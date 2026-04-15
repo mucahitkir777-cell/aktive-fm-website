@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * ProClean Design System
+ * Philosophy: Architektonischer Minimalismus
+ * Primary: Deep Navy #0F2137 | Accent: Steel Blue #1D6FA4
+ * Background: Off-White #F7F8FA | Text: Near-Black #1A2332
+ * Fonts: Syne (Headlines) + Inter (Body)
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* ProClean Brand Colors */
+  --background: oklch(0.978 0.003 247);
+  --foreground: oklch(0.16 0.025 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0.025 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0.025 240);
+  /* Primary: Deep Navy #0F2137 */
+  --primary: oklch(0.22 0.055 240);
+  --primary-foreground: oklch(0.98 0.003 240);
+  /* Secondary: Light Gray */
+  --secondary: oklch(0.96 0.004 240);
+  --secondary-foreground: oklch(0.22 0.055 240);
+  /* Muted */
+  --muted: oklch(0.96 0.004 240);
+  --muted-foreground: oklch(0.52 0.02 240);
+  /* Accent: Steel Blue #1D6FA4 */
+  --accent: oklch(0.50 0.12 240);
+  --accent-foreground: oklch(0.98 0.003 240);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.90 0.006 240);
+  --input: oklch(0.90 0.006 240);
+  --ring: oklch(0.50 0.12 240);
+  --chart-1: oklch(0.50 0.12 240);
+  --chart-2: oklch(0.40 0.10 240);
+  --chart-3: oklch(0.30 0.08 240);
+  --chart-4: oklch(0.22 0.055 240);
+  --chart-5: oklch(0.15 0.04 240);
+  --sidebar: oklch(0.22 0.055 240);
+  --sidebar-foreground: oklch(0.98 0.003 240);
+  --sidebar-primary: oklch(0.50 0.12 240);
+  --sidebar-primary-foreground: oklch(0.98 0.003 240);
+  --sidebar-accent: oklch(0.28 0.06 240);
+  --sidebar-accent-foreground: oklch(0.98 0.003 240);
+  --sidebar-border: oklch(0.30 0.06 240);
+  --sidebar-ring: oklch(0.50 0.12 240);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+
+  /* ProClean Custom Components */
+  .pc-section {
+    @apply py-20 lg:py-28;
+  }
+
+  .pc-section-title {
+    font-family: 'Syne', sans-serif;
+    @apply text-3xl lg:text-4xl font-bold text-[#0F2137] leading-tight;
+  }
+
+  .pc-section-subtitle {
+    @apply text-base lg:text-lg text-[#6B7A8D] leading-relaxed mt-4;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+
+  .pc-accent-line {
+    @apply block w-10 h-0.5 bg-[#1D6FA4] mt-4 mb-6;
+  }
+
+  .pc-btn-primary {
+    @apply inline-flex items-center gap-2 bg-[#1D6FA4] text-white font-semibold px-6 py-3 rounded transition-all duration-300 hover:bg-[#155d8e] hover:shadow-lg hover:-translate-y-0.5;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .pc-btn-outline {
+    @apply inline-flex items-center gap-2 border-2 border-[#0F2137] text-[#0F2137] font-semibold px-6 py-3 rounded transition-all duration-300 hover:bg-[#0F2137] hover:text-white;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .pc-btn-white {
+    @apply inline-flex items-center gap-2 bg-white text-[#0F2137] font-semibold px-6 py-3 rounded transition-all duration-300 hover:bg-gray-100 hover:shadow-lg hover:-translate-y-0.5;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .pc-card {
+    @apply bg-white rounded-lg p-6 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  }
+
+  .pc-nav-link {
+    @apply text-sm font-medium text-[#1A2332] hover:text-[#1D6FA4] transition-colors duration-200;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Scroll animation utility */
+  .pc-fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .pc-fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
