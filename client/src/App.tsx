@@ -18,6 +18,7 @@ import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
 import FAQ from "./pages/FAQ";
 import Region from "./pages/Region";
+import Admin from "./pages/Admin";
 
 function AppContent() {
   const [location] = useLocation();
@@ -53,6 +54,7 @@ function Router() {
       <Route path="/impressum" component={Impressum} />
       <Route path="/datenschutz" component={Datenschutz} />
       <Route path="/faq" component={FAQ} />
+      <Route path="/admin" component={Admin} />
       <Route path="/gebaeudereinigung-kreis-offenbach" component={Region} />
       <Route path="/gebaeudereinigung-frankfurt" component={Region} />
       <Route path="/gebaeudereinigung-hanau" component={Region} />

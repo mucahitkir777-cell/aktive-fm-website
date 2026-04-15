@@ -3,8 +3,9 @@ import path from "path";
 import { randomUUID } from "crypto";
 import type { LeadProviderResult, LeadSubmissionPayload } from "../../shared/lead";
 import { LEAD_SERVER_CONFIG, hasConfiguredLeadValue } from "./config";
+import { createLead } from "./repository";
 
-interface StoredLead {
+export interface StoredLead {
   leadId: string;
   receivedAt: string;
   payload: LeadSubmissionPayload;
@@ -90,7 +91,16 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
     payload,
   };
 
-  const providerResults: LeadProviderResult[] = [await persistToLocalInbox(storedLead)];
+  const savedLead = await createLead(storedLead);
+
+  const providerResults: LeadProviderResult[] = [
+    {
+      provider: "database",
+      status: "success",
+      message: `Lead stored in PostgreSQL with status ${savedLead.status}.`,
+    },
+    await persistToLocalInbox(storedLead),
+  ];
 
   if (LEAD_SERVER_CONFIG.webhook.enabled) {
     providerResults.push(await postJson("webhook", LEAD_SERVER_CONFIG.webhook.endpoint, storedLead));

@@ -60,6 +60,24 @@ export type LeadSubmissionPayload = z.infer<typeof leadSubmissionSchema>;
 export type LeadFieldName = keyof LeadSubmissionPayload | "general";
 export type LeadFieldErrors = Partial<Record<LeadFieldName, string>>;
 
+export const leadStatusValues = ["new", "contacted", "qualified", "done", "archived"] as const;
+export const leadStatusSchema = z.enum(leadStatusValues);
+export type LeadStatus = (typeof leadStatusValues)[number];
+
+export interface AdminLead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string | null;
+  status: LeadStatus;
+  createdAt: string;
+  updatedAt: string;
+  company?: string | null;
+  regionLabel?: string | null;
+  serviceLabel?: string | null;
+}
+
 export interface LeadSubmissionResult {
   success: boolean;
   leadId?: string;
@@ -69,7 +87,7 @@ export interface LeadSubmissionResult {
 }
 
 export interface LeadProviderResult {
-  provider: "local_inbox" | "webhook" | "crm" | "email";
+  provider: "database" | "local_inbox" | "webhook" | "crm" | "email";
   status: "success" | "skipped" | "error";
   message: string;
 }

@@ -19,7 +19,7 @@ function readBooleanEnv(name: string, fallback = false) {
 
 export const LEAD_SERVER_CONFIG = {
   inbox: {
-    enabled: readBooleanEnv("LEAD_INBOX_ENABLED", true),
+    enabled: readBooleanEnv("LEAD_INBOX_ENABLED", false),
     filePath: readEnv("LEAD_INBOX_FILE", path.resolve(process.cwd(), "data", "leads.jsonl")),
   },
   webhook: {
