@@ -20,6 +20,10 @@ function readBooleanEnv(name: string, fallback = false) {
   return String(value).toLowerCase() === "true";
 }
 
+const gaMeasurementId =
+  readEnv("VITE_GA_MEASUREMENT_ID")
+  || readEnv("VITE_GA4_MEASUREMENT_ID");
+
 export const TRACKING_CONFIG = {
   siteName: companyConfig.brand.name,
   debug: readBooleanEnv("VITE_TRACKING_DEBUG", import.meta.env.DEV),
@@ -33,9 +37,11 @@ export const TRACKING_CONFIG = {
   },
   destinations: {
     ga4: {
-      enabled: readBooleanEnv("VITE_GA4_ENABLED", true),
-      measurementId: readEnv("VITE_GA4_MEASUREMENT_ID", "G-RM3SBZCP0G"),
-      debug: readBooleanEnv("VITE_GA4_DEBUG", import.meta.env.DEV),
+      enabled:
+        Boolean(gaMeasurementId)
+        && readBooleanEnv("VITE_GA_ENABLED", readBooleanEnv("VITE_GA4_ENABLED", true)),
+      measurementId: gaMeasurementId,
+      debug: readBooleanEnv("VITE_GA_DEBUG", readBooleanEnv("VITE_GA4_DEBUG", import.meta.env.DEV)),
     },
     gtm: {
       enabled: readBooleanEnv("VITE_GTM_ENABLED", false),

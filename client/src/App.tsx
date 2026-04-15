@@ -10,6 +10,7 @@ import CookieConsent from "./components/CookieConsent";
 import CompanyMeta from "./components/CompanyMeta";
 import CompanyStructuredData from "./components/CompanyStructuredData";
 import { initAnalytics, initScrollDepthTracking, trackPageView } from "./lib/analytics";
+import { sendInternalPageView } from "./lib/pageviews";
 import Home from "./pages/Home";
 import Leistungen from "./pages/Leistungen";
 import UeberUns from "./pages/UeberUns";
@@ -31,6 +32,7 @@ function AppContent() {
 
   useEffect(() => {
     trackPageView({ route: location });
+    sendInternalPageView(location);
   }, [location]);
 
   return (
@@ -55,6 +57,9 @@ function Router() {
       <Route path="/datenschutz" component={Datenschutz} />
       <Route path="/faq" component={FAQ} />
       <Route path="/admin" component={Admin} />
+      <Route path="/admin/dashboard" component={Admin} />
+      <Route path="/admin/leads" component={Admin} />
+      <Route path="/admin/settings" component={Admin} />
       <Route path="/gebaeudereinigung-kreis-offenbach" component={Region} />
       <Route path="/gebaeudereinigung-frankfurt" component={Region} />
       <Route path="/gebaeudereinigung-hanau" component={Region} />

@@ -1,4 +1,4 @@
-import type { AdminLead, LeadStatus } from "../../shared/lead";
+import type { AdminLead, AdminLeadUpdateInput, LeadStatus } from "../../shared/lead";
 import { getDbPool } from "../db";
 import type { StoredLead } from "./adapters";
 
@@ -115,15 +115,54 @@ export async function getLeadById(id: string) {
 }
 
 export async function updateLeadStatus(id: string, status: LeadStatus) {
+  return updateLead(id, { status });
+}
+
+export async function updateLead(id: string, input: AdminLeadUpdateInput) {
   const db = getDbPool();
+  const existingLead = await getLeadById(id);
+
+  if (!existingLead) {
+    return null;
+  }
+
+  const nextLead = {
+    name: input.name ?? existingLead.name,
+    email: input.email ?? existingLead.email,
+    phone: input.phone ?? existingLead.phone,
+    message: input.message !== undefined ? input.message : existingLead.message,
+    status: input.status ?? existingLead.status,
+  };
+
   const result = await db.query<LeadRow>(
     `
       UPDATE leads
-      SET status = $2, updated_at = NOW()
+      SET
+        name = $2,
+        email = $3,
+        phone = $4,
+        message = $5,
+        status = $6,
+        payload = COALESCE(payload, '{}'::jsonb) || $7::jsonb,
+        updated_at = NOW()
       WHERE id = $1
       RETURNING ${leadSelect}
     `,
-    [id, status],
+    [
+      id,
+      nextLead.name,
+      nextLead.email,
+      nextLead.phone,
+      nextLead.message,
+      nextLead.status,
+      JSON.stringify({
+        name: nextLead.name,
+        email: nextLead.email,
+        phone: nextLead.phone,
+        message: nextLead.message,
+        status: nextLead.status,
+      }),
+    ],
   );
 
   return result.rows[0] ? mapLeadRow(result.rows[0]) : null;

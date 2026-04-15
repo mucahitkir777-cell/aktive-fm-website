@@ -33,6 +33,24 @@ export async function initializeDatabase() {
   const db = getDbPool();
 
   await db.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      username TEXT NOT NULL,
+      password_hash TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT 'admin'
+        CHECK (role IN ('admin', 'staff')),
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await db.query(`
+    CREATE UNIQUE INDEX IF NOT EXISTS users_username_lower_idx
+    ON users (LOWER(username))
+  `);
+
+  await db.query(`
     CREATE TABLE IF NOT EXISTS leads (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
@@ -53,5 +71,24 @@ export async function initializeDatabase() {
   await db.query(`
     CREATE INDEX IF NOT EXISTS leads_created_at_idx
     ON leads (created_at DESC)
+  `);
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS page_views (
+      id TEXT PRIMARY KEY,
+      path TEXT NOT NULL,
+      user_agent TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await db.query(`
+    CREATE INDEX IF NOT EXISTS page_views_created_at_idx
+    ON page_views (created_at DESC)
+  `);
+
+  await db.query(`
+    CREATE INDEX IF NOT EXISTS page_views_path_idx
+    ON page_views (path)
   `);
 }

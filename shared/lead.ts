@@ -78,6 +78,22 @@ export interface AdminLead {
   serviceLabel?: string | null;
 }
 
+export const adminLeadUpdateSchema = z
+  .object({
+    name: z.string().trim().min(2, "Bitte geben Sie einen gueltigen Namen ein.").max(120, "Der Name ist zu lang.").optional(),
+    email: z.string().trim().email("Bitte geben Sie eine gueltige E-Mail-Adresse ein.").max(160, "Die E-Mail-Adresse ist zu lang.").optional(),
+    phone: z.string().trim().min(5, "Bitte geben Sie eine gueltige Telefonnummer ein.").max(50, "Die Telefonnummer ist zu lang.").optional(),
+    message: z
+      .union([z.string().trim().max(2000, "Die Nachricht ist zu lang."), z.null()])
+      .optional(),
+    status: leadStatusSchema.optional(),
+  })
+  .refine((value) => Object.values(value).some((entry) => entry !== undefined), {
+    message: "Mindestens ein Feld muss geaendert werden.",
+  });
+
+export type AdminLeadUpdateInput = z.infer<typeof adminLeadUpdateSchema>;
+
 export interface LeadSubmissionResult {
   success: boolean;
   leadId?: string;
