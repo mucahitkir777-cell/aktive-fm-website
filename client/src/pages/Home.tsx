@@ -241,6 +241,7 @@ export default function Home() {
   const sectionsRef = useRef<HTMLDivElement>(null);
   const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
   const resolvedCmsContent = mergeCmsHomeContent(cmsContent);
+  const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroMain;
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -321,7 +322,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src={IMAGES.heroMain}
+            src={heroImageUrl}
             alt="Professionelle Gebäudereinigung"
             className="w-full h-full object-cover"
             loading="eager"

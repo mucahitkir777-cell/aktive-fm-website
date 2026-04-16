@@ -155,6 +155,7 @@ function mergeCmsServicesContent(content: unknown): CmsServicesContent {
 export default function Leistungen() {
   const [cmsContent, setCmsContent] = useState<CmsServicesContent>(() => getDefaultCmsPageContent("leistungen"));
   const resolvedCmsContent = mergeCmsServicesContent(cmsContent);
+  const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroOffice;
 
   const handleServiceCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceTitle?: string, serviceId?: string) => {
     if (serviceTitle) {
@@ -210,9 +211,18 @@ export default function Leistungen() {
       <Navigation />
 
       {/* Page Hero */}
-      <section className="bg-[#0F2137] pt-28 pb-16">
+      <section className="relative overflow-hidden bg-[#0F2137] pt-28 pb-16">
+        <div className="absolute inset-0">
+          <img
+            src={heroImageUrl}
+            alt="Reinigungsleistungen"
+            className="h-full w-full object-cover"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-[#0F2137]/80" />
+        </div>
         <div className="container">
-          <div className="max-w-2xl">
+          <div className="relative z-10 max-w-2xl">
             <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
               {resolvedCmsContent.hero.title}

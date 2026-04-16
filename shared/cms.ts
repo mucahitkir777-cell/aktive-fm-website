@@ -7,11 +7,13 @@ export type CmsPageSlug = (typeof cmsPageSlugs)[number];
 const pageTitleSchema = z.string().trim().min(1, "Der Titel ist erforderlich.").max(120, "Der Titel ist zu lang.");
 const pageSubtitleSchema = z.string().trim().min(1, "Die Beschreibung ist erforderlich.").max(500, "Die Beschreibung ist zu lang.");
 const pageButtonSchema = z.string().trim().min(1, "Der Button-Text ist erforderlich.").max(60, "Der Button-Text ist zu lang.");
+const imageUrlSchema = z.string().trim().max(1000, "Die Bild-URL ist zu lang.").default("");
 
 const heroBaseSchema = z.object({
   title: pageTitleSchema,
   subtitle: pageSubtitleSchema,
   buttonText: pageButtonSchema.default("Mehr erfahren"),
+  imageUrl: imageUrlSchema,
 });
 
 const heroWithAccentSchema = z.object({
@@ -19,6 +21,7 @@ const heroWithAccentSchema = z.object({
   accentTitle: pageTitleSchema,
   subtitle: pageSubtitleSchema,
   primaryButtonText: pageButtonSchema.default("Kostenloses Angebot"),
+  imageUrl: imageUrlSchema,
 });
 
 const finalCtaSchema = z.object({
@@ -310,6 +313,7 @@ export const cmsPageDefinitions = {
           { key: "accentTitle", label: "Hero-Akzenttitel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "Hero-Button-Text", input: "text" },
+          { key: "imageUrl", label: "Hero-Bild URL", input: "text" },
         ],
       },
       {
@@ -353,6 +357,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Hero-Titel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
           { key: "buttonText", label: "Hero-Button-Text", input: "text" },
+          { key: "imageUrl", label: "Hero-Bild URL", input: "text" },
         ],
       },
       {
@@ -395,6 +400,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Hero-Titel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
           { key: "buttonText", label: "Hero-Button-Text", input: "text" },
+          { key: "imageUrl", label: "Hero-Bild URL", input: "text" },
         ],
       },
       {
@@ -437,6 +443,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Hero-Titel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
           { key: "buttonText", label: "Hero-Button-Text", input: "text" },
+          { key: "imageUrl", label: "Hero-Bild URL", input: "text" },
         ],
       },
       {
@@ -472,6 +479,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Hero-Titel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
           { key: "buttonText", label: "Hero-Button-Text", input: "text" },
+          { key: "imageUrl", label: "Hero-Bild URL", input: "text" },
         ],
       },
       {
@@ -558,6 +566,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       subtitle:
         "Zuverlaessige Gebaeudereinigung fuer Unternehmen im Rhein-Main-Gebiet - puenktlich, gruendlich und diskret. Damit Sie sich auf Ihr Kerngeschaeft konzentrieren koennen.",
       primaryButtonText: "Kostenloses Angebot",
+      imageUrl: "",
     },
     services: {
       title: "Unsere Leistungen",
@@ -584,6 +593,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Professionelle Reinigungsleistungen",
       subtitle: "Unser Team reinigt Büro-, Praxis- und Gewerbeflächen mit hoher Sorgfalt und planbarer Frequenz.",
       buttonText: "Mehr erfahren",
+      imageUrl: "",
     },
     overview: {
       title: "Unser Angebot im Überblick",
@@ -606,6 +616,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Wir reinigen mit Vertrauen",
       subtitle: "Lernen Sie unser regionales Team kennen und erfahren Sie, wie wir Qualität, Sicherheit und Service verbinden.",
       buttonText: "Mehr erfahren",
+      imageUrl: "",
     },
     companyInfo: {
       title: "Unsere Geschichte",
@@ -628,6 +639,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Häufige Fragen",
       subtitle: "Antworten auf die wichtigsten Fragen zu unseren Reinigungsleistungen und unserem Service.",
       buttonText: "Mehr erfahren",
+      imageUrl: "",
     },
     questions: {
       title: "FAQ",
@@ -647,6 +659,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Kontakt aufnehmen",
       subtitle: "Wir sind für Sie da – schreiben Sie uns oder rufen Sie an. Wir melden uns schnellstmöglich zurück.",
       buttonText: "Anfrage senden",
+      imageUrl: "",
     },
     contactInfo: {
       title: "Kontaktinformationen",
