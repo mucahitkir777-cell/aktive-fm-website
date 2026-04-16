@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   BarChart3,
+  Eye,
+  FileText,
   KeyRound,
   LayoutDashboard,
   LogOut,
   PencilLine,
+  PanelTop,
   RefreshCw,
   Settings,
   UserPlus,
@@ -13,6 +16,14 @@ import {
 } from "lucide-react";
 import { useLocation } from "wouter";
 import type { AdminDashboardStats, AdminRole, AdminSessionUser, AdminUser } from "@shared/admin";
+import {
+  cmsPageDefinitions,
+  getDefaultCmsPageContent,
+  type CmsHomeContent,
+  type CmsPage,
+  type CmsPageSlug,
+  type CmsPageSummary,
+} from "@shared/cms";
 import type { AdminLead, LeadStatus } from "@shared/lead";
 
 const ADMIN_TOKEN_KEY = "proclean_admin_token";
@@ -66,6 +77,20 @@ interface StatsResponse {
   code?: string;
 }
 
+interface CmsPageListResponse {
+  success: boolean;
+  pages?: CmsPageSummary[];
+  message?: string;
+  code?: string;
+}
+
+interface CmsPageResponse {
+  success: boolean;
+  page?: CmsPage;
+  message?: string;
+  code?: string;
+}
+
 interface SessionState {
   token: string;
   user: AdminSessionUser;
@@ -78,7 +103,21 @@ interface DecodedAdminToken extends AdminSessionUser {
 }
 
 type ActivePanel = "lead-edit" | "change-password" | "users" | null;
-type AdminSection = "dashboard" | "leads" | "settings";
+type AdminSection = "dashboard" | "leads" | "settings" | "pages" | "content" | "preview";
+type CmsSectionKey = keyof CmsHomeContent;
+type CmsPreviewViewport = "desktop" | "tablet" | "mobile";
+type LeadFilterValue =
+  | "all"
+  | "new"
+  | "in-progress"
+  | "completed"
+  | "without-status"
+  | "due-today"
+  | "overdue"
+  | "with-follow-up"
+  | "without-follow-up";
+type LeadSortValue = "newest" | "oldest" | "follow-up-asc" | "follow-up-desc";
+type LeadDueState = "none" | "today" | "overdue" | "upcoming";
 
 interface LeadDraft {
   id: string;
@@ -86,6 +125,8 @@ interface LeadDraft {
   email: string;
   phone: string;
   message: string;
+  internalNote: string;
+  followUpDate: string;
   status: LeadStatus;
 }
 
@@ -98,6 +139,20 @@ function formatDate(value: string) {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(value));
+}
+
+function formatDateOnly(value: string) {
+  return new Intl.DateTimeFormat("de-DE", {
+    dateStyle: "short",
+  }).format(new Date(`${value}T00:00:00`));
+}
+
+function getTodayDateString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function decodeBase64Url(value: string) {
@@ -172,8 +227,99 @@ function createLeadDraft(lead: AdminLead): LeadDraft {
     email: lead.email,
     phone: lead.phone,
     message: lead.message ?? "",
+    internalNote: lead.internalNote ?? "",
+    followUpDate: lead.followUpDate ?? "",
     status: lead.status,
   };
+}
+
+function createCmsDraft(page?: CmsPage | null) {
+  return page?.slug === "home"
+    ? page.content
+    : getDefaultCmsPageContent("home");
+}
+
+function getLeadFilterBucket(lead: AdminLead): LeadFilterValue {
+  const currentStatus = (lead as AdminLead & { status?: string | null }).status;
+
+  if (!currentStatus) {
+    return "without-status";
+  }
+
+  if (currentStatus === "new") {
+    return "new";
+  }
+
+  if (currentStatus === "contacted" || currentStatus === "qualified") {
+    return "in-progress";
+  }
+
+  if (currentStatus === "done" || currentStatus === "archived") {
+    return "completed";
+  }
+
+  return "without-status";
+}
+
+function getLeadDueState(lead: AdminLead): LeadDueState {
+  if (!lead.followUpDate) {
+    return "none";
+  }
+
+  const today = getTodayDateString();
+  if (lead.followUpDate === today) {
+    return "today";
+  }
+
+  if (lead.followUpDate < today) {
+    return "overdue";
+  }
+
+  return "upcoming";
+}
+
+function matchesLeadFilter(lead: AdminLead, filterValue: LeadFilterValue) {
+  if (filterValue === "all") {
+    return true;
+  }
+
+  if (
+    filterValue === "new"
+    || filterValue === "in-progress"
+    || filterValue === "completed"
+    || filterValue === "without-status"
+  ) {
+    return getLeadFilterBucket(lead) === filterValue;
+  }
+
+  if (filterValue === "due-today") {
+    return getLeadDueState(lead) === "today";
+  }
+
+  if (filterValue === "overdue") {
+    return getLeadDueState(lead) === "overdue";
+  }
+
+  if (filterValue === "with-follow-up") {
+    return Boolean(lead.followUpDate);
+  }
+
+  return !lead.followUpDate;
+}
+
+function matchesLeadSearch(lead: AdminLead, searchTerm: string) {
+  if (!searchTerm) {
+    return true;
+  }
+
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  if (!normalizedSearch) {
+    return true;
+  }
+
+  return [lead.name, lead.email, lead.phone].some((value) =>
+    value.toLowerCase().includes(normalizedSearch),
+  );
 }
 
 export default function Admin() {
@@ -184,6 +330,15 @@ export default function Admin() {
   const [leads, setLeads] = useState<AdminLead[]>([]);
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [stats, setStats] = useState<AdminDashboardStats | null>(null);
+  const [cmsPages, setCmsPages] = useState<CmsPageSummary[]>([]);
+  const [selectedCmsSlug, setSelectedCmsSlug] = useState<CmsPageSlug>("home");
+  const [selectedCmsSection, setSelectedCmsSection] = useState<CmsSectionKey>("hero");
+  const [cmsPage, setCmsPage] = useState<CmsPage | null>(null);
+  const [cmsDraft, setCmsDraft] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
+  const [loadingCms, setLoadingCms] = useState(false);
+  const [savingCms, setSavingCms] = useState(false);
+  const [previewViewport, setPreviewViewport] = useState<CmsPreviewViewport>("desktop");
+  const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
   const [loadingLeads, setLoadingLeads] = useState(false);
   const [loadingStats, setLoadingStats] = useState(false);
   const [submittingLogin, setSubmittingLogin] = useState(false);
@@ -192,6 +347,9 @@ export default function Admin() {
   const [successMessage, setSuccessMessage] = useState("");
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [leadFilter, setLeadFilter] = useState<LeadFilterValue>("all");
+  const [leadSearch, setLeadSearch] = useState("");
+  const [leadSort, setLeadSort] = useState<LeadSortValue>("newest");
   const [selectedLead, setSelectedLead] = useState<LeadDraft | null>(null);
   const [changePasswordForm, setChangePasswordForm] = useState({
     currentPassword: "",
@@ -208,10 +366,59 @@ export default function Admin() {
   const leadCount = leads.length;
   const isAdmin = session?.user.role === "admin";
   const currentSection: AdminSection = useMemo(() => {
+    if (location === "/admin/pages") return "pages";
+    if (location === "/admin/content") return "content";
+    if (location === "/admin/preview") return "preview";
     if (location === "/admin/leads") return "leads";
     if (location === "/admin/settings") return "settings";
     return "dashboard";
   }, [location]);
+
+  const filteredLeads = useMemo(() => {
+    const nextLeads = leads.filter((lead) => {
+      const matchesFilter = matchesLeadFilter(lead, leadFilter);
+      return matchesFilter && matchesLeadSearch(lead, leadSearch);
+    });
+
+    nextLeads.sort((leftLead, rightLead) => {
+      if (leadSort === "follow-up-asc" || leadSort === "follow-up-desc") {
+        const leftFollowUp = leftLead.followUpDate ?? "";
+        const rightFollowUp = rightLead.followUpDate ?? "";
+
+        if (!leftFollowUp && !rightFollowUp) {
+          return 0;
+        }
+
+        if (!leftFollowUp) {
+          return 1;
+        }
+
+        if (!rightFollowUp) {
+          return -1;
+        }
+
+        return leadSort === "follow-up-asc"
+          ? leftFollowUp.localeCompare(rightFollowUp)
+          : rightFollowUp.localeCompare(leftFollowUp);
+      }
+
+      const leftTime = new Date(leftLead.createdAt).getTime();
+      const rightTime = new Date(rightLead.createdAt).getTime();
+
+      return leadSort === "oldest" ? leftTime - rightTime : rightTime - leftTime;
+    });
+
+    return nextLeads;
+  }, [leadFilter, leadSearch, leadSort, leads]);
+
+  const cmsDefinition = cmsPageDefinitions[selectedCmsSlug];
+  const cmsSections = cmsDefinition.sections;
+  const cmsSelectedSection = cmsSections.find((section) => section.key === selectedCmsSection) ?? cmsSections[0];
+  const previewWidthClass = useMemo(() => {
+    if (previewViewport === "mobile") return "mx-auto w-[390px] max-w-full";
+    if (previewViewport === "tablet") return "mx-auto w-[768px] max-w-full";
+    return "w-full";
+  }, [previewViewport]);
 
   function applySession(token: string) {
     const decoded = parseToken(token);
@@ -241,6 +448,12 @@ export default function Admin() {
     setLeads([]);
     setUsers([]);
     setStats(null);
+    setCmsPages([]);
+    setCmsPage(null);
+    setCmsDraft(getDefaultCmsPageContent("home"));
+    setSelectedCmsSlug("home");
+    setSelectedCmsSection("hero");
+    setPreviewRefreshKey(0);
     setSelectedLead(null);
     setActivePanel(null);
     setSettingsOpen(false);
@@ -351,6 +564,71 @@ export default function Admin() {
     setStats(result.stats);
   }
 
+  async function loadCmsPages(activeSession = session) {
+    if (!activeSession) {
+      return;
+    }
+
+    const { response, result } = await requestJson<CmsPageListResponse>("/api/admin/cms/pages", {
+      headers: {
+        Authorization: `Bearer ${activeSession.token}`,
+      },
+    });
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success) {
+      setError(result.message ?? "CMS-Seiten konnten nicht geladen werden.");
+      return;
+    }
+
+    setCmsPages(result.pages ?? []);
+  }
+
+  async function loadCmsPage(slug = selectedCmsSlug, activeSession = session) {
+    if (!activeSession) {
+      return;
+    }
+
+    setLoadingCms(true);
+
+    const { response, result } = await requestJson<CmsPageResponse>(`/api/admin/cms/pages/${encodeURIComponent(slug)}`, {
+      headers: {
+        Authorization: `Bearer ${activeSession.token}`,
+      },
+    });
+
+    setLoadingCms(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success || !result.page) {
+      setError(result.message ?? "CMS-Seite konnte nicht geladen werden.");
+      return;
+    }
+
+    setCmsPage(result.page);
+    setCmsDraft(createCmsDraft(result.page));
+  }
+
+  function updateCmsField<TSection extends CmsSectionKey>(
+    section: TSection,
+    field: keyof CmsHomeContent[TSection],
+    value: string,
+  ) {
+    setCmsDraft((current) => ({
+      ...current,
+      [section]: {
+        ...current[section],
+        [field]: value,
+      },
+    }));
+  }
+
   useEffect(() => {
     if (!session) {
       return;
@@ -359,6 +637,26 @@ export default function Admin() {
     void loadLeads(session);
     void loadStats(session);
   }, [session]);
+
+  useEffect(() => {
+    if (!session) {
+      return;
+    }
+
+    if (currentSection !== "pages" && currentSection !== "content" && currentSection !== "preview") {
+      return;
+    }
+
+    void loadCmsPages(session);
+    void loadCmsPage(selectedCmsSlug, session);
+  }, [currentSection, selectedCmsSlug, session]);
+
+  useEffect(() => {
+    const firstSection = cmsPageDefinitions[selectedCmsSlug].sections[0];
+    if (selectedCmsSection !== firstSection.key && !cmsPageDefinitions[selectedCmsSlug].sections.some((section) => section.key === selectedCmsSection)) {
+      setSelectedCmsSection(firstSection.key);
+    }
+  }, [selectedCmsSection, selectedCmsSlug]);
 
   useEffect(() => {
     if (!session || activePanel !== "users" || session.user.role !== "admin") {
@@ -508,6 +806,35 @@ export default function Admin() {
     setError("");
   }
 
+  async function openLeadEditorById(id: string) {
+    const existingLead = leads.find((lead) => lead.id === id);
+    if (existingLead) {
+      openLeadEditor(existingLead);
+      return;
+    }
+
+    if (!session) {
+      return;
+    }
+
+    const { response, result } = await requestJson<LeadResponse>(`/api/leads/${encodeURIComponent(id)}`, {
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+    });
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success || !result.lead) {
+      setError(result.message ?? "Lead konnte nicht geladen werden.");
+      return;
+    }
+
+    openLeadEditor(result.lead);
+  }
+
   async function handleLeadSave(event: FormEvent) {
     event.preventDefault();
     if (!session || !selectedLead) {
@@ -529,6 +856,8 @@ export default function Admin() {
         email: selectedLead.email,
         phone: selectedLead.phone,
         message: selectedLead.message.trim() ? selectedLead.message : null,
+        internalNote: selectedLead.internalNote.trim() ? selectedLead.internalNote : null,
+        followUpDate: selectedLead.followUpDate || null,
         status: selectedLead.status,
       }),
     });
@@ -629,6 +958,43 @@ export default function Admin() {
     setSuccessMessage(result.message ?? "Benutzer wurde angelegt.");
   }
 
+  async function handleCmsSave(event: FormEvent) {
+    event.preventDefault();
+    if (!session) {
+      return;
+    }
+
+    setSavingCms(true);
+    setError("");
+    setSuccessMessage("");
+
+    const { response, result } = await requestJson<CmsPageResponse>(`/api/admin/cms/pages/${encodeURIComponent(selectedCmsSlug)}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: cmsDraft }),
+    });
+
+    setSavingCms(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success || !result.page) {
+      setError(result.message ?? "CMS-Inhalte konnten nicht gespeichert werden.");
+      return;
+    }
+
+    setCmsPage(result.page);
+    setCmsDraft(createCmsDraft(result.page));
+    setPreviewRefreshKey((current) => current + 1);
+    setSuccessMessage(result.message ?? "CMS-Inhalte wurden gespeichert.");
+    void loadCmsPages(session);
+  }
+
   const currentPanelTitle = useMemo(() => {
     if (activePanel === "lead-edit") return "Lead bearbeiten";
     if (activePanel === "change-password") return "Passwort aendern";
@@ -656,6 +1022,24 @@ export default function Admin() {
         href: "/admin/settings",
         icon: Settings,
       },
+      {
+        id: "pages" as const,
+        label: "Seiten",
+        href: "/admin/pages",
+        icon: FileText,
+      },
+      {
+        id: "content" as const,
+        label: "Inhalte",
+        href: "/admin/content",
+        icon: PanelTop,
+      },
+      {
+        id: "preview" as const,
+        label: "Vorschau",
+        href: "/admin/preview",
+        icon: Eye,
+      },
     ],
     [],
   );
@@ -672,6 +1056,27 @@ export default function Admin() {
       return {
         title: "Einstellungen",
         description: "Passwort, Benutzer und Sitzung verwalten.",
+      };
+    }
+
+    if (currentSection === "pages") {
+      return {
+        title: "Seiten",
+        description: "Verfuegbare Seiten und CMS-Anbindung verwalten.",
+      };
+    }
+
+    if (currentSection === "content") {
+      return {
+        title: "Inhalte",
+        description: "Strukturierte Inhalte pro Seite und Sektion bearbeiten.",
+      };
+    }
+
+    if (currentSection === "preview") {
+      return {
+        title: "Vorschau",
+        description: "Angeschlossene Seite in Desktop-, Tablet- und Mobilbreite pruefen.",
       };
     }
 
@@ -738,6 +1143,10 @@ export default function Admin() {
               onClick={() => {
                 void loadLeads();
                 void loadStats();
+                if (currentSection === "pages" || currentSection === "content" || currentSection === "preview") {
+                  void loadCmsPages();
+                  void loadCmsPage();
+                }
               }}
               className={secondaryButtonClass}
             >
@@ -850,137 +1259,674 @@ export default function Admin() {
 
         {currentSection === "dashboard" && (
           <div className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-7">
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm text-[#6B7A8D]">Gesamtleads</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Gesamtleads</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.leads.total ?? 0}
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm text-[#6B7A8D]">Neue Leads heute</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Neue Leads heute</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.leads.today ?? 0}
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm text-[#6B7A8D]">Leads diese Woche</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Leads diese Woche</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.leads.thisWeek ?? 0}
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm text-[#6B7A8D]">Seitenaufrufe heute</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Seitenaufrufe heute</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.pageViews.today ?? 0}
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm text-[#6B7A8D]">Seitenaufrufe 7 Tage</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Seitenaufrufe 7 Tage</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.pageViews.last7Days ?? 0}
                 </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="text-sm font-medium text-[#6B7A8D]">Heute faellig</p>
+                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+                  {loadingStats && !stats ? "..." : stats?.leads.dueToday ?? 0}
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <p className="text-sm font-medium text-[#6B7A8D]">Ueberfaellig</p>
+                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+                  {loadingStats && !stats ? "..." : stats?.leads.overdue ?? 0}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 xl:grid-cols-3">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0F2137]">Neu eingegangen</h3>
+                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads von heute, sortiert nach Eingang.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLocation("/admin/leads")}
+                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                  >
+                    Leadliste
+                  </button>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {loadingStats && !stats && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Dashboard wird geladen...
+                    </div>
+                  )}
+
+                  {!loadingStats && (stats?.newLeadsToday.length ?? 0) === 0 && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Heute sind noch keine neuen Leads eingegangen.
+                    </div>
+                  )}
+
+                  {(stats?.newLeadsToday ?? []).map((lead) => (
+                    <button
+                      key={lead.id}
+                      type="button"
+                      onClick={() => void openLeadEditorById(lead.id)}
+                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
+                          <p className="mt-1 text-sm text-[#6B7A8D]">Eingegangen am {formatDate(lead.createdAt)}</p>
+                        </div>
+                        <span className="inline-flex rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137]">
+                          {lead.status}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0F2137]">Heute faellig</h3>
+                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads mit Wiedervorlage fuer heute.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLocation("/admin/leads")}
+                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                  >
+                    Leadliste
+                  </button>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {loadingStats && !stats && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Dashboard wird geladen...
+                    </div>
+                  )}
+
+                  {!loadingStats && (stats?.dueTodayLeads.length ?? 0) === 0 && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Keine Leads fuer heute faellig.
+                    </div>
+                  )}
+
+                  {(stats?.dueTodayLeads ?? []).map((lead) => (
+                    <button
+                      key={lead.id}
+                      type="button"
+                      onClick={() => void openLeadEditorById(lead.id)}
+                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
+                          <p className="mt-1 text-sm text-[#6B7A8D]">Faellig am {formatDateOnly(lead.followUpDate)}</p>
+                        </div>
+                        <span className="inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
+                          {lead.status}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0F2137]">Ueberfaellig</h3>
+                    <p className="mt-1 text-sm text-[#6B7A8D]">Offene Wiedervorlagen vor dem heutigen Datum.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setLocation("/admin/leads")}
+                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                  >
+                    Leadliste
+                  </button>
+                </div>
+
+                <div className="mt-4 space-y-3">
+                  {loadingStats && !stats && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Dashboard wird geladen...
+                    </div>
+                  )}
+
+                  {!loadingStats && (stats?.overdueLeads.length ?? 0) === 0 && (
+                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                      Keine ueberfaelligen Leads vorhanden.
+                    </div>
+                  )}
+
+                  {(stats?.overdueLeads ?? []).map((lead) => (
+                    <button
+                      key={lead.id}
+                      type="button"
+                      onClick={() => void openLeadEditorById(lead.id)}
+                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
+                          <p className="mt-1 text-sm text-[#6B7A8D]">Faellig am {formatDateOnly(lead.followUpDate)}</p>
+                        </div>
+                        <span className="inline-flex rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-700">
+                          {lead.status}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <h3 className="text-base font-semibold text-[#0F2137]">Leads nach Status</h3>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-                {leadStatuses.map((status) => (
-                  <div key={status} className="rounded-lg border border-gray-100 bg-[#F7F8FA] p-4">
-                    <p className="text-xs uppercase tracking-wide text-[#6B7A8D]">{status}</p>
-                    <p className="mt-2 text-2xl font-semibold text-[#0F2137]">
-                      {loadingStats && !stats ? "..." : stats?.leads.byStatus[status] ?? 0}
-                    </p>
-                  </div>
-                ))}
+              <div className="mt-4 grid gap-3 lg:grid-cols-5">
+                {leadStatuses.map((status) => {
+                  const count = stats?.leads.byStatus[status] ?? 0;
+                  const total = stats?.leads.total ?? 0;
+                  const width = total > 0 ? Math.max((count / total) * 100, count > 0 ? 8 : 0) : 0;
+
+                  return (
+                    <div key={status} className="rounded-lg border border-gray-100 bg-[#F7F8FA] p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-medium capitalize text-[#0F2137]">{status}</p>
+                        <p className="text-sm font-semibold text-[#0F2137]">
+                          {loadingStats && !stats ? "..." : count}
+                        </p>
+                      </div>
+                      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white">
+                        <div
+                          className="h-full rounded-full bg-[#1D6FA4] transition-[width]"
+                          style={{ width: `${width}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         )}
 
         {currentSection === "leads" && (
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <table className="w-full min-w-[1060px] border-collapse text-left text-sm">
-              <thead className="bg-gray-50 text-xs uppercase text-[#6B7A8D]">
-                <tr>
-                  <th className="px-4 py-3">Datum</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">E-Mail</th>
-                  <th className="px-4 py-3">Telefon</th>
-                  <th className="px-4 py-3">Nachricht</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Aktion</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loadingLeads && (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-[#6B7A8D]">
-                      Leads werden geladen...
-                    </td>
-                  </tr>
-                )}
+          <div className="space-y-4">
+            <div className="rounded-lg border border-gray-200 bg-white p-4">
+              <div className="grid gap-3 lg:grid-cols-[240px_minmax(0,1fr)_240px_auto]">
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Filter
+                  <select
+                    value={leadFilter}
+                    onChange={(event) => setLeadFilter(event.target.value as LeadFilterValue)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  >
+                    <option value="all">Alle</option>
+                    <option value="new">Neu</option>
+                    <option value="in-progress">In Bearbeitung</option>
+                    <option value="completed">Abgeschlossen</option>
+                    <option value="without-status">Ohne Status</option>
+                    <option value="due-today">Heute faellig</option>
+                    <option value="overdue">Ueberfaellig</option>
+                    <option value="with-follow-up">Mit Wiedervorlage</option>
+                    <option value="without-follow-up">Ohne Wiedervorlage</option>
+                  </select>
+                </label>
 
-                {!loadingLeads && leads.length === 0 && (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-[#6B7A8D]">
-                      Noch keine Leads vorhanden.
-                    </td>
-                  </tr>
-                )}
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Suche
+                  <input
+                    value={leadSearch}
+                    onChange={(event) => setLeadSearch(event.target.value)}
+                    placeholder="Nach Name, E-Mail oder Telefon suchen"
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  />
+                </label>
 
-                {!loadingLeads &&
-                  leads.map((lead) => (
-                    <tr key={lead.id} className="border-t border-gray-100 align-top">
-                      <td className="px-4 py-3 text-[#6B7A8D]">{formatDate(lead.createdAt)}</td>
-                      <td className="px-4 py-3 font-medium text-[#0F2137]">
-                        {lead.name}
-                        {lead.company && <span className="block text-xs font-normal text-[#6B7A8D]">{lead.company}</span>}
-                      </td>
-                      <td className="px-4 py-3">
-                        <a href={`mailto:${lead.email}`} className="text-[#1D6FA4]">
-                          {lead.email}
-                        </a>
-                      </td>
-                      <td className="px-4 py-3">
-                        <a href={`tel:${lead.phone}`} className="text-[#1D6FA4]">
-                          {lead.phone}
-                        </a>
-                      </td>
-                      <td className="max-w-sm px-4 py-3 text-[#6B7A8D]">
-                        <div>{lead.message || "Keine Nachricht"}</div>
-                        {(lead.regionLabel || lead.serviceLabel) && (
-                          <div className="mt-2 text-xs">
-                            {[lead.regionLabel, lead.serviceLabel].filter(Boolean).join(" / ")}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <select
-                          value={lead.status}
-                          onChange={(event) => void handleStatusChange(lead.id, event.target.value as LeadStatus)}
-                          className="rounded-lg border border-gray-200 px-2 py-1 text-sm"
-                        >
-                          {leadStatuses.map((status) => (
-                            <option key={status} value={status}>
-                              {status}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="px-4 py-3">
-                        <button type="button" onClick={() => openLeadEditor(lead)} className={secondaryButtonClass}>
-                          <span className="inline-flex items-center gap-2">
-                            <PencilLine size={15} />
-                            Bearbeiten
-                          </span>
-                        </button>
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Sortierung
+                  <select
+                    value={leadSort}
+                    onChange={(event) => setLeadSort(event.target.value as LeadSortValue)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  >
+                    <option value="newest">Neueste zuerst</option>
+                    <option value="oldest">Aelteste zuerst</option>
+                    <option value="follow-up-asc">Wiedervorlage aufsteigend</option>
+                    <option value="follow-up-desc">Wiedervorlage absteigend</option>
+                  </select>
+                </label>
+
+                <div className="flex items-end">
+                  <div className="w-full rounded-lg border border-gray-200 bg-[#F7F8FA] px-4 py-2 text-sm text-[#0F2137]">
+                    {filteredLeads.length} von {leadCount} Leads
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+              <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+                <thead className="bg-gray-50 text-xs uppercase text-[#6B7A8D]">
+                  <tr>
+                    <th className="px-4 py-3">Datum</th>
+                    <th className="px-4 py-3">Wiedervorlage</th>
+                    <th className="px-4 py-3">Name</th>
+                    <th className="px-4 py-3">E-Mail</th>
+                    <th className="px-4 py-3">Telefon</th>
+                    <th className="px-4 py-3">Nachricht</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Aktion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadingLeads && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                        Leads werden geladen...
                       </td>
                     </tr>
+                  )}
+
+                  {!loadingLeads && leads.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                        Noch keine Leads vorhanden.
+                      </td>
+                    </tr>
+                  )}
+
+                  {!loadingLeads && leads.length > 0 && filteredLeads.length === 0 && (
+                    <tr>
+                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                        Keine Leads fuer die aktuelle Auswahl gefunden.
+                      </td>
+                    </tr>
+                  )}
+
+                  {!loadingLeads &&
+                    filteredLeads.map((lead) => (
+                      <tr key={lead.id} className="border-t border-gray-100 align-top">
+                        <td className="px-4 py-3 text-[#6B7A8D]">{formatDate(lead.createdAt)}</td>
+                        <td className="px-4 py-3">
+                          {lead.followUpDate ? (
+                            <div className="space-y-2">
+                              <div className="font-medium text-[#0F2137]">{formatDateOnly(lead.followUpDate)}</div>
+                              <span
+                                className={
+                                  getLeadDueState(lead) === "overdue"
+                                    ? "inline-flex rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-700"
+                                    : getLeadDueState(lead) === "today"
+                                      ? "inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700"
+                                      : "inline-flex rounded-lg border border-gray-200 bg-[#F7F8FA] px-2 py-1 text-xs font-medium text-[#0F2137]"
+                                }
+                              >
+                                {getLeadDueState(lead) === "overdue"
+                                  ? "Ueberfaellig"
+                                  : getLeadDueState(lead) === "today"
+                                    ? "Heute faellig"
+                                    : "Geplant"}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-[#6B7A8D]">-</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 font-medium text-[#0F2137]">
+                          {lead.name}
+                          {lead.company && <span className="block text-xs font-normal text-[#6B7A8D]">{lead.company}</span>}
+                        </td>
+                        <td className="px-4 py-3">
+                          <a href={`mailto:${lead.email}`} className="text-[#1D6FA4]">
+                            {lead.email}
+                          </a>
+                        </td>
+                        <td className="px-4 py-3">
+                          <a href={`tel:${lead.phone}`} className="text-[#1D6FA4]">
+                            {lead.phone}
+                          </a>
+                        </td>
+                        <td className="max-w-sm px-4 py-3 text-[#6B7A8D]">
+                          <div>{lead.message || "Keine Nachricht"}</div>
+                          {(lead.regionLabel || lead.serviceLabel) && (
+                            <div className="mt-2 text-xs">
+                              {[lead.regionLabel, lead.serviceLabel].filter(Boolean).join(" / ")}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          <select
+                            value={lead.status}
+                            onChange={(event) => void handleStatusChange(lead.id, event.target.value as LeadStatus)}
+                            className="rounded-lg border border-gray-200 px-2 py-1 text-sm"
+                          >
+                            {leadStatuses.map((status) => (
+                              <option key={status} value={status}>
+                                {status}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="px-4 py-3">
+                          <button type="button" onClick={() => openLeadEditor(lead)} className={secondaryButtonClass}>
+                            <span className="inline-flex items-center gap-2">
+                              <PencilLine size={15} />
+                              Bearbeiten
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {currentSection === "pages" && (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {(cmsPages.length > 0 ? cmsPages : [{
+              slug: "home" as const,
+              title: cmsPageDefinitions.home.title,
+              path: cmsPageDefinitions.home.path,
+              updatedAt: "",
+            }]).map((page) => (
+              <div key={page.slug} className="rounded-lg border border-gray-200 bg-white p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0F2137]">{page.title}</h3>
+                    <p className="mt-1 text-sm text-[#6B7A8D]">{page.path}</p>
+                    <p className="mt-3 text-sm text-[#6B7A8D]">
+                      {page.updatedAt ? `Zuletzt aktualisiert: ${formatDate(page.updatedAt)}` : "Noch nicht gespeichert."}
+                    </p>
+                  </div>
+                  <span className="inline-flex rounded-lg border border-gray-200 bg-[#F7F8FA] px-2 py-1 text-xs font-medium text-[#0F2137]">
+                    {page.slug}
+                  </span>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCmsSlug(page.slug);
+                      setError("");
+                      setSuccessMessage("");
+                      setLocation("/admin/content");
+                    }}
+                    className={secondaryButtonClass}
+                  >
+                    Inhalte bearbeiten
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCmsSlug(page.slug);
+                      setError("");
+                      setSuccessMessage("");
+                      setLocation("/admin/preview");
+                    }}
+                    className={secondaryButtonClass}
+                  >
+                    Vorschau oeffnen
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {currentSection === "content" && (
+          <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+            <div className="space-y-4">
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Seite
+                  <select
+                    value={selectedCmsSlug}
+                    onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  >
+                    {(cmsPages.length > 0 ? cmsPages : [{
+                      slug: "home" as const,
+                      title: cmsPageDefinitions.home.title,
+                      path: cmsPageDefinitions.home.path,
+                      updatedAt: "",
+                    }]).map((page) => (
+                      <option key={page.slug} value={page.slug}>
+                        {page.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 bg-white p-4">
+                <p className="text-sm font-medium text-[#0F2137]">Sektionen</p>
+                <div className="mt-3 space-y-2">
+                  {cmsSections.map((section) => (
+                    <button
+                      key={section.key}
+                      type="button"
+                      onClick={() => setSelectedCmsSection(section.key as CmsSectionKey)}
+                      className={
+                        selectedCmsSection === section.key
+                          ? "w-full rounded-lg border border-[#0F2137] bg-[#0F2137] px-3 py-2 text-left text-sm font-medium text-white"
+                          : "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                      }
+                    >
+                      {section.label}
+                    </button>
                   ))}
-              </tbody>
-            </table>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={handleCmsSave} className="rounded-lg border border-gray-200 bg-white p-5">
+              <div className="flex flex-col gap-2 border-b border-gray-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-base font-semibold text-[#0F2137]">{cmsDefinition.title}</h3>
+                  <p className="text-sm text-[#6B7A8D]">{cmsSelectedSection.label} bearbeiten</p>
+                </div>
+                <div className="text-sm text-[#6B7A8D]">
+                  {cmsPage?.updatedAt ? `Zuletzt gespeichert: ${formatDate(cmsPage.updatedAt)}` : "Noch keine Speicherung"}
+                </div>
+              </div>
+
+              {loadingCms ? (
+                <div className="py-10 text-center text-sm text-[#6B7A8D]">CMS-Inhalte werden geladen...</div>
+              ) : (
+                <div className="mt-5 space-y-4">
+                  {selectedCmsSection === "hero" && (
+                    <>
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Hero-Titel
+                        <input
+                          value={cmsDraft.hero.title}
+                          onChange={(event) => updateCmsField("hero", "title", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Hero-Akzenttitel
+                        <input
+                          value={cmsDraft.hero.accentTitle}
+                          onChange={(event) => updateCmsField("hero", "accentTitle", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Hero-Untertitel
+                        <textarea
+                          value={cmsDraft.hero.subtitle}
+                          onChange={(event) => updateCmsField("hero", "subtitle", event.target.value)}
+                          rows={5}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Hero-Button-Text
+                        <input
+                          value={cmsDraft.hero.primaryButtonText}
+                          onChange={(event) => updateCmsField("hero", "primaryButtonText", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </>
+                  )}
+
+                  {selectedCmsSection === "finalCta" && (
+                    <>
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        CTA-Titel
+                        <input
+                          value={cmsDraft.finalCta.title}
+                          onChange={(event) => updateCmsField("finalCta", "title", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        CTA-Text
+                        <textarea
+                          value={cmsDraft.finalCta.body}
+                          onChange={(event) => updateCmsField("finalCta", "body", event.target.value)}
+                          rows={5}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        CTA-Button-Text
+                        <input
+                          value={cmsDraft.finalCta.primaryButtonText}
+                          onChange={(event) => updateCmsField("finalCta", "primaryButtonText", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setCmsDraft(createCmsDraft(cmsPage))}
+                  className={secondaryButtonClass}
+                >
+                  Reset
+                </button>
+                <button type="submit" disabled={savingCms || loadingCms} className={primaryButtonClass}>
+                  {savingCms ? "Speichert..." : "Speichern"}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {currentSection === "preview" && (
+          <div className="space-y-4">
+            <div className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="grid gap-3 md:grid-cols-2">
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Seite
+                  <select
+                    value={selectedCmsSlug}
+                    onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  >
+                    {(cmsPages.length > 0 ? cmsPages : [{
+                      slug: "home" as const,
+                      title: cmsPageDefinitions.home.title,
+                      path: cmsPageDefinitions.home.path,
+                      updatedAt: "",
+                    }]).map((page) => (
+                      <option key={page.slug} value={page.slug}>
+                        {page.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block text-sm font-medium text-[#0F2137]">
+                  Ansicht
+                  <select
+                    value={previewViewport}
+                    onChange={(event) => setPreviewViewport(event.target.value as CmsPreviewViewport)}
+                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                  >
+                    <option value="desktop">Desktop</option>
+                    <option value="tablet">Tablet</option>
+                    <option value="mobile">Mobil</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setLocation("/admin/content")}
+                  className={secondaryButtonClass}
+                >
+                  Inhalte bearbeiten
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPreviewRefreshKey((current) => current + 1)}
+                  className={secondaryButtonClass}
+                >
+                  Vorschau neu laden
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-gray-200 bg-white p-4">
+              <div className={`overflow-hidden rounded-lg border border-gray-200 bg-[#F7F8FA] ${previewWidthClass}`}>
+                <iframe
+                  key={`${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}
+                  src={cmsDefinition.path}
+                  title={`Vorschau ${cmsDefinition.title}`}
+                  className="h-[780px] w-full bg-white"
+                />
+              </div>
+            </div>
           </div>
         )}
 
@@ -1105,6 +2051,26 @@ export default function Admin() {
                       value={selectedLead.message}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, message: event.target.value } : current)}
                       rows={6}
+                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    />
+                  </label>
+
+                  <label className="block text-sm font-medium text-[#0F2137]">
+                    Interne Notiz
+                    <textarea
+                      value={selectedLead.internalNote}
+                      onChange={(event) => setSelectedLead((current) => current ? { ...current, internalNote: event.target.value } : current)}
+                      rows={5}
+                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    />
+                  </label>
+
+                  <label className="block text-sm font-medium text-[#0F2137]">
+                    Wiedervorlage
+                    <input
+                      type="date"
+                      value={selectedLead.followUpDate}
+                      onChange={(event) => setSelectedLead((current) => current ? { ...current, followUpDate: event.target.value } : current)}
                       className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                     />
                   </label>

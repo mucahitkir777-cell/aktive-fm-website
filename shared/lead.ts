@@ -73,6 +73,8 @@ export interface AdminLead {
   status: LeadStatus;
   createdAt: string;
   updatedAt: string;
+  internalNote?: string | null;
+  followUpDate?: string | null;
   company?: string | null;
   regionLabel?: string | null;
   serviceLabel?: string | null;
@@ -85,6 +87,12 @@ export const adminLeadUpdateSchema = z
     phone: z.string().trim().min(5, "Bitte geben Sie eine gueltige Telefonnummer ein.").max(50, "Die Telefonnummer ist zu lang.").optional(),
     message: z
       .union([z.string().trim().max(2000, "Die Nachricht ist zu lang."), z.null()])
+      .optional(),
+    internalNote: z
+      .union([z.string().trim().max(5000, "Die interne Notiz ist zu lang."), z.null()])
+      .optional(),
+    followUpDate: z
+      .union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte geben Sie ein gueltiges Datum ein."), z.null()])
       .optional(),
     status: leadStatusSchema.optional(),
   })

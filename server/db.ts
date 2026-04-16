@@ -59,6 +59,8 @@ export async function initializeDatabase() {
       message TEXT,
       status TEXT NOT NULL DEFAULT 'new'
         CHECK (status IN ('new', 'contacted', 'qualified', 'done', 'archived')),
+      internal_note TEXT,
+      follow_up_date DATE,
       company TEXT,
       region_label TEXT,
       service_label TEXT,
@@ -71,6 +73,16 @@ export async function initializeDatabase() {
   await db.query(`
     CREATE INDEX IF NOT EXISTS leads_created_at_idx
     ON leads (created_at DESC)
+  `);
+
+  await db.query(`
+    ALTER TABLE leads
+    ADD COLUMN IF NOT EXISTS internal_note TEXT
+  `);
+
+  await db.query(`
+    ALTER TABLE leads
+    ADD COLUMN IF NOT EXISTS follow_up_date DATE
   `);
 
   await db.query(`
@@ -90,5 +102,16 @@ export async function initializeDatabase() {
   await db.query(`
     CREATE INDEX IF NOT EXISTS page_views_path_idx
     ON page_views (path)
+  `);
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS cms_pages (
+      slug TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      path TEXT NOT NULL,
+      content JSONB NOT NULL DEFAULT '{}'::jsonb,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
   `);
 }

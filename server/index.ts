@@ -9,12 +9,22 @@ import {
   adminLoginSchema,
 } from "../shared/admin";
 import {
+  cmsHomeContentSchema,
+  cmsPageSlugSchema,
+} from "../shared/cms";
+import {
   adminLeadUpdateSchema,
   validateLeadSubmission,
 } from "../shared/lead";
 import { createAdminToken, requireAdminAuth, requireAdminRole } from "./auth";
 import { getAdminDashboardStats } from "./admin/stats";
 import { recordPageView } from "./analytics/repository";
+import {
+  ensureCmsPageDefaults,
+  getCmsPage,
+  listCmsPages,
+  updateCmsPageContent,
+} from "./cms/repository";
 import { initializeDatabase } from "./db";
 import { processLeadSubmission } from "./leads/adapters";
 import { getLeadById, listLeads, updateLead } from "./leads/repository";
@@ -38,6 +48,7 @@ const pageViewSchema = z.object({
 
 async function startServer() {
   await initializeDatabase();
+  await ensureCmsPageDefaults();
   const bootstrapResult = await ensureInitialAdminUser();
   if (bootstrapResult.created) {
     console.log(`Initial admin user created: ${bootstrapResult.user.username}`);
@@ -214,6 +225,76 @@ async function startServer() {
     }
   });
 
+  app.get("/api/admin/cms/pages", requireAdminAuth, async (_req, res) => {
+    try {
+      const pages = await listCmsPages();
+      res.status(200).json({ success: true, pages });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "CMS-Seiten konnten nicht geladen werden.",
+      });
+    }
+  });
+
+  app.get("/api/admin/cms/pages/:slug", requireAdminAuth, async (req, res) => {
+    const parsedSlug = cmsPageSlugSchema.safeParse(req.params.slug);
+    if (!parsedSlug.success) {
+      res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+      return;
+    }
+
+    try {
+      const page = await getCmsPage(parsedSlug.data);
+      if (!page) {
+        res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+        return;
+      }
+
+      res.status(200).json({ success: true, page });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "CMS-Seite konnte nicht geladen werden.",
+      });
+    }
+  });
+
+  app.put("/api/admin/cms/pages/:slug", requireAdminAuth, async (req, res) => {
+    const parsedSlug = cmsPageSlugSchema.safeParse(req.params.slug);
+    if (!parsedSlug.success) {
+      res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+      return;
+    }
+
+    if (parsedSlug.data !== "home") {
+      res.status(400).json({ success: false, message: "Diese CMS-Seite wird noch nicht unterstuetzt." });
+      return;
+    }
+
+    const parsedContent = cmsHomeContentSchema.safeParse(req.body?.content ?? {});
+    if (!parsedContent.success) {
+      res.status(400).json({
+        success: false,
+        message:
+          parsedContent.error.flatten().fieldErrors.hero?.[0]
+          ?? parsedContent.error.flatten().fieldErrors.finalCta?.[0]
+          ?? "CMS-Inhalte sind ungueltig.",
+      });
+      return;
+    }
+
+    try {
+      const page = await updateCmsPageContent(parsedSlug.data, parsedContent.data);
+      res.status(200).json({ success: true, page, message: "CMS-Inhalte wurden gespeichert." });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "CMS-Inhalte konnten nicht gespeichert werden.",
+      });
+    }
+  });
+
   app.post("/api/leads", async (req, res) => {
     const validation = validateLeadSubmission(req.body);
 
@@ -316,6 +397,29 @@ async function startServer() {
       res.status(202).json({ success: true });
     } catch {
       res.status(202).json({ success: true });
+    }
+  });
+
+  app.get("/api/content/pages/:slug", async (req, res) => {
+    const parsedSlug = cmsPageSlugSchema.safeParse(req.params.slug);
+    if (!parsedSlug.success) {
+      res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+      return;
+    }
+
+    try {
+      const page = await getCmsPage(parsedSlug.data);
+      if (!page) {
+        res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+        return;
+      }
+
+      res.status(200).json({ success: true, page });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "CMS-Seite konnte nicht geladen werden.",
+      });
     }
   });
 

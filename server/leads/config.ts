@@ -5,6 +5,9 @@ const PLACEHOLDER_VALUES = new Set([
   "https://hooks.example.com/proclean-leads",
   "https://crm.example.com/leads",
   "https://email.example.com/send-lead",
+  "smtp.example.com",
+  "notifications@example.com",
+  "team@example.com",
 ]);
 
 function readEnv(name: string, fallback = "") {
@@ -16,6 +19,13 @@ function readBooleanEnv(name: string, fallback = false) {
   if (value === undefined) return fallback;
   return String(value).toLowerCase() === "true";
 }
+
+function readNumberEnv(name: string, fallback: number) {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+const smtpPort = readNumberEnv("LEAD_SMTP_PORT", 587);
 
 export const LEAD_SERVER_CONFIG = {
   inbox: {
@@ -35,9 +45,28 @@ export const LEAD_SERVER_CONFIG = {
     enabled: readBooleanEnv("LEAD_EMAIL_ENABLED", false),
     endpoint: readEnv("LEAD_EMAIL_ENDPOINT", "https://email.example.com/send-lead"),
     provider: readEnv("LEAD_EMAIL_PROVIDER", "placeholder"),
+    smtp: {
+      host: readEnv("LEAD_SMTP_HOST", "smtp.example.com"),
+      port: smtpPort,
+      secure: readBooleanEnv("LEAD_SMTP_SECURE", smtpPort === 465),
+      user: readEnv("LEAD_SMTP_USER"),
+      password: readEnv("LEAD_SMTP_PASSWORD"),
+      from: readEnv("LEAD_EMAIL_FROM", "notifications@example.com"),
+      to: readEnv("LEAD_NOTIFICATION_TO", "team@example.com"),
+    },
   },
 } as const;
 
 export function hasConfiguredLeadValue(value: string) {
   return !PLACEHOLDER_VALUES.has(value.trim());
+}
+
+export function hasConfiguredLeadSmtp() {
+  return (
+    hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.host)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.from)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.to)
+    && Boolean(LEAD_SERVER_CONFIG.email.smtp.user.trim())
+    && Boolean(LEAD_SERVER_CONFIG.email.smtp.password.trim())
+  );
 }

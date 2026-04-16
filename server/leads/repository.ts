@@ -9,6 +9,8 @@ interface LeadRow {
   phone: string;
   message: string | null;
   status: LeadStatus;
+  internal_note: string | null;
+  follow_up_date: Date | string | null;
   company: string | null;
   region_label: string | null;
   service_label: string | null;
@@ -20,6 +22,18 @@ function toIsoString(value: Date | string) {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 }
 
+function toDateString(value: Date | string | null) {
+  if (!value) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+
+  return String(value).slice(0, 10);
+}
+
 function mapLeadRow(row: LeadRow): AdminLead {
   return {
     id: row.id,
@@ -28,6 +42,8 @@ function mapLeadRow(row: LeadRow): AdminLead {
     phone: row.phone,
     message: row.message,
     status: row.status,
+    internalNote: row.internal_note,
+    followUpDate: toDateString(row.follow_up_date),
     company: row.company,
     regionLabel: row.region_label,
     serviceLabel: row.service_label,
@@ -43,6 +59,8 @@ const leadSelect = `
   phone,
   message,
   status,
+  internal_note,
+  follow_up_date,
   company,
   region_label,
   service_label,
@@ -131,6 +149,8 @@ export async function updateLead(id: string, input: AdminLeadUpdateInput) {
     email: input.email ?? existingLead.email,
     phone: input.phone ?? existingLead.phone,
     message: input.message !== undefined ? input.message : existingLead.message,
+    internalNote: input.internalNote !== undefined ? input.internalNote : (existingLead.internalNote ?? null),
+    followUpDate: input.followUpDate !== undefined ? input.followUpDate : (existingLead.followUpDate ?? null),
     status: input.status ?? existingLead.status,
   };
 
@@ -143,7 +163,9 @@ export async function updateLead(id: string, input: AdminLeadUpdateInput) {
         phone = $4,
         message = $5,
         status = $6,
-        payload = COALESCE(payload, '{}'::jsonb) || $7::jsonb,
+        internal_note = $7,
+        follow_up_date = $8,
+        payload = COALESCE(payload, '{}'::jsonb) || $9::jsonb,
         updated_at = NOW()
       WHERE id = $1
       RETURNING ${leadSelect}
@@ -155,6 +177,8 @@ export async function updateLead(id: string, input: AdminLeadUpdateInput) {
       nextLead.phone,
       nextLead.message,
       nextLead.status,
+      nextLead.internalNote,
+      nextLead.followUpDate,
       JSON.stringify({
         name: nextLead.name,
         email: nextLead.email,

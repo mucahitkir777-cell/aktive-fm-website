@@ -50,6 +50,8 @@ export interface AdminLeadStats {
   total: number;
   today: number;
   thisWeek: number;
+  dueToday: number;
+  overdue: number;
   byStatus: Record<LeadStatus, number>;
 }
 
@@ -58,7 +60,28 @@ export interface AdminPageViewStats {
   last7Days: number;
 }
 
+export interface AdminRecentLead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: LeadStatus | "ohne Status";
+  createdAt: string;
+}
+
+export interface AdminDueLead {
+  id: string;
+  name: string;
+  status: LeadStatus | "ohne Status";
+  followUpDate: string;
+}
+
 export interface AdminDashboardStats {
   leads: AdminLeadStats;
   pageViews: AdminPageViewStats;
+  recentLeads: AdminRecentLead[];
+  dueLeads: AdminDueLead[];
+  newLeadsToday: AdminRecentLead[];
+  dueTodayLeads: AdminDueLead[];
+  overdueLeads: AdminDueLead[];
 }

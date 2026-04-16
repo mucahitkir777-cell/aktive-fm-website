@@ -60,6 +60,9 @@ function Router() {
       <Route path="/admin/dashboard" component={Admin} />
       <Route path="/admin/leads" component={Admin} />
       <Route path="/admin/settings" component={Admin} />
+      <Route path="/admin/pages" component={Admin} />
+      <Route path="/admin/content" component={Admin} />
+      <Route path="/admin/preview" component={Admin} />
       <Route path="/gebaeudereinigung-kreis-offenbach" component={Region} />
       <Route path="/gebaeudereinigung-frankfurt" component={Region} />
       <Route path="/gebaeudereinigung-hanau" component={Region} />

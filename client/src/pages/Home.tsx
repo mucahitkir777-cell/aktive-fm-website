@@ -10,9 +10,11 @@ import { useEffect, useRef, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import { fetchPublicCmsPage } from "@/lib/cms";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
+import { getDefaultCmsPageContent, type CmsHomeContent } from "@shared/cms";
 import {
   ArrowRight,
   CheckCircle,
@@ -208,6 +210,7 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
 
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement>(null);
+  const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -232,6 +235,22 @@ export default function Home() {
       location: regionLabel,
     });
   };
+
+  useEffect(() => {
+    let isActive = true;
+
+    void fetchPublicCmsPage("home")
+      .then((page) => {
+        if (page && isActive) {
+          setCmsContent(page.content);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -281,18 +300,21 @@ export default function Home() {
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
               style={{ fontFamily: "Syne, sans-serif", letterSpacing: "-0.02em" }}
             >
-              Sauberkeit,<br />
-              <span className="text-[#1D6FA4]">die überzeugt.</span>
+              {cmsContent.hero.title}<br />
+              <span className="text-[#1D6FA4]">{cmsContent.hero.accentTitle}</span>
             </h1>
 
             <p className="text-white/75 text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
-              Zuverlässige Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet – pünktlich, gründlich und diskret. Damit Sie sich auf Ihr Kerngeschäft konzentrieren können.
+              {cmsContent.hero.subtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
               <Link href="/kontakt">
-                <span onClick={() => handleHomeCtaClick("home_hero_offer", "Kostenloses Angebot", "home_hero", "/kontakt")} className="pc-btn-primary text-base px-7 py-3.5">
-                  Kostenloses Angebot
+                <span
+                  onClick={() => handleHomeCtaClick("home_hero_offer", cmsContent.hero.primaryButtonText, "home_hero", "/kontakt")}
+                  className="pc-btn-primary text-base px-7 py-3.5"
+                >
+                  {cmsContent.hero.primaryButtonText}
                   <ArrowRight size={18} />
                 </span>
               </Link>
@@ -647,16 +669,19 @@ export default function Home() {
               <div className="p-10 lg:p-14">
                 <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
                 <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-                  Bereit für saubere Ergebnisse?
+                  {cmsContent.finalCta.title}
                 </h2>
                 <p className="text-white/60 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Fordern Sie jetzt Ihr kostenloses Angebot für Kreis Offenbach, Frankfurt am Main oder Hanau an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.
+                  {cmsContent.finalCta.body}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 mb-8">
                   <Link href="/kontakt">
-                    <span onClick={() => handleHomeCtaClick("home_final_offer", "Jetzt Angebot anfragen", "home_final_cta", "/kontakt")} className="pc-btn-primary">
-                      Jetzt Angebot anfragen
+                    <span
+                      onClick={() => handleHomeCtaClick("home_final_offer", cmsContent.finalCta.primaryButtonText, "home_final_cta", "/kontakt")}
+                      className="pc-btn-primary"
+                    >
+                      {cmsContent.finalCta.primaryButtonText}
                       <ArrowRight size={16} />
                     </span>
                   </Link>
@@ -701,3 +726,4 @@ export default function Home() {
     </div>
   );
 }
+
