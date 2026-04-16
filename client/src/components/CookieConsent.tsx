@@ -49,17 +49,17 @@ export default function CookieConsent() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-2xl">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t pc-border shadow-[0_-10px_36px_-28px_rgba(15,33,55,0.75)]">
       <div className="container max-w-6xl mx-auto px-4 py-6 lg:py-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Content */}
           <div className="flex-1">
-            <h3 className="font-bold text-[#0F2137] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
+            <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               Wir respektieren Ihre Privatsphäre
             </h3>
-            <p className="text-sm text-[#6B7A8D] leading-relaxed mb-4 lg:mb-0" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="text-sm pc-text-secondary leading-relaxed mb-4 lg:mb-0" style={{ fontFamily: "Inter, sans-serif" }}>
               Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und unsere Website zu optimieren. Sie können Ihre Präferenzen jederzeit anpassen. Weitere Informationen finden Sie in unserer{" "}
-              <a href="/datenschutz" className="text-[#1D6FA4] hover:underline font-semibold">
+              <a href="/datenschutz" className="pc-text-brand hover:underline font-semibold">
                 Datenschutzerklärung
               </a>
               .
@@ -70,14 +70,14 @@ export default function CookieConsent() {
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <button
               onClick={handleRejectAll}
-              className="px-4 py-2.5 text-sm font-medium text-[#6B7A8D] border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2.5 text-sm font-medium pc-text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Ablehnen
             </button>
             <button
               onClick={handleAcceptAll}
-              className="px-4 py-2.5 text-sm font-medium text-white bg-[#1D6FA4] rounded-lg hover:bg-[#165a8a] transition-colors"
+              className="px-4 py-2.5 text-sm font-medium text-white pc-bg-brand rounded-lg hover:bg-[var(--pc-primary-hover)] transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Alle akzeptieren
@@ -95,7 +95,7 @@ export default function CookieConsent() {
 
         {/* Expandable Details (optional) */}
         <details className="mt-4 pt-4 border-t border-gray-200">
-          <summary className="cursor-pointer text-sm font-semibold text-[#0F2137] hover:text-[#1D6FA4]" style={{ fontFamily: "Syne, sans-serif" }}>
+          <summary className="cursor-pointer text-sm font-semibold pc-text-primary hover:text-[var(--pc-primary)]" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
             Detaillierte Einstellungen
           </summary>
           <div className="mt-4 space-y-3">
@@ -111,7 +111,7 @@ export default function CookieConsent() {
                 }
                 className="w-4 h-4 rounded border-gray-300"
               />
-              <span className="text-sm text-[#6B7A8D]" style={{ fontFamily: "Inter, sans-serif" }}>
+              <span className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
                 <strong>Analyse-Cookies</strong> – Helfen uns, die Website zu verbessern
               </span>
             </label>
@@ -127,13 +127,13 @@ export default function CookieConsent() {
                 }
                 className="w-4 h-4 rounded border-gray-300"
               />
-              <span className="text-sm text-[#6B7A8D]" style={{ fontFamily: "Inter, sans-serif" }}>
+              <span className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
                 <strong>Marketing-Cookies</strong> – Personalisierte Inhalte und Anzeigen
               </span>
             </label>
             <button
               onClick={handleSavePreferences}
-              className="mt-4 px-4 py-2 text-sm font-medium text-white bg-[#0F2137] rounded-lg hover:bg-[#1a3a52] transition-colors w-full"
+              className="mt-4 px-4 py-2 text-sm font-medium text-white pc-bg-brand rounded-lg hover:bg-[var(--pc-primary-hover)] transition-colors w-full"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Einstellungen speichern

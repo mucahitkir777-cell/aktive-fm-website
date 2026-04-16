@@ -207,11 +207,11 @@ export default function Leistungen() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen pc-bg-section">
       <Navigation />
 
       {/* Page Hero */}
-      <section className="relative overflow-hidden bg-[#0F2137] pt-28 pb-16">
+      <section className="relative overflow-hidden pt-28 pb-16 border-b pc-border bg-gradient-to-b from-white to-[#EEF4FF]">
         <div className="absolute inset-0">
           <img
             src={heroImageUrl}
@@ -219,15 +219,15 @@ export default function Leistungen() {
             className="h-full w-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-[#0F2137]/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/88 to-white/72" />
         </div>
         <div className="container">
           <div className="relative z-10 max-w-2xl">
-            <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               {resolvedCmsContent.hero.title}
             </h1>
-            <p className="text-white/60 text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
 
@@ -253,16 +253,16 @@ export default function Leistungen() {
           <div className="mx-auto max-w-3xl space-y-8 text-center">
             <div>
               <h2 className="pc-section-title">{resolvedCmsContent.overview.title}</h2>
-              <p className="mt-4 text-[#6B7A8D] text-base leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="mt-4 pc-text-secondary text-base leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.overview.subtitle}
               </p>
             </div>
 
             <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h3 className="text-2xl font-semibold text-[#0F2137] mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+              <h3 className="text-2xl font-semibold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                 {resolvedCmsContent.benefits.title}
               </h3>
-              <p className="text-[#6B7A8D] leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="pc-text-secondary leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.benefits.subtitle}
               </p>
             </div>
@@ -289,24 +289,24 @@ export default function Leistungen() {
                       loading="lazy"
                     />
                   </div>
-                  <div className="absolute -bottom-3 -left-3 bg-[#1D6FA4] text-white rounded-lg p-4 shadow-lg">
+                  <div className="absolute -bottom-3 -left-3 pc-bg-brand text-white rounded-lg p-4 shadow-lg">
                     <service.icon size={22} />
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                  <h2 className="text-2xl lg:text-3xl font-bold text-[#0F2137] mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+                  <h2 className="text-2xl lg:text-3xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                     {service.title}
                   </h2>
-                  <p className="text-[#6B7A8D] leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <p className="pc-text-secondary leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
                     {service.fullDesc}
                   </p>
 
                   <ul className="space-y-2.5 mb-7">
                     {service.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2.5">
-                        <CheckCircle size={16} className="text-[#1D6FA4] mt-0.5 shrink-0" />
+                        <CheckCircle size={16} className="pc-text-brand mt-0.5 shrink-0" />
                         <span className="text-[#1A2332] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                           {feature}
                         </span>
@@ -334,12 +334,12 @@ export default function Leistungen() {
       </section>
 
       {/* Final CTA - Lead-Maschine */}
-      <section className="bg-[#0F2137] py-16 lg:py-20">
+      <section className="pc-bg-soft py-16 lg:py-20 border-y pc-border">
         <div className="container text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+          <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
             {resolvedCmsContent.finalCta.title}
           </h2>
-          <p className="text-white/60 mb-8 max-w-lg mx-auto text-lg" style={{ fontFamily: "Inter, sans-serif" }}>
+          <p className="pc-text-secondary mb-8 max-w-lg mx-auto text-lg" style={{ fontFamily: "Inter, sans-serif" }}>
             {resolvedCmsContent.finalCta.body}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

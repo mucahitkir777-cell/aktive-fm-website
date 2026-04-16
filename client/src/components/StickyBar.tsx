@@ -35,7 +35,7 @@ export default function StickyBar() {
         <a
           href={companyConfig.contact.phoneHref}
           onClick={handlePhoneClick}
-          className="flex items-center justify-center w-14 h-14 bg-[#1D6FA4] text-white rounded-full shadow-lg hover:bg-[#155d8e] hover:shadow-xl transition-all duration-200 hover:scale-110"
+          className="flex items-center justify-center w-14 h-14 pc-bg-brand text-white rounded-full shadow-lg hover:bg-[var(--pc-primary-hover)] hover:shadow-xl transition-all duration-200 hover:scale-110"
           title="Anrufen"
         >
           <Phone size={20} />
@@ -55,20 +55,20 @@ export default function StickyBar() {
 
         {/* Anfrage */}
         <Link href="/kontakt">
-          <span onClick={handleRequestClick} className="flex items-center justify-center w-14 h-14 bg-[#0F2137] text-white rounded-full shadow-lg hover:bg-[#1a3a52] hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer" title="Angebot anfordern">
+          <span onClick={handleRequestClick} className="flex items-center justify-center w-14 h-14 pc-bg-accent pc-text-primary rounded-full shadow-lg hover:bg-[var(--pc-primary)] hover:text-white hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer" title="Angebot anfordern">
             <FileText size={20} />
           </span>
         </Link>
       </div>
 
       {/* Mobile Sticky Bar (unten, horizontal) */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-white border-t border-gray-200 shadow-2xl">
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-white border-t pc-border shadow-[0_-10px_36px_-30px_rgba(15,33,55,0.8)]">
         <div className="flex items-center justify-around h-16">
           {/* Telefon */}
           <a
             href={companyConfig.contact.phoneHref}
             onClick={handlePhoneClick}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[#1D6FA4] hover:bg-blue-50 transition-colors"
+            className="flex-1 flex flex-col items-center justify-center gap-1 py-2 pc-text-brand hover:bg-[var(--pc-bg-soft)] transition-colors"
           >
             <Phone size={20} />
             <span className="text-xs font-semibold">Anrufen</span>
@@ -88,7 +88,7 @@ export default function StickyBar() {
 
           {/* Anfrage */}
           <Link href="/kontakt">
-            <span onClick={handleRequestClick} className="flex-1 flex flex-col items-center justify-center gap-1 py-2 text-[#0F2137] hover:bg-gray-100 transition-colors cursor-pointer">
+            <span onClick={handleRequestClick} className="flex-1 flex flex-col items-center justify-center gap-1 py-2 pc-text-brand hover:bg-[var(--pc-bg-soft)] transition-colors cursor-pointer">
               <FileText size={20} />
               <span className="text-xs font-semibold">Anfrage</span>
             </span>

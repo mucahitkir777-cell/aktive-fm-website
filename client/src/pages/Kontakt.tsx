@@ -95,18 +95,18 @@ export default function Kontakt() {
 
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen pc-bg-section">
       <Navigation />
 
       {/* Page Hero */}
-      <section className="bg-[#0F2137] pt-28 pb-16">
+      <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
-            <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               {resolvedCmsContent.hero.title}
             </h1>
-            <p className="text-white/60 text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
             <div className="mt-8">
@@ -133,26 +133,26 @@ export default function Kontakt() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
             {/* Contact Info */}
             <div className="lg:col-span-1 pc-fade-up">
-              <h2 className="text-xl font-bold text-[#0F2137] mb-6" style={{ fontFamily: "Syne, sans-serif" }}>
+              <h2 className="text-xl font-bold pc-text-primary mb-6" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                 {resolvedCmsContent.contactInfo.title}
               </h2>
-              <p className="text-[#6B7A8D] text-sm leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="pc-text-secondary text-sm leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.contactInfo.subtitle}
               </p>
 
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
-                    <Phone size={18} className="text-[#1D6FA4]" />
+                    <Phone size={18} className="pc-text-brand" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#0F2137] text-sm mb-1" style={{ fontFamily: "Syne, sans-serif" }}>
+                    <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       Telefon
                     </div>
-                    <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_page_info")} className="text-[#6B7A8D] text-sm hover:text-[#1D6FA4] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_page_info")} className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.contact.phoneDisplay}
                     </a>
-                    <p className="text-[#6B7A8D] text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <p className="pc-text-secondary text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.openingHours.phoneAvailability}
                     </p>
                   </div>
@@ -160,13 +160,13 @@ export default function Kontakt() {
 
                 <div className="flex gap-4">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
-                    <Mail size={18} className="text-[#1D6FA4]" />
+                    <Mail size={18} className="pc-text-brand" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#0F2137] text-sm mb-1" style={{ fontFamily: "Syne, sans-serif" }}>
+                    <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       E-Mail
                     </div>
-                    <a href={companyConfig.contact.emailHref} className="text-[#6B7A8D] text-sm hover:text-[#1D6FA4] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <a href={companyConfig.contact.emailHref} className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.contact.email}
                     </a>
                   </div>
@@ -174,13 +174,13 @@ export default function Kontakt() {
 
                 <div className="flex gap-4">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
-                    <MapPin size={18} className="text-[#1D6FA4]" />
+                    <MapPin size={18} className="pc-text-brand" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#0F2137] text-sm mb-1" style={{ fontFamily: "Syne, sans-serif" }}>
+                    <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       Adresse
                     </div>
-                    <p className="text-[#6B7A8D] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.address.lines.map((line) => (
                         <span key={line}>
                           {line}
@@ -193,13 +193,13 @@ export default function Kontakt() {
 
                 <div className="flex gap-4">
                   <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
-                    <Clock size={18} className="text-[#1D6FA4]" />
+                    <Clock size={18} className="pc-text-brand" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#0F2137] text-sm mb-1" style={{ fontFamily: "Syne, sans-serif" }}>
+                    <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       Öffnungszeiten
                     </div>
-                    <p className="text-[#6B7A8D] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.openingHours.contactLines.map((line) => (
                         <span key={line}>
                           {line}
@@ -213,7 +213,7 @@ export default function Kontakt() {
 
               {/* Trust Points */}
               <div className="mt-8 bg-white rounded-lg p-5 border border-gray-100">
-                <h3 className="font-bold text-[#0F2137] text-sm mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Ihr Angebot ist:
                 </h3>
                 <ul className="space-y-2">
@@ -224,8 +224,8 @@ export default function Kontakt() {
                     "Innerhalb von 24 Stunden",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-[#1D6FA4] shrink-0" />
-                      <span className="text-[#6B7A8D] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <CheckCircle size={14} className="pc-text-brand shrink-0" />
+                      <span className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                         {item}
                       </span>
                     </li>
@@ -234,7 +234,7 @@ export default function Kontakt() {
               </div>
 
               <div className="mt-6 bg-white rounded-lg p-5 border border-gray-100">
-                <h3 className="font-bold text-[#0F2137] text-sm mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Einsatzgebiete
                 </h3>
                 <div className="space-y-2">
@@ -242,11 +242,11 @@ export default function Kontakt() {
                     <Link key={region.id} href={region.route}>
                       <span
                         onClick={() => handleRegionClick(region.label, region.route)}
-                        className="flex items-center justify-between gap-3 py-2 text-[#6B7A8D] text-sm hover:text-[#1D6FA4] transition-colors"
+                        className="flex items-center justify-between gap-3 py-2 pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors"
                         style={{ fontFamily: "Inter, sans-serif" }}
                       >
                         <span className="flex items-center gap-2">
-                          <MapPin size={14} className="text-[#1D6FA4]" />
+                          <MapPin size={14} className="pc-text-brand" />
                           {region.label}
                         </span>
                         <span className="text-xs">Ansehen</span>
@@ -260,10 +260,10 @@ export default function Kontakt() {
             {/* Contact Form */}
             <div id="kontakt-form" className="lg:col-span-2 pc-fade-up">
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-3xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   {resolvedCmsContent.formSection.title}
                 </h2>
-                <p className="text-[#6B7A8D] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                   {resolvedCmsContent.formSection.subtitle}
                 </p>
               </div>

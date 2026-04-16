@@ -129,6 +129,10 @@ interface LeadDraft {
   status: LeadStatus;
 }
 
+type CmsDraftValue = string | number | boolean;
+type CmsDraftSection = Record<string, CmsDraftValue>;
+type CmsDraft = Record<string, CmsDraftSection>;
+
 const buttonBaseClass = "rounded-lg px-4 py-2 text-sm font-semibold transition-colors";
 const secondaryButtonClass = `${buttonBaseClass} border border-gray-200 bg-white text-[#0F2137] hover:bg-gray-50`;
 const primaryButtonClass = `${buttonBaseClass} bg-[#1D6FA4] text-white hover:bg-[#155d8e] disabled:bg-gray-400`;
@@ -234,10 +238,10 @@ function createLeadDraft(lead: AdminLead): LeadDraft {
 
 function createCmsDraft(page?: CmsPage | null, slug: CmsPageSlug = "home") {
   if (!page) {
-    return getDefaultCmsPageContent(slug) as Record<string, Record<string, string>>;
+    return getDefaultCmsPageContent(slug) as CmsDraft;
   }
 
-  return page.content as Record<string, Record<string, string>>;
+  return page.content as CmsDraft;
 }
 
 function getLeadFilterBucket(lead: AdminLead): LeadFilterValue {
@@ -335,7 +339,7 @@ export default function Admin() {
   const [selectedCmsSlug, setSelectedCmsSlug] = useState<CmsPageSlug>("home");
   const [selectedCmsSection, setSelectedCmsSection] = useState<CmsSectionKey>("hero");
   const [cmsPage, setCmsPage] = useState<CmsPage | null>(null);
-  const [cmsDraft, setCmsDraft] = useState<Record<string, Record<string, string>>>(() => getDefaultCmsPageContent("home") as Record<string, Record<string, string>>);
+  const [cmsDraft, setCmsDraft] = useState<CmsDraft>(() => getDefaultCmsPageContent("home") as CmsDraft);
   const [loadingCms, setLoadingCms] = useState(false);
   const [savingCms, setSavingCms] = useState(false);
   const [previewViewport, setPreviewViewport] = useState<CmsPreviewViewport>("desktop");
@@ -627,7 +631,7 @@ export default function Admin() {
     setCmsDraft(createCmsDraft(result.page));
   }
 
-  function updateCmsField(section: string, field: string, value: string) {
+  function updateCmsField(section: string, field: string, value: CmsDraftValue) {
     setCmsDraft((current) => ({
       ...current,
       [section]: {
@@ -655,7 +659,7 @@ export default function Admin() {
       return;
     }
 
-    setCmsDraft(getDefaultCmsPageContent(selectedCmsSlug) as Record<string, Record<string, string>>);
+    setCmsDraft(getDefaultCmsPageContent(selectedCmsSlug) as CmsDraft);
     void loadCmsPages(session);
     void loadCmsPage(selectedCmsSlug, session);
   }, [currentSection, selectedCmsSlug, session]);
@@ -1770,21 +1774,55 @@ export default function Admin() {
               ) : (
                 <div className="mt-5 space-y-4">
                   {cmsSelectedSection.fields.map((field) => {
-                    const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as Record<string, string>;
+                    const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
+                    const rawValue = sectionValue[field.key];
+                    const textValue = typeof rawValue === "string" ? rawValue : rawValue == null ? "" : String(rawValue);
+                    const checkedValue =
+                      typeof rawValue === "boolean"
+                        ? rawValue
+                        : rawValue == null
+                          ? true
+                          : String(rawValue).trim().toLowerCase() !== "false";
+                    const parsedNumber = typeof rawValue === "number" ? rawValue : Number.parseInt(String(rawValue ?? ""), 10);
+                    const numberValue = Number.isNaN(parsedNumber) ? "" : parsedNumber;
 
                     return (
                       <label key={field.key} className="block text-sm font-medium text-[#0F2137]">
                         {field.label}
                         {field.input === "textarea" ? (
                           <textarea
-                            value={sectionValue[field.key] ?? ""}
+                            value={textValue}
                             onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
                             rows={field.rows ?? 4}
                             className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                           />
+                        ) : field.input === "checkbox" ? (
+                          <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+                            <input
+                              type="checkbox"
+                              checked={checkedValue}
+                              onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.checked)}
+                            />
+                            <span className="text-sm text-[#0F2137]">{checkedValue ? "Ja" : "Nein"}</span>
+                          </div>
+                        ) : field.input === "number" ? (
+                          <input
+                            type="number"
+                            min={1}
+                            step={1}
+                            value={numberValue}
+                            onChange={(event) => {
+                              const nextValue = Number.parseInt(event.target.value, 10);
+                              if (Number.isNaN(nextValue)) {
+                                return;
+                              }
+                              updateCmsField(cmsSelectedSection.key, field.key, nextValue);
+                            }}
+                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          />
                         ) : (
                           <input
-                            value={sectionValue[field.key] ?? ""}
+                            value={textValue}
                             onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
                             className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                           />

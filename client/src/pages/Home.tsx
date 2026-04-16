@@ -198,10 +198,10 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
   const { count, ref } = useCounter(value);
   return (
     <div ref={ref} className="text-center">
-      <div className="text-3xl lg:text-4xl font-bold text-[#0F2137]" style={{ fontFamily: "Syne, sans-serif" }}>
+      <div className="text-3xl lg:text-4xl font-bold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
         {count}{suffix}
       </div>
-      <div className="text-sm text-[#6B7A8D] mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
+      <div className="text-sm pc-text-secondary mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
         {label}
       </div>
     </div>
@@ -314,7 +314,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]" ref={sectionsRef}>
+    <div className="min-h-screen pc-bg-section" ref={sectionsRef}>
       <Navigation />
 
       {/* ─── HERO ─── */}
@@ -327,28 +327,28 @@ export default function Home() {
             className="w-full h-full object-cover"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F2137]/90 via-[#0F2137]/70 to-[#0F2137]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/82 to-white/55" />
         </div>
 
         {/* Hero Content */}
         <div className="container relative z-10 pt-20">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
-              <span className="w-8 h-0.5 bg-[#1D6FA4]" />
-              <span className="text-[#1D6FA4] text-sm font-medium uppercase tracking-widest" style={{ fontFamily: "Inter, sans-serif" }}>
+              <span className="w-8 h-0.5 pc-bg-brand" />
+              <span className="pc-text-brand text-sm font-medium uppercase tracking-widest" style={{ fontFamily: "Inter, sans-serif" }}>
                 Professionelle Gebäudereinigung
               </span>
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
-              style={{ fontFamily: "Syne, sans-serif", letterSpacing: "-0.02em" }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold pc-text-primary leading-tight mb-6"
+              style={{ fontFamily: "Plus Jakarta Sans, sans-serif", letterSpacing: "-0.02em" }}
             >
               {resolvedCmsContent.hero.title}<br />
-              <span className="text-[#1D6FA4]">{resolvedCmsContent.hero.accentTitle}</span>
+              <span className="pc-text-brand">{resolvedCmsContent.hero.accentTitle}</span>
             </h1>
 
-            <p className="text-white/75 text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="text-[#4F5F76] text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
 
@@ -376,8 +376,8 @@ export default function Home() {
                 "Vollständig versichert",
               ].map((badge) => (
                 <div key={badge} className="flex items-center gap-1.5">
-                  <CheckCircle size={15} className="text-[#1D6FA4]" />
-                  <span className="text-white/80 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <CheckCircle size={15} className="pc-text-brand" />
+                  <span className="text-[#334155] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                     {badge}
                   </span>
                 </div>
@@ -387,8 +387,8 @@ export default function Home() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/40">
-          <div className="w-px h-12 bg-gradient-to-b from-transparent to-white/40" />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#94A3B8]">
+          <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#94A3B8]" />
         </div>
       </section>
 
@@ -424,15 +424,15 @@ export default function Home() {
                   style={{ transitionDelay: `${i * 80}ms` }}
                 >
                   <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                    <MapPin size={20} className="text-[#1D6FA4]" />
+                    <MapPin size={20} className="pc-text-brand" />
                   </div>
-                  <h3 className="text-lg font-bold text-[#0F2137] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
+                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                     {region.label}
                   </h3>
-                  <p className="text-[#6B7A8D] text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <p className="pc-text-secondary text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                     {region.description}
                   </p>
-                  <span className="inline-flex items-center gap-1 text-[#1D6FA4] text-sm font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <span className="inline-flex items-center gap-1 pc-text-brand text-sm font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
                     Region ansehen <ChevronRight size={14} />
                   </span>
                 </span>
@@ -443,7 +443,7 @@ export default function Home() {
       </section>
 
       {/* ─── LEISTUNGEN ─── */}
-      <section className="pc-section bg-[#F7F8FA]">
+      <section className="pc-section pc-bg-section">
         <div className="container">
           <div className="max-w-xl mb-14 pc-fade-up">
             <span className="pc-accent-line" />
@@ -460,13 +460,13 @@ export default function Home() {
                 className="pc-card pc-fade-up group"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
-                <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#1D6FA4] transition-colors duration-300">
-                  <service.icon size={20} className="text-[#1D6FA4] group-hover:text-white transition-colors duration-300" />
+                <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[var(--pc-primary)] transition-colors duration-300">
+                  <service.icon size={20} className="pc-text-brand group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-lg font-bold text-[#0F2137] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   {service.title}
                 </h3>
-                <p className="text-[#6B7A8D] text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                <p className="pc-text-secondary text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   {service.desc}
                 </p>
                 <Link href={service.href}>
@@ -478,7 +478,7 @@ export default function Home() {
                       });
                       handleHomeCtaClick("home_service_more", "Mehr erfahren", "home_services", service.href, service.title);
                     }}
-                    className="inline-flex items-center gap-1 text-[#1D6FA4] text-sm font-medium hover:gap-2 transition-all duration-200"
+                    className="inline-flex items-center gap-1 pc-text-brand text-sm font-medium hover:gap-2 transition-all duration-200"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
                     Mehr erfahren <ChevronRight size={14} />
@@ -514,9 +514,9 @@ export default function Home() {
                 />
               </div>
               {/* Floating Badge */}
-              <div className="absolute -bottom-4 -right-4 bg-[#0F2137] text-white rounded-lg p-5 shadow-xl">
-                <div className="text-3xl font-bold" style={{ fontFamily: "Syne, sans-serif" }}>{companyConfig.metrics.yearsExperience}+</div>
-                <div className="text-white/70 text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>Jahre Erfahrung</div>
+              <div className="absolute -bottom-4 -right-4 pc-bg-accent pc-text-primary rounded-xl p-5 shadow-xl">
+                <div className="text-3xl font-bold" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>{companyConfig.metrics.yearsExperience}+</div>
+                <div className="pc-text-brand text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>Jahre Erfahrung</div>
               </div>
             </div>
 
@@ -526,7 +526,7 @@ export default function Home() {
               <h2 className="pc-section-title mb-4">
                 {resolvedCmsContent.usps.title}
               </h2>
-              <p className="text-[#6B7A8D] leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="pc-text-secondary leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.usps.subtitle}
               </p>
 
@@ -534,13 +534,13 @@ export default function Home() {
                 {usps.map((usp) => (
                   <div key={usp.title} className="flex gap-3">
                     <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
-                      <usp.icon size={18} className="text-[#1D6FA4]" />
+                      <usp.icon size={18} className="pc-text-brand" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-[#0F2137] text-sm mb-1" style={{ fontFamily: "Syne, sans-serif" }}>
+                      <h4 className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                         {usp.title}
                       </h4>
-                      <p className="text-[#6B7A8D] text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <p className="pc-text-secondary text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                         {usp.desc}
                       </p>
                     </div>
@@ -562,14 +562,14 @@ export default function Home() {
       </section>
 
       {/* ─── PROZESS ─── */}
-      <section className="pc-section bg-[#0F2137]">
+      <section className="pc-section pc-bg-soft border-y pc-border">
         <div className="container">
           <div className="max-w-xl mb-14 pc-fade-up">
-            <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-            <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
+            <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary leading-tight" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               So einfach geht's
             </h2>
-            <p className="text-white/60 text-lg leading-relaxed mt-4" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed mt-4" style={{ fontFamily: "Inter, sans-serif" }}>
               Von der ersten Anfrage bis zum ersten Reinigungstermin – unkompliziert und transparent.
             </p>
           </div>
@@ -579,16 +579,16 @@ export default function Home() {
               <div key={step.num} className="relative pc-fade-up" style={{ transitionDelay: `${i * 100}ms` }}>
                 {/* Connector line */}
                 {i < processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-white/10 z-0" />
+                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-[#D9E4F8] z-0" />
                 )}
                 <div className="relative z-10">
-                  <div className="text-5xl font-bold text-white/10 mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+                  <div className="text-5xl font-bold text-[#9DB2D8] mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                     {step.num}
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
+                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                     {step.title}
                   </h3>
-                  <p className="text-white/50 text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                     {step.desc}
                   </p>
                 </div>
@@ -599,7 +599,7 @@ export default function Home() {
       </section>
 
       {/* ─── EINSATZBEREICHE ─── */}
-      <section className="pc-section bg-[#F7F8FA]">
+      <section className="pc-section pc-bg-section">
         <div className="container">
           <div className="max-w-xl mb-12 pc-fade-up">
             <span className="pc-accent-line" />
@@ -613,11 +613,11 @@ export default function Home() {
             {sectors.map((sector, i) => (
               <div
                 key={sector.label}
-                className="bg-white rounded-lg p-5 text-center border border-gray-100 hover:border-[#1D6FA4] hover:shadow-md transition-all duration-300 pc-fade-up"
+                className="bg-white rounded-lg p-5 text-center border border-gray-100 hover:border-[#1E3A8A] hover:shadow-md transition-all duration-300 pc-fade-up"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
-                <sector.icon size={24} className="text-[#1D6FA4] mx-auto mb-3" />
-                <span className="text-[#0F2137] text-xs font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
+                <sector.icon size={24} className="pc-text-brand mx-auto mb-3" />
+                <span className="pc-text-primary text-xs font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
                   {sector.label}
                 </span>
               </div>
@@ -656,10 +656,10 @@ export default function Home() {
                   „{t.text}"
                 </p>
                 <div className="border-t border-gray-100 pt-4">
-                  <div className="font-semibold text-[#0F2137] text-sm" style={{ fontFamily: "Syne, sans-serif" }}>
+                  <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                     {t.name}
                   </div>
-                  <div className="text-[#6B7A8D] text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <div className="pc-text-secondary text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
                     {t.company}
                   </div>
                 </div>
@@ -677,12 +677,12 @@ export default function Home() {
           className="w-full h-full object-cover"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-[#0F2137]/60 flex items-center justify-center">
-          <div className="text-center text-white max-w-2xl px-4">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center">
+          <div className="text-center pc-text-primary max-w-2xl px-4">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               Glasreinigung auf höchstem Niveau
             </h2>
-            <p className="text-white/75 mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="text-[#44546B] mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
               Von der Innenverglasung bis zur Glasfassade – streifenfrei, sicher und professionell.
             </p>
             <Link href="/leistungen">
@@ -705,17 +705,17 @@ export default function Home() {
       </section>
 
       {/* ─── FINALER CTA ─── */}
-      <section className="pc-section bg-[#F7F8FA]">
+      <section className="pc-section pc-bg-section">
         <div className="container">
-          <div className="bg-[#0F2137] rounded-2xl overflow-hidden">
+          <div className="bg-white rounded-2xl overflow-hidden border pc-border shadow-[0_24px_48px_-34px_rgba(15,33,55,0.45)]">
             <div className="grid grid-cols-1 lg:grid-cols-2">
               {/* Content */}
               <div className="p-10 lg:p-14">
-                <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-                <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <span className="block w-10 h-0.5 pc-bg-brand mb-6" />
+                <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   {resolvedCmsContent.finalCta.title}
                 </h2>
-                <p className="text-white/60 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+                <p className="pc-text-secondary leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
                   {resolvedCmsContent.finalCta.body}
                 </p>
 
@@ -742,8 +742,8 @@ export default function Home() {
                     "Persönliche Beratung vor Ort",
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-[#1D6FA4]" />
-                      <span className="text-white/60 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <CheckCircle size={14} className="pc-text-brand" />
+                      <span className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                         {item}
                       </span>
                     </div>
@@ -759,7 +759,7 @@ export default function Home() {
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0F2137]/20" />
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-white/20" />
               </div>
             </div>
           </div>

@@ -14,18 +14,18 @@ export default function Datenschutz() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen pc-bg-section">
       <Navigation />
 
       {/* Page Hero */}
-      <section className="bg-[#0F2137] pt-28 pb-16">
+      <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
-            <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-            <h1 className="text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
+            <h1 className="text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               Datenschutzerklärung
             </h1>
-            <p className="text-white/60" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
               Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäß DSGVO
             </p>
           </div>
@@ -36,10 +36,10 @@ export default function Datenschutz() {
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl">
-            <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8 text-[#6B7A8D] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+            <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8 pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
 
               <div>
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   1. Datenschutz auf einen Blick
                 </h2>
                 <h3 className="font-semibold text-[#1A2332] mb-2">Allgemeine Hinweise</h3>
@@ -49,13 +49,13 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   2. Verantwortliche Stelle
                 </h2>
                 <p className="mb-3">
                   Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
                 </p>
-                <div className="bg-[#F7F8FA] rounded-lg p-4 space-y-1">
+                <div className="pc-bg-section rounded-lg p-4 space-y-1">
                   <p className="font-semibold text-[#1A2332]">{companyConfig.brand.legalName}</p>
                   <p>{companyConfig.address.singleLine}</p>
                   <p>Telefon: {companyConfig.contact.phoneDisplay}</p>
@@ -64,7 +64,7 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   3. Datenerfassung auf dieser Website
                 </h2>
                 <h3 className="font-semibold text-[#1A2332] mb-2">Kontaktformular</h3>
@@ -81,7 +81,7 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   4. Ihre Rechte
                 </h2>
                 <p className="mb-3">Sie haben jederzeit das Recht:</p>
@@ -95,7 +95,7 @@ export default function Datenschutz() {
                     "Ihre Daten in einem maschinenlesbaren Format zu erhalten (Art. 20 DSGVO)",
                   ].map((right) => (
                     <li key={right} className="flex items-start gap-2">
-                      <span className="text-[#1D6FA4] mt-1">•</span>
+                      <span className="pc-text-brand mt-1">•</span>
                       <span>{right}</span>
                     </li>
                   ))}
@@ -106,7 +106,7 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   5. Speicherdauer
                 </h2>
                 <p>
@@ -115,7 +115,7 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   6. Cookies
                 </h2>
                 <p>
@@ -124,7 +124,7 @@ export default function Datenschutz() {
               </div>
 
               <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   7. Kontakt zum Datenschutzbeauftragten
                 </h2>
                 <p>

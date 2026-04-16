@@ -245,10 +245,10 @@ export default function QuickContactForm({
         <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
           <CheckCircle size={32} className="text-green-500" />
         </div>
-        <h3 className="text-xl font-bold text-[#0F2137] mb-2" style={{ fontFamily: "Syne, sans-serif" }}>
+        <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
           Vielen Dank!
         </h3>
-        <p className="text-[#6B7A8D] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+        <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
           Ihre Anfrage wurde verarbeitet. Ihre Referenz: {leadId}
         </p>
       </div>
@@ -257,7 +257,7 @@ export default function QuickContactForm({
 
   const errorClass = "text-red-600 text-xs mt-1";
   const inputClass =
-    "w-full px-4 py-3 rounded-lg border border-gray-200 text-[#1A2332] placeholder-gray-400 focus:outline-none focus:border-[#1D6FA4] focus:ring-1 focus:ring-[#1D6FA4] transition-colors text-sm";
+    "w-full px-4 py-3 rounded-xl border pc-border text-[#1A2332] placeholder-[#94A3B8] focus:outline-none focus:border-[#1E3A8A] focus:ring-1 focus:ring-[#1E3A8A] transition-colors text-sm";
 
   return (
     <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} className="space-y-4" noValidate>
@@ -420,19 +420,19 @@ export default function QuickContactForm({
         {fieldErrors.message && <p className={errorClass}>{fieldErrors.message}</p>}
       </div>
 
-      <label className="flex items-start gap-3 text-[#6B7A8D] text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+      <label className="flex items-start gap-3 pc-text-secondary text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
         <input
           type="checkbox"
           name="privacyConsent"
           checked={formData.privacyConsent}
           onChange={handleInputChange}
-          className="mt-1 h-4 w-4 rounded border-gray-300 text-[#1D6FA4] focus:ring-[#1D6FA4]"
+          className="mt-1 h-4 w-4 rounded border-gray-300 pc-text-brand focus:ring-[#1E3A8A]"
           required
         />
         <span>
           Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet werden. Hinweise finden Sie in der{" "}
           <Link href="/datenschutz">
-            <span className="text-[#1D6FA4] hover:text-[#155d8e]">Datenschutzerklärung</span>
+            <span className="pc-text-brand hover:text-[#1A3277]">Datenschutzerklärung</span>
           </Link>
           . *
           {fieldErrors.privacyConsent && <span className="block text-red-600 mt-1">{fieldErrors.privacyConsent}</span>}
@@ -442,14 +442,14 @@ export default function QuickContactForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-[#1D6FA4] text-white font-semibold py-3 rounded-lg hover:bg-[#155d8e] disabled:bg-gray-400 transition-all duration-200 flex items-center justify-center gap-2"
+        className="w-full pc-bg-brand text-white font-semibold py-3 rounded-xl hover:bg-[var(--pc-primary-hover)] disabled:bg-gray-400 transition-all duration-200 flex items-center justify-center gap-2"
         style={{ fontFamily: "Inter, sans-serif" }}
       >
         <Send size={16} />
         {loading ? "Wird verarbeitet..." : "Kostenloses Angebot"}
       </button>
 
-      <p className="text-[#6B7A8D] text-xs text-center" style={{ fontFamily: "Inter, sans-serif" }}>
+      <p className="pc-text-secondary text-xs text-center" style={{ fontFamily: "Inter, sans-serif" }}>
         Kostenlos & unverbindlich | Verarbeitung erst nach Datenschutz-Zustimmung
       </p>
     </form>

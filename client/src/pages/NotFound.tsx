@@ -10,19 +10,19 @@ import { ArrowLeft, Home } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen pc-bg-section">
       <Navigation />
 
-      <section className="bg-[#0F2137] pt-28 pb-16 min-h-[60vh] flex items-center">
+      <section className="pc-page-hero min-h-[60vh] flex items-center">
         <div className="container">
           <div className="max-w-lg">
-            <span className="text-[#1D6FA4] font-bold text-8xl lg:text-9xl block mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="pc-text-brand font-bold text-8xl lg:text-9xl block mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               404
             </span>
-            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <h1 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               Seite nicht gefunden
             </h1>
-            <p className="text-white/60 text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
               Die gesuchte Seite existiert nicht oder wurde verschoben. Kehren Sie zur Startseite zurück.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">

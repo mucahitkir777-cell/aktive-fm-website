@@ -57,12 +57,12 @@ export function TrustMetrics() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {trustMetrics.map((metric) => (
-        <div key={metric.label} className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 text-center">
-          <metric.icon size={24} className="text-[#1D6FA4] mx-auto mb-2" />
-          <div className="text-xl lg:text-2xl font-bold text-[#0F2137]" style={{ fontFamily: "Syne, sans-serif" }}>
+        <div key={metric.label} className="bg-white rounded-xl p-5 shadow-[0_16px_36px_-28px_rgba(15,33,55,0.4)] border pc-border text-center">
+          <metric.icon size={24} className="pc-text-brand mx-auto mb-2" />
+          <div className="text-xl lg:text-2xl font-bold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
             {metric.number}
           </div>
-          <div className="text-xs lg:text-sm text-[#6B7A8D] mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
+          <div className="text-xs lg:text-sm pc-text-secondary mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
             {metric.label}
           </div>
         </div>
@@ -75,7 +75,7 @@ export function TestimonialsGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {testimonials.map((testimonial) => (
-        <div key={testimonial.name} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div key={testimonial.name} className="bg-white rounded-xl p-6 shadow-[0_16px_36px_-28px_rgba(15,33,55,0.4)] border pc-border hover:shadow-[0_18px_40px_-26px_rgba(15,33,55,0.5)] transition-shadow">
           {/* Stars */}
           <div className="flex gap-1 mb-4">
             {Array.from({ length: testimonial.rating }).map((_, i) => (
@@ -84,20 +84,20 @@ export function TestimonialsGrid() {
           </div>
 
           {/* Zitat */}
-          <p className="text-[#6B7A8D] text-sm leading-relaxed mb-4 italic" style={{ fontFamily: "Inter, sans-serif" }}>
+          <p className="pc-text-secondary text-sm leading-relaxed mb-4 italic" style={{ fontFamily: "Inter, sans-serif" }}>
             "{testimonial.text}"
           </p>
 
           {/* Autor */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#1D6FA4] text-white flex items-center justify-center font-bold text-sm">
+            <div className="w-10 h-10 rounded-full pc-bg-brand text-white flex items-center justify-center font-bold text-sm">
               {testimonial.initials}
             </div>
             <div>
-              <div className="font-semibold text-[#0F2137] text-sm" style={{ fontFamily: "Syne, sans-serif" }}>
+              <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                 {testimonial.name}
               </div>
-              <div className="text-[#6B7A8D] text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
+              <div className="pc-text-secondary text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
                 {testimonial.company}
               </div>
             </div>
@@ -110,7 +110,7 @@ export function TestimonialsGrid() {
 
 export default function TestimonialsSection() {
   return (
-    <section className="pc-section bg-[#F7F8FA]">
+    <section className="pc-section pc-bg-section">
       <div className="container">
         {/* Trust Metrics */}
         <div className="mb-16">

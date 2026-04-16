@@ -102,17 +102,17 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-start justify-between gap-4 py-5 text-left"
       >
-        <span className="font-medium text-[#0F2137] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+        <span className="font-medium pc-text-primary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
           {q}
         </span>
         <ChevronDown
           size={18}
-          className={`text-[#1D6FA4] shrink-0 mt-0.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`pc-text-brand shrink-0 mt-0.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && (
         <div className="pb-5 pr-8">
-          <p className="text-[#6B7A8D] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+          <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
             {a}
           </p>
         </div>
@@ -127,18 +127,18 @@ export default function FAQ() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA]">
+    <div className="min-h-screen pc-bg-section">
       <Navigation />
 
       {/* Page Hero */}
-      <section className="bg-[#0F2137] pt-28 pb-16">
+      <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
-            <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+            <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
               Häufige Fragen
             </h1>
-            <p className="text-white/60 text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
               Hier finden Sie Antworten auf die häufigsten Fragen zu unseren Leistungen, Abläufen und Konditionen.
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function FAQ() {
           <div className="max-w-3xl mx-auto">
             {faqs.map((category) => (
               <div key={category.category} className="mb-10">
-                <h2 className="text-lg font-bold text-[#0F2137] mb-4 pb-3 border-b-2 border-[#1D6FA4] inline-block" style={{ fontFamily: "Syne, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4 pb-3 border-b-2 border-[#38BDF8] inline-block" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   {category.category}
                 </h2>
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-6">
@@ -163,11 +163,11 @@ export default function FAQ() {
             ))}
 
             {/* Still have questions */}
-            <div className="bg-[#0F2137] rounded-xl p-8 text-center mt-12">
-              <h3 className="text-2xl font-bold text-white mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+            <div className="pc-bg-soft border pc-border rounded-xl p-8 text-center mt-12">
+              <h3 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                 Noch Fragen?
               </h3>
-              <p className="text-white/60 mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="pc-text-secondary mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
                 Wir helfen Ihnen gerne persönlich weiter – per Telefon oder über unser Kontaktformular.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
