@@ -366,11 +366,14 @@ export default function Admin() {
   const leadCount = leads.length;
   const isAdmin = session?.user.role === "admin";
   const currentSection: AdminSection = useMemo(() => {
-    if (location === "/admin/pages") return "pages";
-    if (location === "/admin/content") return "content";
-    if (location === "/admin/preview") return "preview";
-    if (location === "/admin/leads") return "leads";
-    if (location === "/admin/settings") return "settings";
+    const rawSection = location.replace(/^\/admin\/?/, "").split("/")[0];
+
+    if (rawSection === "pages") return "pages";
+    if (rawSection === "content") return "content";
+    if (rawSection === "preview") return "preview";
+    if (rawSection === "leads") return "leads";
+    if (rawSection === "settings") return "settings";
+    if (rawSection === "dashboard") return "dashboard";
     return "dashboard";
   }, [location]);
 
