@@ -4,11 +4,13 @@
  */
 
 import { Link } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { trackCtaClick, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
+import { fetchPublicCmsPage } from "@/lib/cms";
+import { getDefaultCmsPageContent, type CmsServicesContent } from "@shared/cms";
 import {
   ArrowRight,
   CheckCircle,
@@ -120,7 +122,39 @@ const services = [
   },
 ];
 
+function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  const provided = content as Record<string, unknown>;
+  return Object.keys(defaults).reduce((result, key) => {
+    const value = provided[key];
+    return {
+      ...result,
+      [key]: typeof value === "string" ? (value as string) : defaults[key as keyof T],
+    };
+  }, {} as T);
+}
+
+function mergeCmsServicesContent(content: unknown): CmsServicesContent {
+  const defaults = getDefaultCmsPageContent("leistungen");
+
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  return {
+    hero: mergeCmsSection(defaults.hero, (content as Record<string, unknown>).hero),
+    overview: mergeCmsSection(defaults.overview, (content as Record<string, unknown>).overview),
+    benefits: mergeCmsSection(defaults.benefits, (content as Record<string, unknown>).benefits),
+    finalCta: mergeCmsSection(defaults.finalCta, (content as Record<string, unknown>).finalCta),
+  };
+}
+
 export default function Leistungen() {
+  const [cmsContent, setCmsContent] = useState<CmsServicesContent>(() => getDefaultCmsPageContent("leistungen"));
+
   const handleServiceCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceTitle?: string, serviceId?: string) => {
     if (serviceTitle) {
       trackServiceInterest(serviceTitle, {
@@ -139,6 +173,22 @@ export default function Leistungen() {
       service_id: serviceId,
     });
   };
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("leistungen")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(mergeCmsServicesContent(page.content));
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -164,10 +214,10 @@ export default function Leistungen() {
           <div className="max-w-2xl">
             <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-              Unsere Leistungen
+              {cmsContent.hero.title}
             </h1>
             <p className="text-white/60 text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-              Das vollständige Spektrum professioneller Gebäudereinigung – maßgeschneidert für Ihr Objekt und Ihre Anforderungen.
+              {cmsContent.hero.subtitle}
             </p>
 
             {/* Hero CTA */}
@@ -177,11 +227,33 @@ export default function Leistungen() {
                 {companyConfig.contact.phoneDisplay}
               </a>
               <Link href="/kontakt">
-                <span onClick={() => handleServiceCtaClick("services_hero_offer", "Angebot anfragen", "services_hero", "/kontakt")} className="pc-btn-white">
-                  Angebot anfragen
+                <span onClick={() => handleServiceCtaClick("services_hero_offer", cmsContent.hero.buttonText, "services_hero", "/kontakt")} className="pc-btn-white">
+                  {cmsContent.hero.buttonText}
                   <ArrowRight size={16} />
                 </span>
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pc-section">
+        <div className="container">
+          <div className="mx-auto max-w-3xl space-y-8 text-center">
+            <div>
+              <h2 className="pc-section-title">{cmsContent.overview.title}</h2>
+              <p className="mt-4 text-[#6B7A8D] text-base leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                {cmsContent.overview.subtitle}
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h3 className="text-2xl font-semibold text-[#0F2137] mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
+                {cmsContent.benefits.title}
+              </h3>
+              <p className="text-[#6B7A8D] leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                {cmsContent.benefits.subtitle}
+              </p>
             </div>
           </div>
         </div>
@@ -254,15 +326,15 @@ export default function Leistungen() {
       <section className="bg-[#0F2137] py-16 lg:py-20">
         <div className="container text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-            Bereit für professionelle Reinigung?
+            {cmsContent.finalCta.title}
           </h2>
           <p className="text-white/60 mb-8 max-w-lg mx-auto text-lg" style={{ fontFamily: "Inter, sans-serif" }}>
-            Fordern Sie jetzt Ihr kostenloses Angebot an. Wir melden uns innerhalb von 24 Stunden.
+            {cmsContent.finalCta.body}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/kontakt">
-              <span onClick={() => handleServiceCtaClick("services_final_offer", "Kostenloses Angebot", "services_final_cta", "/kontakt")} className="pc-btn-primary text-lg">
-                Kostenloses Angebot
+              <span onClick={() => handleServiceCtaClick("services_final_offer", cmsContent.finalCta.primaryButtonText, "services_final_cta", "/kontakt")} className="pc-btn-primary text-lg">
+                {cmsContent.finalCta.primaryButtonText}
                 <ArrowRight size={16} />
               </span>
             </Link>

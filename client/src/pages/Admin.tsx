@@ -19,7 +19,6 @@ import type { AdminDashboardStats, AdminRole, AdminSessionUser, AdminUser } from
 import {
   cmsPageDefinitions,
   getDefaultCmsPageContent,
-  type CmsHomeContent,
   type CmsPage,
   type CmsPageSlug,
   type CmsPageSummary,
@@ -104,7 +103,7 @@ interface DecodedAdminToken extends AdminSessionUser {
 
 type ActivePanel = "lead-edit" | "change-password" | "users" | null;
 type AdminSection = "dashboard" | "leads" | "settings" | "pages" | "content" | "preview";
-type CmsSectionKey = keyof CmsHomeContent;
+type CmsSectionKey = string;
 type CmsPreviewViewport = "desktop" | "tablet" | "mobile";
 type LeadFilterValue =
   | "all"
@@ -233,10 +232,12 @@ function createLeadDraft(lead: AdminLead): LeadDraft {
   };
 }
 
-function createCmsDraft(page?: CmsPage | null) {
-  return page?.slug === "home"
-    ? page.content
-    : getDefaultCmsPageContent("home");
+function createCmsDraft(page?: CmsPage | null, slug: CmsPageSlug = "home") {
+  if (!page) {
+    return getDefaultCmsPageContent(slug) as Record<string, Record<string, string>>;
+  }
+
+  return page.content as Record<string, Record<string, string>>;
 }
 
 function getLeadFilterBucket(lead: AdminLead): LeadFilterValue {
@@ -334,7 +335,7 @@ export default function Admin() {
   const [selectedCmsSlug, setSelectedCmsSlug] = useState<CmsPageSlug>("home");
   const [selectedCmsSection, setSelectedCmsSection] = useState<CmsSectionKey>("hero");
   const [cmsPage, setCmsPage] = useState<CmsPage | null>(null);
-  const [cmsDraft, setCmsDraft] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
+  const [cmsDraft, setCmsDraft] = useState<Record<string, Record<string, string>>>(() => getDefaultCmsPageContent("home") as Record<string, Record<string, string>>);
   const [loadingCms, setLoadingCms] = useState(false);
   const [savingCms, setSavingCms] = useState(false);
   const [previewViewport, setPreviewViewport] = useState<CmsPreviewViewport>("desktop");
@@ -414,7 +415,15 @@ export default function Admin() {
     return nextLeads;
   }, [leadFilter, leadSearch, leadSort, leads]);
 
-  const cmsDefinition = cmsPageDefinitions[selectedCmsSlug];
+  const cmsDefinition = cmsPageDefinitions[selectedCmsSlug] ?? cmsPageDefinitions.home;
+  const cmsPageOptions = cmsPages.length > 0
+    ? cmsPages
+    : (Object.entries(cmsPageDefinitions).map(([slug, definition]) => ({
+        slug: slug as CmsPageSlug,
+        title: definition.title,
+        path: definition.path,
+        updatedAt: "",
+      })) as CmsPageSummary[]);
   const cmsSections = cmsDefinition.sections;
   const cmsSelectedSection = cmsSections.find((section) => section.key === selectedCmsSection) ?? cmsSections[0];
   const previewWidthClass = useMemo(() => {
@@ -618,15 +627,11 @@ export default function Admin() {
     setCmsDraft(createCmsDraft(result.page));
   }
 
-  function updateCmsField<TSection extends CmsSectionKey>(
-    section: TSection,
-    field: keyof CmsHomeContent[TSection],
-    value: string,
-  ) {
+  function updateCmsField(section: string, field: string, value: string) {
     setCmsDraft((current) => ({
       ...current,
       [section]: {
-        ...current[section],
+        ...(current[section] ?? {}),
         [field]: value,
       },
     }));
@@ -650,6 +655,7 @@ export default function Admin() {
       return;
     }
 
+    setCmsDraft(getDefaultCmsPageContent(selectedCmsSlug) as Record<string, Record<string, string>>);
     void loadCmsPages(session);
     void loadCmsPage(selectedCmsSlug, session);
   }, [currentSection, selectedCmsSlug, session]);
@@ -1661,12 +1667,7 @@ export default function Admin() {
 
         {currentSection === "pages" && (
           <div className="grid gap-4 lg:grid-cols-2">
-            {(cmsPages.length > 0 ? cmsPages : [{
-              slug: "home" as const,
-              title: cmsPageDefinitions.home.title,
-              path: cmsPageDefinitions.home.path,
-              updatedAt: "",
-            }]).map((page) => (
+            {cmsPageOptions.map((page) => (
               <div key={page.slug} className="rounded-lg border border-gray-200 bg-white p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -1723,12 +1724,7 @@ export default function Admin() {
                     onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
                     className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                   >
-                    {(cmsPages.length > 0 ? cmsPages : [{
-                      slug: "home" as const,
-                      title: cmsPageDefinitions.home.title,
-                      path: cmsPageDefinitions.home.path,
-                      updatedAt: "",
-                    }]).map((page) => (
+                    {cmsPageOptions.map((page) => (
                       <option key={page.slug} value={page.slug}>
                         {page.title}
                       </option>
@@ -1773,152 +1769,29 @@ export default function Admin() {
                 <div className="py-10 text-center text-sm text-[#6B7A8D]">CMS-Inhalte werden geladen...</div>
               ) : (
                 <div className="mt-5 space-y-4">
-                  {selectedCmsSection === "hero" && (
-                    <>
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Hero-Titel
-                        <input
-                          value={cmsDraft.hero.title}
-                          onChange={(event) => updateCmsField("hero", "title", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
+                  {cmsSelectedSection.fields.map((field) => {
+                    const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as Record<string, string>;
 
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Hero-Akzenttitel
-                        <input
-                          value={cmsDraft.hero.accentTitle}
-                          onChange={(event) => updateCmsField("hero", "accentTitle", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
+                    return (
+                      <label key={field.key} className="block text-sm font-medium text-[#0F2137]">
+                        {field.label}
+                        {field.input === "textarea" ? (
+                          <textarea
+                            value={sectionValue[field.key] ?? ""}
+                            onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
+                            rows={field.rows ?? 4}
+                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          />
+                        ) : (
+                          <input
+                            value={sectionValue[field.key] ?? ""}
+                            onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
+                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          />
+                        )}
                       </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Hero-Untertitel
-                        <textarea
-                          value={cmsDraft.hero.subtitle}
-                          onChange={(event) => updateCmsField("hero", "subtitle", event.target.value)}
-                          rows={5}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Hero-Button-Text
-                        <input
-                          value={cmsDraft.hero.primaryButtonText}
-                          onChange={(event) => updateCmsField("hero", "primaryButtonText", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-                    </>
-                  )}
-
-                  {selectedCmsSection === "services" && (
-                    <>
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Bereichstitel
-                        <input
-                          value={cmsDraft.services.title}
-                          onChange={(event) => updateCmsField("services", "title", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Bereichsbeschreibung
-                        <textarea
-                          value={cmsDraft.services.subtitle}
-                          onChange={(event) => updateCmsField("services", "subtitle", event.target.value)}
-                          rows={5}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Button-Text
-                        <input
-                          value={cmsDraft.services.buttonText}
-                          onChange={(event) => updateCmsField("services", "buttonText", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-                    </>
-                  )}
-
-                  {selectedCmsSection === "usps" && (
-                    <>
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Bereichstitel
-                        <input
-                          value={cmsDraft.usps.title}
-                          onChange={(event) => updateCmsField("usps", "title", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        Bereichsbeschreibung
-                        <textarea
-                          value={cmsDraft.usps.subtitle}
-                          onChange={(event) => updateCmsField("usps", "subtitle", event.target.value)}
-                          rows={5}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-                    </>
-                  )}
-
-                  {selectedCmsSection === "finalCta" && (
-                    <>
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        CTA-Titel
-                        <input
-                          value={cmsDraft.finalCta.title}
-                          onChange={(event) => updateCmsField("finalCta", "title", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        CTA-Text
-                        <textarea
-                          value={cmsDraft.finalCta.body}
-                          onChange={(event) => updateCmsField("finalCta", "body", event.target.value)}
-                          rows={5}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        CTA-Button-Text
-                        <input
-                          value={cmsDraft.finalCta.primaryButtonText}
-                          onChange={(event) => updateCmsField("finalCta", "primaryButtonText", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        SEO-Titel
-                        <input
-                          value={cmsDraft.finalCta.seoTitle}
-                          onChange={(event) => updateCmsField("finalCta", "seoTitle", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-
-                      <label className="block text-sm font-medium text-[#0F2137]">
-                        SEO-Beschreibung
-                        <textarea
-                          value={cmsDraft.finalCta.seoDescription}
-                          onChange={(event) => updateCmsField("finalCta", "seoDescription", event.target.value)}
-                          rows={5}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                        />
-                      </label>
-                    </>
-                  )}
+                    );
+                  })}
                 </div>
               )}
 
@@ -1949,12 +1822,7 @@ export default function Admin() {
                     onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
                     className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                   >
-                    {(cmsPages.length > 0 ? cmsPages : [{
-                      slug: "home" as const,
-                      title: cmsPageDefinitions.home.title,
-                      path: cmsPageDefinitions.home.path,
-                      updatedAt: "",
-                    }]).map((page) => (
+                    {cmsPageOptions.map((page) => (
                       <option key={page.slug} value={page.slug}>
                         {page.title}
                       </option>

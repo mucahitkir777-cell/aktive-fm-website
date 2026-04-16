@@ -3,7 +3,7 @@
  * Design: Architektonischer Minimalismus
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -12,6 +12,8 @@ import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick } from "@/lib/analytics";
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
+import { fetchPublicCmsPage } from "@/lib/cms";
+import { getDefaultCmsPageContent, type CmsContactContent } from "@shared/cms";
 
 export default function Kontakt() {
   const handleRegionClick = (regionLabel: string, destinationUrl: string) => {
@@ -28,6 +30,23 @@ export default function Kontakt() {
     });
   };
 
+  const [cmsContent, setCmsContent] = useState<CmsContactContent>(() => getDefaultCmsPageContent("kontakt"));
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("kontakt")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(page.content);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -55,11 +74,25 @@ export default function Kontakt() {
           <div className="max-w-2xl">
             <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-              Kontakt
+              {cmsContent.hero.title}
             </h1>
             <p className="text-white/60 text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-              Stellen Sie Ihre Anfrage für Kreis Offenbach, Frankfurt am Main oder Hanau – wir melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.
+              {cmsContent.hero.subtitle}
             </p>
+            <div className="mt-8">
+              <a
+                href="#kontakt-form"
+                onClick={() => trackCtaClick({
+                  cta_id: "contact_hero_cta",
+                  cta_text: cmsContent.hero.buttonText,
+                  cta_location: "contact_hero",
+                  destination_url: "#kontakt-form",
+                })}
+                className="pc-btn-primary"
+              >
+                {cmsContent.hero.buttonText}
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -71,8 +104,11 @@ export default function Kontakt() {
             {/* Contact Info */}
             <div className="lg:col-span-1 pc-fade-up">
               <h2 className="text-xl font-bold text-[#0F2137] mb-6" style={{ fontFamily: "Syne, sans-serif" }}>
-                So erreichen Sie uns
+                {cmsContent.contactInfo.title}
               </h2>
+              <p className="text-[#6B7A8D] text-sm leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+                {cmsContent.contactInfo.subtitle}
+              </p>
 
               <div className="space-y-6">
                 <div className="flex gap-4">
@@ -192,7 +228,15 @@ export default function Kontakt() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2 pc-fade-up">
+            <div id="kontakt-form" className="lg:col-span-2 pc-fade-up">
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
+                  {cmsContent.formSection.title}
+                </h2>
+                <p className="text-[#6B7A8D] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {cmsContent.formSection.subtitle}
+                </p>
+              </div>
               <QuickContactForm formId="contact_page_quick_contact" formType="contact" source="contact_page" pageType="contact_page" showLeadFields />
             </div>
           </div>

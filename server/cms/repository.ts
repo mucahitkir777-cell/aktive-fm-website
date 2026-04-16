@@ -1,6 +1,6 @@
 import {
-  cmsHomeContentSchema,
   cmsPageDefinitions,
+  cmsPageSchemas,
   cmsPageSlugs,
   getDefaultCmsPageContent,
   type CmsPage,
@@ -26,11 +26,10 @@ function parseCmsPageContent<TSlug extends CmsPageSlug>(
   slug: TSlug,
   content: unknown,
 ): CmsPageContentMap[TSlug] {
-  if (slug === "home") {
-    const parsed = cmsHomeContentSchema.safeParse(content);
-    if (parsed.success) {
-      return parsed.data as CmsPageContentMap[TSlug];
-    }
+  const schema = cmsPageSchemas[slug];
+  const parsed = schema.safeParse(content);
+  if (parsed.success) {
+    return parsed.data as CmsPageContentMap[TSlug];
   }
 
   return getDefaultCmsPageContent(slug);

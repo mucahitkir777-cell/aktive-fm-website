@@ -208,6 +208,35 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
   );
 }
 
+function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  const provided = content as Record<string, unknown>;
+  return Object.keys(defaults).reduce((result, key) => {
+    const value = provided[key];
+    return {
+      ...result,
+      [key]: typeof value === "string" ? value : defaults[key as keyof T],
+    };
+  }, {} as T);
+}
+
+function mergeCmsHomeContent(content: unknown): CmsHomeContent {
+  const defaults = getDefaultCmsPageContent("home");
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  return {
+    hero: mergeCmsSection(defaults.hero, (content as Record<string, unknown>).hero),
+    services: mergeCmsSection(defaults.services, (content as Record<string, unknown>).services),
+    usps: mergeCmsSection(defaults.usps, (content as Record<string, unknown>).usps),
+    finalCta: mergeCmsSection(defaults.finalCta, (content as Record<string, unknown>).finalCta),
+  };
+}
+
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement>(null);
   const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
@@ -242,7 +271,7 @@ export default function Home() {
     void fetchPublicCmsPage("home")
       .then((page) => {
         if (page && isActive) {
-          setCmsContent(page.content);
+          setCmsContent(mergeCmsHomeContent(page.content));
         }
       })
       .catch(() => undefined);
