@@ -156,6 +156,8 @@ export default function Leistungen() {
   const [cmsContent, setCmsContent] = useState<CmsServicesContent>(() => getDefaultCmsPageContent("leistungen"));
   const resolvedCmsContent = mergeCmsServicesContent(cmsContent);
   const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroOffice;
+  const detailImagePrimary = resolvedCmsContent.overview.imageUrl1;
+  const detailImageSecondary = resolvedCmsContent.overview.imageUrl2;
 
   const handleServiceCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceTitle?: string, serviceId?: string) => {
     if (serviceTitle) {
@@ -274,61 +276,66 @@ export default function Leistungen() {
       <section className="pc-section">
         <div className="container">
           <div className="space-y-16 lg:space-y-24">
-            {services.map((service, i) => (
-              <div
-                key={service.slug}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center pc-fade-up`}
-              >
-                {/* Image */}
-                <div className={`relative ${i % 2 === 1 ? "lg:order-2" : ""}`}>
-                  <div className="overflow-hidden rounded-lg shadow-lg">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-72 lg:h-96 object-cover hover:scale-105 transition-transform duration-700"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="absolute -bottom-3 -left-3 pc-bg-brand text-white rounded-lg p-4 shadow-lg">
-                    <service.icon size={22} />
-                  </div>
-                </div>
+            {services.map((service, i) => {
+              const cmsServiceImageUrl =
+                (i % 2 === 0 ? detailImagePrimary : detailImageSecondary) || detailImagePrimary || detailImageSecondary || service.image;
 
-                {/* Content */}
-                <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                  <h2 className="text-2xl lg:text-3xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                    {service.title}
-                  </h2>
-                  <p className="pc-text-secondary leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
-                    {service.fullDesc}
-                  </p>
+              return (
+                <div
+                  key={service.slug}
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center pc-fade-up`}
+                >
+                  {/* Image */}
+                  <div className={`relative ${i % 2 === 1 ? "lg:order-2" : ""}`}>
+                    <div className="overflow-hidden rounded-lg shadow-lg">
+                      <img
+                        src={cmsServiceImageUrl}
+                        alt={service.title}
+                        className="w-full h-72 lg:h-96 object-cover hover:scale-105 transition-transform duration-700"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="absolute -bottom-3 -left-3 pc-bg-brand text-white rounded-lg p-4 shadow-lg">
+                      <service.icon size={22} />
+                    </div>
+                  </div>
 
-                  <ul className="space-y-2.5 mb-7">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2.5">
-                        <CheckCircle size={16} className="pc-text-brand mt-0.5 shrink-0" />
-                        <span className="text-[#1A2332] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
-                          {feature}
+                  {/* Content */}
+                  <div className={i % 2 === 1 ? "lg:order-1" : ""}>
+                    <h2 className="text-2xl lg:text-3xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                      {service.title}
+                    </h2>
+                    <p className="pc-text-secondary leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {service.fullDesc}
+                    </p>
+
+                    <ul className="space-y-2.5 mb-7">
+                      {service.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2.5">
+                          <CheckCircle size={16} className="pc-text-brand mt-0.5 shrink-0" />
+                          <span className="text-[#1A2332] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Link href="/kontakt">
+                        <span onClick={() => handleServiceCtaClick(`service_${service.slug}_offer`, "Angebot anfragen", "services_detail", "/kontakt", service.title, service.slug)} className="pc-btn-primary">
+                          Angebot anfragen
+                          <ArrowRight size={16} />
                         </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link href="/kontakt">
-                      <span onClick={() => handleServiceCtaClick(`service_${service.slug}_offer`, "Angebot anfragen", "services_detail", "/kontakt", service.title, service.slug)} className="pc-btn-primary">
-                        Angebot anfragen
-                        <ArrowRight size={16} />
-                      </span>
-                    </Link>
-                    <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("services_detail", { service_type: service.title, service_id: service.slug })} className="pc-btn-outline">
-                      <Phone size={16} />
-                      Anrufen
-                    </a>
+                      </Link>
+                      <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("services_detail", { service_type: service.title, service_id: service.slug })} className="pc-btn-outline">
+                        <Phone size={16} />
+                        Anrufen
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

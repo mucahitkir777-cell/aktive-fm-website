@@ -242,6 +242,9 @@ export default function Home() {
   const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
   const resolvedCmsContent = mergeCmsHomeContent(cmsContent);
   const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroMain;
+  const uspsImageUrl = resolvedCmsContent.usps.imageUrl || IMAGES.heroOffice;
+  const servicesFeatureImageUrl = resolvedCmsContent.services.imageUrl || IMAGES.serviceGlass;
+  const finalCtaImageUrl = resolvedCmsContent.finalCta.imageUrl || IMAGES.aboutTeam;
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -507,7 +510,7 @@ export default function Home() {
             <div className="relative pc-fade-up order-2 lg:order-1">
               <div className="relative overflow-hidden rounded-lg shadow-xl">
                 <img
-                  src={IMAGES.heroOffice}
+                  src={uspsImageUrl}
                   alt="Professionelle Büroreinigung"
                   className="w-full h-80 lg:h-[500px] object-cover"
                   loading="lazy"
@@ -672,7 +675,7 @@ export default function Home() {
       {/* ─── BILD-SEKTION ─── */}
       <section className="relative h-80 lg:h-96 overflow-hidden">
         <img
-          src={IMAGES.serviceGlass}
+          src={servicesFeatureImageUrl}
           alt="Glasreinigung an modernem Bürogebäude"
           className="w-full h-full object-cover"
           loading="lazy"
@@ -754,7 +757,7 @@ export default function Home() {
               {/* Image */}
               <div className="hidden lg:block relative">
                 <img
-                  src={IMAGES.aboutTeam}
+                  src={finalCtaImageUrl}
                   alt={`${companyConfig.brand.name} Team`}
                   className="w-full h-full object-cover"
                   loading="lazy"

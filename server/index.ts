@@ -28,6 +28,7 @@ import {
 import { initializeDatabase } from "./db";
 import { processLeadSubmission } from "./leads/adapters";
 import { getLeadById, listLeads, updateLead } from "./leads/repository";
+import { ensureUploadsDirectory, listUploadedImages, saveUploadedImage } from "./media/storage";
 import { hashPassword, verifyPassword } from "./users/password";
 import {
   createUser,
@@ -46,9 +47,17 @@ const pageViewSchema = z.object({
   userAgent: z.string().trim().max(1000).optional(),
 });
 
+const mediaUploadSchema = z.object({
+  filename: z.string().trim().min(1).max(255),
+  dataUrl: z.string().trim().min(1).max(16_000_000),
+});
+
 async function startServer() {
+  const projectRoot = path.resolve(__dirname, "..");
+
   await initializeDatabase();
   await ensureCmsPageDefaults();
+  await ensureUploadsDirectory(projectRoot);
   const bootstrapResult = await ensureInitialAdminUser();
   if (bootstrapResult.created) {
     console.log(`Initial admin user created: ${bootstrapResult.user.username}`);
@@ -57,7 +66,7 @@ async function startServer() {
   const app = express();
   const server = createServer(app);
 
-  app.use(express.json({ limit: "64kb" }));
+  app.use(express.json({ limit: "12mb" }));
 
   app.post("/api/admin/login", async (req, res) => {
     const parsedBody = adminLoginSchema.safeParse(req.body ?? {});
@@ -287,6 +296,51 @@ async function startServer() {
     }
   });
 
+  app.get("/api/admin/media", requireAdminAuth, async (_req, res) => {
+    try {
+      const media = await listUploadedImages(projectRoot);
+      res.status(200).json({ success: true, media });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Medien konnten nicht geladen werden.",
+      });
+    }
+  });
+
+  app.post("/api/admin/media/upload", requireAdminAuth, async (req, res) => {
+    const parsedBody = mediaUploadSchema.safeParse(req.body ?? {});
+
+    if (!parsedBody.success) {
+      res.status(400).json({
+        success: false,
+        message: parsedBody.error.issues[0]?.message ?? "Ungueltige Upload-Daten.",
+      });
+      return;
+    }
+
+    try {
+      const media = await saveUploadedImage({
+        projectRoot,
+        filename: parsedBody.data.filename,
+        dataUrl: parsedBody.data.dataUrl,
+      });
+      res.status(201).json({ success: true, media, message: "Bild wurde hochgeladen." });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Bild konnte nicht hochgeladen werden.";
+      const isClientError =
+        message.includes("Ungueltiges Bildformat")
+        || message.includes("Nur JPG")
+        || message.includes("ist leer")
+        || message.includes("zu gross");
+
+      res.status(isClientError ? 400 : 500).json({
+        success: false,
+        message,
+      });
+    }
+  });
+
   app.post("/api/leads", async (req, res) => {
     const validation = validateLeadSubmission(req.body);
 
@@ -420,6 +474,7 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
+  app.use("/uploads", express.static(path.resolve(projectRoot, "uploads")));
   app.use(express.static(staticPath));
 
   app.get("*", (_req, res) => {

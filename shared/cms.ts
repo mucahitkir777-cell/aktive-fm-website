@@ -41,25 +41,31 @@ export const cmsHomeContentSchema = z.object({
         "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung."
       ),
       buttonText: pageButtonSchema.default("Alle Leistungen ansehen"),
+      imageUrl: imageUrlSchema,
     })
     .default({
       title: "Unsere Leistungen",
       subtitle: "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.",
       buttonText: "Alle Leistungen ansehen",
+      imageUrl: "",
     }),
   usps: z
     .object({
       title: pageTitleSchema.default("Warum Unternehmen uns vertrauen"),
+      imageUrl: imageUrlSchema,
       subtitle: pageSubtitleSchema.default(
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen."
       ),
     })
     .default({
       title: "Warum Unternehmen uns vertrauen",
+      imageUrl: "",
       subtitle:
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     }),
-  finalCta: finalCtaSchema,
+  finalCta: finalCtaSchema.extend({
+    imageUrl: imageUrlSchema,
+  }),
 });
 
 export type CmsHomeContent = z.infer<typeof cmsHomeContentSchema>;
@@ -72,10 +78,14 @@ export const cmsServicesContentSchema = z.object({
       subtitle: pageSubtitleSchema.default(
         "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung."
       ),
+      imageUrl1: imageUrlSchema,
+      imageUrl2: imageUrlSchema,
     })
     .default({
       title: "Leistungsübersicht",
       subtitle: "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung.",
+      imageUrl1: "",
+      imageUrl2: "",
     }),
   benefits: z
     .object({
@@ -343,6 +353,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Bereichstitel", input: "text" },
           { key: "subtitle", label: "Bereichsbeschreibung", input: "textarea", rows: 4 },
           { key: "buttonText", label: "Button-Text", input: "text" },
+          { key: "imageUrl", label: "Bereichsbild URL", input: "text" },
         ],
       },
       {
@@ -351,6 +362,7 @@ export const cmsPageDefinitions = {
         fields: [
           { key: "title", label: "Bereichstitel", input: "text" },
           { key: "subtitle", label: "Bereichsbeschreibung", input: "textarea", rows: 4 },
+          { key: "imageUrl", label: "Bereichsbild URL", input: "text" },
         ],
       },
       {
@@ -360,6 +372,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "CTA-Titel", input: "text" },
           { key: "body", label: "CTA-Text", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "CTA-Button-Text", input: "text" },
+          { key: "imageUrl", label: "CTA-Bild URL", input: "text" },
           { key: "seoTitle", label: "SEO-Titel", input: "text" },
           { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
         ],
@@ -386,6 +399,8 @@ export const cmsPageDefinitions = {
         fields: [
           { key: "title", label: "Titel", input: "text" },
           { key: "subtitle", label: "Beschreibung", input: "textarea", rows: 4 },
+          { key: "imageUrl1", label: "Leistungsbild URL 1", input: "text" },
+          { key: "imageUrl2", label: "Leistungsbild URL 2", input: "text" },
         ],
       },
       {
@@ -603,9 +618,11 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       subtitle:
         "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.",
       buttonText: "Alle Leistungen ansehen",
+      imageUrl: "",
     },
     usps: {
       title: "Warum Unternehmen uns vertrauen",
+      imageUrl: "",
       subtitle:
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     },
@@ -614,6 +631,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       body:
         "Fordern Sie jetzt Ihr kostenloses Angebot fuer Kreis Offenbach, Frankfurt am Main oder Hanau an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
       primaryButtonText: "Jetzt Angebot anfragen",
+      imageUrl: "",
       seoTitle: "",
       seoDescription: "",
     },
@@ -628,6 +646,8 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     overview: {
       title: "Unser Angebot im Überblick",
       subtitle: "Von der Unterhaltsreinigung bis zur Grundreinigung: Wir bieten passgenaue Lösungen für Ihr Objekt.",
+      imageUrl1: "",
+      imageUrl2: "",
     },
     benefits: {
       title: "Ihre Vorteile",

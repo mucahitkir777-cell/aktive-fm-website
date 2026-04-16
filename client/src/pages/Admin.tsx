@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   BarChart3,
   Eye,
@@ -90,6 +90,27 @@ interface CmsPageResponse {
   code?: string;
 }
 
+interface AdminMediaItem {
+  filename: string;
+  url: string;
+  size: number;
+  uploadedAt: string;
+}
+
+interface AdminMediaListResponse {
+  success: boolean;
+  media?: AdminMediaItem[];
+  message?: string;
+  code?: string;
+}
+
+interface AdminMediaUploadResponse {
+  success: boolean;
+  media?: AdminMediaItem;
+  message?: string;
+  code?: string;
+}
+
 interface SessionState {
   token: string;
   user: AdminSessionUser;
@@ -148,6 +169,31 @@ function formatDateOnly(value: string) {
   return new Intl.DateTimeFormat("de-DE", {
     dateStyle: "short",
   }).format(new Date(`${value}T00:00:00`));
+}
+
+function formatFileSize(bytes: number) {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return "0 B";
+  }
+
+  if (bytes < 1024) {
+    return `${bytes} B`;
+  }
+
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+async function fileToDataUrl(file: File) {
+  return await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+    reader.onerror = () => reject(new Error("Datei konnte nicht gelesen werden."));
+    reader.readAsDataURL(file);
+  });
 }
 
 function getTodayDateString() {
@@ -342,6 +388,9 @@ export default function Admin() {
   const [cmsDraft, setCmsDraft] = useState<CmsDraft>(() => getDefaultCmsPageContent("home") as CmsDraft);
   const [loadingCms, setLoadingCms] = useState(false);
   const [savingCms, setSavingCms] = useState(false);
+  const [mediaItems, setMediaItems] = useState<AdminMediaItem[]>([]);
+  const [loadingMedia, setLoadingMedia] = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
   const [previewViewport, setPreviewViewport] = useState<CmsPreviewViewport>("desktop");
   const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
   const [loadingLeads, setLoadingLeads] = useState(false);
@@ -430,6 +479,10 @@ export default function Admin() {
       })) as CmsPageSummary[]);
   const cmsSections = cmsDefinition.sections;
   const cmsSelectedSection = cmsSections.find((section) => section.key === selectedCmsSection) ?? cmsSections[0];
+  const activeImageField = useMemo(
+    () => cmsSelectedSection.fields.find((field) => field.input === "text" && field.key.toLowerCase().includes("imageurl")) ?? null,
+    [cmsSelectedSection],
+  );
   const previewWidthClass = useMemo(() => {
     if (previewViewport === "mobile") return "mx-auto w-[390px] max-w-full";
     if (previewViewport === "tablet") return "mx-auto w-[768px] max-w-full";
@@ -467,6 +520,7 @@ export default function Admin() {
     setCmsPages([]);
     setCmsPage(null);
     setCmsDraft(getDefaultCmsPageContent("home"));
+    setMediaItems([]);
     setSelectedCmsSlug("home");
     setSelectedCmsSection("hero");
     setPreviewRefreshKey(0);
@@ -631,6 +685,97 @@ export default function Admin() {
     setCmsDraft(createCmsDraft(result.page));
   }
 
+  async function loadMedia(activeSession = session) {
+    if (!activeSession) {
+      return;
+    }
+
+    setLoadingMedia(true);
+
+    const { response, result } = await requestJson<AdminMediaListResponse>("/api/admin/media", {
+      headers: {
+        Authorization: `Bearer ${activeSession.token}`,
+      },
+    });
+
+    setLoadingMedia(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success) {
+      setError(result.message ?? "Medien konnten nicht geladen werden.");
+      return;
+    }
+
+    setMediaItems(result.media ?? []);
+  }
+
+  async function handleMediaUpload(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file || !session) {
+      return;
+    }
+
+    event.target.value = "";
+
+    if (!file.type.startsWith("image/")) {
+      setError("Nur Bilddateien sind erlaubt.");
+      return;
+    }
+
+    setUploadingMedia(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const dataUrl = await fileToDataUrl(file);
+
+      const { response, result } = await requestJson<AdminMediaUploadResponse>("/api/admin/media/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          dataUrl,
+        }),
+      });
+
+      if (!result) {
+        return;
+      }
+
+      if (!response.ok || !result.success || !result.media) {
+        setError(result.message ?? "Bild konnte nicht hochgeladen werden.");
+        return;
+      }
+
+      setMediaItems((current) => [result.media!, ...current.filter((item) => item.filename !== result.media!.filename)]);
+      setSuccessMessage(result.message ?? "Bild wurde hochgeladen.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Bild konnte nicht hochgeladen werden.");
+    } finally {
+      setUploadingMedia(false);
+    }
+  }
+
+  async function copyMediaUrl(url: string) {
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      setError("Kopieren wird von diesem Browser nicht unterstuetzt.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setSuccessMessage("Bild-URL wurde kopiert.");
+    } catch {
+      setError("Bild-URL konnte nicht kopiert werden.");
+    }
+  }
+
   function updateCmsField(section: string, field: string, value: CmsDraftValue) {
     setCmsDraft((current) => ({
       ...current,
@@ -663,6 +808,14 @@ export default function Admin() {
     void loadCmsPages(session);
     void loadCmsPage(selectedCmsSlug, session);
   }, [currentSection, selectedCmsSlug, session]);
+
+  useEffect(() => {
+    if (!session || currentSection !== "content") {
+      return;
+    }
+
+    void loadMedia(session);
+  }, [currentSection, session]);
 
   useEffect(() => {
     const firstSection = cmsPageDefinitions[selectedCmsSlug].sections[0];
@@ -1159,6 +1312,9 @@ export default function Admin() {
                 if (currentSection === "pages" || currentSection === "content" || currentSection === "preview") {
                   void loadCmsPages();
                   void loadCmsPage();
+                  if (currentSection === "content") {
+                    void loadMedia();
+                  }
                 }
               }}
               className={secondaryButtonClass}
@@ -1758,7 +1914,60 @@ export default function Admin() {
               </div>
             </div>
 
-            <form onSubmit={handleCmsSave} className="rounded-lg border border-gray-200 bg-white p-5">
+            <div className="space-y-4">
+              <div className="rounded-lg border border-gray-200 bg-white p-5">
+                <div className="flex flex-col gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold text-[#0F2137]">Medienverwaltung</h3>
+                    <p className="text-sm text-[#6B7A8D]">Bilder hochladen und URL direkt in CMS-Felder verwenden.</p>
+                  </div>
+                  <label className={`${secondaryButtonClass} inline-flex items-center justify-center`}>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={handleMediaUpload}
+                      disabled={uploadingMedia}
+                      className="hidden"
+                    />
+                    {uploadingMedia ? "Upload laeuft..." : "Bild hochladen"}
+                  </label>
+                </div>
+
+                {loadingMedia ? (
+                  <div className="py-6 text-sm text-[#6B7A8D]">Medien werden geladen...</div>
+                ) : mediaItems.length === 0 ? (
+                  <div className="py-6 text-sm text-[#6B7A8D]">Noch keine Bilder hochgeladen.</div>
+                ) : (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {mediaItems.map((media) => (
+                      <div key={media.filename} className="rounded-lg border border-gray-200 bg-[#F7F8FA] p-3">
+                        <div className="aspect-[16/10] overflow-hidden rounded-md border border-gray-200 bg-white">
+                          <img src={media.url} alt={media.filename} className="h-full w-full object-cover" loading="lazy" />
+                        </div>
+                        <p className="mt-3 truncate text-xs font-medium text-[#0F2137]">{media.filename}</p>
+                        <p className="mt-1 text-xs text-[#6B7A8D]">{formatFileSize(media.size)} · {formatDate(media.uploadedAt)}</p>
+                        <input value={media.url} readOnly className="mt-2 w-full rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-[#0F2137]" />
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <button type="button" onClick={() => void copyMediaUrl(media.url)} className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50">
+                            URL kopieren
+                          </button>
+                          {activeImageField && (
+                            <button
+                              type="button"
+                              onClick={() => updateCmsField(cmsSelectedSection.key, activeImageField.key, media.url)}
+                              className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50"
+                            >
+                              In Feld uebernehmen
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={handleCmsSave} className="rounded-lg border border-gray-200 bg-white p-5">
               <div className="flex flex-col gap-2 border-b border-gray-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h3 className="text-base font-semibold text-[#0F2137]">{cmsDefinition.title}</h3>
@@ -1845,7 +2054,8 @@ export default function Admin() {
                   {savingCms ? "Speichert..." : "Speichern"}
                 </button>
               </div>
-            </form>
+              </form>
+            </div>
           </div>
         )}
 
