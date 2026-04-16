@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import { fetchPublicCmsPage } from "@/lib/cms";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
+import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
 import { getDefaultCmsPageContent, type CmsHomeContent } from "@shared/cms";
@@ -234,6 +235,7 @@ function mergeCmsHomeContent(content: unknown): CmsHomeContent {
     services: mergeCmsSection(defaults.services, (content as Record<string, unknown>).services),
     usps: mergeCmsSection(defaults.usps, (content as Record<string, unknown>).usps),
     finalCta: mergeCmsSection(defaults.finalCta, (content as Record<string, unknown>).finalCta),
+    seo: mergeCmsSection(defaults.seo, (content as Record<string, unknown>).seo),
   };
 }
 
@@ -287,17 +289,25 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (resolvedCmsContent.finalCta.seoTitle) {
-      document.title = resolvedCmsContent.finalCta.seoTitle;
-    }
+    const seoTitle = resolveSeoValue(
+      resolvedCmsContent.seo.seoTitle,
+      resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
+    );
+    const seoDescription = resolveSeoValue(
+      resolvedCmsContent.seo.seoDescription,
+      resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
+    );
 
-    if (resolvedCmsContent.finalCta.seoDescription) {
-      const descriptionMeta = document.querySelector('meta[name="description"]');
-      if (descriptionMeta) {
-        descriptionMeta.setAttribute("content", resolvedCmsContent.finalCta.seoDescription);
-      }
-    }
-  }, [resolvedCmsContent.finalCta.seoDescription, resolvedCmsContent.finalCta.seoTitle]);
+    applyPageSeo({
+      title: seoTitle,
+      description: seoDescription,
+    });
+  }, [
+    resolvedCmsContent.finalCta.seoDescription,
+    resolvedCmsContent.finalCta.seoTitle,
+    resolvedCmsContent.seo.seoDescription,
+    resolvedCmsContent.seo.seoTitle,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

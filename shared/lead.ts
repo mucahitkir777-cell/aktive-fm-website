@@ -82,9 +82,9 @@ export interface AdminLead {
 
 export const adminLeadUpdateSchema = z
   .object({
-    name: z.string().trim().min(2, "Bitte geben Sie einen gueltigen Namen ein.").max(120, "Der Name ist zu lang.").optional(),
-    email: z.string().trim().email("Bitte geben Sie eine gueltige E-Mail-Adresse ein.").max(160, "Die E-Mail-Adresse ist zu lang.").optional(),
-    phone: z.string().trim().min(5, "Bitte geben Sie eine gueltige Telefonnummer ein.").max(50, "Die Telefonnummer ist zu lang.").optional(),
+    name: z.string().trim().min(2, "Bitte geben Sie einen gültigen Namen ein.").max(120, "Der Name ist zu lang.").optional(),
+    email: z.string().trim().email("Bitte geben Sie eine gültige E-Mail-Adresse ein.").max(160, "Die E-Mail-Adresse ist zu lang.").optional(),
+    phone: z.string().trim().min(5, "Bitte geben Sie eine gültige Telefonnummer ein.").max(50, "Die Telefonnummer ist zu lang.").optional(),
     message: z
       .union([z.string().trim().max(2000, "Die Nachricht ist zu lang."), z.null()])
       .optional(),
@@ -92,12 +92,12 @@ export const adminLeadUpdateSchema = z
       .union([z.string().trim().max(5000, "Die interne Notiz ist zu lang."), z.null()])
       .optional(),
     followUpDate: z
-      .union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte geben Sie ein gueltiges Datum ein."), z.null()])
+      .union([z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte geben Sie ein gültiges Datum ein."), z.null()])
       .optional(),
     status: leadStatusSchema.optional(),
   })
   .refine((value) => Object.values(value).some((entry) => entry !== undefined), {
-    message: "Mindestens ein Feld muss geaendert werden.",
+    message: "Mindestens ein Feld muss geändert werden.",
   });
 
 export type AdminLeadUpdateInput = z.infer<typeof adminLeadUpdateSchema>;

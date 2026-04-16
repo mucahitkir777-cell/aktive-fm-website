@@ -13,6 +13,11 @@ export default function CompanyMeta() {
   const [location] = useLocation();
 
   useEffect(() => {
+    const cmsManagedSeoRoutes = new Set(["/", "/leistungen", "/ueber-uns", "/faq", "/kontakt"]);
+    if (cmsManagedSeoRoutes.has(location)) {
+      return;
+    }
+
     const isRegionalRoute =
       companyConfig.regions.some((region) => region.route === location) ||
       companyConfig.regionalServiceRoutes.some((route) => route.route === location);

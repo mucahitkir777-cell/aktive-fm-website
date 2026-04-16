@@ -10,6 +10,9 @@ import Footer from "@/components/Footer";
 import { ChevronDown, ArrowRight, Phone } from "lucide-react";
 import { trackCtaClick, trackPhoneClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
+import { fetchPublicCmsPage } from "@/lib/cms";
+import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsFaqContent } from "@shared/cms";
 
 const faqs = [
   {
@@ -122,6 +125,43 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 }
 
 export default function FAQ() {
+  const [cmsContent, setCmsContent] = useState<CmsFaqContent>(() => getDefaultCmsPageContent("faq"));
+  const resolvedCmsContent = normalizeCmsPageContent("faq", cmsContent);
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("faq")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(normalizeCmsPageContent("faq", page.content));
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    applyPageSeo({
+      title: resolveSeoValue(
+        resolvedCmsContent.seo.seoTitle,
+        resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
+      ),
+      description: resolveSeoValue(
+        resolvedCmsContent.seo.seoDescription,
+        resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
+      ),
+    });
+  }, [
+    resolvedCmsContent.finalCta.seoDescription,
+    resolvedCmsContent.finalCta.seoTitle,
+    resolvedCmsContent.seo.seoDescription,
+    resolvedCmsContent.seo.seoTitle,
+  ]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

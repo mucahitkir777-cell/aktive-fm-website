@@ -764,7 +764,7 @@ export default function Admin() {
 
   async function copyMediaUrl(url: string) {
     if (typeof navigator === "undefined" || !navigator.clipboard) {
-      setError("Kopieren wird von diesem Browser nicht unterstuetzt.");
+      setError("Kopieren wird von diesem Browser nicht unterstützt.");
       return;
     }
 
@@ -860,7 +860,7 @@ export default function Admin() {
     const resetTimeout = () => {
       window.clearTimeout(timeoutId);
       timeoutId = window.setTimeout(() => {
-        handleLogout("Sitzung wegen Inaktivitaet beendet.");
+        handleLogout("Sitzung wegen Inaktivität beendet.");
       }, INACTIVITY_TIMEOUT_MS);
     };
 
@@ -957,7 +957,7 @@ export default function Admin() {
     }
 
     if (!response.ok || !result.success || !result.lead) {
-      setError(result.message ?? "Status konnte nicht geaendert werden.");
+      setError(result.message ?? "Status konnte nicht geändert werden.");
       return;
     }
 
@@ -1052,7 +1052,7 @@ export default function Admin() {
     }
 
     if (changePasswordForm.newPassword !== changePasswordForm.confirmPassword) {
-      setError("Die neuen Passwoerter stimmen nicht ueberein.");
+      setError("Die neuen Passwörter stimmen nicht überein.");
       return;
     }
 
@@ -1163,7 +1163,7 @@ export default function Admin() {
 
   const currentPanelTitle = useMemo(() => {
     if (activePanel === "lead-edit") return "Lead bearbeiten";
-    if (activePanel === "change-password") return "Passwort aendern";
+    if (activePanel === "change-password") return "Passwort ändern";
     if (activePanel === "users") return "Benutzer verwalten";
     return "";
   }, [activePanel]);
@@ -1228,7 +1228,7 @@ export default function Admin() {
     if (currentSection === "pages") {
       return {
         title: "Seiten",
-        description: "Verfuegbare Seiten und CMS-Anbindung verwalten.",
+        description: "Verfügbare Seiten und CMS-Anbindung verwalten.",
       };
     }
 
@@ -1242,13 +1242,13 @@ export default function Admin() {
     if (currentSection === "preview") {
       return {
         title: "Vorschau",
-        description: "Angeschlossene Seite in Desktop-, Tablet- und Mobilbreite pruefen.",
+        description: "Angeschlossene Seite in Desktop-, Tablet- und Mobilbreite prüfen.",
       };
     }
 
     return {
       title: "Dashboard",
-      description: "Kernzahlen fuer Leads und Seitenaufrufe.",
+      description: "Kernzahlen für Leads und Seitenaufrufe.",
     };
   }, [currentSection]);
 
@@ -1284,7 +1284,7 @@ export default function Admin() {
             </label>
 
             <button type="submit" disabled={submittingLogin} className={`w-full ${primaryButtonClass}`}>
-              {submittingLogin ? "Anmeldung laeuft..." : "Einloggen"}
+              {submittingLogin ? "Anmeldung läuft..." : "Einloggen"}
             </button>
           </form>
         </section>
@@ -1351,7 +1351,7 @@ export default function Admin() {
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
                   >
                     <KeyRound size={16} />
-                    Passwort aendern
+                    Passwort ändern
                   </button>
 
                   {isAdmin && (
@@ -1460,13 +1460,13 @@ export default function Admin() {
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Heute faellig</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">Heute fällig</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.leads.dueToday ?? 0}
                 </p>
               </div>
               <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Ueberfaellig</p>
+                <p className="text-sm font-medium text-[#6B7A8D]">überfällig</p>
                 <p className="mt-2 text-3xl font-bold text-[#0F2137]">
                   {loadingStats && !stats ? "..." : stats?.leads.overdue ?? 0}
                 </p>
@@ -1526,8 +1526,8 @@ export default function Admin() {
               <div className="rounded-lg border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">Heute faellig</h3>
-                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads mit Wiedervorlage fuer heute.</p>
+                    <h3 className="text-base font-semibold text-[#0F2137]">Heute fällig</h3>
+                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads mit Wiedervorlage für heute.</p>
                   </div>
                   <button
                     type="button"
@@ -1547,7 +1547,7 @@ export default function Admin() {
 
                   {!loadingStats && (stats?.dueTodayLeads.length ?? 0) === 0 && (
                     <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
-                      Keine Leads fuer heute faellig.
+                      Keine Leads für heute fällig.
                     </div>
                   )}
 
@@ -1561,7 +1561,7 @@ export default function Admin() {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
-                          <p className="mt-1 text-sm text-[#6B7A8D]">Faellig am {formatDateOnly(lead.followUpDate)}</p>
+                          <p className="mt-1 text-sm text-[#6B7A8D]">Fällig am {formatDateOnly(lead.followUpDate)}</p>
                         </div>
                         <span className="inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
                           {lead.status}
@@ -1575,7 +1575,7 @@ export default function Admin() {
               <div className="rounded-lg border border-gray-200 bg-white p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">Ueberfaellig</h3>
+                    <h3 className="text-base font-semibold text-[#0F2137]">überfällig</h3>
                     <p className="mt-1 text-sm text-[#6B7A8D]">Offene Wiedervorlagen vor dem heutigen Datum.</p>
                   </div>
                   <button
@@ -1596,7 +1596,7 @@ export default function Admin() {
 
                   {!loadingStats && (stats?.overdueLeads.length ?? 0) === 0 && (
                     <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
-                      Keine ueberfaelligen Leads vorhanden.
+                      Keine überfälligen Leads vorhanden.
                     </div>
                   )}
 
@@ -1610,7 +1610,7 @@ export default function Admin() {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
-                          <p className="mt-1 text-sm text-[#6B7A8D]">Faellig am {formatDateOnly(lead.followUpDate)}</p>
+                          <p className="mt-1 text-sm text-[#6B7A8D]">Fällig am {formatDateOnly(lead.followUpDate)}</p>
                         </div>
                         <span className="inline-flex rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-700">
                           {lead.status}
@@ -1668,8 +1668,8 @@ export default function Admin() {
                     <option value="in-progress">In Bearbeitung</option>
                     <option value="completed">Abgeschlossen</option>
                     <option value="without-status">Ohne Status</option>
-                    <option value="due-today">Heute faellig</option>
-                    <option value="overdue">Ueberfaellig</option>
+                    <option value="due-today">Heute fällig</option>
+                    <option value="overdue">überfällig</option>
                     <option value="with-follow-up">Mit Wiedervorlage</option>
                     <option value="without-follow-up">Ohne Wiedervorlage</option>
                   </select>
@@ -1693,7 +1693,7 @@ export default function Admin() {
                     className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                   >
                     <option value="newest">Neueste zuerst</option>
-                    <option value="oldest">Aelteste zuerst</option>
+                    <option value="oldest">Älteste zuerst</option>
                     <option value="follow-up-asc">Wiedervorlage aufsteigend</option>
                     <option value="follow-up-desc">Wiedervorlage absteigend</option>
                   </select>
@@ -1741,7 +1741,7 @@ export default function Admin() {
                   {!loadingLeads && leads.length > 0 && filteredLeads.length === 0 && (
                     <tr>
                       <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
-                        Keine Leads fuer die aktuelle Auswahl gefunden.
+                        Keine Leads für die aktuelle Auswahl gefunden.
                       </td>
                     </tr>
                   )}
@@ -1764,9 +1764,9 @@ export default function Admin() {
                                 }
                               >
                                 {getLeadDueState(lead) === "overdue"
-                                  ? "Ueberfaellig"
+                                  ? "überfällig"
                                   : getLeadDueState(lead) === "today"
-                                    ? "Heute faellig"
+                                    ? "Heute fällig"
                                     : "Geplant"}
                               </span>
                             </div>
@@ -1865,7 +1865,7 @@ export default function Admin() {
                     }}
                     className={secondaryButtonClass}
                   >
-                    Vorschau oeffnen
+                    Vorschau öffnen
                   </button>
                 </div>
               </div>
@@ -1929,7 +1929,7 @@ export default function Admin() {
                       disabled={uploadingMedia}
                       className="hidden"
                     />
-                    {uploadingMedia ? "Upload laeuft..." : "Bild hochladen"}
+                    {uploadingMedia ? "Upload läuft..." : "Bild hochladen"}
                   </label>
                 </div>
 
@@ -1957,7 +1957,7 @@ export default function Admin() {
                               onClick={() => updateCmsField(cmsSelectedSection.key, activeImageField.key, media.url)}
                               className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50"
                             >
-                              In Feld uebernehmen
+                              In Feld übernehmen
                             </button>
                           )}
                         </div>
@@ -2127,7 +2127,7 @@ export default function Admin() {
           <div className="grid gap-4 lg:grid-cols-3">
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <h3 className="text-base font-semibold text-[#0F2137]">Passwort</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelles Passwort pruefen und sicher aendern.</p>
+              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelles Passwort prüfen und sicher ändern.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -2137,20 +2137,20 @@ export default function Admin() {
                 }}
                 className={`mt-4 ${secondaryButtonClass}`}
               >
-                Passwort aendern
+                Passwort ändern
               </button>
             </div>
 
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <h3 className="text-base font-semibold text-[#0F2137]">Benutzer</h3>
               <p className="mt-2 text-sm text-[#6B7A8D]">
-                {isAdmin ? "Benutzer ansehen und neue Zugaenge anlegen." : "Nur Admins duerfen Benutzer verwalten."}
+                {isAdmin ? "Benutzer ansehen und neue Zugänge anlegen." : "Nur Admins dürfen Benutzer verwalten."}
               </p>
               <button
                 type="button"
                 onClick={() => {
                   if (!isAdmin) {
-                    setError("Nur Admins duerfen Benutzer verwalten.");
+                    setError("Nur Admins dürfen Benutzer verwalten.");
                     return;
                   }
 
@@ -2167,7 +2167,7 @@ export default function Admin() {
 
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <h3 className="text-base font-semibold text-[#0F2137]">Sitzung</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelle Sitzung gueltig bis {formatDate(session.expiresAt)}.</p>
+              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelle Sitzung gültig bis {formatDate(session.expiresAt)}.</p>
               <button
                 type="button"
                 onClick={() => handleLogout("Sie wurden abgemeldet.")}
@@ -2188,7 +2188,7 @@ export default function Admin() {
                 <h2 className="text-xl font-bold text-[#0F2137]">{currentPanelTitle}</h2>
                 <p className="text-sm text-[#6B7A8D]">
                   {activePanel === "lead-edit" && "Lead-Daten in PostgreSQL aktualisieren."}
-                  {activePanel === "change-password" && "Aktuelles Passwort pruefen und sicher ersetzen."}
+                  {activePanel === "change-password" && "Aktuelles Passwort prüfen und sicher ersetzen."}
                   {activePanel === "users" && "Interne Benutzer ansehen und neue Benutzer anlegen."}
                 </p>
               </div>

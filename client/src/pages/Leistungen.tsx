@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import { trackCtaClick, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
+import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
 import { getDefaultCmsPageContent, type CmsServicesContent } from "@shared/cms";
 import {
   ArrowRight,
@@ -149,6 +150,7 @@ function mergeCmsServicesContent(content: unknown): CmsServicesContent {
     overview: mergeCmsSection(defaults.overview, (content as Record<string, unknown>).overview),
     benefits: mergeCmsSection(defaults.benefits, (content as Record<string, unknown>).benefits),
     finalCta: mergeCmsSection(defaults.finalCta, (content as Record<string, unknown>).finalCta),
+    seo: mergeCmsSection(defaults.seo, (content as Record<string, unknown>).seo),
   };
 }
 
@@ -193,6 +195,27 @@ export default function Leistungen() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    const seoTitle = resolveSeoValue(
+      resolvedCmsContent.seo.seoTitle,
+      resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
+    );
+    const seoDescription = resolveSeoValue(
+      resolvedCmsContent.seo.seoDescription,
+      resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
+    );
+
+    applyPageSeo({
+      title: seoTitle,
+      description: seoDescription,
+    });
+  }, [
+    resolvedCmsContent.finalCta.seoDescription,
+    resolvedCmsContent.finalCta.seoTitle,
+    resolvedCmsContent.seo.seoDescription,
+    resolvedCmsContent.seo.seoTitle,
+  ]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

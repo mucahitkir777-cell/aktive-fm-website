@@ -42,7 +42,7 @@ function buildNotificationText(input: StoredLeadEmailInput) {
     "Nachricht:",
     payload.message?.trim() || "Keine Nachricht angegeben.",
     "",
-    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfuegbar.",
+    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfügbar.",
     `Lead-ID: ${input.leadId}`,
   ].join("\n");
 }

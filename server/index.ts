@@ -121,7 +121,7 @@ async function startServer() {
         message:
           parsedBody.error.flatten().fieldErrors.currentPassword?.[0]
           ?? parsedBody.error.flatten().fieldErrors.newPassword?.[0]
-          ?? "Bitte pruefen Sie Ihre Eingaben.",
+          ?? "Bitte prüfen Sie Ihre Eingaben.",
       });
       return;
     }
@@ -191,7 +191,7 @@ async function startServer() {
       const fieldErrors = parsedBody.error.flatten().fieldErrors;
       res.status(400).json({
         success: false,
-        message: fieldErrors.username?.[0] ?? fieldErrors.password?.[0] ?? fieldErrors.role?.[0] ?? "Bitte pruefen Sie Ihre Eingaben.",
+        message: fieldErrors.username?.[0] ?? fieldErrors.password?.[0] ?? fieldErrors.role?.[0] ?? "Bitte prüfen Sie Ihre Eingaben.",
       });
       return;
     }
@@ -280,7 +280,7 @@ async function startServer() {
     if (!parsedContent.success) {
       res.status(400).json({
         success: false,
-        message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungueltig.",
+        message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungültig.",
       });
       return;
     }
@@ -314,7 +314,7 @@ async function startServer() {
     if (!parsedBody.success) {
       res.status(400).json({
         success: false,
-        message: parsedBody.error.issues[0]?.message ?? "Ungueltige Upload-Daten.",
+        message: parsedBody.error.issues[0]?.message ?? "Ungültige Upload-Daten.",
       });
       return;
     }
@@ -329,7 +329,7 @@ async function startServer() {
     } catch (error) {
       const message = error instanceof Error ? error.message : "Bild konnte nicht hochgeladen werden.";
       const isClientError =
-        message.includes("Ungueltiges Bildformat")
+        message.includes("Ungültiges Bildformat")
         || message.includes("Nur JPG")
         || message.includes("ist leer")
         || message.includes("zu gross");
@@ -347,7 +347,7 @@ async function startServer() {
     if (!validation.success) {
       res.status(400).json({
         success: false,
-        message: "Bitte pruefen Sie Ihre Angaben.",
+        message: "Bitte prüfen Sie Ihre Angaben.",
         fieldErrors: validation.fieldErrors,
       });
       return;
@@ -405,7 +405,7 @@ async function startServer() {
     const parsedUpdate = adminLeadUpdateSchema.safeParse(req.body ?? {});
 
     if (!parsedUpdate.success) {
-      res.status(400).json({ success: false, message: "Ungueltige Lead-Daten." });
+      res.status(400).json({ success: false, message: "Ungültige Lead-Daten." });
       return;
     }
 
@@ -430,7 +430,7 @@ async function startServer() {
     const parsedBody = pageViewSchema.safeParse(req.body ?? {});
 
     if (!parsedBody.success) {
-      res.status(400).json({ success: false, message: "Ungueltiger Pageview." });
+      res.status(400).json({ success: false, message: "Ungültiger Pageview." });
       return;
     }
 

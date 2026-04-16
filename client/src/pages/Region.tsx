@@ -1,6 +1,6 @@
 /*
  * ProClean Region-Seite
- * Kuratierte Lead-Seiten fuer priorisierte Rhein-Main-Regionen.
+ * Kuratierte Lead-Seiten für priorisierte Rhein-Main-Regionen.
  */
 
 import { useEffect } from "react";

@@ -37,7 +37,7 @@ function sanitizeBaseName(filename: string) {
 function parseDataUrl(dataUrl: string) {
   const parsed = /^data:(image\/[a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=]+)$/.exec(dataUrl.trim());
   if (!parsed) {
-    throw new Error("Ungueltiges Bildformat.");
+    throw new Error("Ungültiges Bildformat.");
   }
 
   const mimeType = parsed[1].toLowerCase();

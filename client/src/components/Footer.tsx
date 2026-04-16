@@ -84,7 +84,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                "Bueroreinigung",
+                "Büroreinigung",
                 "Unterhaltsreinigung",
                 "Glasreinigung",
                 "Treppenhaus & Aussen",

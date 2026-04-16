@@ -4,8 +4,8 @@
 
 ```
 /                           -> Startseite
-/leistungen                 -> Leistungen-Uebersicht
-/ueber-uns                  -> Ueber uns
+/leistungen                 -> Leistungen-Übersicht
+/ueber-uns                  -> Über uns
 /kontakt                    -> Kontaktseite
 /faq                        -> FAQ
 /impressum                  -> Impressum
@@ -29,7 +29,7 @@ Jede Regionsseite nutzt:
 - eigene Meta Description
 - regionale Leistungs- und Kontakt-CTAs
 - interne Links zu anderen Zielregionen
-- `location_interest` Tracking fuer Seitenbesuch und Regionslinks
+- `location_interest` Tracking für Seitenbesuch und Regionslinks
 
 ## Vorbereitete Frankfurt-Leistungsseiten
 
@@ -47,20 +47,20 @@ Jede regionale Leistungsseite nutzt:
 - servicebezogenen Meta Title
 - servicebezogene Meta Description
 - `location_interest` und `service_interest` Tracking
-- vorausgewaehlte Region und Leistung im Anfrageformular
+- vorausgewählte Region und Leistung im Anfrageformular
 
 ## Interne Verlinkung
 
-Die Startseite und Kontaktseite beziehen die Zielregionen ueber `companyConfig.regions`.
+Die Startseite und Kontaktseite beziehen die Zielregionen über `companyConfig.regions`.
 Die Regionsseiten verlinken untereinander und verbinden die zentralen Leistungen mit den vorbereiteten Frankfurt-Leistungsseiten.
 
 ## Mobile Anforderungen
 
-- StickyBar bleibt unveraendert aktiv.
-- CTA-Gruppen werden mobil einspaltig und gross dargestellt.
-- Keine globale Layout- oder Designstruktur wurde fuer diese SEO-Erweiterung veraendert.
+- StickyBar bleibt unverändert aktiv.
+- CTA-Gruppen werden mobil einspaltig und groß dargestellt.
+- Keine globale Layout- oder Designstruktur wurde für diese SEO-Erweiterung verändert.
 
 ## Pflegehinweis
 
-Neue Regionen oder regionale Leistungsseiten duerfen nicht als Massenstruktur angelegt werden.
-Erst wenn Inhalte, Nachfrage und Tracking-Auswertung eine neue Zielseite rechtfertigen, wird ein Eintrag in `companyConfig.regions` oder `companyConfig.regionalServiceRoutes` ergaenzt und danach Routing sowie Sitemap aktualisiert.
+Neue Regionen oder regionale Leistungsseiten dürfen nicht als Massenstruktur angelegt werden.
+Erst wenn Inhalte, Nachfrage und Tracking-Auswertung eine neue Zielseite rechtfertigen, wird ein Eintrag in `companyConfig.regions` oder `companyConfig.regionalServiceRoutes` ergänzt und danach Routing sowie Sitemap aktualisiert.

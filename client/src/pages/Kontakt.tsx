@@ -13,6 +13,7 @@ import { trackCtaClick, trackLocationInterest, trackPhoneClick } from "@/lib/ana
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
+import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
 import { getDefaultCmsPageContent, type CmsContactContent } from "@shared/cms";
 
 function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
@@ -41,6 +42,7 @@ function mergeCmsContactContent(content: unknown): CmsContactContent {
     hero: mergeCmsSection(defaults.hero, (content as Record<string, unknown>).hero),
     contactInfo: mergeCmsSection(defaults.contactInfo, (content as Record<string, unknown>).contactInfo),
     formSection: mergeCmsSection(defaults.formSection, (content as Record<string, unknown>).formSection),
+    seo: mergeCmsSection(defaults.seo, (content as Record<string, unknown>).seo),
   };
 }
 
@@ -77,6 +79,13 @@ export default function Kontakt() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    applyPageSeo({
+      title: resolveSeoValue(resolvedCmsContent.seo.seoTitle, companyConfig.seo.title),
+      description: resolveSeoValue(resolvedCmsContent.seo.seoDescription, companyConfig.seo.description),
+    });
+  }, [resolvedCmsContent.seo.seoDescription, resolvedCmsContent.seo.seoTitle]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

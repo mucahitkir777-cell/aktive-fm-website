@@ -32,6 +32,11 @@ const finalCtaSchema = z.object({
   seoDescription: z.string().trim().max(500, "Die SEO-Beschreibung ist zu lang.").default(""),
 });
 
+const seoSectionSchema = z.object({
+  seoTitle: z.string().trim().max(120, "Der SEO-Titel ist zu lang.").default(""),
+  seoDescription: z.string().trim().max(500, "Die SEO-Beschreibung ist zu lang.").default(""),
+});
+
 export const cmsHomeContentSchema = z.object({
   hero: heroWithAccentSchema,
   services: z
@@ -65,6 +70,11 @@ export const cmsHomeContentSchema = z.object({
     }),
   finalCta: finalCtaSchema.extend({
     imageUrl: imageUrlSchema,
+  }),
+  seo: seoSectionSchema.default({
+    seoTitle: "Gebäudereinigung im Rhein-Main-Gebiet | ProClean",
+    seoDescription:
+      "Professionelle Gebäudereinigung für Unternehmen in Offenbach, Frankfurt und Hanau. Jetzt kostenloses Angebot anfragen.",
   }),
 });
 
@@ -100,6 +110,11 @@ export const cmsServicesContentSchema = z.object({
         "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher Zuverlässigkeit – genau das, was Unternehmen erwarten.",
     }),
   finalCta: finalCtaSchema,
+  seo: seoSectionSchema.default({
+    seoTitle: "Leistungen für professionelle Gebäudereinigung | ProClean",
+    seoDescription:
+      "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen im Rhein-Main-Gebiet.",
+  }),
 });
 
 export type CmsServicesContent = z.infer<typeof cmsServicesContentSchema>;
@@ -130,6 +145,11 @@ export const cmsAboutContentSchema = z.object({
         "Vertrauen, Verlässlichkeit und Transparenz sind die Basis unserer Arbeit – für zufriedene Kunden im Rhein-Main-Gebiet.",
     }),
   finalCta: finalCtaSchema,
+  seo: seoSectionSchema.default({
+    seoTitle: "Über uns | ProClean Gebäudereinigung",
+    seoDescription:
+      "Lernen Sie das Team hinter ProClean kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+  }),
 });
 
 export type CmsAboutContent = z.infer<typeof cmsAboutContentSchema>;
@@ -150,6 +170,11 @@ export const cmsFaqContentSchema = z.object({
       faqText: "Was kostet die Reinigung?\nWelchen Service bieten Sie an?\nWie schnell erhalten wir ein Angebot?",
     }),
   finalCta: finalCtaSchema,
+  seo: seoSectionSchema.default({
+    seoTitle: "FAQ zur Gebäudereinigung | ProClean",
+    seoDescription:
+      "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
+  }),
 });
 
 export type CmsFaqContent = z.infer<typeof cmsFaqContentSchema>;
@@ -178,6 +203,11 @@ export const cmsContactContentSchema = z.object({
       subtitle: "Senden Sie uns Ihre Anfrage und wir melden uns innerhalb von 24 Stunden.",
       buttonText: "Nachricht senden",
     }),
+  seo: seoSectionSchema.default({
+    seoTitle: "Kontakt | ProClean Gebäudereinigung",
+    seoDescription:
+      "Kontaktieren Sie ProClean für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung im Rhein-Main-Gebiet.",
+  }),
 });
 
 export type CmsContactContent = z.infer<typeof cmsContactContentSchema>;
@@ -195,7 +225,7 @@ export const cmsGlobalContentSchema = z.object({
     servicesHref: pathFieldSchema.default("/leistungen"),
     servicesVisible: z.boolean().default(true),
     servicesSortOrder: z.coerce.number().int().min(1).max(100).default(2),
-    aboutLabel: pageTitleSchema.default("Ueber uns"),
+    aboutLabel: pageTitleSchema.default("Über uns"),
     aboutHref: pathFieldSchema.default("/ueber-uns"),
     aboutVisible: z.boolean().default(true),
     aboutSortOrder: z.coerce.number().int().min(1).max(100).default(3),
@@ -212,7 +242,7 @@ export const cmsGlobalContentSchema = z.object({
   }),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
-      "Ihr zuverlaessiger Partner fuer professionelle Gebaeudereinigung im Rhein-Main-Gebiet. Qualitaet, die man sieht."
+      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung im Rhein-Main-Gebiet. Qualität, die man sieht."
     ),
     membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
   }),
@@ -225,8 +255,8 @@ export const cmsGlobalContentSchema = z.object({
     emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@proclean-gmbh.de"),
     emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@proclean-gmbh.de"),
     addressLabel: pageTitleSchema.default("Adresse"),
-    addressLines: multilineTextSchema.default("Musterstrasse 1\n12345 Musterstadt"),
-    hoursLabel: pageTitleSchema.default("Oeffnungszeiten"),
+    addressLines: multilineTextSchema.default("Musterstraße 1\n12345 Musterstadt"),
+    hoursLabel: pageTitleSchema.default("Öffnungszeiten"),
     hoursLines: multilineTextSchema.default("Mo-Fr: 07:00-18:00\nSa: 08:00-14:00"),
   }),
   legal: z.object({
@@ -278,10 +308,10 @@ export const cmsPageDefinitions = {
           { key: "servicesHref", label: "Leistungen Pfad", input: "text" },
           { key: "servicesVisible", label: "Leistungen sichtbar", input: "checkbox" },
           { key: "servicesSortOrder", label: "Leistungen Reihenfolge", input: "number" },
-          { key: "aboutLabel", label: "Ueber uns Label", input: "text" },
-          { key: "aboutHref", label: "Ueber uns Pfad", input: "text" },
-          { key: "aboutVisible", label: "Ueber uns sichtbar", input: "checkbox" },
-          { key: "aboutSortOrder", label: "Ueber uns Reihenfolge", input: "number" },
+          { key: "aboutLabel", label: "Über uns Label", input: "text" },
+          { key: "aboutHref", label: "Über uns Pfad", input: "text" },
+          { key: "aboutVisible", label: "Über uns sichtbar", input: "checkbox" },
+          { key: "aboutSortOrder", label: "Über uns Reihenfolge", input: "number" },
           { key: "faqLabel", label: "FAQ Label", input: "text" },
           { key: "faqHref", label: "FAQ Pfad", input: "text" },
           { key: "faqVisible", label: "FAQ sichtbar", input: "checkbox" },
@@ -315,8 +345,8 @@ export const cmsPageDefinitions = {
           { key: "emailHref", label: "E-Mail Link", input: "text" },
           { key: "addressLabel", label: "Adresse Label", input: "text" },
           { key: "addressLines", label: "Adresse Zeilen", input: "textarea", rows: 3 },
-          { key: "hoursLabel", label: "Oeffnungszeiten Label", input: "text" },
-          { key: "hoursLines", label: "Oeffnungszeiten Zeilen", input: "textarea", rows: 3 },
+          { key: "hoursLabel", label: "Öffnungszeiten Label", input: "text" },
+          { key: "hoursLines", label: "Öffnungszeiten Zeilen", input: "textarea", rows: 3 },
         ],
       },
       {
@@ -373,6 +403,12 @@ export const cmsPageDefinitions = {
           { key: "body", label: "CTA-Text", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "CTA-Button-Text", input: "text" },
           { key: "imageUrl", label: "CTA-Bild URL", input: "text" },
+        ],
+      },
+      {
+        key: "seo",
+        label: "SEO",
+        fields: [
           { key: "seoTitle", label: "SEO-Titel", input: "text" },
           { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
         ],
@@ -418,6 +454,12 @@ export const cmsPageDefinitions = {
           { key: "title", label: "CTA-Titel", input: "text" },
           { key: "body", label: "CTA-Text", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "CTA-Button-Text", input: "text" },
+        ],
+      },
+      {
+        key: "seo",
+        label: "SEO",
+        fields: [
           { key: "seoTitle", label: "SEO-Titel", input: "text" },
           { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
         ],
@@ -461,6 +503,12 @@ export const cmsPageDefinitions = {
           { key: "title", label: "CTA-Titel", input: "text" },
           { key: "body", label: "CTA-Text", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "CTA-Button-Text", input: "text" },
+        ],
+      },
+      {
+        key: "seo",
+        label: "SEO",
+        fields: [
           { key: "seoTitle", label: "SEO-Titel", input: "text" },
           { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
         ],
@@ -497,6 +545,12 @@ export const cmsPageDefinitions = {
           { key: "title", label: "CTA-Titel", input: "text" },
           { key: "body", label: "CTA-Text", input: "textarea", rows: 4 },
           { key: "primaryButtonText", label: "CTA-Button-Text", input: "text" },
+        ],
+      },
+      {
+        key: "seo",
+        label: "SEO",
+        fields: [
           { key: "seoTitle", label: "SEO-Titel", input: "text" },
           { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
         ],
@@ -534,6 +588,14 @@ export const cmsPageDefinitions = {
           { key: "buttonText", label: "Button-Text", input: "text" },
         ],
       },
+      {
+        key: "seo",
+        label: "SEO",
+        fields: [
+          { key: "seoTitle", label: "SEO-Titel", input: "text" },
+          { key: "seoDescription", label: "SEO-Beschreibung", input: "textarea", rows: 4 },
+        ],
+      },
     ],
   },
 } as const satisfies Record<
@@ -565,7 +627,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       servicesHref: "/leistungen",
       servicesVisible: true,
       servicesSortOrder: 2,
-      aboutLabel: "Ueber uns",
+      aboutLabel: "Über uns",
       aboutHref: "/ueber-uns",
       aboutVisible: true,
       aboutSortOrder: 3,
@@ -581,7 +643,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       ctaHref: "/kontakt",
     },
     footer: {
-      footerText: "Ihr zuverlaessiger Partner fuer professionelle Gebaeudereinigung im Rhein-Main-Gebiet. Qualitaet, die man sieht.",
+      footerText: "Ihr zuverlässiger Partner für professionelle Gebäudereinigung im Rhein-Main-Gebiet. Qualität, die man sieht.",
       membershipLabel: "BIV Bundesinnungsverband",
     },
     footerContact: {
@@ -593,8 +655,8 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       emailDisplay: "info@proclean-gmbh.de",
       emailHref: "mailto:info@proclean-gmbh.de",
       addressLabel: "Adresse",
-      addressLines: "Musterstrasse 1\n12345 Musterstadt",
-      hoursLabel: "Oeffnungszeiten",
+      addressLines: "Musterstraße 1\n12345 Musterstadt",
+      hoursLabel: "Öffnungszeiten",
       hoursLines: "Mo-Fr: 07:00-18:00\nSa: 08:00-14:00",
     },
     legal: {
@@ -607,9 +669,9 @@ export const defaultCmsPageContent: CmsPageContentMap = {
   home: {
     hero: {
       title: "Sauberkeit,",
-      accentTitle: "die ueberzeugt.",
+      accentTitle: "die überzeugt.",
       subtitle:
-        "Zuverlaessige Gebaeudereinigung fuer Unternehmen im Rhein-Main-Gebiet - puenktlich, gruendlich und diskret. Damit Sie sich auf Ihr Kerngeschaeft konzentrieren koennen.",
+        "Zuverlässige Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet - pünktlich, gründlich und diskret. Damit Sie sich auf Ihr Kerngeschäft konzentrieren können.",
       primaryButtonText: "Kostenloses Angebot",
       imageUrl: "",
     },
@@ -627,13 +689,18 @@ export const defaultCmsPageContent: CmsPageContentMap = {
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     },
     finalCta: {
-      title: "Bereit fuer saubere Ergebnisse?",
+      title: "Bereit für saubere Ergebnisse?",
       body:
-        "Fordern Sie jetzt Ihr kostenloses Angebot fuer Kreis Offenbach, Frankfurt am Main oder Hanau an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+        "Fordern Sie jetzt Ihr kostenloses Angebot für Kreis Offenbach, Frankfurt am Main oder Hanau an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
       primaryButtonText: "Jetzt Angebot anfragen",
       imageUrl: "",
       seoTitle: "",
       seoDescription: "",
+    },
+    seo: {
+      seoTitle: "Gebäudereinigung im Rhein-Main-Gebiet | ProClean",
+      seoDescription:
+        "Professionelle Gebäudereinigung für Unternehmen in Offenbach, Frankfurt und Hanau. Jetzt kostenloses Angebot anfragen.",
     },
   },
   leistungen: {
@@ -660,6 +727,11 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoTitle: "",
       seoDescription: "",
     },
+    seo: {
+      seoTitle: "Leistungen für professionelle Gebäudereinigung | ProClean",
+      seoDescription:
+        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen im Rhein-Main-Gebiet.",
+    },
   },
   "ueber-uns": {
     hero: {
@@ -683,6 +755,11 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoTitle: "",
       seoDescription: "",
     },
+    seo: {
+      seoTitle: "Über uns | ProClean Gebäudereinigung",
+      seoDescription:
+        "Lernen Sie das Team hinter ProClean kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+    },
   },
   faq: {
     hero: {
@@ -703,6 +780,11 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoTitle: "",
       seoDescription: "",
     },
+    seo: {
+      seoTitle: "FAQ zur Gebäudereinigung | ProClean",
+      seoDescription:
+        "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
+    },
   },
   kontakt: {
     hero: {
@@ -719,6 +801,11 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Senden Sie uns Ihre Anfrage",
       subtitle: "Nutzen Sie das Formular für Ihr Anliegen und wir melden uns innerhalb von 24 Stunden.",
       buttonText: "Nachricht senden",
+    },
+    seo: {
+      seoTitle: "Kontakt | ProClean Gebäudereinigung",
+      seoDescription:
+        "Kontaktieren Sie ProClean für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung im Rhein-Main-Gebiet.",
     },
   },
 };

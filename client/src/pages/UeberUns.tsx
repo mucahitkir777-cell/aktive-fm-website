@@ -4,11 +4,14 @@
  */
 
 import { Link } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { trackCtaClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
+import { fetchPublicCmsPage } from "@/lib/cms";
+import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsAboutContent } from "@shared/cms";
 import {
   ArrowRight,
   CheckCircle,
@@ -47,6 +50,43 @@ const values = [
 ];
 
 export default function UeberUns() {
+  const [cmsContent, setCmsContent] = useState<CmsAboutContent>(() => getDefaultCmsPageContent("ueber-uns"));
+  const resolvedCmsContent = normalizeCmsPageContent("ueber-uns", cmsContent);
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("ueber-uns")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(normalizeCmsPageContent("ueber-uns", page.content));
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    applyPageSeo({
+      title: resolveSeoValue(
+        resolvedCmsContent.seo.seoTitle,
+        resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
+      ),
+      description: resolveSeoValue(
+        resolvedCmsContent.seo.seoDescription,
+        resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
+      ),
+    });
+  }, [
+    resolvedCmsContent.finalCta.seoDescription,
+    resolvedCmsContent.finalCta.seoTitle,
+    resolvedCmsContent.seo.seoDescription,
+    resolvedCmsContent.seo.seoTitle,
+  ]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const observer = new IntersectionObserver(

@@ -194,7 +194,7 @@ export default function Navigation() {
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--color-bg-soft)]"
-            aria-label="Menue oeffnen"
+            aria-label="Menü öffnen"
           >
             {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
