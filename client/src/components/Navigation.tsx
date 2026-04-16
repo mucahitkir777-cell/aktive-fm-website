@@ -67,7 +67,7 @@ export default function Navigation() {
           ...link,
           fallbackIndex: index,
           isVisible: typeof link.visible === "boolean" ? link.visible : true,
-          resolvedSortOrder: Number.isFinite(parsedSortOrder) ? parsedSortOrder : index + 1,
+          resolvedSortOrder: Number.isFinite(parsedSortOrder) ? parsedSortOrder : 999,
         };
       })
       .filter((link) => link.isVisible)
@@ -127,8 +127,8 @@ export default function Navigation() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isTopState
-          ? "bg-white/90 backdrop-blur-sm border-b pc-border"
-          : "bg-white/96 backdrop-blur-sm shadow-[0_10px_35px_-24px_rgba(15,33,55,0.65)] border-b pc-border"
+          ? "bg-white/95 backdrop-blur-sm border-b pc-border"
+          : "bg-white/98 backdrop-blur-sm shadow-[0_10px_35px_-24px_rgba(15,33,55,0.65)] border-b pc-border"
       }`}
     >
       <div className="container">
@@ -148,7 +148,7 @@ export default function Navigation() {
                   {companyConfig.brand.name}
                 </span>
                 <span
-                  className="block text-xs font-normal leading-none transition-colors duration-300 text-[#62728A]"
+                  className="block text-xs font-normal leading-none transition-colors duration-300 pc-text-muted"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   {companyConfig.brand.descriptor}
@@ -161,10 +161,10 @@ export default function Navigation() {
             {navLinks.map((link) => (
               <Link key={link.id} href={link.href}>
                 <span
-                  className={`text-sm font-medium transition-colors duration-200 ${
+                  className={`pc-nav-link ${
                     location === link.href
-                      ? "pc-text-brand"
-                      : "text-[#1A2332] hover:text-[var(--pc-primary)]"
+                      ? "pc-text-brand pc-bg-soft"
+                      : ""
                   }`}
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -178,7 +178,7 @@ export default function Navigation() {
             <a
               href={companyConfig.contact.phoneHref}
               onClick={() => handlePhoneClick("navigation_desktop")}
-              className="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 text-[#1A2332] hover:text-[var(--pc-primary)]"
+              className="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 pc-text-primary hover:text-[var(--color-primary)] rounded-lg px-3 py-2 hover:bg-[var(--color-bg-soft)]"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               <Phone size={14} />
@@ -193,7 +193,7 @@ export default function Navigation() {
 
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--pc-bg-soft)]"
+            className="lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--color-bg-soft)]"
             aria-label="Menue oeffnen"
           >
             {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -202,7 +202,7 @@ export default function Navigation() {
       </div>
 
       {isMobileOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
+        <div className="lg:hidden bg-white border-t pc-border shadow-[0_18px_34px_-26px_rgba(15,33,55,0.6)]">
           <div className="container py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link key={link.id} href={link.href}>
@@ -210,7 +210,7 @@ export default function Navigation() {
                   className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
                     location === link.href
                       ? "pc-text-brand pc-bg-soft"
-                      : "text-[#1A2332] hover:text-[var(--pc-primary)] hover:bg-[var(--pc-bg-soft)]"
+                      : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
                   }`}
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -218,11 +218,11 @@ export default function Navigation() {
                 </span>
               </Link>
             ))}
-            <div className="pt-3 mt-2 border-t border-gray-100 flex flex-col gap-2">
+            <div className="pt-3 mt-2 border-t pc-border flex flex-col gap-2">
               <a
                 href={companyConfig.contact.phoneHref}
                 onClick={() => handlePhoneClick("navigation_mobile")}
-                className="flex items-center gap-2 py-2.5 px-2 text-sm font-medium text-[#1A2332]"
+                className="flex items-center gap-2 py-2.5 px-2 text-sm font-medium pc-text-primary rounded-lg hover:bg-[var(--color-bg-soft)] transition-colors"
               >
                 <Phone size={16} className="pc-text-brand" />
                 {companyConfig.contact.phoneDisplay}

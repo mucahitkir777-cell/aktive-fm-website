@@ -142,14 +142,14 @@ export default function Kontakt() {
 
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                     <Phone size={18} className="pc-text-brand" />
                   </div>
                   <div>
                     <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       Telefon
                     </div>
-                    <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_page_info")} className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_page_info")} className="pc-text-secondary text-sm hover:text-[var(--color-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.contact.phoneDisplay}
                     </a>
                     <p className="pc-text-secondary text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -159,21 +159,21 @@ export default function Kontakt() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                     <Mail size={18} className="pc-text-brand" />
                   </div>
                   <div>
                     <div className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                       E-Mail
                     </div>
-                    <a href={companyConfig.contact.emailHref} className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <a href={companyConfig.contact.emailHref} className="pc-text-secondary text-sm hover:text-[var(--color-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                       {companyConfig.contact.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                     <MapPin size={18} className="pc-text-brand" />
                   </div>
                   <div>
@@ -192,7 +192,7 @@ export default function Kontakt() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                     <Clock size={18} className="pc-text-brand" />
                   </div>
                   <div>
@@ -212,7 +212,7 @@ export default function Kontakt() {
               </div>
 
               {/* Trust Points */}
-              <div className="mt-8 bg-white rounded-lg p-5 border border-gray-100">
+              <div className="mt-8 pc-form-shell">
                 <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Ihr Angebot ist:
                 </h3>
@@ -233,7 +233,7 @@ export default function Kontakt() {
                 </ul>
               </div>
 
-              <div className="mt-6 bg-white rounded-lg p-5 border border-gray-100">
+              <div className="mt-6 pc-form-shell">
                 <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Einsatzgebiete
                 </h3>
@@ -242,7 +242,7 @@ export default function Kontakt() {
                     <Link key={region.id} href={region.route}>
                       <span
                         onClick={() => handleRegionClick(region.label, region.route)}
-                        className="flex items-center justify-between gap-3 py-2 pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors"
+                        className="flex items-center justify-between gap-3 py-2 pc-text-secondary text-sm hover:text-[var(--color-primary)] transition-colors"
                         style={{ fontFamily: "Inter, sans-serif" }}
                       >
                         <span className="flex items-center gap-2">
@@ -267,7 +267,9 @@ export default function Kontakt() {
                   {resolvedCmsContent.formSection.subtitle}
                 </p>
               </div>
-              <QuickContactForm formId="contact_page_quick_contact" formType="contact" source="contact_page" pageType="contact_page" showLeadFields />
+              <div className="pc-form-shell">
+                <QuickContactForm formId="contact_page_quick_contact" formType="contact" source="contact_page" pageType="contact_page" showLeadFields />
+              </div>
             </div>
           </div>
         </div>

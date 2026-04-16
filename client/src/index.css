@@ -52,51 +52,80 @@
 }
 
 :root {
-  /* Core Design System Tokens */
-  --pc-bg-base: #ffffff;
-  --pc-bg-section: #f5f7fa;
-  --pc-bg-soft: #eef4ff;
-  --pc-primary: #1e3a8a;
-  --pc-primary-hover: #1a3277;
-  --pc-accent: #38bdf8;
-  --pc-text-primary: #0f172a;
-  --pc-text-secondary: #475569;
-  --pc-text-muted: #64748b;
-  --pc-border: #e2e8f0;
-  --pc-success: #14b8a6;
+  /* Core Color Tokens */
+  --color-primary: #1e3a8a;
+  --color-primary-hover: #1a3277;
+  --color-bg: #ffffff;
+  --color-bg-section: #f5f7fa;
+  --color-bg-soft: #eef4ff;
+  --color-card: #ffffff;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-accent: #38bdf8;
+  --color-success: #14b8a6;
+  --color-placeholder: #94a3b8;
+
+  /* Typography Tokens */
+  --font-family-heading: "Plus Jakarta Sans", sans-serif;
+  --font-family-body: "Inter", sans-serif;
+  --font-size-h1: clamp(2rem, 3vw, 3rem);
+  --font-size-h2: clamp(1.625rem, 2.5vw, 2.25rem);
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --line-height-heading: 1.15;
+  --line-height-body: 1.6;
+  --line-height-small: 1.45;
+
+  /* Backward-compatible aliases */
+  --pc-bg-base: var(--color-bg);
+  --pc-bg-section: var(--color-bg-section);
+  --pc-bg-soft: var(--color-bg-soft);
+  --pc-primary: var(--color-primary);
+  --pc-primary-hover: var(--color-primary-hover);
+  --pc-accent: var(--color-accent);
+  --pc-text-primary: var(--color-text);
+  --pc-text-secondary: var(--color-text-secondary);
+  --pc-text-muted: var(--color-text-muted);
+  --pc-border: var(--color-border);
+  --pc-success: var(--color-success);
+  --pc-radius-md: 0.75rem;
+  --pc-shadow-soft: 0 16px 34px -26px rgba(15, 33, 55, 0.34);
+  --pc-shadow-soft-hover: 0 22px 42px -24px rgba(15, 33, 55, 0.4);
   --radius: 0.75rem;
-  --background: var(--pc-bg-base);
-  --foreground: var(--pc-text-primary);
-  --card: var(--pc-bg-base);
-  --card-foreground: var(--pc-text-primary);
-  --popover: var(--pc-bg-base);
-  --popover-foreground: var(--pc-text-primary);
-  --primary: var(--pc-primary);
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+  --card: var(--color-card);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-card);
+  --popover-foreground: var(--color-text);
+  --primary: var(--color-primary);
   --primary-foreground: #ffffff;
-  --secondary: var(--pc-bg-section);
-  --secondary-foreground: var(--pc-text-primary);
-  --muted: var(--pc-bg-section);
-  --muted-foreground: var(--pc-text-secondary);
-  --accent: var(--pc-accent);
-  --accent-foreground: var(--pc-text-primary);
+  --secondary: var(--color-bg-section);
+  --secondary-foreground: var(--color-text);
+  --muted: var(--color-bg-section);
+  --muted-foreground: var(--color-text-secondary);
+  --accent: var(--color-accent);
+  --accent-foreground: var(--color-text);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: var(--pc-border);
-  --input: var(--pc-border);
-  --ring: var(--pc-primary);
-  --chart-1: var(--pc-primary);
+  --border: var(--color-border);
+  --input: var(--color-border);
+  --ring: var(--color-primary);
+  --chart-1: var(--color-primary);
   --chart-2: #3552a8;
   --chart-3: #5f79bd;
-  --chart-4: var(--pc-accent);
-  --chart-5: var(--pc-success);
-  --sidebar: var(--pc-bg-base);
-  --sidebar-foreground: var(--pc-text-primary);
-  --sidebar-primary: var(--pc-primary);
+  --chart-4: var(--color-accent);
+  --chart-5: var(--color-success);
+  --sidebar: var(--color-bg);
+  --sidebar-foreground: var(--color-text);
+  --sidebar-primary: var(--color-primary);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--pc-bg-section);
-  --sidebar-accent-foreground: var(--pc-text-primary);
-  --sidebar-border: var(--pc-border);
-  --sidebar-ring: var(--pc-primary);
+  --sidebar-accent: var(--color-bg-section);
+  --sidebar-accent-foreground: var(--color-text);
+  --sidebar-border: var(--color-border);
+  --sidebar-ring: var(--color-primary);
 }
 
 @layer base {
@@ -105,17 +134,17 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-family-heading);
     font-weight: 700;
     letter-spacing: -0.015em;
-    line-height: 1.15;
+    line-height: var(--line-height-heading);
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -161,108 +190,172 @@
 
   /* ProClean Custom Components */
   .pc-section {
-    @apply py-20 lg:py-32;
+    @apply py-24 lg:py-36;
   }
 
   .pc-section-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    @apply text-3xl lg:text-4xl font-bold leading-tight;
-    color: var(--pc-text-primary);
+    font-family: var(--font-family-heading);
+    @apply font-bold;
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-heading);
+    color: var(--color-text);
   }
 
   .pc-section-subtitle {
-    @apply text-base lg:text-lg leading-relaxed mt-4;
-    color: var(--pc-text-secondary);
-    font-family: 'Inter', sans-serif;
+    @apply mt-4;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-body);
     font-weight: 400;
   }
 
   .pc-accent-line {
     @apply block w-12 h-0.5 mt-4 mb-6;
-    background-color: var(--pc-accent);
+    background-color: var(--color-accent);
   }
 
   .pc-btn-primary {
-    @apply inline-flex items-center gap-2 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-[0_14px_36px_-20px_rgba(30,58,138,0.8)] hover:-translate-y-0.5;
-    background-color: var(--pc-primary);
-    font-family: 'Inter', sans-serif;
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
+    background-color: var(--color-primary);
+    border-radius: var(--pc-radius-md);
+    box-shadow: var(--pc-shadow-soft);
+    font-family: var(--font-family-body);
   }
   .pc-btn-primary:hover {
-    background-color: var(--pc-primary-hover);
+    background-color: var(--color-primary-hover);
+    box-shadow: var(--pc-shadow-soft-hover);
   }
 
   .pc-btn-outline {
-    @apply inline-flex items-center gap-2 border-2 font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:text-white;
-    border-color: var(--pc-primary);
-    color: var(--pc-primary);
-    font-family: 'Inter', sans-serif;
+    @apply inline-flex items-center justify-center gap-2 border-2 bg-white font-semibold px-6 py-3.5 transition-all duration-300 hover:text-white hover:-translate-y-0.5;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    border-radius: var(--pc-radius-md);
+    font-family: var(--font-family-body);
   }
   .pc-btn-outline:hover {
-    background-color: var(--pc-primary);
+    background-color: var(--color-primary);
+    box-shadow: var(--pc-shadow-soft);
   }
 
   .pc-btn-white {
-    @apply inline-flex items-center gap-2 bg-white border font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:bg-[#F8FBFF] hover:shadow-[0_14px_36px_-24px_rgba(30,58,138,0.7)] hover:-translate-y-0.5;
-    color: var(--pc-primary);
-    border-color: var(--pc-border);
-    font-family: 'Inter', sans-serif;
+    @apply inline-flex items-center justify-center gap-2 bg-white border font-semibold px-6 py-3.5 transition-all duration-300 hover:bg-[#F8FBFF] hover:-translate-y-0.5;
+    color: var(--color-primary);
+    border-color: var(--color-border);
+    border-radius: var(--pc-radius-md);
+    box-shadow: var(--pc-shadow-soft);
+    font-family: var(--font-family-body);
   }
+  .pc-btn-white:hover { box-shadow: var(--pc-shadow-soft-hover); }
 
   .pc-card {
-    @apply bg-white rounded-2xl p-6 shadow-[0_18px_40px_-30px_rgba(15,33,55,0.35)] border transition-all duration-300 hover:shadow-[0_22px_45px_-28px_rgba(15,33,55,0.45)] hover:-translate-y-1;
-    border-color: var(--pc-border);
+    @apply bg-white p-7 border transition-all duration-300 hover:-translate-y-1;
+    border-color: var(--color-border);
+    border-radius: var(--pc-radius-md);
+    box-shadow: var(--pc-shadow-soft);
+  }
+  .pc-card:hover {
+    box-shadow: var(--pc-shadow-soft-hover);
   }
 
   .pc-nav-link {
-    @apply text-sm font-medium transition-colors duration-200;
-    color: var(--pc-text-primary);
-    font-family: 'Inter', sans-serif;
+    @apply text-sm font-medium transition-colors duration-200 px-3 py-2;
+    color: var(--color-text);
+    border-radius: var(--pc-radius-md);
+    font-family: var(--font-family-body);
   }
   .pc-nav-link:hover {
-    color: var(--pc-primary);
+    color: var(--color-primary);
+    background-color: var(--color-bg-soft);
   }
 
   .pc-page-hero {
     @apply border-b pt-28 pb-16;
-    border-color: var(--pc-border);
-    background: linear-gradient(180deg, var(--pc-bg-base) 0%, var(--pc-bg-soft) 100%);
+    border-color: var(--color-border);
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-soft) 100%);
   }
 
   .pc-h1 {
-    @apply text-4xl lg:text-5xl font-bold leading-tight;
-    color: var(--pc-text-primary);
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply font-bold;
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-heading);
+    color: var(--color-text);
+    font-family: var(--font-family-heading);
   }
 
   .pc-h2 {
-    @apply text-3xl lg:text-4xl font-bold leading-tight;
-    color: var(--pc-text-primary);
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply font-bold;
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-heading);
+    color: var(--color-text);
+    font-family: var(--font-family-heading);
   }
 
   .pc-body {
-    @apply text-base leading-relaxed;
-    color: var(--pc-text-secondary);
-    font-family: 'Inter', sans-serif;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-body);
   }
 
   .pc-caption {
-    @apply text-sm leading-relaxed;
-    color: var(--pc-text-muted);
-    font-family: 'Inter', sans-serif;
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    color: var(--color-text-muted);
+    font-family: var(--font-family-body);
   }
 
-  .pc-bg-base { background-color: var(--pc-bg-base); }
-  .pc-bg-section { background-color: var(--pc-bg-section); }
-  .pc-bg-soft { background-color: var(--pc-bg-soft); }
-  .pc-bg-brand { background-color: var(--pc-primary); }
-  .pc-bg-accent { background-color: var(--pc-accent); }
-  .pc-bg-success { background-color: var(--pc-success); }
-  .pc-border { border-color: var(--pc-border); }
-  .pc-text-primary { color: var(--pc-text-primary); }
-  .pc-text-secondary { color: var(--pc-text-secondary); }
-  .pc-text-brand { color: var(--pc-primary); }
-  .pc-text-accent { color: var(--pc-accent); }
+  .pc-input,
+  .pc-select,
+  .pc-textarea {
+    @apply w-full border px-4 py-3.5 text-sm transition-all duration-200;
+    border-color: var(--color-border);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    border-radius: var(--pc-radius-md);
+    font-family: var(--font-family-body);
+  }
+
+  .pc-input::placeholder,
+  .pc-select::placeholder,
+  .pc-textarea::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  .pc-input:focus,
+  .pc-select:focus,
+  .pc-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+  }
+
+  .pc-checkbox {
+    @apply h-4 w-4 rounded border;
+    border-color: var(--color-border);
+    color: var(--color-primary);
+  }
+
+  .pc-form-shell {
+    @apply bg-white border p-6 sm:p-8;
+    border-color: var(--color-border);
+    border-radius: var(--pc-radius-md);
+    box-shadow: var(--pc-shadow-soft);
+  }
+
+  .pc-bg-base { background-color: var(--color-bg); }
+  .pc-bg-section { background-color: var(--color-bg-section); }
+  .pc-bg-soft { background-color: var(--color-bg-soft); }
+  .pc-bg-brand { background-color: var(--color-primary); }
+  .pc-bg-accent { background-color: var(--color-accent); }
+  .pc-bg-success { background-color: var(--color-success); }
+  .pc-border { border-color: var(--color-border); }
+  .pc-text-primary { color: var(--color-text); }
+  .pc-text-secondary { color: var(--color-text-secondary); }
+  .pc-text-muted { color: var(--color-text-muted); }
+  .pc-text-brand { color: var(--color-primary); }
+  .pc-text-accent { color: var(--color-accent); }
 
   /* Scroll animation utility */
   .pc-fade-up {

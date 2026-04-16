@@ -241,9 +241,9 @@ export default function QuickContactForm({
 
   if (leadId) {
     return (
-      <div className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm text-center">
-        <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
-          <CheckCircle size={32} className="text-green-500" />
+      <div className="pc-form-shell text-center">
+        <div className="w-16 h-16 pc-bg-soft rounded-full flex items-center justify-center mx-auto mb-5">
+          <CheckCircle size={32} className="pc-text-brand" />
         </div>
         <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
           Vielen Dank!
@@ -256,11 +256,10 @@ export default function QuickContactForm({
   }
 
   const errorClass = "text-red-600 text-xs mt-1";
-  const inputClass =
-    "w-full px-4 py-3 rounded-xl border pc-border text-[#1A2332] placeholder-[#94A3B8] focus:outline-none focus:border-[#1E3A8A] focus:ring-1 focus:ring-[#1E3A8A] transition-colors text-sm";
+  const inputClass = "pc-input";
 
   return (
-    <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} className="space-y-5" noValidate>
       {fieldErrors.general && (
         <div className="flex gap-2 bg-red-50 text-red-700 border border-red-100 rounded-lg p-3 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
@@ -268,7 +267,7 @@ export default function QuickContactForm({
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <input
             type="text"
@@ -299,7 +298,7 @@ export default function QuickContactForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <input
             type="tel"
@@ -333,13 +332,13 @@ export default function QuickContactForm({
 
       {showLeadFields && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <select
                 name="regionId"
                 value={formData.regionId}
                 onChange={handleSelectChange}
-                className={inputClass}
+                className="pc-select"
                 style={{ fontFamily: "Inter, sans-serif" }}
                 required
               >
@@ -358,7 +357,7 @@ export default function QuickContactForm({
                 name="serviceId"
                 value={formData.serviceId}
                 onChange={handleSelectChange}
-                className={inputClass}
+                className="pc-select"
                 style={{ fontFamily: "Inter, sans-serif" }}
                 required
               >
@@ -373,12 +372,12 @@ export default function QuickContactForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <select
               name="objectSize"
               value={formData.objectSize}
               onChange={handleSelectChange}
-              className={inputClass}
+              className="pc-select"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               <option value="">Objektgröße optional</option>
@@ -393,7 +392,7 @@ export default function QuickContactForm({
               name="cleaningInterval"
               value={formData.cleaningInterval}
               onChange={handleSelectChange}
-              className={inputClass}
+              className="pc-select"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               <option value="">Reinigungsintervall optional</option>
@@ -414,7 +413,7 @@ export default function QuickContactForm({
           onChange={handleInputChange}
           placeholder="Nachricht, Objektart oder besondere Anforderungen"
           rows={4}
-          className={`${inputClass} resize-none`}
+          className="pc-textarea resize-none"
           style={{ fontFamily: "Inter, sans-serif" }}
         />
         {fieldErrors.message && <p className={errorClass}>{fieldErrors.message}</p>}
@@ -426,13 +425,13 @@ export default function QuickContactForm({
           name="privacyConsent"
           checked={formData.privacyConsent}
           onChange={handleInputChange}
-          className="mt-1 h-4 w-4 rounded border-gray-300 pc-text-brand focus:ring-[#1E3A8A]"
+          className="mt-1 pc-checkbox"
           required
         />
         <span>
           Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet werden. Hinweise finden Sie in der{" "}
           <Link href="/datenschutz">
-            <span className="pc-text-brand hover:text-[#1A3277]">Datenschutzerklärung</span>
+            <span className="pc-text-brand hover:text-[var(--color-primary-hover)]">Datenschutzerklärung</span>
           </Link>
           . *
           {fieldErrors.privacyConsent && <span className="block text-red-600 mt-1">{fieldErrors.privacyConsent}</span>}
@@ -442,7 +441,7 @@ export default function QuickContactForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full pc-bg-brand text-white font-semibold py-3 rounded-xl hover:bg-[var(--pc-primary-hover)] disabled:bg-gray-400 transition-all duration-200 flex items-center justify-center gap-2"
+        className="w-full pc-btn-primary disabled:bg-gray-400"
         style={{ fontFamily: "Inter, sans-serif" }}
       >
         <Send size={16} />
