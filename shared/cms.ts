@@ -202,7 +202,7 @@ export const cmsPageDefinitions = {
           { key: "title", label: "Hero-Titel", input: "text" },
           { key: "accentTitle", label: "Hero-Akzenttitel", input: "text" },
           { key: "subtitle", label: "Hero-Untertitel", input: "textarea", rows: 4 },
-          { key: "buttonText", label: "Hero-Button-Text", input: "text" },
+          { key: "primaryButtonText", label: "Hero-Button-Text", input: "text" },
         ],
       },
       {

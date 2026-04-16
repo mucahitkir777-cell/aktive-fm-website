@@ -154,6 +154,7 @@ function mergeCmsServicesContent(content: unknown): CmsServicesContent {
 
 export default function Leistungen() {
   const [cmsContent, setCmsContent] = useState<CmsServicesContent>(() => getDefaultCmsPageContent("leistungen"));
+  const resolvedCmsContent = mergeCmsServicesContent(cmsContent);
 
   const handleServiceCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceTitle?: string, serviceId?: string) => {
     if (serviceTitle) {
@@ -214,10 +215,10 @@ export default function Leistungen() {
           <div className="max-w-2xl">
             <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-              {cmsContent.hero.title}
+              {resolvedCmsContent.hero.title}
             </h1>
             <p className="text-white/60 text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-              {cmsContent.hero.subtitle}
+              {resolvedCmsContent.hero.subtitle}
             </p>
 
             {/* Hero CTA */}
@@ -227,8 +228,8 @@ export default function Leistungen() {
                 {companyConfig.contact.phoneDisplay}
               </a>
               <Link href="/kontakt">
-                <span onClick={() => handleServiceCtaClick("services_hero_offer", cmsContent.hero.buttonText, "services_hero", "/kontakt")} className="pc-btn-white">
-                  {cmsContent.hero.buttonText}
+                <span onClick={() => handleServiceCtaClick("services_hero_offer", resolvedCmsContent.hero.buttonText, "services_hero", "/kontakt")} className="pc-btn-white">
+                  {resolvedCmsContent.hero.buttonText}
                   <ArrowRight size={16} />
                 </span>
               </Link>
@@ -241,18 +242,18 @@ export default function Leistungen() {
         <div className="container">
           <div className="mx-auto max-w-3xl space-y-8 text-center">
             <div>
-              <h2 className="pc-section-title">{cmsContent.overview.title}</h2>
+              <h2 className="pc-section-title">{resolvedCmsContent.overview.title}</h2>
               <p className="mt-4 text-[#6B7A8D] text-base leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                {cmsContent.overview.subtitle}
+                {resolvedCmsContent.overview.subtitle}
               </p>
             </div>
 
             <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
               <h3 className="text-2xl font-semibold text-[#0F2137] mb-3" style={{ fontFamily: "Syne, sans-serif" }}>
-                {cmsContent.benefits.title}
+                {resolvedCmsContent.benefits.title}
               </h3>
               <p className="text-[#6B7A8D] leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                {cmsContent.benefits.subtitle}
+                {resolvedCmsContent.benefits.subtitle}
               </p>
             </div>
           </div>
@@ -326,15 +327,15 @@ export default function Leistungen() {
       <section className="bg-[#0F2137] py-16 lg:py-20">
         <div className="container text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-            {cmsContent.finalCta.title}
+            {resolvedCmsContent.finalCta.title}
           </h2>
           <p className="text-white/60 mb-8 max-w-lg mx-auto text-lg" style={{ fontFamily: "Inter, sans-serif" }}>
-            {cmsContent.finalCta.body}
+            {resolvedCmsContent.finalCta.body}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/kontakt">
-              <span onClick={() => handleServiceCtaClick("services_final_offer", cmsContent.finalCta.primaryButtonText, "services_final_cta", "/kontakt")} className="pc-btn-primary text-lg">
-                {cmsContent.finalCta.primaryButtonText}
+              <span onClick={() => handleServiceCtaClick("services_final_offer", resolvedCmsContent.finalCta.primaryButtonText, "services_final_cta", "/kontakt")} className="pc-btn-primary text-lg">
+                {resolvedCmsContent.finalCta.primaryButtonText}
                 <ArrowRight size={16} />
               </span>
             </Link>
@@ -350,3 +351,4 @@ export default function Leistungen() {
     </div>
   );
 }
+

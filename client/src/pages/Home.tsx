@@ -240,6 +240,7 @@ function mergeCmsHomeContent(content: unknown): CmsHomeContent {
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement>(null);
   const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
+  const resolvedCmsContent = mergeCmsHomeContent(cmsContent);
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -282,17 +283,17 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (cmsContent.finalCta.seoTitle) {
-      document.title = cmsContent.finalCta.seoTitle;
+    if (resolvedCmsContent.finalCta.seoTitle) {
+      document.title = resolvedCmsContent.finalCta.seoTitle;
     }
 
-    if (cmsContent.finalCta.seoDescription) {
+    if (resolvedCmsContent.finalCta.seoDescription) {
       const descriptionMeta = document.querySelector('meta[name="description"]');
       if (descriptionMeta) {
-        descriptionMeta.setAttribute("content", cmsContent.finalCta.seoDescription);
+        descriptionMeta.setAttribute("content", resolvedCmsContent.finalCta.seoDescription);
       }
     }
-  }, [cmsContent.finalCta.seoTitle, cmsContent.finalCta.seoDescription]);
+  }, [resolvedCmsContent.finalCta.seoDescription, resolvedCmsContent.finalCta.seoTitle]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -342,21 +343,21 @@ export default function Home() {
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
               style={{ fontFamily: "Syne, sans-serif", letterSpacing: "-0.02em" }}
             >
-              {cmsContent.hero.title}<br />
-              <span className="text-[#1D6FA4]">{cmsContent.hero.accentTitle}</span>
+              {resolvedCmsContent.hero.title}<br />
+              <span className="text-[#1D6FA4]">{resolvedCmsContent.hero.accentTitle}</span>
             </h1>
 
             <p className="text-white/75 text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
-              {cmsContent.hero.subtitle}
+              {resolvedCmsContent.hero.subtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
               <Link href="/kontakt">
                 <span
-                  onClick={() => handleHomeCtaClick("home_hero_offer", cmsContent.hero.primaryButtonText, "home_hero", "/kontakt")}
+                  onClick={() => handleHomeCtaClick("home_hero_offer", resolvedCmsContent.hero.primaryButtonText, "home_hero", "/kontakt")}
                   className="pc-btn-primary text-base px-7 py-3.5"
                 >
-                  {cmsContent.hero.primaryButtonText}
+                  {resolvedCmsContent.hero.primaryButtonText}
                   <ArrowRight size={18} />
                 </span>
               </Link>
@@ -445,9 +446,9 @@ export default function Home() {
         <div className="container">
           <div className="max-w-xl mb-14 pc-fade-up">
             <span className="pc-accent-line" />
-            <h2 className="pc-section-title">{cmsContent.services.title}</h2>
+            <h2 className="pc-section-title">{resolvedCmsContent.services.title}</h2>
             <p className="pc-section-subtitle">
-              {cmsContent.services.subtitle}
+              {resolvedCmsContent.services.subtitle}
             </p>
           </div>
 
@@ -488,8 +489,8 @@ export default function Home() {
 
           <div className="mt-10 text-center pc-fade-up">
             <Link href="/leistungen">
-              <span onClick={() => handleHomeCtaClick("home_all_services", cmsContent.services.buttonText, "home_services", "/leistungen")} className="pc-btn-outline">
-                {cmsContent.services.buttonText}
+              <span onClick={() => handleHomeCtaClick("home_all_services", resolvedCmsContent.services.buttonText, "home_services", "/leistungen")} className="pc-btn-outline">
+                {resolvedCmsContent.services.buttonText}
                 <ArrowRight size={16} />
               </span>
             </Link>
@@ -522,10 +523,10 @@ export default function Home() {
             <div className="order-1 lg:order-2 pc-fade-up">
               <span className="pc-accent-line" />
               <h2 className="pc-section-title mb-4">
-                {cmsContent.usps.title}
+                {resolvedCmsContent.usps.title}
               </h2>
               <p className="text-[#6B7A8D] leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                {cmsContent.usps.subtitle}
+                {resolvedCmsContent.usps.subtitle}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -711,19 +712,19 @@ export default function Home() {
               <div className="p-10 lg:p-14">
                 <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
                 <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-                  {cmsContent.finalCta.title}
+                  {resolvedCmsContent.finalCta.title}
                 </h2>
                 <p className="text-white/60 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {cmsContent.finalCta.body}
+                  {resolvedCmsContent.finalCta.body}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3 mb-8">
                   <Link href="/kontakt">
                     <span
-                      onClick={() => handleHomeCtaClick("home_final_offer", cmsContent.finalCta.primaryButtonText, "home_final_cta", "/kontakt")}
+                      onClick={() => handleHomeCtaClick("home_final_offer", resolvedCmsContent.finalCta.primaryButtonText, "home_final_cta", "/kontakt")}
                       className="pc-btn-primary"
                     >
-                      {cmsContent.finalCta.primaryButtonText}
+                      {resolvedCmsContent.finalCta.primaryButtonText}
                       <ArrowRight size={16} />
                     </span>
                   </Link>
@@ -768,4 +769,5 @@ export default function Home() {
     </div>
   );
 }
+
 

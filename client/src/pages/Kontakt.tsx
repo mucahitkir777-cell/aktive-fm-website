@@ -15,6 +15,35 @@ import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
 import { getDefaultCmsPageContent, type CmsContactContent } from "@shared/cms";
 
+function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  const provided = content as Record<string, unknown>;
+  return Object.keys(defaults).reduce((result, key) => {
+    const value = provided[key];
+    return {
+      ...result,
+      [key]: typeof value === "string" ? (value as string) : defaults[key as keyof T],
+    };
+  }, {} as T);
+}
+
+function mergeCmsContactContent(content: unknown): CmsContactContent {
+  const defaults = getDefaultCmsPageContent("kontakt");
+
+  if (!content || typeof content !== "object") {
+    return defaults;
+  }
+
+  return {
+    hero: mergeCmsSection(defaults.hero, (content as Record<string, unknown>).hero),
+    contactInfo: mergeCmsSection(defaults.contactInfo, (content as Record<string, unknown>).contactInfo),
+    formSection: mergeCmsSection(defaults.formSection, (content as Record<string, unknown>).formSection),
+  };
+}
+
 export default function Kontakt() {
   const handleRegionClick = (regionLabel: string, destinationUrl: string) => {
     trackLocationInterest(regionLabel, {
@@ -31,6 +60,7 @@ export default function Kontakt() {
   };
 
   const [cmsContent, setCmsContent] = useState<CmsContactContent>(() => getDefaultCmsPageContent("kontakt"));
+  const resolvedCmsContent = mergeCmsContactContent(cmsContent);
 
   useEffect(() => {
     let active = true;
@@ -38,7 +68,7 @@ export default function Kontakt() {
     void fetchPublicCmsPage("kontakt")
       .then((page) => {
         if (page && active) {
-          setCmsContent(page.content);
+          setCmsContent(mergeCmsContactContent(page.content));
         }
       })
       .catch(() => undefined);
@@ -74,23 +104,23 @@ export default function Kontakt() {
           <div className="max-w-2xl">
             <span className="block w-10 h-0.5 bg-[#1D6FA4] mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-              {cmsContent.hero.title}
+              {resolvedCmsContent.hero.title}
             </h1>
             <p className="text-white/60 text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-              {cmsContent.hero.subtitle}
+              {resolvedCmsContent.hero.subtitle}
             </p>
             <div className="mt-8">
               <a
                 href="#kontakt-form"
                 onClick={() => trackCtaClick({
                   cta_id: "contact_hero_cta",
-                  cta_text: cmsContent.hero.buttonText,
+                  cta_text: resolvedCmsContent.hero.buttonText,
                   cta_location: "contact_hero",
                   destination_url: "#kontakt-form",
                 })}
                 className="pc-btn-primary"
               >
-                {cmsContent.hero.buttonText}
+                {resolvedCmsContent.hero.buttonText}
               </a>
             </div>
           </div>
@@ -104,10 +134,10 @@ export default function Kontakt() {
             {/* Contact Info */}
             <div className="lg:col-span-1 pc-fade-up">
               <h2 className="text-xl font-bold text-[#0F2137] mb-6" style={{ fontFamily: "Syne, sans-serif" }}>
-                {cmsContent.contactInfo.title}
+                {resolvedCmsContent.contactInfo.title}
               </h2>
               <p className="text-[#6B7A8D] text-sm leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                {cmsContent.contactInfo.subtitle}
+                {resolvedCmsContent.contactInfo.subtitle}
               </p>
 
               <div className="space-y-6">
@@ -231,10 +261,10 @@ export default function Kontakt() {
             <div id="kontakt-form" className="lg:col-span-2 pc-fade-up">
               <div className="mb-8">
                 <h2 className="text-3xl font-bold text-[#0F2137] mb-4" style={{ fontFamily: "Syne, sans-serif" }}>
-                  {cmsContent.formSection.title}
+                  {resolvedCmsContent.formSection.title}
                 </h2>
                 <p className="text-[#6B7A8D] text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {cmsContent.formSection.subtitle}
+                  {resolvedCmsContent.formSection.subtitle}
                 </p>
               </div>
               <QuickContactForm formId="contact_page_quick_contact" formType="contact" source="contact_page" pageType="contact_page" showLeadFields />
