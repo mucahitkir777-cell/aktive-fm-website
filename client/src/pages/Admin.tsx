@@ -1798,7 +1798,7 @@ export default function Admin() {
               <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4">
                 <button
                   type="button"
-                  onClick={() => setCmsDraft(createCmsDraft(cmsPage))}
+                  onClick={() => setCmsDraft(createCmsDraft(cmsPage, selectedCmsSlug))}
                   className={secondaryButtonClass}
                 >
                   Reset

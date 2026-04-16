@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const cmsPageSlugs = ["home", "leistungen", "ueber-uns", "faq", "kontakt"] as const;
+export const cmsPageSlugs = ["global", "home", "leistungen", "ueber-uns", "faq", "kontakt"] as const;
 export const cmsPageSlugSchema = z.enum(cmsPageSlugs);
 export type CmsPageSlug = (typeof cmsPageSlugs)[number];
 
@@ -169,7 +169,55 @@ export const cmsContactContentSchema = z.object({
 
 export type CmsContactContent = z.infer<typeof cmsContactContentSchema>;
 
+const pathFieldSchema = z.string().trim().min(1, "Der Pfad ist erforderlich.").max(200, "Der Pfad ist zu lang.");
+const multilineTextSchema = z.string().trim().min(1, "Das Feld ist erforderlich.").max(2000, "Das Feld ist zu lang.");
+
+export const cmsGlobalContentSchema = z.object({
+  navigation: z.object({
+    homeLabel: pageTitleSchema.default("Startseite"),
+    homeHref: pathFieldSchema.default("/"),
+    servicesLabel: pageTitleSchema.default("Leistungen"),
+    servicesHref: pathFieldSchema.default("/leistungen"),
+    aboutLabel: pageTitleSchema.default("Ueber uns"),
+    aboutHref: pathFieldSchema.default("/ueber-uns"),
+    faqLabel: pageTitleSchema.default("FAQ"),
+    faqHref: pathFieldSchema.default("/faq"),
+    contactLabel: pageTitleSchema.default("Kontakt"),
+    contactHref: pathFieldSchema.default("/kontakt"),
+    ctaLabel: pageButtonSchema.default("Angebot anfragen"),
+    ctaHref: pathFieldSchema.default("/kontakt"),
+  }),
+  footer: z.object({
+    footerText: pageSubtitleSchema.default(
+      "Ihr zuverlaessiger Partner fuer professionelle Gebaeudereinigung im Rhein-Main-Gebiet. Qualitaet, die man sieht."
+    ),
+    membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
+  }),
+  footerContact: z.object({
+    phoneLabel: pageTitleSchema.default("Telefon"),
+    phoneDisplay: z.string().trim().min(1, "Die Telefonnummer ist erforderlich.").max(80, "Die Telefonnummer ist zu lang.").default("0800 000 000"),
+    phoneHref: z.string().trim().min(1, "Der Telefon-Link ist erforderlich.").max(200, "Der Telefon-Link ist zu lang.").default("tel:+4900000000000"),
+    phoneMeta: z.string().trim().min(1, "Die Zusatzinfo ist erforderlich.").max(120, "Die Zusatzinfo ist zu lang.").default("Mo-Fr 7:00-18:00 Uhr"),
+    emailLabel: pageTitleSchema.default("E-Mail"),
+    emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@proclean-gmbh.de"),
+    emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@proclean-gmbh.de"),
+    addressLabel: pageTitleSchema.default("Adresse"),
+    addressLines: multilineTextSchema.default("Musterstrasse 1\n12345 Musterstadt"),
+    hoursLabel: pageTitleSchema.default("Oeffnungszeiten"),
+    hoursLines: multilineTextSchema.default("Mo-Fr: 07:00-18:00\nSa: 08:00-14:00"),
+  }),
+  legal: z.object({
+    impressumLabel: pageTitleSchema.default("Impressum"),
+    impressumHref: pathFieldSchema.default("/impressum"),
+    datenschutzLabel: pageTitleSchema.default("Datenschutz"),
+    datenschutzHref: pathFieldSchema.default("/datenschutz"),
+  }),
+});
+
+export type CmsGlobalContent = z.infer<typeof cmsGlobalContentSchema>;
+
 export const cmsPageSchemas = {
+  global: cmsGlobalContentSchema,
   home: cmsHomeContentSchema,
   leistungen: cmsServicesContentSchema,
   "ueber-uns": cmsAboutContentSchema,
@@ -191,6 +239,65 @@ export interface CmsSectionDefinition {
 }
 
 export const cmsPageDefinitions = {
+  global: {
+    title: "Globale Inhalte",
+    path: "/",
+    sections: [
+      {
+        key: "navigation",
+        label: "Navigation",
+        fields: [
+          { key: "homeLabel", label: "Startseite Label", input: "text" },
+          { key: "homeHref", label: "Startseite Pfad", input: "text" },
+          { key: "servicesLabel", label: "Leistungen Label", input: "text" },
+          { key: "servicesHref", label: "Leistungen Pfad", input: "text" },
+          { key: "aboutLabel", label: "Ueber uns Label", input: "text" },
+          { key: "aboutHref", label: "Ueber uns Pfad", input: "text" },
+          { key: "faqLabel", label: "FAQ Label", input: "text" },
+          { key: "faqHref", label: "FAQ Pfad", input: "text" },
+          { key: "contactLabel", label: "Kontakt Label", input: "text" },
+          { key: "contactHref", label: "Kontakt Pfad", input: "text" },
+          { key: "ctaLabel", label: "CTA Label", input: "text" },
+          { key: "ctaHref", label: "CTA Pfad", input: "text" },
+        ],
+      },
+      {
+        key: "footer",
+        label: "Footer",
+        fields: [
+          { key: "footerText", label: "Footer-Text", input: "textarea", rows: 4 },
+          { key: "membershipLabel", label: "Mitgliedschaft", input: "text" },
+        ],
+      },
+      {
+        key: "footerContact",
+        label: "Footer Kontakt",
+        fields: [
+          { key: "phoneLabel", label: "Telefon Label", input: "text" },
+          { key: "phoneDisplay", label: "Telefon Anzeige", input: "text" },
+          { key: "phoneHref", label: "Telefon Link", input: "text" },
+          { key: "phoneMeta", label: "Telefon Zusatzinfo", input: "text" },
+          { key: "emailLabel", label: "E-Mail Label", input: "text" },
+          { key: "emailDisplay", label: "E-Mail Anzeige", input: "text" },
+          { key: "emailHref", label: "E-Mail Link", input: "text" },
+          { key: "addressLabel", label: "Adresse Label", input: "text" },
+          { key: "addressLines", label: "Adresse Zeilen", input: "textarea", rows: 3 },
+          { key: "hoursLabel", label: "Oeffnungszeiten Label", input: "text" },
+          { key: "hoursLines", label: "Oeffnungszeiten Zeilen", input: "textarea", rows: 3 },
+        ],
+      },
+      {
+        key: "legal",
+        label: "Rechtliches",
+        fields: [
+          { key: "impressumLabel", label: "Impressum Label", input: "text" },
+          { key: "impressumHref", label: "Impressum Pfad", input: "text" },
+          { key: "datenschutzLabel", label: "Datenschutz Label", input: "text" },
+          { key: "datenschutzHref", label: "Datenschutz Pfad", input: "text" },
+        ],
+      },
+    ],
+  },
   home: {
     title: "Startseite",
     path: "/",
@@ -396,6 +503,7 @@ export const cmsPageDefinitions = {
 >;
 
 export interface CmsPageContentMap {
+  global: CmsGlobalContent;
   home: CmsHomeContent;
   leistungen: CmsServicesContent;
   "ueber-uns": CmsAboutContent;
@@ -404,6 +512,45 @@ export interface CmsPageContentMap {
 }
 
 export const defaultCmsPageContent: CmsPageContentMap = {
+  global: {
+    navigation: {
+      homeLabel: "Startseite",
+      homeHref: "/",
+      servicesLabel: "Leistungen",
+      servicesHref: "/leistungen",
+      aboutLabel: "Ueber uns",
+      aboutHref: "/ueber-uns",
+      faqLabel: "FAQ",
+      faqHref: "/faq",
+      contactLabel: "Kontakt",
+      contactHref: "/kontakt",
+      ctaLabel: "Angebot anfragen",
+      ctaHref: "/kontakt",
+    },
+    footer: {
+      footerText: "Ihr zuverlaessiger Partner fuer professionelle Gebaeudereinigung im Rhein-Main-Gebiet. Qualitaet, die man sieht.",
+      membershipLabel: "BIV Bundesinnungsverband",
+    },
+    footerContact: {
+      phoneLabel: "Telefon",
+      phoneDisplay: "0800 000 000",
+      phoneHref: "tel:+4900000000000",
+      phoneMeta: "Mo-Fr 7:00-18:00 Uhr",
+      emailLabel: "E-Mail",
+      emailDisplay: "info@proclean-gmbh.de",
+      emailHref: "mailto:info@proclean-gmbh.de",
+      addressLabel: "Adresse",
+      addressLines: "Musterstrasse 1\n12345 Musterstadt",
+      hoursLabel: "Oeffnungszeiten",
+      hoursLines: "Mo-Fr: 07:00-18:00\nSa: 08:00-14:00",
+    },
+    legal: {
+      impressumLabel: "Impressum",
+      impressumHref: "/impressum",
+      datenschutzLabel: "Datenschutz",
+      datenschutzHref: "/datenschutz",
+    },
+  },
   home: {
     hero: {
       title: "Sauberkeit,",
@@ -522,6 +669,16 @@ export interface CmsPageSummary<TSlug extends CmsPageSlug = CmsPageSlug> {
 
 export interface CmsPage<TSlug extends CmsPageSlug = CmsPageSlug> extends CmsPageSummary<TSlug> {
   content: CmsPageContentMap[TSlug];
+}
+
+export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, content: unknown): CmsPageContentMap[TSlug] {
+  const schema = cmsPageSchemas[slug];
+  const parsed = schema.safeParse(content);
+  if (parsed.success) {
+    return parsed.data as CmsPageContentMap[TSlug];
+  }
+
+  return getDefaultCmsPageContent(slug);
 }
 
 export function getDefaultCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug): CmsPageContentMap[TSlug] {

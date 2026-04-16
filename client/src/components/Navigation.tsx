@@ -6,30 +6,34 @@
  * - Mobile hamburger menu
  */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { trackCtaClick, trackPhoneClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
-
-const navLinks = [
-  { href: "/", label: "Startseite" },
-  { href: "/leistungen", label: "Leistungen" },
-  { href: "/ueber-uns", label: "Über uns" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/kontakt", label: "Kontakt" },
-];
+import { fetchPublicCmsPage } from "@/lib/cms";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent } from "@shared/cms";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
   const [location] = useLocation();
   const isHome = location === "/";
+  const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
+  const navLinks = [
+    { href: resolvedCmsContent.navigation.homeHref, label: resolvedCmsContent.navigation.homeLabel },
+    { href: resolvedCmsContent.navigation.servicesHref, label: resolvedCmsContent.navigation.servicesLabel },
+    { href: resolvedCmsContent.navigation.aboutHref, label: resolvedCmsContent.navigation.aboutLabel },
+    { href: resolvedCmsContent.navigation.faqHref, label: resolvedCmsContent.navigation.faqLabel },
+    { href: resolvedCmsContent.navigation.contactHref, label: resolvedCmsContent.navigation.contactLabel },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 60);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -37,6 +41,22 @@ export default function Navigation() {
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location]);
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("global")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(normalizeCmsPageContent("global", page.content));
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const isTransparent = isHome && !isScrolled && !isMobileOpen;
 
@@ -47,9 +67,9 @@ export default function Navigation() {
   const handleRequestClick = (buttonLocation: string) => {
     trackCtaClick({
       cta_id: `${buttonLocation}_offer_request`,
-      cta_text: "Angebot anfragen",
+      cta_text: resolvedCmsContent.navigation.ctaLabel,
       cta_location: buttonLocation,
-      destination_url: "/kontakt",
+      destination_url: resolvedCmsContent.navigation.ctaHref,
     });
   };
 
@@ -63,7 +83,6 @@ export default function Navigation() {
     >
       <div className="container">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
           <Link href="/">
             <div className="flex items-center gap-2 group">
               <div className="w-8 h-8 bg-[#1D6FA4] rounded flex items-center justify-center">
@@ -92,7 +111,6 @@ export default function Navigation() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -101,8 +119,8 @@ export default function Navigation() {
                     isTransparent
                       ? "text-white/90 hover:text-white"
                       : location === link.href
-                      ? "text-[#1D6FA4]"
-                      : "text-[#1A2332] hover:text-[#1D6FA4]"
+                        ? "text-[#1D6FA4]"
+                        : "text-[#1A2332] hover:text-[#1D6FA4]"
                   }`}
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -112,7 +130,6 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
             <a
               href={companyConfig.contact.phoneHref}
@@ -125,27 +142,25 @@ export default function Navigation() {
               <Phone size={14} />
               <span>{companyConfig.contact.phoneDisplay}</span>
             </a>
-            <Link href="/kontakt">
+            <Link href={resolvedCmsContent.navigation.ctaHref}>
               <span onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
-                Angebot anfragen
+                {resolvedCmsContent.navigation.ctaLabel}
               </span>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className={`lg:hidden p-2 rounded transition-colors ${
               isTransparent ? "text-white hover:bg-white/10" : "text-[#0F2137] hover:bg-gray-100"
             }`}
-            aria-label="Menü öffnen"
+            aria-label="Menue oeffnen"
           >
             {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileOpen && (
         <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="container py-4 flex flex-col gap-1">
@@ -172,9 +187,9 @@ export default function Navigation() {
                 <Phone size={16} className="text-[#1D6FA4]" />
                 {companyConfig.contact.phoneDisplay}
               </a>
-              <Link href="/kontakt">
+              <Link href={resolvedCmsContent.navigation.ctaHref}>
                 <span onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
-                  Kostenloses Angebot
+                  {resolvedCmsContent.navigation.ctaLabel}
                 </span>
               </Link>
             </div>

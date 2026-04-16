@@ -1,8 +1,8 @@
 import {
   cmsPageDefinitions,
-  cmsPageSchemas,
   cmsPageSlugs,
   getDefaultCmsPageContent,
+  normalizeCmsPageContent,
   type CmsPage,
   type CmsPageContentMap,
   type CmsPageSlug,
@@ -26,13 +26,7 @@ function parseCmsPageContent<TSlug extends CmsPageSlug>(
   slug: TSlug,
   content: unknown,
 ): CmsPageContentMap[TSlug] {
-  const schema = cmsPageSchemas[slug];
-  const parsed = schema.safeParse(content);
-  if (parsed.success) {
-    return parsed.data as CmsPageContentMap[TSlug];
-  }
-
-  return getDefaultCmsPageContent(slug);
+  return normalizeCmsPageContent(slug, content);
 }
 
 function mapCmsPageRow<TSlug extends CmsPageSlug>(row: CmsPageRow, slug: TSlug): CmsPage<TSlug> {

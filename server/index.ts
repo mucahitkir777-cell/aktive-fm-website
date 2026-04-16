@@ -9,7 +9,7 @@ import {
   adminLoginSchema,
 } from "../shared/admin";
 import {
-  cmsHomeContentSchema,
+  cmsPageSchemas,
   cmsPageSlugSchema,
 } from "../shared/cms";
 import {
@@ -267,19 +267,11 @@ async function startServer() {
       return;
     }
 
-    if (parsedSlug.data !== "home") {
-      res.status(400).json({ success: false, message: "Diese CMS-Seite wird noch nicht unterstuetzt." });
-      return;
-    }
-
-    const parsedContent = cmsHomeContentSchema.safeParse(req.body?.content ?? {});
+    const parsedContent = cmsPageSchemas[parsedSlug.data].safeParse(req.body?.content ?? {});
     if (!parsedContent.success) {
       res.status(400).json({
         success: false,
-        message:
-          parsedContent.error.flatten().fieldErrors.hero?.[0]
-          ?? parsedContent.error.flatten().fieldErrors.finalCta?.[0]
-          ?? "CMS-Inhalte sind ungueltig.",
+        message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungueltig.",
       });
       return;
     }
