@@ -1814,6 +1814,61 @@ export default function Admin() {
                     </>
                   )}
 
+                  {selectedCmsSection === "services" && (
+                    <>
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Bereichstitel
+                        <input
+                          value={cmsDraft.services.title}
+                          onChange={(event) => updateCmsField("services", "title", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Bereichsbeschreibung
+                        <textarea
+                          value={cmsDraft.services.subtitle}
+                          onChange={(event) => updateCmsField("services", "subtitle", event.target.value)}
+                          rows={5}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Button-Text
+                        <input
+                          value={cmsDraft.services.buttonText}
+                          onChange={(event) => updateCmsField("services", "buttonText", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </>
+                  )}
+
+                  {selectedCmsSection === "usps" && (
+                    <>
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Bereichstitel
+                        <input
+                          value={cmsDraft.usps.title}
+                          onChange={(event) => updateCmsField("usps", "title", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        Bereichsbeschreibung
+                        <textarea
+                          value={cmsDraft.usps.subtitle}
+                          onChange={(event) => updateCmsField("usps", "subtitle", event.target.value)}
+                          rows={5}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </>
+                  )}
+
                   {selectedCmsSection === "finalCta" && (
                     <>
                       <label className="block text-sm font-medium text-[#0F2137]">
@@ -1840,6 +1895,25 @@ export default function Admin() {
                         <input
                           value={cmsDraft.finalCta.primaryButtonText}
                           onChange={(event) => updateCmsField("finalCta", "primaryButtonText", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        SEO-Titel
+                        <input
+                          value={cmsDraft.finalCta.seoTitle}
+                          onChange={(event) => updateCmsField("finalCta", "seoTitle", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        SEO-Beschreibung
+                        <textarea
+                          value={cmsDraft.finalCta.seoDescription}
+                          onChange={(event) => updateCmsField("finalCta", "seoDescription", event.target.value)}
+                          rows={5}
                           className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                         />
                       </label>

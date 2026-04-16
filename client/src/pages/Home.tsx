@@ -253,6 +253,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (cmsContent.finalCta.seoTitle) {
+      document.title = cmsContent.finalCta.seoTitle;
+    }
+
+    if (cmsContent.finalCta.seoDescription) {
+      const descriptionMeta = document.querySelector('meta[name="description"]');
+      if (descriptionMeta) {
+        descriptionMeta.setAttribute("content", cmsContent.finalCta.seoDescription);
+      }
+    }
+  }, [cmsContent.finalCta.seoTitle, cmsContent.finalCta.seoDescription]);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -403,9 +416,9 @@ export default function Home() {
         <div className="container">
           <div className="max-w-xl mb-14 pc-fade-up">
             <span className="pc-accent-line" />
-            <h2 className="pc-section-title">Unsere Leistungen</h2>
+            <h2 className="pc-section-title">{cmsContent.services.title}</h2>
             <p className="pc-section-subtitle">
-              Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.
+              {cmsContent.services.subtitle}
             </p>
           </div>
 
@@ -446,8 +459,8 @@ export default function Home() {
 
           <div className="mt-10 text-center pc-fade-up">
             <Link href="/leistungen">
-              <span onClick={() => handleHomeCtaClick("home_all_services", "Alle Leistungen ansehen", "home_services", "/leistungen")} className="pc-btn-outline">
-                Alle Leistungen ansehen
+              <span onClick={() => handleHomeCtaClick("home_all_services", cmsContent.services.buttonText, "home_services", "/leistungen")} className="pc-btn-outline">
+                {cmsContent.services.buttonText}
                 <ArrowRight size={16} />
               </span>
             </Link>
@@ -480,10 +493,10 @@ export default function Home() {
             <div className="order-1 lg:order-2 pc-fade-up">
               <span className="pc-accent-line" />
               <h2 className="pc-section-title mb-4">
-                Warum Unternehmen uns vertrauen
+                {cmsContent.usps.title}
               </h2>
               <p className="text-[#6B7A8D] leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-                Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.
+                {cmsContent.usps.subtitle}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
