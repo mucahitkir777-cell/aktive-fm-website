@@ -142,4 +142,20 @@ export async function initializeDatabase() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+
+  await db.query(`
+    ALTER TABLE cms_pages
+    ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'published'
+      CHECK (status IN ('draft', 'published'))
+  `);
+
+  await db.query(`
+    ALTER TABLE cms_pages
+    ADD COLUMN IF NOT EXISTS seo_title TEXT
+  `);
+
+  await db.query(`
+    ALTER TABLE cms_pages
+    ADD COLUMN IF NOT EXISTS seo_description TEXT
+  `);
 }

@@ -12,7 +12,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { trackCtaClick, trackPhoneClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
-import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent } from "@shared/cms";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent, type CmsNavigationItem } from "@shared/cms";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,43 +22,9 @@ export default function Navigation() {
   const isHome = location === "/";
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
   const navLinks = useMemo(() => {
-    const baseLinks = [
-      {
-        id: "home",
-        href: resolvedCmsContent.navigation.homeHref,
-        label: resolvedCmsContent.navigation.homeLabel,
-        visible: resolvedCmsContent.navigation.homeVisible,
-        sortOrder: resolvedCmsContent.navigation.homeSortOrder,
-      },
-      {
-        id: "services",
-        href: resolvedCmsContent.navigation.servicesHref,
-        label: resolvedCmsContent.navigation.servicesLabel,
-        visible: resolvedCmsContent.navigation.servicesVisible,
-        sortOrder: resolvedCmsContent.navigation.servicesSortOrder,
-      },
-      {
-        id: "about",
-        href: resolvedCmsContent.navigation.aboutHref,
-        label: resolvedCmsContent.navigation.aboutLabel,
-        visible: resolvedCmsContent.navigation.aboutVisible,
-        sortOrder: resolvedCmsContent.navigation.aboutSortOrder,
-      },
-      {
-        id: "faq",
-        href: resolvedCmsContent.navigation.faqHref,
-        label: resolvedCmsContent.navigation.faqLabel,
-        visible: resolvedCmsContent.navigation.faqVisible,
-        sortOrder: resolvedCmsContent.navigation.faqSortOrder,
-      },
-      {
-        id: "contact",
-        href: resolvedCmsContent.navigation.contactHref,
-        label: resolvedCmsContent.navigation.contactLabel,
-        visible: resolvedCmsContent.navigation.contactVisible,
-        sortOrder: resolvedCmsContent.navigation.contactSortOrder,
-      },
-    ];
+    const baseLinks: CmsNavigationItem[] = Array.isArray(resolvedCmsContent.navigation.items)
+      ? resolvedCmsContent.navigation.items
+      : [];
 
     return baseLinks
       .map((link, index) => {
@@ -159,18 +125,31 @@ export default function Navigation() {
 
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link key={link.id} href={link.href}>
-                <span
-                  className={`pc-nav-link ${
-                    location === link.href
-                      ? "pc-text-brand pc-bg-soft"
-                      : ""
-                  }`}
+              link.target === "_blank" ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pc-nav-link"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   {link.label}
-                </span>
-              </Link>
+                </a>
+              ) : (
+                <Link key={link.id} href={link.href}>
+                  <span
+                    className={`pc-nav-link ${
+                      location === link.href
+                        ? "pc-text-brand pc-bg-soft"
+                        : ""
+                    }`}
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              )
             ))}
           </nav>
 
@@ -205,18 +184,31 @@ export default function Navigation() {
         <div className="lg:hidden bg-white border-t pc-border shadow-[0_18px_34px_-26px_rgba(15,33,55,0.6)]">
           <div className="container py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
-              <Link key={link.id} href={link.href}>
-                <span
-                  className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
-                    location === link.href
-                      ? "pc-text-brand pc-bg-soft"
-                      : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
-                  }`}
+              link.target === "_blank" ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block py-3 px-2 text-sm font-medium rounded transition-colors pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   {link.label}
-                </span>
-              </Link>
+                </a>
+              ) : (
+                <Link key={link.id} href={link.href}>
+                  <span
+                    className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
+                      location === link.href
+                        ? "pc-text-brand pc-bg-soft"
+                        : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
+                    }`}
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              )
             ))}
             <div className="pt-3 mt-2 border-t pc-border flex flex-col gap-2">
               <a

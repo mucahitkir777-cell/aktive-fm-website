@@ -21,6 +21,7 @@ import {
   cmsPageDefinitions,
   getDefaultCmsPageContent,
   type CmsGlobalContent,
+  type CmsNavigationItem,
   type CmsPage,
   type CmsPageSlug,
   type CmsPageSummary,
@@ -168,7 +169,7 @@ interface LeadDraft {
   status: LeadStatus;
 }
 
-type CmsDraftValue = string | number | boolean;
+type CmsDraftValue = string | number | boolean | CmsNavigationItem[];
 type CmsDraftSection = Record<string, CmsDraftValue>;
 type CmsDraft = Record<string, CmsDraftSection>;
 
@@ -306,6 +307,33 @@ function createCmsDraft(page?: CmsPage | null, slug: CmsPageSlug = "home") {
   }
 
   return page.content as CmsDraft;
+}
+
+function toNavigationItems(value: CmsDraftValue | undefined): CmsNavigationItem[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item): item is CmsNavigationItem => typeof item === "object" && item !== null)
+    .map((item, index) => ({
+      id: typeof item.id === "string" && item.id.trim() ? item.id.trim() : `item-${index + 1}`,
+      label: typeof item.label === "string" ? item.label : "",
+      href: typeof item.href === "string" ? item.href : "/",
+      visible: typeof item.visible === "boolean" ? item.visible : true,
+      sortOrder: typeof item.sortOrder === "number" ? item.sortOrder : index + 1,
+      type: item.type === "custom" ? "custom" : "page",
+      target: item.target === "_blank" ? "_blank" : "_self",
+    }));
+}
+
+function getNextNavigationId(items: CmsNavigationItem[]): string {
+  const usedIds = new Set(items.map((item) => item.id));
+  let counter = 1;
+  while (usedIds.has(`custom-${counter}`)) {
+    counter += 1;
+  }
+  return `custom-${counter}`;
 }
 
 function getLeadFilterBucket(lead: AdminLead): LeadFilterValue {
@@ -547,6 +575,14 @@ export default function Admin() {
       })) as CmsPageSummary[]);
   const cmsSections = cmsDefinition.sections;
   const cmsSelectedSection = cmsSections.find((section) => section.key === selectedCmsSection) ?? cmsSections[0];
+  const isGlobalNavigationSection = selectedCmsSlug === "global" && cmsSelectedSection.key === "navigation";
+  const navigationDraftItems = useMemo(() => {
+    if (!isGlobalNavigationSection) {
+      return [];
+    }
+    const sectionValue = (cmsDraft.navigation ?? {}) as CmsDraftSection;
+    return toNavigationItems(sectionValue.items);
+  }, [cmsDraft.navigation, isGlobalNavigationSection]);
   const activeImageField = useMemo(
     () => cmsSelectedSection.fields.find((field) => field.input === "text" && field.key.toLowerCase().includes("imageurl")) ?? null,
     [cmsSelectedSection],
@@ -889,6 +925,64 @@ export default function Admin() {
         [field]: value,
       },
     }));
+  }
+
+  function updateNavigationItem(index: number, nextValue: Partial<CmsNavigationItem>) {
+    setCmsDraft((current) => {
+      const navigationSection = (current.navigation ?? {}) as CmsDraftSection;
+      const items = toNavigationItems(navigationSection.items);
+      const nextItems = items.map((item, itemIndex) => (itemIndex === index ? { ...item, ...nextValue } : item))
+        .map((item, itemIndex) => ({ ...item, sortOrder: itemIndex + 1 }));
+
+      return {
+        ...current,
+        navigation: {
+          ...navigationSection,
+          items: nextItems,
+        },
+      };
+    });
+  }
+
+  function removeNavigationItem(id: string) {
+    setCmsDraft((current) => {
+      const navigationSection = (current.navigation ?? {}) as CmsDraftSection;
+      const items = toNavigationItems(navigationSection.items)
+        .filter((item) => item.id !== id)
+        .map((item, index) => ({ ...item, sortOrder: index + 1 }));
+
+      return {
+        ...current,
+        navigation: {
+          ...navigationSection,
+          items,
+        },
+      };
+    });
+  }
+
+  function addNavigationItem() {
+    setCmsDraft((current) => {
+      const navigationSection = (current.navigation ?? {}) as CmsDraftSection;
+      const items = toNavigationItems(navigationSection.items);
+      const nextItem: CmsNavigationItem = {
+        id: getNextNavigationId(items),
+        label: "Neuer Link",
+        href: "/",
+        visible: true,
+        sortOrder: items.length + 1,
+        type: "custom",
+        target: "_self",
+      };
+
+      return {
+        ...current,
+        navigation: {
+          ...navigationSection,
+          items: [...items, nextItem],
+        },
+      };
+    });
   }
 
   useEffect(() => {
@@ -2221,63 +2315,160 @@ export default function Admin() {
                 <div className="py-10 text-center text-sm text-[#6B7A8D]">CMS-Inhalte werden geladen...</div>
               ) : (
                 <div className="mt-5 space-y-4">
-                  {cmsSelectedSection.fields.map((field) => {
-                    const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
-                    const rawValue = sectionValue[field.key];
-                    const textValue = typeof rawValue === "string" ? rawValue : rawValue == null ? "" : String(rawValue);
-                    const checkedValue =
-                      typeof rawValue === "boolean"
-                        ? rawValue
-                        : rawValue == null
-                          ? true
-                          : String(rawValue).trim().toLowerCase() !== "false";
-                    const parsedNumber = typeof rawValue === "number" ? rawValue : Number.parseInt(String(rawValue ?? ""), 10);
-                    const numberValue = Number.isNaN(parsedNumber) ? "" : parsedNumber;
-
-                    return (
-                      <label key={field.key} className="block text-sm font-medium text-[#0F2137]">
-                        {field.label}
-                        {field.input === "textarea" ? (
-                          <textarea
-                            value={textValue}
-                            onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
-                            rows={field.rows ?? 4}
-                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                          />
-                        ) : field.input === "checkbox" ? (
-                          <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
-                            <input
-                              type="checkbox"
-                              checked={checkedValue}
-                              onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.checked)}
-                            />
-                            <span className="text-sm text-[#0F2137]">{checkedValue ? "Ja" : "Nein"}</span>
+                  {isGlobalNavigationSection ? (
+                    <>
+                      <div className="space-y-3">
+                        {navigationDraftItems.map((item, index) => (
+                          <div key={item.id} className="rounded-lg border border-gray-200 bg-[#F7F8FA] p-3">
+                            <div className="mb-3 flex items-center justify-between">
+                              <p className="text-sm font-semibold text-[#0F2137]">
+                                {item.id}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => removeNavigationItem(item.id)}
+                                className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50"
+                              >
+                                Entfernen
+                              </button>
+                            </div>
+                            <div className="grid gap-3 md:grid-cols-2">
+                              <label className="block text-sm font-medium text-[#0F2137]">
+                                Label
+                                <input
+                                  value={item.label}
+                                  onChange={(event) => updateNavigationItem(index, { label: event.target.value })}
+                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                />
+                              </label>
+                              <label className="block text-sm font-medium text-[#0F2137]">
+                                Pfad / URL
+                                <input
+                                  value={item.href}
+                                  onChange={(event) => updateNavigationItem(index, { href: event.target.value })}
+                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                />
+                              </label>
+                              <label className="block text-sm font-medium text-[#0F2137]">
+                                Typ
+                                <select
+                                  value={item.type}
+                                  onChange={(event) => updateNavigationItem(index, { type: event.target.value as CmsNavigationItem["type"] })}
+                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                >
+                                  <option value="page">Seite</option>
+                                  <option value="custom">Custom</option>
+                                </select>
+                              </label>
+                              <label className="block text-sm font-medium text-[#0F2137]">
+                                Ziel
+                                <select
+                                  value={item.target}
+                                  onChange={(event) => updateNavigationItem(index, { target: event.target.value as CmsNavigationItem["target"] })}
+                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                >
+                                  <option value="_self">Gleiches Tab</option>
+                                  <option value="_blank">Neues Tab</option>
+                                </select>
+                              </label>
+                              <label className="block text-sm font-medium text-[#0F2137]">
+                                Sichtbar
+                                <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={item.visible}
+                                    onChange={(event) => updateNavigationItem(index, { visible: event.target.checked })}
+                                  />
+                                  <span className="text-sm text-[#0F2137]">{item.visible ? "Ja" : "Nein"}</span>
+                                </div>
+                              </label>
+                            </div>
                           </div>
-                        ) : field.input === "number" ? (
-                          <input
-                            type="number"
-                            min={1}
-                            step={1}
-                            value={numberValue}
-                            onChange={(event) => {
-                              const nextValue = Number.parseInt(event.target.value, 10);
-                              if (Number.isNaN(nextValue)) {
-                                return;
-                              }
-                              updateCmsField(cmsSelectedSection.key, field.key, nextValue);
-                            }}
-                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                          />
-                        ) : (
-                          <input
-                            value={textValue}
-                            onChange={(event) => updateCmsField(cmsSelectedSection.key, field.key, event.target.value)}
-                            className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
-                          />
-                        )}
+                        ))}
+                      </div>
+                      <button type="button" onClick={addNavigationItem} className={secondaryButtonClass}>
+                        Link hinzufügen
+                      </button>
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        CTA Label
+                        <input
+                          value={String(((cmsDraft.navigation ?? {}) as CmsDraftSection).ctaLabel ?? "")}
+                          onChange={(event) => updateCmsField("navigation", "ctaLabel", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
                       </label>
-                    );
-                  })}
+                      <label className="block text-sm font-medium text-[#0F2137]">
+                        CTA Pfad
+                        <input
+                          value={String(((cmsDraft.navigation ?? {}) as CmsDraftSection).ctaHref ?? "")}
+                          onChange={(event) => updateCmsField("navigation", "ctaHref", event.target.value)}
+                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                        />
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      {cmsSelectedSection.fields.map((field) => {
+                        const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
+                        const fieldKey = String(field.key);
+                        const inputType = field.input as "text" | "textarea" | "checkbox" | "number";
+                        const rawValue = sectionValue[fieldKey];
+                        const textValue = typeof rawValue === "string" ? rawValue : rawValue == null ? "" : String(rawValue);
+                        const checkedValue =
+                          typeof rawValue === "boolean"
+                            ? rawValue
+                            : rawValue == null
+                              ? true
+                              : String(rawValue).trim().toLowerCase() !== "false";
+                        const parsedNumber = typeof rawValue === "number" ? rawValue : Number.parseInt(String(rawValue ?? ""), 10);
+                        const numberValue = Number.isNaN(parsedNumber) ? "" : parsedNumber;
+
+                        return (
+                          <label key={fieldKey} className="block text-sm font-medium text-[#0F2137]">
+                            {field.label}
+                            {inputType === "textarea" ? (
+                              <textarea
+                                value={textValue}
+                                onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.value)}
+                                rows={"rows" in field && typeof field.rows === "number" ? field.rows : 4}
+                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                              />
+                            ) : inputType === "checkbox" ? (
+                              <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+                                <input
+                                  type="checkbox"
+                                  checked={checkedValue}
+                                  onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.checked)}
+                                />
+                                <span className="text-sm text-[#0F2137]">{checkedValue ? "Ja" : "Nein"}</span>
+                              </div>
+                            ) : inputType === "number" ? (
+                              <input
+                                type="number"
+                                min={1}
+                                step={1}
+                                value={numberValue}
+                                onChange={(event) => {
+                                  const nextValue = Number.parseInt(event.target.value, 10);
+                                  if (Number.isNaN(nextValue)) {
+                                    return;
+                                  }
+                                  updateCmsField(cmsSelectedSection.key, fieldKey, nextValue);
+                                }}
+                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                              />
+                            ) : (
+                              <input
+                                value={textValue}
+                                onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.value)}
+                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                              />
+                            )}
+                          </label>
+                        );
+                      })}
+                    </>
+                  )}
                 </div>
               )}
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Footer Component
  * Design: Architektonischer Minimalismus
  * Helle Surface, klare Struktur, rechtliche Links
@@ -10,7 +10,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { trackPhoneClick } from "@/lib/analytics";
 import { companyConfig, getCopyrightLine } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
-import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent } from "@shared/cms";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent, type CmsNavigationItem } from "@shared/cms";
 
 function splitLines(value: string) {
   return value
@@ -30,12 +30,20 @@ export default function Footer() {
     () => splitLines(resolvedCmsContent.footerContact.hoursLines),
     [resolvedCmsContent.footerContact.hoursLines],
   );
-  const footerCompanyLinks = [
-    { label: resolvedCmsContent.navigation.aboutLabel, href: resolvedCmsContent.navigation.aboutHref },
-    { label: resolvedCmsContent.navigation.faqLabel, href: resolvedCmsContent.navigation.faqHref },
-    { label: resolvedCmsContent.navigation.contactLabel, href: resolvedCmsContent.navigation.contactHref },
-    { label: resolvedCmsContent.legal.impressumLabel, href: resolvedCmsContent.legal.impressumHref },
-    { label: resolvedCmsContent.legal.datenschutzLabel, href: resolvedCmsContent.legal.datenschutzHref },
+  const navigationItemsById = useMemo(
+    () =>
+      (resolvedCmsContent.navigation.items ?? []).reduce<Record<string, CmsNavigationItem>>((result, item) => {
+        result[item.id] = item;
+        return result;
+      }, {}),
+    [resolvedCmsContent.navigation.items],
+  );
+  const footerCompanyLinks: CmsNavigationItem[] = [
+    navigationItemsById.about ?? { id: "about", label: "Über uns", href: "/ueber-uns", visible: true, sortOrder: 3, type: "page", target: "_self" },
+    navigationItemsById.faq ?? { id: "faq", label: "FAQ", href: "/faq", visible: true, sortOrder: 4, type: "page", target: "_self" },
+    navigationItemsById.contact ?? { id: "contact", label: "Kontakt", href: "/kontakt", visible: true, sortOrder: 5, type: "page", target: "_self" },
+    { id: "impressum", label: resolvedCmsContent.legal.impressumLabel, href: resolvedCmsContent.legal.impressumHref, visible: true, sortOrder: 6, type: "custom", target: "_self" },
+    { id: "datenschutz", label: resolvedCmsContent.legal.datenschutzLabel, href: resolvedCmsContent.legal.datenschutzHref, visible: true, sortOrder: 7, type: "custom", target: "_self" },
   ];
 
   useEffect(() => {
@@ -84,10 +92,10 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                "Büroreinigung",
+                "BÃ¼roreinigung",
                 "Unterhaltsreinigung",
                 "Glasreinigung",
-                "Treppenhaus & Außen",
+                "Treppenhaus & AuÃŸen",
                 "Sonderreinigung",
                 "Grundreinigung",
               ].map((item) => (
@@ -109,11 +117,23 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footerCompanyLinks.map((item) => (
                 <li key={`${item.href}-${item.label}`}>
-                  <Link href={item.href}>
-                    <span className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {item.target === "_blank" ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200"
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    >
                       {item.label}
-                    </span>
-                  </Link>
+                    </a>
+                  ) : (
+                    <Link href={item.href}>
+                      <span className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -201,4 +221,7 @@ export default function Footer() {
     </footer>
   );
 }
+
+
+
 
