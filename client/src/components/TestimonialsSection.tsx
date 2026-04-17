@@ -1,5 +1,5 @@
 /*
- * ProClean Testimonials & Bewertungen
+ * Aktive Facility Management Testimonials & Bewertungen
  * Trust-Building Element mit Kundenzitaten und Ratings
  */
 
@@ -118,7 +118,7 @@ export default function TestimonialsSection() {
             <span className="pc-accent-line" />
             <h2 className="pc-section-title">Zahlen, die sprechen</h2>
             <p className="pc-section-subtitle">
-              {companyConfig.brand.name} ist der vertrauenswürdige Partner für Unternehmen im Rhein-Main-Gebiet.
+              {companyConfig.brand.name} ist der vertrauenswürdige Partner für Unternehmen in {companyConfig.regionMessaging.primaryLabel}.
             </p>
           </div>
           <TrustMetrics />
@@ -139,3 +139,4 @@ export default function TestimonialsSection() {
     </section>
   );
 }
+

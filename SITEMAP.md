@@ -1,11 +1,11 @@
-# ProClean Sitemap & Regionale SEO-Struktur
+﻿# Aktive Facility Management Sitemap & Regionale SEO-Struktur
 
 ## Hauptseiten
 
 ```
 /                           -> Startseite
-/leistungen                 -> Leistungen-Übersicht
-/ueber-uns                  -> Über uns
+/leistungen                 -> Leistungen-Ãœbersicht
+/ueber-uns                  -> Ãœber uns
 /kontakt                    -> Kontaktseite
 /faq                        -> FAQ
 /impressum                  -> Impressum
@@ -20,6 +20,7 @@ Die regionale Struktur ist bewusst klein gehalten und wird zentral in `client/sr
 /gebaeudereinigung-frankfurt
 /gebaeudereinigung-hanau
 /gebaeudereinigung-kreis-offenbach
+/gebaeudereinigung-mannheim
 ```
 
 Jede Regionsseite nutzt:
@@ -29,7 +30,7 @@ Jede Regionsseite nutzt:
 - eigene Meta Description
 - regionale Leistungs- und Kontakt-CTAs
 - interne Links zu anderen Zielregionen
-- `location_interest` Tracking für Seitenbesuch und Regionslinks
+- `location_interest` Tracking fÃ¼r Seitenbesuch und Regionslinks
 
 ## Vorbereitete Frankfurt-Leistungsseiten
 
@@ -47,20 +48,28 @@ Jede regionale Leistungsseite nutzt:
 - servicebezogenen Meta Title
 - servicebezogene Meta Description
 - `location_interest` und `service_interest` Tracking
-- vorausgewählte Region und Leistung im Anfrageformular
+- vorausgewÃ¤hlte Region und Leistung im Anfrageformular
+
+## Weitere regionale Leistungsseiten
+
+```
+/buero-reinigung-mannheim
+/unterhaltsreinigung-mannheim
+```
 
 ## Interne Verlinkung
 
-Die Startseite und Kontaktseite beziehen die Zielregionen über `companyConfig.regions`.
+Die Startseite und Kontaktseite beziehen die Zielregionen Ã¼ber `companyConfig.regions`.
 Die Regionsseiten verlinken untereinander und verbinden die zentralen Leistungen mit den vorbereiteten Frankfurt-Leistungsseiten.
 
 ## Mobile Anforderungen
 
-- StickyBar bleibt unverändert aktiv.
-- CTA-Gruppen werden mobil einspaltig und groß dargestellt.
-- Keine globale Layout- oder Designstruktur wurde für diese SEO-Erweiterung verändert.
+- StickyBar bleibt unverÃ¤ndert aktiv.
+- CTA-Gruppen werden mobil einspaltig und groÃŸ dargestellt.
+- Keine globale Layout- oder Designstruktur wurde fÃ¼r diese SEO-Erweiterung verÃ¤ndert.
 
 ## Pflegehinweis
 
-Neue Regionen oder regionale Leistungsseiten dürfen nicht als Massenstruktur angelegt werden.
-Erst wenn Inhalte, Nachfrage und Tracking-Auswertung eine neue Zielseite rechtfertigen, wird ein Eintrag in `companyConfig.regions` oder `companyConfig.regionalServiceRoutes` ergänzt und danach Routing sowie Sitemap aktualisiert.
+Neue Regionen oder regionale Leistungsseiten dÃ¼rfen nicht als Massenstruktur angelegt werden.
+Erst wenn Inhalte, Nachfrage und Tracking-Auswertung eine neue Zielseite rechtfertigen, wird ein Eintrag in `companyConfig.regions` oder `companyConfig.regionalServiceRoutes` ergÃ¤nzt und danach Routing sowie Sitemap aktualisiert.
+

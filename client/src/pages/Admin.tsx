@@ -28,7 +28,7 @@ import type { AdminLead, LeadStatus } from "@shared/lead";
 const ADMIN_TOKEN_KEY = "proclean_admin_token";
 const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000;
 const leadStatuses: LeadStatus[] = ["new", "contacted", "qualified", "done", "archived"];
-const adminRoles: AdminRole[] = ["admin", "staff"];
+const userCreationRoles: AdminRole[] = ["admin", "editor"];
 
 interface LeadListResponse {
   success: boolean;
@@ -373,6 +373,48 @@ function matchesLeadSearch(lead: AdminLead, searchTerm: string) {
   );
 }
 
+function hasCmsAccess(role: AdminRole | null | undefined) {
+  return role === "admin" || role === "editor" || role === "staff";
+}
+
+function hasSectionAccess(role: AdminRole | null | undefined, section: AdminSection) {
+  if (!role) {
+    return false;
+  }
+
+  if (section === "dashboard" || section === "leads") {
+    return role === "admin";
+  }
+
+  if (section === "pages" || section === "content" || section === "preview") {
+    return hasCmsAccess(role);
+  }
+
+  if (section === "settings") {
+    return true;
+  }
+
+  return false;
+}
+
+function getDefaultSectionForRole(role: AdminRole | null | undefined) {
+  if (role === "admin") {
+    return "/admin/dashboard";
+  }
+
+  if (hasCmsAccess(role)) {
+    return "/admin/content";
+  }
+
+  return "/admin/settings";
+}
+
+function formatRoleLabel(role: AdminRole) {
+  if (role === "admin") return "admin";
+  if (role === "editor") return "editor";
+  return "staff (legacy)";
+}
+
 export default function Admin() {
   const [location, setLocation] = useLocation();
   const [session, setSession] = useState<SessionState | null>(getStoredSession);
@@ -413,12 +455,16 @@ export default function Admin() {
   const [userCreateForm, setUserCreateForm] = useState({
     username: "",
     password: "",
-    role: "staff" as AdminRole,
+    role: "editor" as AdminRole,
   });
 
   const settingsRef = useRef<HTMLDivElement | null>(null);
   const leadCount = leads.length;
-  const isAdmin = session?.user.role === "admin";
+  const userRole = session?.user.role ?? null;
+  const isAdmin = userRole === "admin";
+  const canAccessLeads = userRole === "admin";
+  const canAccessDashboard = userRole === "admin";
+  const canAccessCmsSection = hasCmsAccess(userRole);
   const currentSection: AdminSection = useMemo(() => {
     const rawSection = location.replace(/^\/admin\/?/, "").split("/")[0];
 
@@ -529,7 +575,7 @@ export default function Admin() {
     setSettingsOpen(false);
     setPassword("");
     setChangePasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
-    setUserCreateForm({ username: "", password: "", role: "staff" });
+    setUserCreateForm({ username: "", password: "", role: "editor" });
     setSuccessMessage("");
     if (message) {
       setError(message);
@@ -557,7 +603,7 @@ export default function Admin() {
   }
 
   async function loadLeads(activeSession = session) {
-    if (!activeSession) {
+    if (!activeSession || activeSession.user.role !== "admin") {
       return;
     }
 
@@ -608,7 +654,7 @@ export default function Admin() {
   }
 
   async function loadStats(activeSession = session) {
-    if (!activeSession) {
+    if (!activeSession || activeSession.user.role !== "admin") {
       return;
     }
 
@@ -635,7 +681,7 @@ export default function Admin() {
   }
 
   async function loadCmsPages(activeSession = session) {
-    if (!activeSession) {
+    if (!activeSession || !hasCmsAccess(activeSession.user.role)) {
       return;
     }
 
@@ -658,7 +704,7 @@ export default function Admin() {
   }
 
   async function loadCmsPage(slug = selectedCmsSlug, activeSession = session) {
-    if (!activeSession) {
+    if (!activeSession || !hasCmsAccess(activeSession.user.role)) {
       return;
     }
 
@@ -686,7 +732,7 @@ export default function Admin() {
   }
 
   async function loadMedia(activeSession = session) {
-    if (!activeSession) {
+    if (!activeSession || !hasCmsAccess(activeSession.user.role)) {
       return;
     }
 
@@ -791,12 +837,14 @@ export default function Admin() {
       return;
     }
 
-    void loadLeads(session);
-    void loadStats(session);
+    if (session.user.role === "admin") {
+      void loadLeads(session);
+      void loadStats(session);
+    }
   }, [session]);
 
   useEffect(() => {
-    if (!session) {
+    if (!session || !hasSectionAccess(session.user.role, currentSection)) {
       return;
     }
 
@@ -810,7 +858,7 @@ export default function Admin() {
   }, [currentSection, selectedCmsSlug, session]);
 
   useEffect(() => {
-    if (!session || currentSection !== "content") {
+    if (!session || currentSection !== "content" || !hasSectionAccess(session.user.role, currentSection)) {
       return;
     }
 
@@ -898,9 +946,20 @@ export default function Admin() {
 
   useEffect(() => {
     if (session && location === "/admin") {
-      setLocation("/admin/dashboard");
+      setLocation(getDefaultSectionForRole(session.user.role));
     }
   }, [location, session, setLocation]);
+
+  useEffect(() => {
+    if (!session || location === "/admin") {
+      return;
+    }
+
+    if (!hasSectionAccess(session.user.role, currentSection)) {
+      setError("Keine Berechtigung für diesen Bereich.");
+      setLocation(getDefaultSectionForRole(session.user.role));
+    }
+  }, [currentSection, location, session, setLocation]);
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
@@ -927,13 +986,11 @@ export default function Admin() {
       return;
     }
 
-    applySession(result.token);
+    const nextSession = applySession(result.token);
     setPassword("");
     setSuccessMessage("");
 
-    if (location === "/admin") {
-      setLocation("/admin/dashboard");
-    }
+    setLocation(getDefaultSectionForRole(nextSession?.user.role));
   }
 
   async function handleStatusChange(id: string, status: LeadStatus) {
@@ -1120,7 +1177,7 @@ export default function Admin() {
     }
 
     setUsers((current) => [...current, result.user!]);
-    setUserCreateForm({ username: "", password: "", role: "staff" });
+    setUserCreateForm({ username: "", password: "", role: "editor" });
     setSuccessMessage(result.message ?? "Benutzer wurde angelegt.");
   }
 
@@ -1206,8 +1263,8 @@ export default function Admin() {
         href: "/admin/preview",
         icon: Eye,
       },
-    ],
-    [],
+    ].filter((item) => hasSectionAccess(userRole, item.id)),
+    [userRole],
   );
 
   const currentSectionMeta = useMemo(() => {
@@ -1304,17 +1361,21 @@ export default function Admin() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                void loadLeads();
-                void loadStats();
-                if (currentSection === "pages" || currentSection === "content" || currentSection === "preview") {
-                  void loadCmsPages();
-                  void loadCmsPage();
-                  if (currentSection === "content") {
-                    void loadMedia();
+              <button
+                type="button"
+                onClick={() => {
+                  if (canAccessLeads) {
+                    void loadLeads();
                   }
+                  if (canAccessDashboard) {
+                    void loadStats();
+                  }
+                  if (canAccessCmsSection && (currentSection === "pages" || currentSection === "content" || currentSection === "preview")) {
+                    void loadCmsPages();
+                    void loadCmsPage();
+                    if (currentSection === "content") {
+                      void loadMedia();
+                    }
                 }
               }}
               className={secondaryButtonClass}
@@ -2201,7 +2262,7 @@ export default function Admin() {
                   setSuccessMessage("");
                 }}
                 className="rounded-lg border border-gray-200 p-2 text-[#0F2137] hover:bg-gray-50"
-                aria-label="Panel schliessen"
+                aria-label="Panel schließen"
               >
                 <X size={18} />
               </button>
@@ -2362,7 +2423,7 @@ export default function Admin() {
                         {users.map((user) => (
                           <tr key={user.id} className="border-t border-gray-100">
                             <td className="px-4 py-3 font-medium text-[#0F2137]">{user.username}</td>
-                            <td className="px-4 py-3 text-[#6B7A8D]">{user.role}</td>
+                            <td className="px-4 py-3 text-[#6B7A8D]">{formatRoleLabel(user.role)}</td>
                             <td className="px-4 py-3 text-[#6B7A8D]">{user.isActive ? "aktiv" : "inaktiv"}</td>
                             <td className="px-4 py-3 text-[#6B7A8D]">{formatDate(user.createdAt)}</td>
                           </tr>
@@ -2419,7 +2480,7 @@ export default function Admin() {
                           }
                           className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
                         >
-                          {adminRoles.map((role) => (
+                          {userCreationRoles.map((role) => (
                             <option key={role} value={role}>
                               {role}
                             </option>

@@ -16,7 +16,7 @@ import {
   adminLeadUpdateSchema,
   validateLeadSubmission,
 } from "../shared/lead";
-import { createAdminToken, requireAdminAuth, requireAdminRole } from "./auth";
+import { createAdminToken, requireAdminAnyRole, requireAdminAuth, requireAdminRole } from "./auth";
 import { getAdminDashboardStats } from "./admin/stats";
 import { recordPageView } from "./analytics/repository";
 import {
@@ -27,6 +27,7 @@ import {
 } from "./cms/repository";
 import { initializeDatabase } from "./db";
 import { processLeadSubmission } from "./leads/adapters";
+import { runLeadReminderJob } from "./leads/reminders";
 import { getLeadById, listLeads, updateLead } from "./leads/repository";
 import { ensureUploadsDirectory, listUploadedImages, saveUploadedImage } from "./media/storage";
 import { hashPassword, verifyPassword } from "./users/password";
@@ -52,6 +53,42 @@ const mediaUploadSchema = z.object({
   dataUrl: z.string().trim().min(1).max(16_000_000),
 });
 
+function isSchedulerEnabled() {
+  return String(process.env.LEAD_REMINDER_SCHEDULER_ENABLED ?? "").toLowerCase() === "true";
+}
+
+function getSchedulerIntervalMs() {
+  const configuredMinutes = Number(process.env.LEAD_REMINDER_SCHEDULER_INTERVAL_MINUTES ?? "1440");
+  if (!Number.isFinite(configuredMinutes) || configuredMinutes < 1) {
+    return 24 * 60 * 60 * 1000;
+  }
+
+  return Math.floor(configuredMinutes * 60 * 1000);
+}
+
+function startLeadReminderScheduler() {
+  if (!isSchedulerEnabled()) {
+    return;
+  }
+
+  const intervalMs = getSchedulerIntervalMs();
+  const run = async () => {
+    try {
+      const result = await runLeadReminderJob();
+      console.info(
+        `[lead-reminder-scheduler] completed: dueToday=${result.totalDueToday}, overdue=${result.totalOverdue}, processed=${result.processed}, failed=${result.failed}`,
+      );
+    } catch (error) {
+      console.error("[lead-reminder-scheduler] failed", error);
+    }
+  };
+
+  void run();
+  setInterval(() => {
+    void run();
+  }, intervalMs);
+}
+
 async function startServer() {
   const projectRoot = path.resolve(__dirname, "..");
 
@@ -62,6 +99,7 @@ async function startServer() {
   if (bootstrapResult.created) {
     console.log(`Initial admin user created: ${bootstrapResult.user.username}`);
   }
+  startLeadReminderScheduler();
 
   const app = express();
   const server = createServer(app);
@@ -222,7 +260,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/admin/stats", requireAdminAuth, async (_req, res) => {
+  app.get("/api/admin/stats", requireAdminAuth, requireAdminRole("admin"), async (_req, res) => {
     try {
       const stats = await getAdminDashboardStats();
       res.status(200).json({ success: true, stats });
@@ -234,7 +272,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/admin/cms/pages", requireAdminAuth, async (_req, res) => {
+  app.get("/api/admin/cms/pages", requireAdminAuth, requireAdminAnyRole(["admin", "editor", "staff"]), async (_req, res) => {
     try {
       const pages = await listCmsPages();
       res.status(200).json({ success: true, pages });
@@ -246,7 +284,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/admin/cms/pages/:slug", requireAdminAuth, async (req, res) => {
+  app.get("/api/admin/cms/pages/:slug", requireAdminAuth, requireAdminAnyRole(["admin", "editor", "staff"]), async (req, res) => {
     const parsedSlug = cmsPageSlugSchema.safeParse(req.params.slug);
     if (!parsedSlug.success) {
       res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
@@ -269,7 +307,7 @@ async function startServer() {
     }
   });
 
-  app.put("/api/admin/cms/pages/:slug", requireAdminAuth, async (req, res) => {
+  app.put("/api/admin/cms/pages/:slug", requireAdminAuth, requireAdminAnyRole(["admin", "editor", "staff"]), async (req, res) => {
     const parsedSlug = cmsPageSlugSchema.safeParse(req.params.slug);
     if (!parsedSlug.success) {
       res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
@@ -296,7 +334,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/admin/media", requireAdminAuth, async (_req, res) => {
+  app.get("/api/admin/media", requireAdminAuth, requireAdminAnyRole(["admin", "editor", "staff"]), async (_req, res) => {
     try {
       const media = await listUploadedImages(projectRoot);
       res.status(200).json({ success: true, media });
@@ -308,7 +346,7 @@ async function startServer() {
     }
   });
 
-  app.post("/api/admin/media/upload", requireAdminAuth, async (req, res) => {
+  app.post("/api/admin/media/upload", requireAdminAuth, requireAdminAnyRole(["admin", "editor", "staff"]), async (req, res) => {
     const parsedBody = mediaUploadSchema.safeParse(req.body ?? {});
 
     if (!parsedBody.success) {
@@ -372,7 +410,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/leads", requireAdminAuth, async (_req, res) => {
+  app.get("/api/leads", requireAdminAuth, requireAdminRole("admin"), async (_req, res) => {
     try {
       const leads = await listLeads();
       res.status(200).json({ success: true, leads });
@@ -384,7 +422,7 @@ async function startServer() {
     }
   });
 
-  app.get("/api/leads/:id", requireAdminAuth, async (req, res) => {
+  app.get("/api/leads/:id", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
     try {
       const lead = await getLeadById(req.params.id);
       if (!lead) {
@@ -401,7 +439,7 @@ async function startServer() {
     }
   });
 
-  app.patch("/api/leads/:id", requireAdminAuth, async (req, res) => {
+  app.patch("/api/leads/:id", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
     const parsedUpdate = adminLeadUpdateSchema.safeParse(req.body ?? {});
 
     if (!parsedUpdate.success) {

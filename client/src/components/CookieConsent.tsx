@@ -1,5 +1,5 @@
 /*
- * ProClean Cookie Consent Banner
+ * Aktive Facility Management Cookie Consent Banner
  * DSGVO-konform
  * Speichert Nutzer-Präferenzen in localStorage
  */
@@ -144,3 +144,4 @@ export default function CookieConsent() {
     </div>
   );
 }
+

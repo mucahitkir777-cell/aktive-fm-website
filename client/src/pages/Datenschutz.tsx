@@ -1,5 +1,5 @@
-/*
- * ProClean Datenschutz-Seite
+﻿/*
+ * Aktive Facility Management Datenschutz-Seite
  * Design: Architektonischer Minimalismus
  */
 
@@ -7,17 +7,24 @@ import { useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { companyConfig } from "@/config/company";
+import { applyPageSeo } from "@/lib/seo";
 
 export default function Datenschutz() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    applyPageSeo({
+      title: `Datenschutz | ${companyConfig.brand.legalName}`,
+      description: `Datenschutzhinweise der ${companyConfig.brand.legalName} zur Verarbeitung personenbezogener Daten auf dieser Website.`,
+    });
+  }, []);
+
   return (
     <div className="min-h-screen pc-bg-section">
       <Navigation />
 
-      {/* Page Hero */}
       <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
@@ -26,38 +33,26 @@ export default function Datenschutz() {
               Datenschutzerklärung
             </h1>
             <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-              Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäß DSGVO
+              Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO
             </p>
           </div>
         </div>
       </section>
 
-      {/* Content */}
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl">
             <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8 pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-
               <div>
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  1. Datenschutz auf einen Blick
+                  1. Verantwortliche Stelle
                 </h2>
-                <h3 className="font-semibold text-[#1A2332] mb-2">Allgemeine Hinweise</h3>
-                <p>
-                  Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.
-                </p>
-              </div>
-
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  2. Verantwortliche Stelle
-                </h2>
-                <p className="mb-3">
-                  Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
-                </p>
+                <p className="mb-3">Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
                 <div className="pc-bg-section rounded-lg p-4 space-y-1">
                   <p className="font-semibold text-[#1A2332]">{companyConfig.brand.legalName}</p>
-                  <p>{companyConfig.address.singleLine}</p>
+                  {companyConfig.address.lines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
                   <p>Telefon: {companyConfig.contact.phoneDisplay}</p>
                   <p>E-Mail: {companyConfig.contact.email}</p>
                 </div>
@@ -65,43 +60,39 @@ export default function Datenschutz() {
 
               <div className="border-t border-gray-100 pt-6">
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  3. Datenerfassung auf dieser Website
+                  2. Zugriffsdaten und Hosting
                 </h2>
-                <h3 className="font-semibold text-[#1A2332] mb-2">Kontaktformular</h3>
-                <p className="mb-4">
-                  Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
-                </p>
-                <p className="mb-4">
-                  Die Verarbeitung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Erfüllung eines Vertrags zusammenhängt oder zur Durchführung vorvertraglicher Maßnahmen erforderlich ist. In allen übrigen Fällen beruht die Verarbeitung auf unserem berechtigten Interesse an der effektiven Bearbeitung der an uns gerichteten Anfragen (Art. 6 Abs. 1 lit. f DSGVO).
-                </p>
-                <h3 className="font-semibold text-[#1A2332] mb-2">Server-Log-Dateien</h3>
                 <p>
-                  Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp und Browserversion, verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners, Uhrzeit der Serveranfrage und IP-Adresse. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.
+                  Beim Aufruf der Website werden technisch erforderliche Daten (z. B. IP-Adresse, Datum/Uhrzeit, aufgerufene URL,
+                  Browserinformationen) in Server-Log-Dateien verarbeitet, um den Betrieb, die Sicherheit und die Fehleranalyse sicherzustellen.
                 </p>
               </div>
 
               <div className="border-t border-gray-100 pt-6">
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  4. Ihre Rechte
+                  3. Kontaktformular und Anfragen
                 </h2>
-                <p className="mb-3">Sie haben jederzeit das Recht:</p>
-                <ul className="space-y-2 ml-4">
-                  {[
-                    "Auskunft über Ihre bei uns gespeicherten personenbezogenen Daten zu erhalten (Art. 15 DSGVO)",
-                    "Die Berichtigung unrichtiger Daten zu verlangen (Art. 16 DSGVO)",
-                    "Die Löschung Ihrer bei uns gespeicherten Daten zu verlangen (Art. 17 DSGVO)",
-                    "Die Einschränkung der Datenverarbeitung zu verlangen (Art. 18 DSGVO)",
-                    "Der Verarbeitung Ihrer Daten zu widersprechen (Art. 21 DSGVO)",
-                    "Ihre Daten in einem maschinenlesbaren Format zu erhalten (Art. 20 DSGVO)",
-                  ].map((right) => (
-                    <li key={right} className="flex items-start gap-2">
-                      <span className="pc-text-brand mt-1">•</span>
-                      <span>{right}</span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4">
-                  Außerdem haben Sie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten durch uns zu beschweren.
+                <p className="mb-3">
+                  Wenn Sie uns über das Kontaktformular eine Anfrage senden, verarbeiten wir die von Ihnen übermittelten Angaben
+                  (z. B. Name, Kontaktangaben, Nachricht, optionale Objekt- und Leistungsdaten) zur Bearbeitung Ihrer Anfrage.
+                </p>
+                <p>
+                  Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Kommunikation) bzw. Art. 6 Abs. 1 lit. f DSGVO
+                  (berechtigtes Interesse an effizienter Bearbeitung von Anfragen).
+                </p>
+              </div>
+
+              <div className="border-t border-gray-100 pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  4. Cookies, Consent und Tracking
+                </h2>
+                <p className="mb-3">
+                  Diese Website verwendet ein Consent-Banner. Nicht technisch erforderliche Analyse- oder Marketing-Verarbeitungen werden
+                  erst nach Ihrer Einwilligung aktiviert.
+                </p>
+                <p>
+                  Je nach Konfiguration der Website können Analyse- oder Tag-Management-Dienste eingebunden werden. Ohne Einwilligung
+                  bleiben diese deaktiviert.
                 </p>
               </div>
 
@@ -110,31 +101,52 @@ export default function Datenschutz() {
                   5. Speicherdauer
                 </h2>
                 <p>
-                  Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben.
+                  Personenbezogene Daten werden nur so lange gespeichert, wie dies für die jeweiligen Zwecke erforderlich ist oder
+                  gesetzliche Aufbewahrungspflichten bestehen. Danach werden Daten gelöscht oder anonymisiert.
                 </p>
               </div>
 
               <div className="border-t border-gray-100 pt-6">
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  6. Cookies
+                  6. Ihre Rechte
                 </h2>
-                <p>
-                  Diese Website verwendet keine Tracking-Cookies oder Analyse-Tools von Drittanbietern. Es werden ausschließlich technisch notwendige Cookies verwendet, die für den Betrieb der Website erforderlich sind.
+                <p className="mb-3">Sie haben insbesondere folgende Rechte:</p>
+                <ul className="space-y-2 ml-4">
+                  {[
+                    "Auskunft (Art. 15 DSGVO)",
+                    "Berichtigung (Art. 16 DSGVO)",
+                    "Löschung (Art. 17 DSGVO)",
+                    "Einschränkung der Verarbeitung (Art. 18 DSGVO)",
+                    "Datenübertragbarkeit (Art. 20 DSGVO)",
+                    "Widerspruch gegen bestimmte Verarbeitungen (Art. 21 DSGVO)",
+                    "Widerruf erteilter Einwilligungen mit Wirkung für die Zukunft",
+                  ].map((right) => (
+                    <li key={right} className="flex items-start gap-2">
+                      <span className="pc-text-brand mt-1">•</span>
+                      <span>{right}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4">
+                  Außerdem haben Sie ein Beschwerderecht bei einer zuständigen Datenschutz-Aufsichtsbehörde.
                 </p>
               </div>
 
               <div className="border-t border-gray-100 pt-6">
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  7. Kontakt zum Datenschutzbeauftragten
+                  7. Kontakt zu Datenschutzanfragen
                 </h2>
                 <p>
-                  Bei Fragen zum Datenschutz wenden Sie sich bitte an: {companyConfig.contact.email}
+                  Für Anfragen zum Datenschutz kontaktieren Sie uns unter {" "}
+                  <a href={companyConfig.contact.emailHref} className="pc-text-brand hover:underline">
+                    {companyConfig.contact.email}
+                  </a>
+                  .
                 </p>
                 <p className="mt-3 text-xs text-[#9CA3AF]">
                   Stand: {new Date().toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
                 </p>
               </div>
-
             </div>
           </div>
         </div>

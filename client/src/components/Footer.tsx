@@ -1,5 +1,5 @@
 /*
- * ProClean Footer Component
+ * Aktive Facility Management Footer Component
  * Design: Architektonischer Minimalismus
  * Helle Surface, klare Struktur, rechtliche Links
  */
@@ -201,3 +201,4 @@ export default function Footer() {
     </footer>
   );
 }
+

@@ -1,5 +1,5 @@
 /*
- * ProClean Startseite
+ * Aktive Facility Management Startseite
  * Design: Architektonischer Minimalismus
  * Conversion-Architektur: Hero → Trust → Leistungen → USPs → Prozess → Testimonials → CTA
  * Bilder: KI-generierte Premium-Bilder von CDN
@@ -11,7 +11,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import { fetchPublicCmsPage } from "@/lib/cms";
-import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
+import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest, trackWhatsAppClick } from "@/lib/analytics";
 import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
@@ -33,6 +33,7 @@ import {
   Wind,
   Wrench,
   Home as HomeIcon,
+  MessageCircle,
 } from "lucide-react";
 
 // CDN Image URLs
@@ -364,6 +365,9 @@ export default function Home() {
             <p className="text-[#4F5F76] text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
+            <p className="text-sm pc-text-secondary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+              Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+            </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
               <Link href="/kontakt">
@@ -377,9 +381,23 @@ export default function Home() {
               </Link>
               <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("home_hero")} className="pc-btn-white text-base px-7 py-3.5">
                 <Phone size={18} />
-                {companyConfig.contact.phoneDisplay}
+                Jetzt anrufen
+              </a>
+              <a
+                href={companyConfig.contact.whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick("home_hero")}
+                className="pc-btn-outline text-base px-7 py-3.5"
+                style={{ fontFamily: "Inter, sans-serif" }}
+              >
+                <MessageCircle size={18} />
+                WhatsApp
               </a>
             </div>
+            <p className="text-xs pc-text-secondary mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+              Schnellkontakt: Telefon und WhatsApp direkt, oder Anfrage über Formular in unter 1 Minute.
+            </p>
 
             {/* Hero Trust Badges */}
             <div className="flex flex-wrap gap-5">
@@ -387,6 +405,7 @@ export default function Home() {
                 `Seit über ${companyConfig.metrics.yearsExperience} Jahren`,
                 `${companyConfig.metrics.customers}+ zufriedene Kunden`,
                 "Vollständig versichert",
+                `Rückmeldung i. d. R. in ${companyConfig.metrics.responseTime}`,
               ].map((badge) => (
                 <div key={badge} className="flex items-center gap-1.5">
                   <CheckCircle size={15} className="pc-text-brand" />
@@ -422,9 +441,9 @@ export default function Home() {
         <div className="container">
           <div className="max-w-xl mb-12 pc-fade-up">
             <span className="pc-accent-line" />
-            <h2 className="pc-section-title">Reinigung im Rhein-Main-Gebiet</h2>
+            <h2 className="pc-section-title">Reinigung in {companyConfig.regionMessaging.primaryLabel}</h2>
             <p className="pc-section-subtitle">
-              Wir betreuen gezielt Unternehmen in Kreis Offenbach, Frankfurt am Main und Hanau – mit planbaren Teams und kurzen Abstimmungswegen.
+              {companyConfig.regionMessaging.coverageDescription} Mit planbaren Teams und kurzen Abstimmungswegen.
             </p>
           </div>
 
@@ -744,9 +763,23 @@ export default function Home() {
                   </Link>
                   <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("home_final_cta")} className="pc-btn-white">
                     <Phone size={16} />
-                    {companyConfig.contact.phoneDisplay}
+                    Jetzt anrufen
+                  </a>
+                  <a
+                    href={companyConfig.contact.whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick("home_final_cta")}
+                    className="pc-btn-outline"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    <MessageCircle size={16} />
+                    WhatsApp
                   </a>
                 </div>
+                <p className="pc-text-secondary text-sm mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+                  Keine versteckten Kosten. Persönliche Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+                </p>
 
                 <div className="flex flex-col gap-2">
                   {[
@@ -783,5 +816,4 @@ export default function Home() {
     </div>
   );
 }
-
 

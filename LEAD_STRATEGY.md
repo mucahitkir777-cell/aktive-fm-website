@@ -1,6 +1,6 @@
-# ProClean Lead-Maschinen-Strategie
+﻿# Aktive Facility Management Lead-Maschinen-Strategie
 
-## 🎯 Ziel
+## ðŸŽ¯ Ziel
 Maximale Lead-Generierung durch:
 - Sofortkontakt (Telefon, WhatsApp, Formular)
 - Vertrauenssignale (Bewertungen, Zertifikate, Erfahrung)
@@ -9,7 +9,7 @@ Maximale Lead-Generierung durch:
 
 ---
 
-## 🔥 Lead-Kanäle
+## ðŸ”¥ Lead-KanÃ¤le
 
 ### 1. Sticky-Bar (Permanent sichtbar)
 - Telefon-Button (Click-to-Call)
@@ -23,37 +23,37 @@ Jede Seite hat CTAs an:
 - Nach Bewertungen
 - Ende (Finale CTA)
 
-### 3. Kontaktkanäle
-- **Telefon**: 0800 000 000 (Click-to-Call)
+### 3. KontaktkanÃ¤le
+- **Telefon**: 0178 6660021 (Click-to-Call)
 - **WhatsApp**: Direkter Chat-Link
 - **Formular**: Schnell & minimal
-- **E-Mail**: info@proclean-gmbh.de
+- **E-Mail**: info@Aktive Facility Management-gmbh.de
 
 ---
 
-## 💎 Vertrauenssignale (Trust-Stack)
+## ðŸ’Ž Vertrauenssignale (Trust-Stack)
 
 ### Auf Hero sichtbar:
-- ⭐ Google-Bewertungen (4.9/5 Sterne)
-- 🏆 "500+ zufriedene Kunden"
-- ⏱️ "Antwort innerhalb 24 Stunden"
-- ✅ "Vollständig versichert"
+- â­ Google-Bewertungen (4.9/5 Sterne)
+- ðŸ† "500+ zufriedene Kunden"
+- â±ï¸ "Antwort innerhalb 24 Stunden"
+- âœ… "VollstÃ¤ndig versichert"
 
 ### Bewertungs-Sektion:
 - 3-5 echte Kundenzitate
-- Name, Branche, Foto (falls möglich)
+- Name, Branche, Foto (falls mÃ¶glich)
 - Sterne-Rating
 
 ### Zertifikate/Nachweise:
-- Führungszeugnis (für Schulen/Kitas)
+- FÃ¼hrungszeugnis (fÃ¼r Schulen/Kitas)
 - Versicherungsnachweise
-- Branchenzugehörigkeit
+- BranchenzugehÃ¶rigkeit
 
 ---
 
-## 🏗️ SEO-Silo-Struktur
+## ðŸ—ï¸ SEO-Silo-Struktur
 
-### Tier 1: Leistungen (Überblick)
+### Tier 1: Leistungen (Ãœberblick)
 - /leistungen
 
 ### Tier 2: Leistung + Stadt (Silo)
@@ -71,31 +71,31 @@ Jede Seite:
 
 ---
 
-## 📊 Conversion-Funnel (Jede Seite)
+## ðŸ“Š Conversion-Funnel (Jede Seite)
 
 ```
 Hero (Headline + CTA)
-    ↓
+    â†“
 Vertrauen (Zahlen, Vorteile)
-    ↓
+    â†“
 Leistungen (Was wir bieten)
-    ↓
+    â†“
 Warum wir? (Differenzierung)
-    ↓
+    â†“
 Bewertungen (Social Proof)
-    ↓
+    â†“
 Prozess (Wie es funktioniert)
-    ↓
+    â†“
 Finale CTA (Kontakt)
 ```
 
 ---
 
-## 🎨 CTA-Button-Strategie
+## ðŸŽ¨ CTA-Button-Strategie
 
 ### Farben:
 - **Primary**: Stahlblau (#1D6FA4) - Hauptaktion
-- **Secondary**: Weiß mit Border - Alternative
+- **Secondary**: WeiÃŸ mit Border - Alternative
 - **Tertiary**: Transparent - Weniger wichtig
 
 ### Platzierung:
@@ -106,11 +106,11 @@ Finale CTA (Kontakt)
 
 ---
 
-## 📱 Mobile Sticky-Bar
+## ðŸ“± Mobile Sticky-Bar
 
 Permanent sichtbar auf Mobile:
 ```
-[☎️ Anrufen] [💬 WhatsApp] [📋 Anfrage]
+[â˜Žï¸ Anrufen] [ðŸ’¬ WhatsApp] [ðŸ“‹ Anfrage]
 ```
 
 - Haftend oben oder unten
@@ -119,17 +119,17 @@ Permanent sichtbar auf Mobile:
 
 ---
 
-## 📈 Tracking-Punkte
+## ðŸ“ˆ Tracking-Punkte
 
-Analytics-Events für:
-1. **Telefon-Klicks** → Ziel: "phone_click"
-2. **WhatsApp-Klicks** → Ziel: "whatsapp_click"
-3. **Formular-Submission** → Ziel: "form_submit"
-4. **Seitenaufrufe** → Ziel: "page_view"
+Analytics-Events fÃ¼r:
+1. **Telefon-Klicks** â†’ Ziel: "phone_click"
+2. **WhatsApp-Klicks** â†’ Ziel: "whatsapp_click"
+3. **Formular-Submission** â†’ Ziel: "form_submit"
+4. **Seitenaufrufe** â†’ Ziel: "page_view"
 
 ---
 
-## 🧪 A/B-Test-Ideen
+## ðŸ§ª A/B-Test-Ideen
 
 1. CTA-Button-Text: "Angebot anfordern" vs "Kostenlose Beratung"
 2. Sticky-Bar Position: Oben vs Unten
@@ -138,7 +138,7 @@ Analytics-Events für:
 
 ---
 
-## ✅ Conversion-Checkliste
+## âœ… Conversion-Checkliste
 
 - [ ] Sticky-Bar implementiert
 - [ ] Telefon Click-to-Call funktioniert
@@ -150,3 +150,4 @@ Analytics-Events für:
 - [ ] Tracking implementiert
 - [ ] Mobile-Optimierung getestet
 - [ ] Ladezeit < 3 Sekunden
+

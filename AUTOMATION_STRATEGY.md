@@ -1,80 +1,80 @@
-# ProClean Lead-Automatisierungs-Strategie
+﻿# Aktive Facility Management Lead-Automatisierungs-Strategie
 
-## 🎯 Ziel
-Vollständig automatisierte Lead-Erfassung, -Verarbeitung und -Verwaltung ohne manuelle Eingriffe.
+## ðŸŽ¯ Ziel
+VollstÃ¤ndig automatisierte Lead-Erfassung, -Verarbeitung und -Verwaltung ohne manuelle Eingriffe.
 
 ---
 
-## 📊 Tracking-Architektur
+## ðŸ“Š Tracking-Architektur
 
 ### Google Analytics 4 Events
 
 ```
 Event: call_click
-├─ Trigger: Telefon-Button geklickt
-├─ Parameter: page_path, button_location
-└─ Ziel: Anrufe tracken
+â”œâ”€ Trigger: Telefon-Button geklickt
+â”œâ”€ Parameter: page_path, button_location
+â””â”€ Ziel: Anrufe tracken
 
 Event: whatsapp_click
-├─ Trigger: WhatsApp-Button geklickt
-├─ Parameter: page_path, button_location
-└─ Ziel: WhatsApp-Anfragen tracken
+â”œâ”€ Trigger: WhatsApp-Button geklickt
+â”œâ”€ Parameter: page_path, button_location
+â””â”€ Ziel: WhatsApp-Anfragen tracken
 
 Event: form_submit
-├─ Trigger: Kontaktformular abgesendet
-├─ Parameter: page_path, form_type, service_type
-└─ Ziel: Formular-Conversions tracken
+â”œâ”€ Trigger: Kontaktformular abgesendet
+â”œâ”€ Parameter: page_path, form_type, service_type
+â””â”€ Ziel: Formular-Conversions tracken
 
 Event: scroll_depth
-├─ Trigger: 25%, 50%, 75%, 100% gescrollt
-├─ Parameter: page_path, scroll_percentage
-└─ Ziel: Engagement messen
+â”œâ”€ Trigger: 25%, 50%, 75%, 100% gescrollt
+â”œâ”€ Parameter: page_path, scroll_percentage
+â””â”€ Ziel: Engagement messen
 ```
 
 ---
 
-## 🔄 Lead-Flow
+## ðŸ”„ Lead-Flow
 
 ```
 Website
-  ├─ Telefon-Klick
-  │  ├─ GA Event: call_click
-  │  └─ Tracking: Umami
-  │
-  ├─ WhatsApp-Klick
-  │  ├─ GA Event: whatsapp_click
-  │  └─ Tracking: Umami
-  │
-  └─ Formular-Submission
-     ├─ GA Event: form_submit
-     ├─ Tracking: Umami
-     ├─ Webhook → Zapier
-     │  ├─ → HubSpot/Pipedrive (CRM)
-     │  ├─ → E-Mail (Bestätigung + intern)
-     │  ├─ → Google Sheets (Backup)
-     │  └─ → WhatsApp (optional)
-     └─ Datenbank-Speicherung (lokal)
+  â”œâ”€ Telefon-Klick
+  â”‚  â”œâ”€ GA Event: call_click
+  â”‚  â””â”€ Tracking: Umami
+  â”‚
+  â”œâ”€ WhatsApp-Klick
+  â”‚  â”œâ”€ GA Event: whatsapp_click
+  â”‚  â””â”€ Tracking: Umami
+  â”‚
+  â””â”€ Formular-Submission
+     â”œâ”€ GA Event: form_submit
+     â”œâ”€ Tracking: Umami
+     â”œâ”€ Webhook â†’ Zapier
+     â”‚  â”œâ”€ â†’ HubSpot/Pipedrive (CRM)
+     â”‚  â”œâ”€ â†’ E-Mail (BestÃ¤tigung + intern)
+     â”‚  â”œâ”€ â†’ Google Sheets (Backup)
+     â”‚  â””â”€ â†’ WhatsApp (optional)
+     â””â”€ Datenbank-Speicherung (lokal)
 ```
 
 ---
 
-## 🔐 DSGVO-Compliance
+## ðŸ” DSGVO-Compliance
 
 ### Cookie Consent Banner
-- Opt-In für Analytics
-- Opt-In für Marketing
-- Opt-Out möglich
+- Opt-In fÃ¼r Analytics
+- Opt-In fÃ¼r Marketing
+- Opt-Out mÃ¶glich
 - Cookie-Speicherung
 
 ### Datenschutz
-- Formular-Daten verschlüsselt
+- Formular-Daten verschlÃ¼sselt
 - Keine Tracking ohne Consent
-- Datenschutzerklärung aktualisiert
+- DatenschutzerklÃ¤rung aktualisiert
 - Impressum aktualisiert
 
 ---
 
-## 💼 CRM-Integration (HubSpot oder Pipedrive)
+## ðŸ’¼ CRM-Integration (HubSpot oder Pipedrive)
 
 ### Webhook-Struktur
 
@@ -86,9 +86,9 @@ Website
     "phone": "+49 123 456789",
     "company": "Musterfirma GmbH",
     "location": "Frankfurt am Main",
-    "service_type": "Büroreinigung",
-    "cleaning_interval": "wöchentlich",
-    "object_size": "1000-5000 m²",
+    "service_type": "BÃ¼roreinigung",
+    "cleaning_interval": "wÃ¶chentlich",
+    "object_size": "1000-5000 mÂ²",
     "source": "website_form",
     "created_at": "2026-04-12T21:30:00Z"
   }
@@ -109,50 +109,50 @@ Website
 
 ---
 
-## 🤖 Zapier-Automatisierungen
+## ðŸ¤– Zapier-Automatisierungen
 
-### Automation 1: Formular → CRM
+### Automation 1: Formular â†’ CRM
 ```
 Trigger: Website Formular abgesendet
-├─ Webhook empfangen
-├─ Daten validieren
-├─ Lead in CRM erstellen
-└─ Bestätigung senden
+â”œâ”€ Webhook empfangen
+â”œâ”€ Daten validieren
+â”œâ”€ Lead in CRM erstellen
+â””â”€ BestÃ¤tigung senden
 ```
 
-### Automation 2: Formular → E-Mail
+### Automation 2: Formular â†’ E-Mail
 ```
 Trigger: Website Formular abgesendet
-├─ Bestätigungs-E-Mail an Kunde
-├─ Interne Benachrichtigung an Team
-└─ Automatische Antwort
+â”œâ”€ BestÃ¤tigungs-E-Mail an Kunde
+â”œâ”€ Interne Benachrichtigung an Team
+â””â”€ Automatische Antwort
 ```
 
-### Automation 3: Formular → Google Sheets
+### Automation 3: Formular â†’ Google Sheets
 ```
 Trigger: Website Formular abgesendet
-├─ Neue Zeile in Google Sheets
-├─ Alle Kontaktdaten speichern
-└─ Backup-Funktion
+â”œâ”€ Neue Zeile in Google Sheets
+â”œâ”€ Alle Kontaktdaten speichern
+â””â”€ Backup-Funktion
 ```
 
-### Automation 4: Formular → WhatsApp (optional)
+### Automation 4: Formular â†’ WhatsApp (optional)
 ```
 Trigger: Website Formular abgesendet
-├─ WhatsApp-Nachricht an Team
-├─ Lead-Details
-└─ Schnelle Reaktion ermöglichen
+â”œâ”€ WhatsApp-Nachricht an Team
+â”œâ”€ Lead-Details
+â””â”€ Schnelle Reaktion ermÃ¶glichen
 ```
 
 ---
 
-## 📈 Tracking-Metriken
+## ðŸ“ˆ Tracking-Metriken
 
 ### Wichtigste KPIs
 - **Conversion Rate**: Formular-Submissions / Seitenaufrufe
 - **Call Rate**: Telefon-Klicks / Seitenaufrufe
 - **WhatsApp Rate**: WhatsApp-Klicks / Seitenaufrufe
-- **Lead Quality**: Leads mit vollständigen Daten / Gesamt-Leads
+- **Lead Quality**: Leads mit vollstÃ¤ndigen Daten / Gesamt-Leads
 - **Response Time**: Zeit bis erste Antwort
 
 ### Dashboards
@@ -162,7 +162,7 @@ Trigger: Website Formular abgesendet
 
 ---
 
-## 🔗 Google Search Console
+## ðŸ”— Google Search Console
 
 ### Anforderungen
 - Sitemap eingereicht
@@ -179,7 +179,7 @@ Trigger: Website Formular abgesendet
 
 ---
 
-## 📋 Lead-Qualifizierung
+## ðŸ“‹ Lead-Qualifizierung
 
 ### Formular-Felder (erweitert)
 1. **Name** (Pflicht)
@@ -188,11 +188,11 @@ Trigger: Website Formular abgesendet
 4. **Ort** (Pflicht) - Dropdown/Autocomplete
 5. **Leistung** (Pflicht) - Dropdown
 6. **Reinigungsintervall** (Pflicht) - Dropdown
-7. **Objektgröße** (Optional) - Dropdown
+7. **ObjektgrÃ¶ÃŸe** (Optional) - Dropdown
 8. **Nachricht** (Optional) - Text
 
 ### Lead-Score
-- Vollständige Daten: +10 Punkte
+- VollstÃ¤ndige Daten: +10 Punkte
 - Telefon vorhanden: +5 Punkte
 - E-Mail vorhanden: +5 Punkte
 - Ort in Zielregion: +10 Punkte
@@ -200,13 +200,13 @@ Trigger: Website Formular abgesendet
 
 ---
 
-## 🧪 Testing-Checklist
+## ðŸ§ª Testing-Checklist
 
 - [ ] GA Events werden korrekt gesendet
 - [ ] Cookie Consent funktioniert
 - [ ] Formular-Submission triggert Webhook
 - [ ] CRM-Lead wird erstellt
-- [ ] E-Mail-Bestätigung kommt an
+- [ ] E-Mail-BestÃ¤tigung kommt an
 - [ ] Google Sheets wird aktualisiert
 - [ ] WhatsApp-Nachricht kommt an (optional)
 - [ ] Datenschutz ist DSGVO-konform
@@ -215,25 +215,26 @@ Trigger: Website Formular abgesendet
 
 ---
 
-## 📊 Erfolgs-Metriken
+## ðŸ“Š Erfolgs-Metriken
 
 Nach Implementierung sollten folgende Metriken gemessen werden:
 
 1. **Lead-Volumen**: Leads pro Woche
-2. **Lead-Qualität**: % mit vollständigen Daten
-3. **Conversion-Rate**: Seitenaufrufe → Leads
+2. **Lead-QualitÃ¤t**: % mit vollstÃ¤ndigen Daten
+3. **Conversion-Rate**: Seitenaufrufe â†’ Leads
 4. **Response-Time**: Zeit bis erste Antwort
-5. **Close-Rate**: Leads → Kunden
+5. **Close-Rate**: Leads â†’ Kunden
 6. **ROI**: Umsatz / Akquisitionskosten
 
 ---
 
-## 🚀 Skalierung
+## ðŸš€ Skalierung
 
-Für Zukunft vorbereitet:
+FÃ¼r Zukunft vorbereitet:
 - Mehrsprachigkeit (DE, EN)
 - Mehrere Standorte
 - Unterschiedliche Leistungen
 - A/B-Testing
 - Dynamische Preisberechnung
 - Automatische Angebotsgenerierung
+

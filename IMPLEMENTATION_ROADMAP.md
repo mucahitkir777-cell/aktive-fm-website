@@ -1,17 +1,17 @@
-# ProClean Lead-Automatisierungs-Plattform – Implementierungs-Roadmap
+﻿# Aktive Facility Management Lead-Automatisierungs-Plattform â€“ Implementierungs-Roadmap
 
-## 📋 Übersicht
+## ðŸ“‹ Ãœbersicht
 
-Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Automatisierungs-Plattform.
+Diese Roadmap zeigt alle Schritte zur vollstÃ¤ndigen Implementierung der Lead-Automatisierungs-Plattform.
 
 ---
 
-## ✅ Phase 1: Grundlagen (Abgeschlossen)
+## âœ… Phase 1: Grundlagen (Abgeschlossen)
 
 ### 1.1 Website-Struktur
 - [x] 11 Seiten implementiert
 - [x] Responsive Design
-- [x] Premium-Ästhetik
+- [x] Premium-Ã„sthetik
 - [x] SEO-Silo-Struktur (4 Leistungs-Stadt-Seiten)
 
 ### 1.2 Lead-Maschinen-Elemente
@@ -24,15 +24,15 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 🔄 Phase 2: Tracking & Analytics (In Bearbeitung)
+## ðŸ”„ Phase 2: Tracking & Analytics (In Bearbeitung)
 
 ### 2.1 Google Analytics 4
 - [x] GA4-Script in index.html
 - [x] Event-Tracking implementiert:
-  - [x] `call_click` – Telefon-Klicks
-  - [x] `whatsapp_click` – WhatsApp-Klicks
-  - [x] `form_submit` – Formular-Absendungen
-  - [x] `scroll_depth` – Scroll-Tracking (25%, 50%, 75%, 100%)
+  - [x] `call_click` â€“ Telefon-Klicks
+  - [x] `whatsapp_click` â€“ WhatsApp-Klicks
+  - [x] `form_submit` â€“ Formular-Absendungen
+  - [x] `scroll_depth` â€“ Scroll-Tracking (25%, 50%, 75%, 100%)
 - [ ] **TODO:** GA4-Measurement ID eintragen (G-XXXXXXXXXX)
 - [ ] **TODO:** GA4-Dashboard konfigurieren
 - [ ] **TODO:** Conversion-Ziele definieren
@@ -40,9 +40,9 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 ### 2.2 Cookie Consent & DSGVO
 - [x] Cookie Consent Banner implementiert
 - [x] localStorage-Speicherung
-- [x] Opt-In/Opt-Out Funktionalität
+- [x] Opt-In/Opt-Out FunktionalitÃ¤t
 - [x] GA4-Consent-Updates
-- [ ] **TODO:** Datenschutzerklärung aktualisieren (Cookie-Richtlinie)
+- [ ] **TODO:** DatenschutzerklÃ¤rung aktualisieren (Cookie-Richtlinie)
 - [ ] **TODO:** Impressum aktualisieren (Verantwortlicher)
 
 ### 2.3 Umami Analytics (Fallback)
@@ -52,7 +52,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 🎯 Phase 3: Lead-Qualifizierung (Nächster Schritt)
+## ðŸŽ¯ Phase 3: Lead-Qualifizierung (NÃ¤chster Schritt)
 
 ### 3.1 Erweitertes Kontaktformular
 - [ ] **TODO:** Lead-Qualifizierungs-Formular erstellen mit:
@@ -60,30 +60,30 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
   - [ ] E-Mail (Pflicht)
   - [ ] Telefon (Pflicht)
   - [ ] Unternehmen (Optional)
-  - [ ] Stadt (Pflicht) – Dropdown mit 21 Städten
-  - [ ] Leistungsart (Pflicht) – 6 Optionen
-  - [ ] Reinigungsintervall (Pflicht) – 6 Optionen
-  - [ ] Objektgröße (Optional) – 4 Optionen
+  - [ ] Stadt (Pflicht) â€“ Dropdown mit 21 StÃ¤dten
+  - [ ] Leistungsart (Pflicht) â€“ 6 Optionen
+  - [ ] Reinigungsintervall (Pflicht) â€“ 6 Optionen
+  - [ ] ObjektgrÃ¶ÃŸe (Optional) â€“ 4 Optionen
   - [ ] Nachricht (Optional)
 - [ ] **TODO:** Formular-Validierung
-- [ ] **TODO:** Formular-Styling (ProClean-Design)
+- [ ] **TODO:** Formular-Styling (Aktive Facility Management-Design)
 - [ ] **TODO:** Success-Message nach Submission
 
 ### 3.2 Lead-Scoring
 - [ ] **TODO:** Lead-Score-Logik implementieren
 - [ ] **TODO:** Automatische Lead-Klassifizierung
-- [ ] **TODO:** Lead-Score in CRM übertragen
+- [ ] **TODO:** Lead-Score in CRM Ã¼bertragen
 
 ---
 
-## 🔗 Phase 4: CRM-Integration (Zu Implementieren)
+## ðŸ”— Phase 4: CRM-Integration (Zu Implementieren)
 
 ### 4.1 CRM-Auswahl
-- [ ] **TODO:** HubSpot oder Pipedrive auswählen
+- [ ] **TODO:** HubSpot oder Pipedrive auswÃ¤hlen
 - [ ] **TODO:** API-Dokumentation lesen
 - [ ] **TODO:** Private App/API-Token erstellen
 
-### 4.2 HubSpot Integration (falls gewählt)
+### 4.2 HubSpot Integration (falls gewÃ¤hlt)
 - [ ] **TODO:** Private App erstellen
 - [ ] **TODO:** API-Token sicher speichern
 - [ ] **TODO:** Contact-Erstellung testen
@@ -91,7 +91,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 - [ ] **TODO:** Custom Fields erstellen
 - [ ] **TODO:** Webhook-Struktur validieren
 
-### 4.3 Pipedrive Integration (falls gewählt)
+### 4.3 Pipedrive Integration (falls gewÃ¤hlt)
 - [ ] **TODO:** API-Token generieren
 - [ ] **TODO:** Custom Fields erstellen
 - [ ] **TODO:** Person-Erstellung testen
@@ -100,7 +100,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 🤖 Phase 5: Zapier-Automatisierung (Zu Implementieren)
+## ðŸ¤– Phase 5: Zapier-Automatisierung (Zu Implementieren)
 
 ### 5.1 Zapier-Setup
 - [ ] **TODO:** Zapier-Konto erstellen
@@ -108,27 +108,27 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 - [ ] **TODO:** Webhook-URL kopieren
 - [ ] **TODO:** Webhook-URL in Website integrieren
 
-### 5.2 Automation 1: Formular → CRM
+### 5.2 Automation 1: Formular â†’ CRM
 - [ ] **TODO:** Zap erstellen
 - [ ] **TODO:** Trigger: Website Webhook
 - [ ] **TODO:** Action: HubSpot/Pipedrive Contact erstellen
 - [ ] **TODO:** Action: HubSpot/Pipedrive Deal erstellen
 - [ ] **TODO:** Testen mit Test-Lead
 
-### 5.3 Automation 2: Formular → E-Mail
+### 5.3 Automation 2: Formular â†’ E-Mail
 - [ ] **TODO:** Zap erstellen
 - [ ] **TODO:** Trigger: Website Webhook
-- [ ] **TODO:** Action: Gmail/Outlook Bestätigungs-E-Mail
+- [ ] **TODO:** Action: Gmail/Outlook BestÃ¤tigungs-E-Mail
 - [ ] **TODO:** Action: Interne Benachrichtigungs-E-Mail
 - [ ] **TODO:** E-Mail-Templates erstellen
 
-### 5.4 Automation 3: Formular → Google Sheets
+### 5.4 Automation 3: Formular â†’ Google Sheets
 - [ ] **TODO:** Zap erstellen
 - [ ] **TODO:** Trigger: Website Webhook
-- [ ] **TODO:** Action: Google Sheets Zeile hinzufügen
+- [ ] **TODO:** Action: Google Sheets Zeile hinzufÃ¼gen
 - [ ] **TODO:** Backup-Tabelle erstellen
 
-### 5.5 Automation 4: Formular → WhatsApp (Optional)
+### 5.5 Automation 4: Formular â†’ WhatsApp (Optional)
 - [ ] **TODO:** Zap erstellen
 - [ ] **TODO:** Trigger: Website Webhook
 - [ ] **TODO:** Action: WhatsApp Business Nachricht
@@ -136,7 +136,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 📊 Phase 6: Google Search Console (Zu Implementieren)
+## ðŸ“Š Phase 6: Google Search Console (Zu Implementieren)
 
 ### 6.1 GSC-Setup
 - [ ] **TODO:** Website in GSC registrieren
@@ -146,9 +146,9 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ### 6.2 Indexierung
 - [ ] **TODO:** Alle Seiten indexieren lassen
-- [ ] **TODO:** URL-Inspektion für jede Seite
+- [ ] **TODO:** URL-Inspektion fÃ¼r jede Seite
 - [ ] **TODO:** Coverage-Fehler beheben
-- [ ] **TODO:** Core Web Vitals prüfen
+- [ ] **TODO:** Core Web Vitals prÃ¼fen
 
 ### 6.3 Performance-Monitoring
 - [ ] **TODO:** Performance-Dashboard einrichten
@@ -158,7 +158,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 🧪 Phase 7: Testing & QA (Zu Implementieren)
+## ðŸ§ª Phase 7: Testing & QA (Zu Implementieren)
 
 ### 7.1 Funktionales Testing
 - [ ] **TODO:** GA4-Events testen
@@ -166,22 +166,22 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 - [ ] **TODO:** Formular-Submission testen
 - [ ] **TODO:** Webhook-Payload verifizieren
 - [ ] **TODO:** CRM-Lead-Erstellung verifizieren
-- [ ] **TODO:** E-Mail-Bestätigung testen
+- [ ] **TODO:** E-Mail-BestÃ¤tigung testen
 - [ ] **TODO:** Google Sheets Update testen
 
 ### 7.2 Performance-Testing
 - [ ] **TODO:** Ladezeit messen (< 3 Sekunden)
-- [ ] **TODO:** Core Web Vitals prüfen
+- [ ] **TODO:** Core Web Vitals prÃ¼fen
 - [ ] **TODO:** Mobile-Performance testen
 - [ ] **TODO:** Lighthouse-Score > 90
 
 ### 7.3 Sicherheits-Testing
-- [ ] **TODO:** HTTPS überprüfen
+- [ ] **TODO:** HTTPS Ã¼berprÃ¼fen
 - [ ] **TODO:** API-Token nicht im Code
-- [ ] **TODO:** DSGVO-Compliance prüfen
+- [ ] **TODO:** DSGVO-Compliance prÃ¼fen
 - [ ] **TODO:** Webhook-Sicherheit validieren
 
-### 7.4 Browser-Kompatibilität
+### 7.4 Browser-KompatibilitÃ¤t
 - [ ] **TODO:** Chrome testen
 - [ ] **TODO:** Firefox testen
 - [ ] **TODO:** Safari testen
@@ -190,7 +190,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ---
 
-## 📱 Phase 8: Deployment & Launch (Zu Implementieren)
+## ðŸ“± Phase 8: Deployment & Launch (Zu Implementieren)
 
 ### 8.1 Pre-Launch Checklist
 - [ ] **TODO:** Alle Tests bestanden
@@ -198,7 +198,7 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 - [ ] **TODO:** Zapier-Webhook-URL eingetragen
 - [ ] **TODO:** CRM-API-Token konfiguriert
 - [ ] **TODO:** E-Mail-Templates finalisiert
-- [ ] **TODO:** Datenschutzerklärung aktualisiert
+- [ ] **TODO:** DatenschutzerklÃ¤rung aktualisiert
 
 ### 8.2 Launch
 - [ ] **TODO:** Website live schalten
@@ -208,20 +208,20 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 - [ ] **TODO:** Team trainieren
 
 ### 8.3 Post-Launch Monitoring
-- [ ] **TODO:** GA4-Daten prüfen (erste 24h)
+- [ ] **TODO:** GA4-Daten prÃ¼fen (erste 24h)
 - [ ] **TODO:** Formular-Submissions monitoren
-- [ ] **TODO:** CRM-Lead-Qualität prüfen
-- [ ] **TODO:** Fehler-Logs prüfen
-- [ ] **TODO:** Performance-Metriken überwachen
+- [ ] **TODO:** CRM-Lead-QualitÃ¤t prÃ¼fen
+- [ ] **TODO:** Fehler-Logs prÃ¼fen
+- [ ] **TODO:** Performance-Metriken Ã¼berwachen
 
 ---
 
-## 📈 Phase 9: Optimierung & Skalierung (Zu Implementieren)
+## ðŸ“ˆ Phase 9: Optimierung & Skalierung (Zu Implementieren)
 
-### 9.1 Lead-Qualität verbessern
+### 9.1 Lead-QualitÃ¤t verbessern
 - [ ] **TODO:** Lead-Scoring optimieren
 - [ ] **TODO:** Formular-Felder basierend auf Daten anpassen
-- [ ] **TODO:** A/B-Testing durchführen
+- [ ] **TODO:** A/B-Testing durchfÃ¼hren
 - [ ] **TODO:** Conversion-Rate verbessern
 
 ### 9.2 Automation erweitern
@@ -232,13 +232,13 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ### 9.3 Skalierung
 - [ ] **TODO:** Mehrsprachigkeit (DE, EN)
-- [ ] **TODO:** Mehrere Standorte unterstützen
-- [ ] **TODO:** Weitere Leistungen hinzufügen
+- [ ] **TODO:** Mehrere Standorte unterstÃ¼tzen
+- [ ] **TODO:** Weitere Leistungen hinzufÃ¼gen
 - [ ] **TODO:** Internationale Expansion vorbereiten
 
 ---
 
-## 🎯 Erfolgs-Metriken
+## ðŸŽ¯ Erfolgs-Metriken
 
 ### Tracking-Metriken
 - [ ] GA4-Events werden korrekt gesendet
@@ -248,37 +248,37 @@ Diese Roadmap zeigt alle Schritte zur vollständigen Implementierung der Lead-Au
 
 ### Lead-Metriken
 - [ ] Leads pro Woche: > 10
-- [ ] Lead-Qualität: > 80% mit vollständigen Daten
+- [ ] Lead-QualitÃ¤t: > 80% mit vollstÃ¤ndigen Daten
 - [ ] Conversion-Rate: > 2%
 - [ ] Response-Time: < 24 Stunden
 
 ### Business-Metriken
 - [ ] Organischer Traffic: > 100 Besuche/Woche
 - [ ] Leads aus Website: > 50% des Gesamt-Leads
-- [ ] Cost per Lead: < €50
+- [ ] Cost per Lead: < â‚¬50
 - [ ] Lead-to-Customer Rate: > 20%
 
 ---
 
-## 📅 Zeitplan
+## ðŸ“… Zeitplan
 
 | Phase | Dauer | Status |
 |---|---|---|
-| Phase 1: Grundlagen | 2 Wochen | ✅ Abgeschlossen |
-| Phase 2: Tracking | 1 Woche | 🔄 In Bearbeitung |
-| Phase 3: Lead-Qualifizierung | 3-5 Tage | ⏳ Nächster Schritt |
-| Phase 4: CRM-Integration | 3-5 Tage | ⏳ Zu Implementieren |
-| Phase 5: Zapier-Automatisierung | 1 Woche | ⏳ Zu Implementieren |
-| Phase 6: Google Search Console | 2-3 Tage | ⏳ Zu Implementieren |
-| Phase 7: Testing & QA | 3-5 Tage | ⏳ Zu Implementieren |
-| Phase 8: Deployment & Launch | 2-3 Tage | ⏳ Zu Implementieren |
-| Phase 9: Optimierung | Laufend | ⏳ Nach Launch |
+| Phase 1: Grundlagen | 2 Wochen | âœ… Abgeschlossen |
+| Phase 2: Tracking | 1 Woche | ðŸ”„ In Bearbeitung |
+| Phase 3: Lead-Qualifizierung | 3-5 Tage | â³ NÃ¤chster Schritt |
+| Phase 4: CRM-Integration | 3-5 Tage | â³ Zu Implementieren |
+| Phase 5: Zapier-Automatisierung | 1 Woche | â³ Zu Implementieren |
+| Phase 6: Google Search Console | 2-3 Tage | â³ Zu Implementieren |
+| Phase 7: Testing & QA | 3-5 Tage | â³ Zu Implementieren |
+| Phase 8: Deployment & Launch | 2-3 Tage | â³ Zu Implementieren |
+| Phase 9: Optimierung | Laufend | â³ Nach Launch |
 
-**Gesamtdauer:** 4-6 Wochen bis vollständige Implementierung
+**Gesamtdauer:** 4-6 Wochen bis vollstÃ¤ndige Implementierung
 
 ---
 
-## 🔧 Konfiguration erforderlich
+## ðŸ”§ Konfiguration erforderlich
 
 ### Umgebungsvariablen (.env)
 ```bash
@@ -294,10 +294,10 @@ VITE_HUBSPOT_PORTAL_ID=123456
 
 # CRM (Pipedrive)
 VITE_PIPEDRIVE_API_TOKEN=xxxxx
-VITE_PIPEDRIVE_COMPANY_DOMAIN=proclean
+VITE_PIPEDRIVE_COMPANY_DOMAIN=Aktive Facility Management
 
 # E-Mail
-VITE_NOTIFICATION_EMAIL=info@proclean-gmbh.de
+VITE_NOTIFICATION_EMAIL=info@aktive-fm.de
 ```
 
 ### Secrets (in Produktion)
@@ -308,7 +308,7 @@ VITE_NOTIFICATION_EMAIL=info@proclean-gmbh.de
 
 ---
 
-## 📞 Support & Ressourcen
+## ðŸ“ž Support & Ressourcen
 
 ### Dokumentation
 - [Google Analytics 4 Setup](./AUTOMATION_STRATEGY.md)
@@ -324,20 +324,21 @@ VITE_NOTIFICATION_EMAIL=info@proclean-gmbh.de
 
 ---
 
-## 🚀 Nächste Schritte
+## ðŸš€ NÃ¤chste Schritte
 
 1. **GA4-Measurement ID eintragen** (in index.html)
-2. **CRM auswählen** (HubSpot oder Pipedrive)
+2. **CRM auswÃ¤hlen** (HubSpot oder Pipedrive)
 3. **Zapier-Konto erstellen** und Automationen konfigurieren
-4. **Formular-Validierung** durchführen
+4. **Formular-Validierung** durchfÃ¼hren
 5. **Testing** mit Test-Leads
 6. **Live-Schaltung** und Monitoring
 
 ---
 
-## 📝 Notizen
+## ðŸ“ Notizen
 
 - Alle Dokumentationen sind in diesem Projekt enthalten
-- Webhook-URLs müssen vor Launch konfiguriert werden
+- Webhook-URLs mÃ¼ssen vor Launch konfiguriert werden
 - API-Tokens sollten in Umgebungsvariablen gespeichert werden
-- Regelmäßiges Monitoring ist essentiell für Erfolg
+- RegelmÃ¤ÃŸiges Monitoring ist essentiell fÃ¼r Erfolg
+

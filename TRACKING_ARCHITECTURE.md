@@ -1,4 +1,4 @@
-# Tracking Architecture
+﻿# Tracking Architecture
 
 ## Scope
 
@@ -52,7 +52,7 @@ VITE_CRM_LEAD_ENDPOINT=https://crm.example.com/leads
 VITE_CRM_PROVIDER=placeholder
 VITE_LEAD_API_ENDPOINT=/api/leads
 VITE_LEAD_WEBHOOK_ENABLED=false
-VITE_LEAD_WEBHOOK_ENDPOINT=https://hooks.example.com/proclean-leads
+VITE_LEAD_WEBHOOK_ENDPOINT=https://hooks.example.com/Aktive Facility Management-leads
 VITE_LEAD_CRM_ENABLED=false
 VITE_LEAD_CRM_ENDPOINT=https://crm.example.com/leads
 VITE_LEAD_CRM_PROVIDER=placeholder
@@ -62,14 +62,14 @@ VITE_LEAD_EMAIL_PROVIDER=placeholder
 LEAD_INBOX_ENABLED=true
 LEAD_INBOX_FILE=./data/leads.jsonl
 LEAD_WEBHOOK_ENABLED=false
-LEAD_WEBHOOK_ENDPOINT=https://hooks.example.com/proclean-leads
+LEAD_WEBHOOK_ENDPOINT=https://hooks.example.com/Aktive Facility Management-leads
 LEAD_CRM_ENABLED=false
 LEAD_CRM_ENDPOINT=https://crm.example.com/leads
 LEAD_CRM_PROVIDER=placeholder
 LEAD_EMAIL_ENABLED=false
 LEAD_EMAIL_ENDPOINT=https://email.example.com/send-lead
 LEAD_EMAIL_PROVIDER=placeholder
-VITE_SITE_URL=https://www.proclean-gmbh.de
+VITE_SITE_URL=https://www.aktive-fm.de
 VITE_GOOGLE_SITE_VERIFICATION=GOOGLE_SEARCH_CONSOLE_PLACEHOLDER
 ```
 
@@ -105,7 +105,7 @@ Local debug:
 1. Set `VITE_TRACKING_DEBUG=true` and `VITE_GA4_DEBUG=true`.
 2. Accept analytics cookies in the consent banner.
 3. Check the browser console for `[tracking]` and `[ga4]` logs.
-4. Confirm one GA4 script tag with id `proclean-ga4-script` exists after consent.
+4. Confirm one GA4 script tag with id `Aktive Facility Management-ga4-script` exists after consent.
 
 ## Regional Lead Logic
 
@@ -130,3 +130,4 @@ Curated Frankfurt service URLs prepared for quality SEO pages:
 
 The project intentionally uses curated regional pages instead of generating mass service-by-region URL combinations.
 Region and service interest is tracked through `location_interest` and `service_interest` events on the home page, contact page, regional pages, regional service pages, CTA links, and qualifying form fields.
+

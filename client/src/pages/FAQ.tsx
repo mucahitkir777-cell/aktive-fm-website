@@ -1,38 +1,32 @@
-/*
- * ProClean FAQ-Seite
- * Design: Architektonischer Minimalismus
- */
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { ChevronDown, ArrowRight, Phone } from "lucide-react";
-import { trackCtaClick, trackPhoneClick } from "@/lib/analytics";
+import { ChevronDown, ArrowRight, Phone, MessageCircle } from "lucide-react";
+import { trackCtaClick, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
 import { applyPageSeo, resolveSeoValue } from "@/lib/seo";
 import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsFaqContent } from "@shared/cms";
 
-const faqs = [
+type FaqItemType = { q: string; a: string };
+type FaqCategory = { category: string; items: FaqItemType[] };
+
+const DEFAULT_FAQS: FaqCategory[] = [
   {
     category: "Allgemeines",
     items: [
       {
         q: "Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?",
-        a: "Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel, Industrieanlagen, Schulen und weitere Einrichtungen. Sprechen Sie uns an – wir finden eine passende Lösung für Ihr Objekt.",
+        a: "Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel, Industrieanlagen, Schulen und weitere Einrichtungen.",
       },
       {
         q: "Wie schnell kann ich ein Angebot erhalten?",
-        a: "Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden. Für ein genaues Angebot führen wir eine kostenlose Besichtigung Ihres Objekts durch – danach erhalten Sie ein transparentes, individuelles Angebot.",
-      },
-      {
-        q: "Sind Ihre Mitarbeiter versichert?",
-        a: "Ja, alle unsere Mitarbeiter sind vollständig sozialversichert und festangestellt. Unser Unternehmen verfügt über eine umfassende Betriebshaftpflichtversicherung, die alle Einsätze abdeckt.",
+        a: "Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden. Danach erhalten Sie ein transparentes, individuelles Angebot.",
       },
       {
         q: "Arbeiten Sie mit Subunternehmern?",
-        a: "Nein. Alle Reinigungsleistungen werden ausschließlich durch unser eigenes, festangestelltes Personal erbracht. Das garantiert gleichbleibende Qualität und Verlässlichkeit.",
+        a: "Nein. Alle Reinigungsleistungen werden ausschließlich durch unser eigenes, festangestelltes Personal erbracht.",
       },
     ],
   },
@@ -41,19 +35,11 @@ const faqs = [
     items: [
       {
         q: "Wie häufig wird gereinigt?",
-        a: "Das hängt von Ihren Anforderungen und Ihrem Objekt ab. Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an – ganz nach Ihrem Bedarf und Budget.",
+        a: "Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an – passend zu Ihrem Bedarf.",
       },
       {
         q: "Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?",
-        a: "Ja, das ist möglich und bei vielen unserer Kunden der Standard. Wir reinigen morgens vor Arbeitsbeginn, abends nach Feierabend oder am Wochenende – ganz wie es für Ihren Betrieb am besten passt.",
-      },
-      {
-        q: "Was ist der Unterschied zwischen Unterhaltsreinigung und Grundreinigung?",
-        a: "Die Unterhaltsreinigung ist die regelmäßige, kontinuierliche Reinigung nach festem Plan. Die Grundreinigung ist eine intensive Tiefenreinigung, die in größeren Abständen oder bei besonderem Bedarf (z.B. nach Renovierungen) durchgeführt wird.",
-      },
-      {
-        q: "Bieten Sie auch Glasreinigung für Hochhäuser an?",
-        a: "Ja, wir verfügen über zertifizierte Höhenarbeiter und das nötige Equipment für die Reinigung von Glasfassaden und schwer zugänglichen Bereichen.",
+        a: "Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.",
       },
     ],
   },
@@ -62,40 +48,44 @@ const faqs = [
     items: [
       {
         q: "Wie stellen Sie gleichbleibende Qualität sicher?",
-        a: "Durch feste Teams pro Objekt, regelmäßige Schulungen, dokumentierte Reinigungsprotokolle und persönliche Qualitätskontrollen durch unsere Objektleiter. Sie haben immer einen direkten Ansprechpartner.",
-      },
-      {
-        q: "Was passiert, wenn ich mit der Reinigung nicht zufrieden bin?",
-        a: "Sprechen Sie uns direkt an – wir reagieren schnell und unkompliziert. Ihr Feedback ist für uns wichtig, und wir lösen Probleme ohne bürokratischen Aufwand.",
-      },
-      {
-        q: "Welche Reinigungsmittel verwenden Sie?",
-        a: "Wir setzen auf umweltfreundliche, zertifizierte Reinigungsmittel, die wirksam und gleichzeitig schonend für Menschen und Oberflächen sind. Auf Wunsch können wir auch spezielle Produkte einsetzen.",
-      },
-      {
-        q: "Kann ich mein Reinigungsteam kennenlernen?",
-        a: "Selbstverständlich. Wir stellen Ihnen Ihr festes Team vor – damit Sie wissen, wer in Ihrem Objekt arbeitet. Vertrauen beginnt mit Transparenz.",
-      },
-    ],
-  },
-  {
-    category: "Vertrag & Kosten",
-    items: [
-      {
-        q: "Wie lange sind die Vertragslaufzeiten?",
-        a: "Wir bieten flexible Vertragslaufzeiten an. Sprechen Sie uns an – wir finden eine Lösung, die zu Ihrem Unternehmen passt.",
-      },
-      {
-        q: "Gibt es versteckte Kosten?",
-        a: "Nein. Unser Angebot ist transparent und vollständig. Was wir anbieten, das berechnen wir – nicht mehr und nicht weniger.",
-      },
-      {
-        q: "Ist das Angebot wirklich kostenlos?",
-        a: "Ja, die Besichtigung, Beratung und Angebotserstellung sind vollständig kostenlos und unverbindlich.",
+        a: "Durch feste Teams pro Objekt, regelmäßige Schulungen, dokumentierte Reinigungsprotokolle und persönliche Qualitätskontrollen.",
       },
     ],
   },
 ];
+
+function parseFaqText(faqText: string): FaqCategory[] {
+  const lines = faqText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    return DEFAULT_FAQS;
+  }
+
+  const grouped = new Map<string, FaqItemType[]>();
+
+  for (const line of lines) {
+    const parts = line.split("|").map((part) => part.trim());
+    if (parts.length < 3) {
+      return DEFAULT_FAQS;
+    }
+
+    const [category, question, ...answerParts] = parts;
+    const answer = answerParts.join(" | ").trim();
+    if (!category || !question || !answer) {
+      return DEFAULT_FAQS;
+    }
+
+    const current = grouped.get(category) ?? [];
+    current.push({ q: question, a: answer });
+    grouped.set(category, current);
+  }
+
+  const categories = Array.from(grouped.entries()).map(([category, items]) => ({ category, items }));
+  return categories.length > 0 ? categories : DEFAULT_FAQS;
+}
 
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -127,6 +117,11 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function FAQ() {
   const [cmsContent, setCmsContent] = useState<CmsFaqContent>(() => getDefaultCmsPageContent("faq"));
   const resolvedCmsContent = normalizeCmsPageContent("faq", cmsContent);
+
+  const faqCategories = useMemo(
+    () => parseFaqText(resolvedCmsContent.questions.faqText),
+    [resolvedCmsContent.questions.faqText],
+  );
 
   useEffect(() => {
     let active = true;
@@ -170,26 +165,58 @@ export default function FAQ() {
     <div className="min-h-screen pc-bg-section">
       <Navigation />
 
-      {/* Page Hero */}
       <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
             <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-              Häufige Fragen
+              {resolvedCmsContent.hero.title}
             </h1>
-            <p className="pc-text-secondary text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-              Hier finden Sie Antworten auf die häufigsten Fragen zu unseren Leistungen, Abläufen und Konditionen.
+            <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
+              {resolvedCmsContent.hero.subtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/kontakt">
+                <span onClick={() => trackCtaClick({ cta_id: "faq_hero_contact", cta_text: "Jetzt Anfrage senden", cta_location: "faq_hero", destination_url: "/kontakt" })} className="pc-btn-primary">
+                  Jetzt Anfrage senden
+                  <ArrowRight size={16} />
+                </span>
+              </Link>
+              <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("faq_hero")} className="pc-btn-white">
+                <Phone size={16} />
+                Jetzt anrufen
+              </a>
+              <a
+                href={companyConfig.contact.whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackWhatsAppClick("faq_hero")}
+                className="pc-btn-outline"
+              >
+                <MessageCircle size={16} />
+                WhatsApp
+              </a>
+            </div>
+            <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+              Antwort in der Regel innerhalb von {companyConfig.metrics.responseTime}.
             </p>
           </div>
         </div>
       </section>
 
-      {/* FAQ Content */}
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl mx-auto">
-            {faqs.map((category) => (
+            <div className="mb-10">
+              <h2 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                {resolvedCmsContent.questions.title}
+              </h2>
+              <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                {resolvedCmsContent.questions.subtitle}
+              </p>
+            </div>
+
+            {faqCategories.map((category) => (
               <div key={category.category} className="mb-10">
                 <h2 className="text-lg font-bold pc-text-primary mb-4 pb-3 border-b-2 border-[#38BDF8] inline-block" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   {category.category}
@@ -202,24 +229,34 @@ export default function FAQ() {
               </div>
             ))}
 
-            {/* Still have questions */}
             <div className="pc-bg-soft border pc-border rounded-xl p-8 text-center mt-12">
               <h3 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                Noch Fragen?
+                {resolvedCmsContent.finalCta.title}
               </h3>
               <p className="pc-text-secondary mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
-                Wir helfen Ihnen gerne persönlich weiter – per Telefon oder über unser Kontaktformular.
+                {resolvedCmsContent.finalCta.body}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link href="/kontakt">
-                  <span onClick={() => trackCtaClick({ cta_id: "faq_contact", cta_text: "Kontakt aufnehmen", cta_location: "faq_final_cta", destination_url: "/kontakt" })} className="pc-btn-primary">
-                    Kontakt aufnehmen
+                  <span onClick={() => trackCtaClick({ cta_id: "faq_contact", cta_text: resolvedCmsContent.finalCta.primaryButtonText, cta_location: "faq_final_cta", destination_url: "/kontakt" })} className="pc-btn-primary">
+                    {resolvedCmsContent.finalCta.primaryButtonText}
                     <ArrowRight size={16} />
                   </span>
                 </Link>
                 <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("faq_final_cta")} className="pc-btn-white">
                   <Phone size={16} />
                   {companyConfig.contact.phoneDisplay}
+                </a>
+                <a
+                  href={companyConfig.contact.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppClick("faq_final_cta")}
+                  className="inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 rounded-[var(--pc-radius-md)] shadow-[var(--pc-shadow-soft)] bg-green-500 hover:bg-green-600 transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  <MessageCircle size={16} />
+                  WhatsApp
                 </a>
               </div>
             </div>

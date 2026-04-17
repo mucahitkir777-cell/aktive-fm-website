@@ -1,5 +1,5 @@
-/*
- * ProClean Impressum-Seite
+﻿/*
+ * Aktive Facility Management Impressum-Seite
  * Design: Architektonischer Minimalismus
  */
 
@@ -7,17 +7,24 @@ import { useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { companyConfig } from "@/config/company";
+import { applyPageSeo } from "@/lib/seo";
 
 export default function Impressum() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    applyPageSeo({
+      title: `Impressum | ${companyConfig.brand.legalName}`,
+      description: `Impressum der ${companyConfig.brand.legalName} mit Anbieterkennzeichnung, Kontakt- und Registerdaten.`,
+    });
+  }, []);
+
   return (
     <div className="min-h-screen pc-bg-section">
       <Navigation />
 
-      {/* Page Hero */}
       <section className="pc-page-hero">
         <div className="container">
           <div className="max-w-2xl">
@@ -32,12 +39,10 @@ export default function Impressum() {
         </div>
       </section>
 
-      {/* Content */}
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl">
             <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8">
-
               <div>
                 <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Angaben gemäß § 5 TMG
@@ -56,8 +61,18 @@ export default function Impressum() {
                   Kontakt
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
-                  <p>Telefon: {companyConfig.contact.phoneDisplay}</p>
-                  <p>E-Mail: {companyConfig.contact.email}</p>
+                  <p>
+                    Telefon:{" "}
+                    <a href={companyConfig.contact.phoneHref} className="pc-text-brand hover:underline">
+                      {companyConfig.contact.phoneDisplay}
+                    </a>
+                  </p>
+                  <p>
+                    E-Mail:{" "}
+                    <a href={companyConfig.contact.emailHref} className="pc-text-brand hover:underline">
+                      {companyConfig.contact.email}
+                    </a>
+                  </p>
                 </div>
               </div>
 
@@ -77,7 +92,7 @@ export default function Impressum() {
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
                   <p>Eintragung im Handelsregister</p>
                   <p>Registergericht: {companyConfig.legal.registerCourt}</p>
-                  <p>Registernummer: {companyConfig.legal.registerNumber}</p>
+                  <p>HRB: {companyConfig.legal.registerNumber}</p>
                 </div>
               </div>
 
@@ -86,8 +101,20 @@ export default function Impressum() {
                   Umsatzsteuer-ID
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:</p>
+                  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:</p>
                   <p>{companyConfig.legal.vatId}</p>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  Verantwortlich nach § 55 Abs. 2 RStV
+                </h2>
+                <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <p>{companyConfig.legal.editorialResponsibleName}</p>
+                  {companyConfig.legal.editorialResponsibleAddressLines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
                 </div>
               </div>
 
@@ -107,7 +134,7 @@ export default function Impressum() {
                   Haftung für Inhalte
                 </h2>
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+                  Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
                 </p>
                 <p className="pc-text-secondary text-sm leading-relaxed mt-3" style={{ fontFamily: "Inter, sans-serif" }}>
                   Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
@@ -140,7 +167,6 @@ export default function Impressum() {
                   {companyConfig.legal.providerNote}
                 </p>
               </div>
-
             </div>
           </div>
         </div>

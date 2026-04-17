@@ -1,5 +1,5 @@
 /*
- * ProClean Navigation Component
+ * Aktive Facility Management Navigation Component
  * Design: Architektonischer Minimalismus
  * - Transparent on hero, solid white on scroll
  * - Logo left, nav center, CTA right
@@ -239,3 +239,4 @@ export default function Navigation() {
     </header>
   );
 }
+

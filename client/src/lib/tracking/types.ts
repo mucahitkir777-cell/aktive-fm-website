@@ -38,7 +38,13 @@ export interface TrackingContext {
 }
 
 export interface TrackingPayload {
+  cta_type?: string;
+  page?: string;
+  section?: string;
+  label?: string;
+  destination?: string;
   button_location?: string;
+  button_text?: string;
   cta_id?: string;
   cta_text?: string;
   cta_location?: string;

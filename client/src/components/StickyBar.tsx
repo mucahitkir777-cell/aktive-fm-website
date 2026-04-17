@@ -1,112 +1,146 @@
-/*
- * ProClean Sticky-Bar
- * Lead-Maschinen-Element: Permanent sichtbar auf Mobile
- * Enth√§lt: Telefon, WhatsApp, Anfrage-Button
- */
-
-import { Phone, MessageCircle, FileText } from "lucide-react";
-import { Link } from "wouter";
-import { trackCtaClick, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
+import { useEffect, useState } from "react";
+import { MessageCircle, Phone, Send } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent } from "@shared/cms";
 import { companyConfig } from "@/config/company";
+import { trackCtaClick, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
+import { fetchPublicCmsPage } from "@/lib/cms";
+
+const MOBILE_BAR_BASE_HEIGHT = 72;
 
 export default function StickyBar() {
+  const [location] = useLocation();
+  const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
+  const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
+
+  useEffect(() => {
+    let active = true;
+
+    void fetchPublicCmsPage("global")
+      .then((page) => {
+        if (page && active) {
+          setCmsContent(normalizeCmsPageContent("global", page.content));
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (location.startsWith("/admin")) {
+    return null;
+  }
+
+  const phoneHref = resolvedCmsContent.footerContact.phoneHref || companyConfig.contact.phoneHref;
+  const phoneDisplay = resolvedCmsContent.footerContact.phoneDisplay || companyConfig.contact.phoneDisplay;
+  const requestHref = resolvedCmsContent.navigation.ctaHref || "/kontakt";
+  const requestLabel = resolvedCmsContent.navigation.ctaLabel || "Angebot anfragen";
+
   const handlePhoneClick = () => {
-    trackPhoneClick('sticky_bar');
+    trackPhoneClick("sticky_bar", {
+      button_text: phoneDisplay,
+      destination_url: phoneHref,
+    });
   };
 
   const handleWhatsAppClick = () => {
-    trackWhatsAppClick('sticky_bar');
+    trackWhatsAppClick("sticky_bar", {
+      button_text: "WhatsApp",
+      destination_url: companyConfig.contact.whatsappHref,
+    });
   };
 
   const handleRequestClick = () => {
     trackCtaClick({
       cta_id: "sticky_bar_request",
-      cta_text: "Anfrage",
+      cta_text: requestLabel,
       cta_location: "sticky_bar",
-      destination_url: "/kontakt",
+      destination_url: requestHref,
     });
   };
 
   return (
     <>
-      {/* Desktop Sticky Bar (oben rechts) */}
-      <div className="hidden lg:fixed lg:top-24 lg:right-6 lg:z-40 lg:flex lg:flex-col lg:gap-3">
-        {/* Telefon */}
-        <a
-          href={companyConfig.contact.phoneHref}
-          onClick={handlePhoneClick}
-          className="flex items-center justify-center w-14 h-14 pc-bg-brand text-white rounded-full shadow-lg hover:bg-[var(--pc-primary-hover)] hover:shadow-xl transition-all duration-200 hover:scale-110"
-          title="Anrufen"
-        >
-          <Phone size={20} />
-        </a>
-
-        {/* WhatsApp */}
-        <a
-          href={companyConfig.contact.whatsappHref}
-          onClick={handleWhatsAppClick}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center w-14 h-14 bg-green-500 text-white rounded-full shadow-lg hover:bg-green-600 hover:shadow-xl transition-all duration-200 hover:scale-110"
-          title="WhatsApp"
-        >
-          <MessageCircle size={20} />
-        </a>
-
-        {/* Anfrage */}
-        <Link href="/kontakt">
-          <span onClick={handleRequestClick} className="flex items-center justify-center w-14 h-14 pc-bg-accent pc-text-primary rounded-full shadow-lg hover:bg-[var(--pc-primary)] hover:text-white hover:shadow-xl transition-all duration-200 hover:scale-110 cursor-pointer" title="Angebot anfordern">
-            <FileText size={20} />
-          </span>
-        </Link>
+      <div className="fixed bottom-5 right-5 z-40 hidden md:block">
+        <div className="rounded-2xl border pc-border bg-white/96 p-2 shadow-[0_24px_36px_-30px_rgba(15,33,55,0.55)] backdrop-blur">
+          <div className="flex flex-col gap-1.5">
+            <a
+              href={phoneHref}
+              onClick={handlePhoneClick}
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+              aria-label={`Telefonisch kontaktieren: ${phoneDisplay}`}
+            >
+              <Phone size={16} />
+              <span>Anrufen</span>
+            </a>
+            <a
+              href={companyConfig.contact.whatsappHref}
+              onClick={handleWhatsAppClick}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              aria-label="Kontakt per WhatsApp"
+            >
+              <MessageCircle size={16} />
+              <span>WhatsApp</span>
+            </a>
+            <Link
+              href={requestHref}
+              onClick={handleRequestClick}
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+              aria-label={`${requestLabel} ˆffnen`}
+            >
+              <Send size={16} />
+              <span>{requestLabel}</span>
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* Mobile Sticky Bar (unten, horizontal) */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-40 bg-white border-t pc-border shadow-[0_-10px_36px_-30px_rgba(15,33,55,0.8)]">
-        <div className="flex items-center justify-around h-16">
-          {/* Telefon */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-40 border-t pc-border bg-white/98 shadow-[0_-12px_28px_-24px_rgba(15,33,55,0.8)] backdrop-blur md:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      >
+        <div className="grid grid-cols-3">
           <a
-            href={companyConfig.contact.phoneHref}
+            href={phoneHref}
             onClick={handlePhoneClick}
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-2 pc-text-brand hover:bg-[var(--pc-bg-soft)] transition-colors"
+            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+            aria-label={`Telefonisch kontaktieren: ${phoneDisplay}`}
           >
             <Phone size={20} />
             <span className="text-xs font-semibold">Anrufen</span>
           </a>
-
-          {/* WhatsApp */}
           <a
             href={companyConfig.contact.whatsappHref}
             onClick={handleWhatsAppClick}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex flex-col items-center justify-center gap-1 py-2 text-green-500 hover:bg-green-50 transition-colors"
+            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 text-emerald-700 transition-colors hover:bg-emerald-50 active:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            aria-label="Kontakt per WhatsApp"
           >
             <MessageCircle size={20} />
             <span className="text-xs font-semibold">WhatsApp</span>
           </a>
-
-          {/* Anfrage */}
-          <Link href="/kontakt">
-            <span onClick={handleRequestClick} className="flex-1 flex flex-col items-center justify-center gap-1 py-2 pc-text-brand hover:bg-[var(--pc-bg-soft)] transition-colors cursor-pointer">
-              <FileText size={20} />
-              <span className="text-xs font-semibold">Anfrage</span>
-            </span>
+          <Link
+            href={requestHref}
+            onClick={handleRequestClick}
+            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 px-2 py-2 pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+            aria-label={`${requestLabel} ˆffnen`}
+          >
+            <Send size={20} />
+            <span className="text-xs font-semibold">Anfrage</span>
           </Link>
         </div>
       </div>
 
-      {/* Spacer f√ºr Mobile (damit Content nicht von Sticky-Bar verdeckt wird) */}
-      <div className="h-16 lg:hidden" />
+      <div
+        className="md:hidden"
+        style={{ height: `calc(${MOBILE_BAR_BASE_HEIGHT}px + env(safe-area-inset-bottom, 0px))` }}
+        aria-hidden="true"
+      />
     </>
   );
-}
-
-// Umami-Typen erweitern
-declare global {
-  interface Window {
-    umami?: {
-      track: (name: string, data?: Record<string, any>) => void;
-    };
-  }
 }

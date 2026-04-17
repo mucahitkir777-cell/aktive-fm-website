@@ -1,24 +1,24 @@
-# ProClean Google Search Console Setup Guide
+﻿# Aktive Facility Management Google Search Console Setup Guide
 
-## 🎯 Ziel
+## ðŸŽ¯ Ziel
 Website in Google Search Console registrieren, indexieren und SEO-Performance monitoren.
 
 ---
 
-## 📋 Schritt 1: Website in GSC registrieren
+## ðŸ“‹ Schritt 1: Website in GSC registrieren
 
-### 1.1 Google Search Console öffnen
+### 1.1 Google Search Console Ã¶ffnen
 - Gehe zu https://search.google.com/search-console
 - Melde dich mit deinem Google-Konto an
 
-### 1.2 Property hinzufügen
-1. Klicke auf **+ Property hinzufügen**
-2. Wähle **URL-Präfix**
-3. Gib ein: `https://www.proclean-gmbh.de`
+### 1.2 Property hinzufÃ¼gen
+1. Klicke auf **+ Property hinzufÃ¼gen**
+2. WÃ¤hle **URL-PrÃ¤fix**
+3. Gib ein: `https://www.aktive-fm.de`
 4. Klicke **Weiter**
 
 ### 1.3 Ownership verifizieren
-Wähle eine Verifizierungsmethode:
+WÃ¤hle eine Verifizierungsmethode:
 
 #### Option A: HTML-Datei (empfohlen)
 1. Lade die HTML-Datei herunter
@@ -27,7 +27,7 @@ Wähle eine Verifizierungsmethode:
 
 #### Option B: HTML-Tag (schneller)
 1. Kopiere den Meta-Tag
-2. Füge ihn in `client/index.html` ein (im `<head>`):
+2. FÃ¼ge ihn in `client/index.html` ein (im `<head>`):
 ```html
 <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE" />
 ```
@@ -35,38 +35,38 @@ Wähle eine Verifizierungsmethode:
 
 #### Option C: Google Analytics
 Wenn Google Analytics bereits installiert:
-1. Wähle **Google Analytics**
+1. WÃ¤hle **Google Analytics**
 2. Klicke **Verifizieren**
 
 ---
 
-## 📊 Schritt 2: Sitemap einreichen
+## ðŸ“Š Schritt 2: Sitemap einreichen
 
 ### 2.1 Sitemap-URL
 Deine Sitemap ist bereits unter:
 ```
-https://www.proclean-gmbh.de/sitemap.xml
+https://www.aktive-fm.de/sitemap.xml
 ```
 
 ### 2.2 Sitemap in GSC einreichen
-1. Gehe zu **Sitemaps** (im linken Menü)
-2. Klicke **Sitemap hinzufügen**
+1. Gehe zu **Sitemaps** (im linken MenÃ¼)
+2. Klicke **Sitemap hinzufÃ¼gen**
 3. Gib ein: `sitemap.xml`
 4. Klicke **Senden**
 
-### 2.3 Sitemap-Status prüfen
+### 2.3 Sitemap-Status prÃ¼fen
 - Warte 24-48 Stunden
-- Prüfe den Status unter **Sitemaps**
+- PrÃ¼fe den Status unter **Sitemaps**
 - Sollte zeigen: "Erfolgreich" mit Anzahl der eingereichten URLs
 
 ---
 
-## 🤖 Schritt 3: robots.txt validieren
+## ðŸ¤– Schritt 3: robots.txt validieren
 
-### 3.1 robots.txt prüfen
+### 3.1 robots.txt prÃ¼fen
 Deine robots.txt ist unter:
 ```
-https://www.proclean-gmbh.de/robots.txt
+https://www.aktive-fm.de/robots.txt
 ```
 
 ### 3.2 Inhalt der robots.txt
@@ -76,28 +76,28 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
-Sitemap: https://www.proclean-gmbh.de/sitemap.xml
+Sitemap: https://www.aktive-fm.de/sitemap.xml
 ```
 
 ### 3.3 robots.txt in GSC testen
 1. Gehe zu **URL-Inspektion** (oben)
-2. Gib ein: `https://www.proclean-gmbh.de/`
+2. Gib ein: `https://www.aktive-fm.de/`
 3. Klicke **Testen**
-4. Prüfe: "Robots.txt erlaubt das Crawlen"
+4. PrÃ¼fe: "Robots.txt erlaubt das Crawlen"
 
 ---
 
-## 🔍 Schritt 4: URL-Inspektion & Indexierung
+## ðŸ” Schritt 4: URL-Inspektion & Indexierung
 
-### 4.1 Einzelne URLs prüfen
+### 4.1 Einzelne URLs prÃ¼fen
 1. Gehe zu **URL-Inspektion**
-2. Gib eine URL ein: `https://www.proclean-gmbh.de/leistungen`
+2. Gib eine URL ein: `https://www.aktive-fm.de/leistungen`
 3. Klicke **Enter**
 
 **Sollte zeigen:**
-- ✅ "URL ist in Google Index"
-- ✅ "Robots.txt erlaubt das Crawlen"
-- ✅ "Robots.txt blockiert keine Ressourcen"
+- âœ… "URL ist in Google Index"
+- âœ… "Robots.txt erlaubt das Crawlen"
+- âœ… "Robots.txt blockiert keine Ressourcen"
 
 ### 4.2 URL indexieren lassen
 Wenn URL nicht indexiert:
@@ -112,11 +112,11 @@ Wenn URL nicht indexiert:
 
 ---
 
-## ⚙️ Schritt 5: Core Web Vitals prüfen
+## âš™ï¸ Schritt 5: Core Web Vitals prÃ¼fen
 
 ### 5.1 Core Web Vitals anzeigen
-1. Gehe zu **Core Web Vitals** (im linken Menü)
-2. Prüfe die Metriken:
+1. Gehe zu **Core Web Vitals** (im linken MenÃ¼)
+2. PrÃ¼fe die Metriken:
    - **LCP** (Largest Contentful Paint): < 2,5 Sekunden
    - **FID** (First Input Delay): < 100 Millisekunden
    - **CLS** (Cumulative Layout Shift): < 0,1
@@ -127,7 +127,7 @@ Wenn Metriken schlecht:
 2. Gib deine URL ein
 3. Folge den Empfehlungen
 
-**Häufige Optimierungen:**
+**HÃ¤ufige Optimierungen:**
 - Bilder komprimieren
 - JavaScript minimieren
 - CSS-Dateien optimieren
@@ -135,11 +135,11 @@ Wenn Metriken schlecht:
 
 ---
 
-## 📈 Schritt 6: Performance & Keywords monitoren
+## ðŸ“ˆ Schritt 6: Performance & Keywords monitoren
 
 ### 6.1 Performance-Bericht
-1. Gehe zu **Performance** (im linken Menü)
-2. Prüfe:
+1. Gehe zu **Performance** (im linken MenÃ¼)
+2. PrÃ¼fe:
    - **Clicks**: Anzahl der Klicks in Suchergebnissen
    - **Impressions**: Wie oft deine Website angezeigt wurde
    - **CTR**: Click-Through-Rate
@@ -148,25 +148,25 @@ Wenn Metriken schlecht:
 ### 6.2 Top Keywords
 1. Gehe zu **Performance**
 2. Filtere nach **Queries**
-3. Prüfe deine Top-Keywords:
-   - "Büroreinigung Frankfurt"
-   - "Gebäudereinigung Kreis Offenbach"
+3. PrÃ¼fe deine Top-Keywords:
+   - "BÃ¼roreinigung Frankfurt"
+   - "GebÃ¤udereinigung Kreis Offenbach"
    - "Glasreinigung"
 
 ### 6.3 Ranking-Verbesserung
 Wenn Keywords schlecht ranken:
-1. Prüfe die Seite (URL-Inspektion)
+1. PrÃ¼fe die Seite (URL-Inspektion)
 2. Optimiere Meta-Tags
-3. Verbessere Content-Qualität
+3. Verbessere Content-QualitÃ¤t
 4. Baue interne Links auf
 
 ---
 
-## 🔗 Schritt 7: Backlinks & externe Links
+## ðŸ”— Schritt 7: Backlinks & externe Links
 
-### 7.1 Backlinks prüfen
-1. Gehe zu **Links** (im linken Menü)
-2. Prüfe:
+### 7.1 Backlinks prÃ¼fen
+1. Gehe zu **Links** (im linken MenÃ¼)
+2. PrÃ¼fe:
    - **Top verlinkte Seiten**: Welche Seiten am meisten verlinkt sind
    - **Top verlinkte Websites**: Welche Domains zu dir linken
    - **Ankertexte**: Welche Texte in Links verwendet werden
@@ -176,22 +176,22 @@ Strategien:
 - Branchenverzeichnisse (Gelbe Seiten, Handwerkskammer)
 - Lokale Verzeichnisse (Google My Business)
 - Pressemitteilungen
-- Gastbeiträge auf relevanten Blogs
+- GastbeitrÃ¤ge auf relevanten Blogs
 
 ---
 
-## ⚠️ Schritt 8: Fehler & Warnungen beheben
+## âš ï¸ Schritt 8: Fehler & Warnungen beheben
 
 ### 8.1 Coverage-Bericht
-1. Gehe zu **Coverage** (im linken Menü)
-2. Prüfe auf Fehler:
-   - 🔴 **Fehler**: URLs können nicht gecrawlt werden
-   - 🟡 **Warnung**: URLs mit Problemen
-   - 🟢 **Gültig**: URLs funktionieren korrekt
+1. Gehe zu **Coverage** (im linken MenÃ¼)
+2. PrÃ¼fe auf Fehler:
+   - ðŸ”´ **Fehler**: URLs kÃ¶nnen nicht gecrawlt werden
+   - ðŸŸ¡ **Warnung**: URLs mit Problemen
+   - ðŸŸ¢ **GÃ¼ltig**: URLs funktionieren korrekt
 
-### 8.2 Häufige Fehler beheben
+### 8.2 HÃ¤ufige Fehler beheben
 
-| Fehler | Ursache | Lösung |
+| Fehler | Ursache | LÃ¶sung |
 |---|---|---|
 | 404 Not Found | Seite existiert nicht | URL in Sitemap entfernen |
 | Robots.txt blockiert | robots.txt blockiert Crawling | robots.txt aktualisieren |
@@ -201,71 +201,71 @@ Strategien:
 ### 8.3 Fehler einreichen
 Nach Behebung:
 1. Klicke **Validierung anfordern**
-2. Google prüft die URL erneut
+2. Google prÃ¼ft die URL erneut
 3. Fehler sollten nach 24-48 Stunden behoben sein
 
 ---
 
-## 📱 Schritt 9: Mobile Usability
+## ðŸ“± Schritt 9: Mobile Usability
 
 ### 9.1 Mobile-Test
-1. Gehe zu **Mobile Usability** (im linken Menü)
-2. Prüfe auf Probleme:
+1. Gehe zu **Mobile Usability** (im linken MenÃ¼)
+2. PrÃ¼fe auf Probleme:
    - Text zu klein
    - Buttons zu nah beieinander
    - Viewport nicht konfiguriert
    - Flash-Inhalte
 
 ### 9.2 Mobile-Optimierung
-Prüfe in `client/index.html`:
+PrÃ¼fe in `client/index.html`:
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
 ```
 
 Stelle sicher:
-- ✅ Responsive Design
-- ✅ Touch-Buttons > 48px
-- ✅ Lesbare Schriftgröße (> 16px)
-- ✅ Kein Horizontal-Scrollen
+- âœ… Responsive Design
+- âœ… Touch-Buttons > 48px
+- âœ… Lesbare SchriftgrÃ¶ÃŸe (> 16px)
+- âœ… Kein Horizontal-Scrollen
 
 ---
 
-## 🔐 Schritt 10: Sicherheit & HTTPS
+## ðŸ” Schritt 10: Sicherheit & HTTPS
 
-### 10.1 HTTPS-Status prüfen
-1. Gehe zu **Sicherheitsprobleme** (im linken Menü)
+### 10.1 HTTPS-Status prÃ¼fen
+1. Gehe zu **Sicherheitsprobleme** (im linken MenÃ¼)
 2. Sollte zeigen: "Keine Probleme erkannt"
 
 ### 10.2 HTTPS erzwingen
 In deiner Website-Konfiguration:
 - Alle URLs sollten mit `https://` beginnen
-- HTTP → HTTPS Redirect aktivieren
-- SSL-Zertifikat gültig
+- HTTP â†’ HTTPS Redirect aktivieren
+- SSL-Zertifikat gÃ¼ltig
 
 ---
 
-## 📊 Schritt 11: Regelmäßiges Monitoring
+## ðŸ“Š Schritt 11: RegelmÃ¤ÃŸiges Monitoring
 
-### Wöchentliche Checks
-- [ ] Performance-Bericht prüfen
+### WÃ¶chentliche Checks
+- [ ] Performance-Bericht prÃ¼fen
 - [ ] Neue Keywords identifizieren
 - [ ] CTR-Trends analysieren
 
 ### Monatliche Checks
-- [ ] Core Web Vitals prüfen
+- [ ] Core Web Vitals prÃ¼fen
 - [ ] Coverage-Fehler beheben
 - [ ] Backlinks analysieren
 - [ ] Ranking-Positionen vergleichen
 
 ### Quartalsweise Checks
-- [ ] SEO-Strategie überprüfen
+- [ ] SEO-Strategie Ã¼berprÃ¼fen
 - [ ] Content-Gaps identifizieren
 - [ ] Neue Keywords recherchieren
-- [ ] Konkurrenz-Analyse durchführen
+- [ ] Konkurrenz-Analyse durchfÃ¼hren
 
 ---
 
-## 🎯 SEO-Ziele für ProClean
+## ðŸŽ¯ SEO-Ziele fÃ¼r Aktive Facility Management
 
 ### Kurzfristig (3 Monate)
 - [ ] Alle Seiten indexiert
@@ -274,13 +274,13 @@ In deiner Website-Konfiguration:
 - [ ] 10 Top-Keywords identifiziert
 
 ### Mittelfristig (6 Monate)
-- [ ] Top-10 Rankings für "Büroreinigung Frankfurt"
+- [ ] Top-10 Rankings fÃ¼r "BÃ¼roreinigung Frankfurt"
 - [ ] 50+ Backlinks von relevanten Domains
 - [ ] 100+ monatliche organische Clicks
 - [ ] CTR > 3%
 
 ### Langfristig (12 Monate)
-- [ ] Top-3 Rankings für Haupt-Keywords
+- [ ] Top-3 Rankings fÃ¼r Haupt-Keywords
 - [ ] 200+ Backlinks
 - [ ] 500+ monatliche organische Clicks
 - [ ] CTR > 5%
@@ -288,7 +288,7 @@ In deiner Website-Konfiguration:
 
 ---
 
-## 🔗 Nützliche Links
+## ðŸ”— NÃ¼tzliche Links
 
 - **Google Search Console**: https://search.google.com/search-console
 - **PageSpeed Insights**: https://pagespeed.web.dev/
@@ -298,34 +298,35 @@ In deiner Website-Konfiguration:
 
 ---
 
-## 💡 Best Practices
+## ðŸ’¡ Best Practices
 
 ### On-Page SEO
-- ✅ Unique Meta-Titles (50-60 Zeichen)
-- ✅ Unique Meta-Descriptions (150-160 Zeichen)
-- ✅ H1-Tag pro Seite
-- ✅ Keyword-Dichte 1-2%
-- ✅ Interne Links (3-5 pro Seite)
+- âœ… Unique Meta-Titles (50-60 Zeichen)
+- âœ… Unique Meta-Descriptions (150-160 Zeichen)
+- âœ… H1-Tag pro Seite
+- âœ… Keyword-Dichte 1-2%
+- âœ… Interne Links (3-5 pro Seite)
 
 ### Off-Page SEO
-- ✅ Backlinks von relevanten Domains
-- ✅ Lokale Verzeichnisse
-- ✅ Social Media Signals
-- ✅ Brand Mentions
+- âœ… Backlinks von relevanten Domains
+- âœ… Lokale Verzeichnisse
+- âœ… Social Media Signals
+- âœ… Brand Mentions
 
 ### Technisches SEO
-- ✅ Sitemap.xml
-- ✅ robots.txt
-- ✅ Schema.org Markup
-- ✅ Mobile-Friendly
-- ✅ HTTPS
-- ✅ Fast Loading Speed
-- ✅ Structured Data
+- âœ… Sitemap.xml
+- âœ… robots.txt
+- âœ… Schema.org Markup
+- âœ… Mobile-Friendly
+- âœ… HTTPS
+- âœ… Fast Loading Speed
+- âœ… Structured Data
 
 ---
 
-## 📞 Support
+## ðŸ“ž Support
 
 Bei Fragen:
 - Google Search Console Help: https://support.google.com/webmasters/
 - SEO Starter Guide: https://developers.google.com/search/docs/beginner/seo-starter-guide
+

@@ -1,5 +1,5 @@
 /*
- * ProClean Region-Seite
+ * Aktive Facility Management Region-Seite
  * Kuratierte Lead-Seiten für priorisierte Rhein-Main-Regionen.
  */
 
@@ -169,10 +169,20 @@ export default function Region() {
 
   const renderContactCtas = (ctaLocation: string, tone: "dark" | "light" = "light") => {
     const secondaryClass = tone === "dark" ? "pc-btn-white" : "pc-btn-outline";
+    const primaryClass = "pc-btn-primary";
     const buttonClass = "w-full sm:w-auto justify-center min-h-12";
 
     return (
       <div className="flex flex-col sm:flex-row gap-3">
+        <Link href="/kontakt">
+          <span
+            onClick={() => handleCtaClick(`${ctaLocation}_offer`, "Angebot", ctaLocation, "/kontakt")}
+            className={`${primaryClass} ${buttonClass}`}
+          >
+            <ArrowRight size={16} />
+            Angebot anfragen
+          </span>
+        </Link>
         <a
           href={companyConfig.contact.phoneHref}
           onClick={() =>
@@ -205,15 +215,6 @@ export default function Region() {
           <MessageCircle size={16} />
           WhatsApp
         </a>
-        <Link href="/kontakt">
-          <span
-            onClick={() => handleCtaClick(`${ctaLocation}_offer`, "Angebot", ctaLocation, "/kontakt")}
-            className={`${secondaryClass} ${buttonClass}`}
-          >
-            <ArrowRight size={16} />
-            Angebot
-          </span>
-        </Link>
       </div>
     );
   };
@@ -403,3 +404,4 @@ export default function Region() {
     </div>
   );
 }
+

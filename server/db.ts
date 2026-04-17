@@ -29,6 +29,15 @@ export function getDbPool() {
   return pool;
 }
 
+export async function closeDatabase() {
+  if (!pool) {
+    return;
+  }
+
+  await pool.end();
+  pool = null;
+}
+
 export async function initializeDatabase() {
   const db = getDbPool();
 
@@ -38,11 +47,30 @@ export async function initializeDatabase() {
       username TEXT NOT NULL,
       password_hash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'admin'
-        CHECK (role IN ('admin', 'staff')),
+        CHECK (role IN ('admin', 'editor', 'staff')),
       is_active BOOLEAN NOT NULL DEFAULT TRUE,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
+  `);
+
+  await db.query(`
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'users_role_check'
+      ) THEN
+        ALTER TABLE users DROP CONSTRAINT users_role_check;
+      END IF;
+    END $$;
+  `);
+
+  await db.query(`
+    ALTER TABLE users
+    ADD CONSTRAINT users_role_check
+    CHECK (role IN ('admin', 'editor', 'staff'))
   `);
 
   await db.query(`

@@ -176,8 +176,12 @@ export async function requireAdminAuth(req: Request, res: Response, next: NextFu
 }
 
 export function requireAdminRole(role: AdminRole) {
+  return requireAdminAnyRole([role]);
+}
+
+export function requireAdminAnyRole(roles: readonly AdminRole[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.adminUser || req.adminUser.role !== role) {
+    if (!req.adminUser || !roles.includes(req.adminUser.role)) {
       res.status(403).json({
         success: false,
         message: "Keine Berechtigung.",

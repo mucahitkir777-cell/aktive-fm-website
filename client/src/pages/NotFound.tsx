@@ -1,5 +1,5 @@
 /*
- * ProClean 404-Seite
+ * Aktive Facility Management 404-Seite
  * Design: Architektonischer Minimalismus
  */
 
@@ -48,3 +48,4 @@ export default function NotFound() {
     </div>
   );
 }
+

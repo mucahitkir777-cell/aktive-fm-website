@@ -11,6 +11,7 @@ import CompanyMeta from "./components/CompanyMeta";
 import CompanyStructuredData from "./components/CompanyStructuredData";
 import { initAnalytics, initScrollDepthTracking, trackPageView } from "./lib/analytics";
 import { sendInternalPageView } from "./lib/pageviews";
+import { companyConfig } from "./config/company";
 import Home from "./pages/Home";
 import Leistungen from "./pages/Leistungen";
 import UeberUns from "./pages/UeberUns";
@@ -47,6 +48,9 @@ function AppContent() {
 }
 
 function Router() {
+  const regionalRegionRoutes = companyConfig.regions.map((region) => region.route);
+  const regionalServiceRoutes = companyConfig.regionalServiceRoutes.map((route) => route.route);
+
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -64,12 +68,12 @@ function Router() {
       <Route path="/admin/preview" component={Admin} />
       <Route path="/admin/:section" component={Admin} />
       <Route path="/admin" component={Admin} />
-      <Route path="/gebaeudereinigung-kreis-offenbach" component={Region} />
-      <Route path="/gebaeudereinigung-frankfurt" component={Region} />
-      <Route path="/gebaeudereinigung-hanau" component={Region} />
-      <Route path="/buero-reinigung-frankfurt" component={Region} />
-      <Route path="/treppenhausreinigung-frankfurt" component={Region} />
-      <Route path="/glasreinigung-frankfurt" component={Region} />
+      {regionalRegionRoutes.map((path) => (
+        <Route key={path} path={path} component={Region} />
+      ))}
+      {regionalServiceRoutes.map((path) => (
+        <Route key={path} path={path} component={Region} />
+      ))}
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

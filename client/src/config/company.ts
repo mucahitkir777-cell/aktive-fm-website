@@ -31,54 +31,62 @@ export interface RegionalServiceRoute {
 
 export const companyConfig = {
   brand: {
-    name: "ProClean",
-    legalName: "ProClean GmbH",
-    initials: "PC",
+    name: "Aktive Facility Management",
+    legalName: "Aktive Facility Management GmbH",
+    initials: "AFM",
     descriptor: "Gebäudereinigung",
-    siteUrl: "https://www.proclean-gmbh.de",
+    siteUrl: "https://aktive-fm.de",
     footerText:
-      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung im Rhein-Main-Gebiet. Qualität, die man sieht.",
+      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",
     membershipLabel: "BIV Bundesinnungsverband",
   },
   seo: {
-    title: "ProClean – Professionelle Gebäudereinigung im Rhein-Main-Gebiet",
+    title: "Aktive Facility Management – Professionelle Gebäudereinigung in Neu-Isenburg und Umgebung",
     description:
-      "ProClean GmbH – Ihr zuverlässiger Partner für professionelle Gebäudereinigung, Büroreinigung, Glasreinigung und Unterhaltsreinigung. Kostenlos & unverbindlich anfragen.",
+      "Aktive Facility Management GmbH – Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Kostenlos & unverbindlich anfragen.",
     keywords:
       "Gebäudereinigung, Büroreinigung, Glasreinigung, Unterhaltsreinigung, Reinigungsservice, gewerbliche Reinigung, Grundreinigung, Sonderreinigung, Treppenhaus reinigen",
-    ogTitle: "ProClean – Professionelle Gebäudereinigung",
+    ogTitle: "Aktive Facility Management – Professionelle Gebäudereinigung",
     ogDescription:
-      "Zuverlässige Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet – pünktlich, gründlich und diskret. Jetzt kostenloses Angebot anfordern.",
+      "Zuverlässige Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung – pünktlich, gründlich und diskret. Jetzt kostenloses Angebot anfordern.",
     twitterDescription:
-      "Zuverlässige Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet – pünktlich, gründlich und diskret.",
+      "Zuverlässige Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung – pünktlich, gründlich und diskret.",
+  },
+  regionMessaging: {
+    primaryLabel: "Neu-Isenburg und Umgebung",
+    coverageLabel: "Kreis Offenbach, Frankfurt am Main und Hanau",
+    coverageDescription:
+      "Wir betreuen Unternehmen in Neu-Isenburg, im Kreis Offenbach sowie in Frankfurt am Main und Hanau.",
   },
   contact: {
-    phoneDisplay: "0800 000 000",
-    phoneHref: "tel:+4900000000000",
-    phoneInternational: "+4900000000000",
-    email: "info@proclean-gmbh.de",
-    emailHref: "mailto:info@proclean-gmbh.de",
+    phoneDisplay: "0178 6660021",
+    phoneHref: "tel:+491786660021",
+    phoneInternational: "+491786660021",
+    email: "info@aktive-fm.de",
+    emailHref: "mailto:info@aktive-fm.de",
     whatsappHref:
-      "https://wa.me/4900000000000?text=Hallo%20ProClean%2C%20ich%20m%C3%B6chte%20ein%20Angebot%20f%C3%BCr%20Geb%C3%A4udereinigung%20anfordern.",
+      "https://wa.me/491786660021?text=Hallo%20Aktive%20Facility%20Management%2C%20ich%20m%C3%B6chte%20ein%20Angebot%20f%C3%BCr%20Geb%C3%A4udereinigung%20anfordern.",
   },
   address: {
-    street: "Musterstraße 1",
-    postalCode: "12345",
-    city: "Musterstadt",
+    street: "Schleussnerstraße 90",
+    postalCode: "63263",
+    city: "Neu-Isenburg",
     country: "Deutschland",
     countryCode: "DE",
-    lines: ["Musterstraße 1", "12345 Musterstadt"],
-    singleLine: "Musterstraße 1, 12345 Musterstadt",
+    lines: ["Schleussnerstraße 90", "63263 Neu-Isenburg"],
+    singleLine: "Schleussnerstraße 90, 63263 Neu-Isenburg",
   },
   legal: {
-    managingDirector: "[Vorname Nachname]",
-    registerCourt: "Amtsgericht Musterstadt",
-    registerNumber: "HRB 00000",
-    vatId: "DE 000 000 000",
+    managingDirector: "Mücahit Kir",
+    registerCourt: "Amtsgericht Offenbach am Main",
+    registerNumber: "HRB 49079",
+    vatId: "DE 306064109",
     profession: "Gebäudereiniger",
-    chamber: "Innung des Gebäudereiniger-Handwerks [Region]",
+    chamber: "Innung des Gebäudereiniger-Handwerks",
+    editorialResponsibleName: "Mücahit Kir",
+    editorialResponsibleAddressLines: ["Schleussnerstraße 90", "63263 Neu-Isenburg"],
     providerNote:
-      "Die auf dieser Website dargestellten Leistungen können durch die ProClean GmbH sowie durch verbundene Einzelunternehmen erbracht werden. Die Auftragsabwicklung, Rechnungsstellung und Haftung erfolgt jeweils durch das ausführende Unternehmen. Auf Anfrage teilen wir Ihnen mit, welches Unternehmen Ihren Auftrag ausführt.",
+      "Die auf dieser Website dargestellten Leistungen werden durch die Aktive Facility Management GmbH erbracht.",
   },
   openingHours: {
     phoneAvailability: "Mo-Fr 7:00-18:00 Uhr",
@@ -118,7 +126,7 @@ export const companyConfig = {
       proofPoint: "Ideal für Objekte in Offenbach, Neu-Isenburg, Dreieich, Dietzenbach und Umgebung.",
       responseNote: "Vor-Ort-Termine im Kreis Offenbach werden priorisiert eingeplant.",
       nearbyAreas: ["Offenbach", "Neu-Isenburg", "Dreieich", "Dietzenbach", "Rodgau"],
-      seoTitle: "Gebäudereinigung Kreis Offenbach | ProClean",
+      seoTitle: "Gebäudereinigung Kreis Offenbach | Aktive Facility Management",
       seoDescription:
         "Professionelle Gebäudereinigung im Kreis Offenbach für Büros, Praxen und Gewerbe. Regional geplant, transparent angefragt und schnell erreichbar.",
     },
@@ -133,7 +141,7 @@ export const companyConfig = {
       proofPoint: "Passend für Innenstadt, Sachsenhausen, Niederrad, Ostend und Gewerbestandorte.",
       responseNote: "Termine in Frankfurt werden nach Stadtteil und Objektgröße geplant.",
       nearbyAreas: ["Innenstadt", "Sachsenhausen", "Niederrad", "Ostend", "Bockenheim"],
-      seoTitle: "Gebäudereinigung Frankfurt am Main | ProClean",
+      seoTitle: "Gebäudereinigung Frankfurt am Main | Aktive Facility Management",
       seoDescription:
         "Gebäudereinigung in Frankfurt am Main für Büros, Kanzleien, Praxen und Gewerbeflächen. Jetzt regionales Reinigungsangebot anfragen.",
     },
@@ -146,9 +154,9 @@ export const companyConfig = {
       description:
         "Professionelle Reinigung für Unternehmen, Verwaltungen und Gewerbeobjekte in Hanau.",
       proofPoint: "Geeignet für Hanau, Steinheim, Großauheim, Kesselstadt und angrenzende Gewerbegebiete.",
-      responseNote: "Anfragen aus Hanau können mit umliegenden Rhein-Main-Routen gebündelt werden.",
+      responseNote: "Anfragen aus Hanau werden regional abgestimmt und zeitnah eingeplant.",
       nearbyAreas: ["Steinheim", "Großauheim", "Kesselstadt", "Wolfgang", "Maintal"],
-      seoTitle: "Gebäudereinigung Hanau | ProClean",
+      seoTitle: "Gebäudereinigung Hanau | Aktive Facility Management",
       seoDescription:
         "Professionelle Gebäudereinigung in Hanau für Unternehmen, Verwaltungen und Gewerbeobjekte. Anfrage mit Region und Leistung starten.",
     },
@@ -187,7 +195,7 @@ export const companyConfig = {
       regionId: "frankfurt_am_main",
       serviceId: "buero_reinigung",
       h1: "Büroreinigung in Frankfurt am Main",
-      seoTitle: "Büroreinigung Frankfurt am Main | ProClean",
+      seoTitle: "Büroreinigung Frankfurt am Main | Aktive Facility Management",
       seoDescription:
         "Büroreinigung in Frankfurt am Main für Büros, Kanzleien und Praxen. Regelmäßige Reinigung mit klarer Abstimmung und schneller Anfrage.",
       intro:
@@ -199,7 +207,7 @@ export const companyConfig = {
       regionId: "frankfurt_am_main",
       serviceId: "treppenhausreinigung",
       h1: "Treppenhausreinigung in Frankfurt am Main",
-      seoTitle: "Treppenhausreinigung Frankfurt am Main | ProClean",
+      seoTitle: "Treppenhausreinigung Frankfurt am Main | Aktive Facility Management",
       seoDescription:
         "Treppenhausreinigung in Frankfurt am Main für Wohn- und Gewerbeobjekte. Saubere Eingangsbereiche, klare Intervalle und regionale Planung.",
       intro:
@@ -211,7 +219,7 @@ export const companyConfig = {
       regionId: "frankfurt_am_main",
       serviceId: "glasreinigung",
       h1: "Glasreinigung in Frankfurt am Main",
-      seoTitle: "Glasreinigung Frankfurt am Main | ProClean",
+      seoTitle: "Glasreinigung Frankfurt am Main | Aktive Facility Management",
       seoDescription:
         "Glasreinigung in Frankfurt am Main für Fenster, Glasflächen und Eingangsbereiche. Streifenfreie Reinigung für gewerbliche Objekte.",
       intro:
@@ -222,3 +230,5 @@ export const companyConfig = {
 
 export const getCopyrightLine = (year = new Date().getFullYear()) =>
   `© ${year} ${companyConfig.brand.legalName}. Alle Rechte vorbehalten.`;
+
+

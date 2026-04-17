@@ -1,5 +1,5 @@
 /*
- * ProClean Leistungen-Seite
+ * Aktive Facility Management Leistungen-Seite
  * Design: Architektonischer Minimalismus
  */
 
@@ -16,6 +16,7 @@ import {
   ArrowRight,
   CheckCircle,
   Phone,
+  MessageCircle,
   Building2,
   Sparkles,
   Wind,
@@ -258,17 +259,30 @@ export default function Leistungen() {
 
             {/* Hero CTA */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("services_hero")} className="pc-btn-primary">
-                <Phone size={16} />
-                {companyConfig.contact.phoneDisplay}
-              </a>
               <Link href="/kontakt">
-                <span onClick={() => handleServiceCtaClick("services_hero_offer", resolvedCmsContent.hero.buttonText, "services_hero", "/kontakt")} className="pc-btn-white">
+                <span onClick={() => handleServiceCtaClick("services_hero_offer", resolvedCmsContent.hero.buttonText, "services_hero", "/kontakt")} className="pc-btn-primary">
                   {resolvedCmsContent.hero.buttonText}
                   <ArrowRight size={16} />
                 </span>
               </Link>
+              <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("services_hero")} className="pc-btn-white">
+                <Phone size={16} />
+                Jetzt anrufen
+              </a>
+              <a
+                href={companyConfig.contact.whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackCtaClick({ cta_id: "services_hero_whatsapp", cta_text: "WhatsApp", cta_location: "services_hero", destination_url: companyConfig.contact.whatsappHref })}
+                className="pc-btn-outline"
+              >
+                <MessageCircle size={16} />
+                WhatsApp
+              </a>
             </div>
+            <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+              Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+            </p>
           </div>
         </div>
       </section>
@@ -383,7 +397,20 @@ export default function Leistungen() {
               <Phone size={16} />
               Jetzt anrufen
             </a>
+            <a
+              href={companyConfig.contact.whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCtaClick({ cta_id: "services_final_whatsapp", cta_text: "WhatsApp", cta_location: "services_final_cta", destination_url: companyConfig.contact.whatsappHref })}
+              className="pc-btn-outline text-lg"
+            >
+              <MessageCircle size={16} />
+              WhatsApp
+            </a>
           </div>
+          <p className="mt-4 pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+            Schneller Kontaktweg: Telefon oder WhatsApp, alternativ Anfrageformular.
+          </p>
         </div>
       </section>
 
@@ -391,4 +418,5 @@ export default function Leistungen() {
     </div>
   );
 }
+
 

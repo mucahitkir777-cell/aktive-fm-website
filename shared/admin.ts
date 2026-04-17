@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { LeadStatus } from "./lead";
 
-export const adminRoleValues = ["admin", "staff"] as const;
+export const adminRoleValues = ["admin", "editor", "staff"] as const;
 export const adminRoleSchema = z.enum(adminRoleValues);
 export type AdminRole = (typeof adminRoleValues)[number];
 
@@ -28,7 +28,7 @@ export const adminCreateUserSchema = z.object({
     .max(50, "Der Benutzername ist zu lang.")
     .regex(/^[a-zA-Z0-9._-]+$/, "Nur Buchstaben, Zahlen, Punkt, Unterstrich und Bindestrich sind erlaubt."),
   password: z.string().min(10, "Das Passwort muss mindestens 10 Zeichen lang sein."),
-  role: adminRoleSchema.default("staff"),
+  role: adminRoleSchema.default("editor"),
 });
 
 export interface AdminUser {

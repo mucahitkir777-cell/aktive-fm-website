@@ -1,5 +1,5 @@
 /*
- * ProClean Kontakt-Seite
+ * Aktive Facility Management Kontakt-Seite
  * Design: Architektonischer Minimalismus
  */
 
@@ -8,8 +8,8 @@ import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import QuickContactForm from "@/components/QuickContactForm";
-import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
-import { trackCtaClick, trackLocationInterest, trackPhoneClick } from "@/lib/analytics";
+import { Phone, Mail, MapPin, Clock, CheckCircle, MessageCircle } from "lucide-react";
+import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 import { leadRegions } from "@/data/leadTargets";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
@@ -118,19 +118,39 @@ export default function Kontakt() {
             <p className="pc-text-secondary text-lg leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
+            <p className="mt-3 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+              Schnellster Weg: anrufen, WhatsApp schreiben oder in unter 1 Minute anfragen.
+            </p>
             <div className="mt-8">
-              <a
-                href="#kontakt-form"
-                onClick={() => trackCtaClick({
-                  cta_id: "contact_hero_cta",
-                  cta_text: resolvedCmsContent.hero.buttonText,
-                  cta_location: "contact_hero",
-                  destination_url: "#kontakt-form",
-                })}
-                className="pc-btn-primary"
-              >
-                {resolvedCmsContent.hero.buttonText}
-              </a>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href="#kontakt-form"
+                  onClick={() => trackCtaClick({
+                    cta_id: "contact_hero_cta",
+                    cta_text: resolvedCmsContent.hero.buttonText,
+                    cta_location: "contact_hero",
+                    destination_url: "#kontakt-form",
+                  })}
+                  className="pc-btn-primary"
+                >
+                  {resolvedCmsContent.hero.buttonText}
+                </a>
+                <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_hero")} className="pc-btn-white">
+                  <Phone size={16} />
+                  Jetzt anrufen
+                </a>
+                <a
+                  href={companyConfig.contact.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppClick("contact_hero")}
+                  className="inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 rounded-[var(--pc-radius-md)] shadow-[var(--pc-shadow-soft)] bg-green-500 hover:bg-green-600 transition-all duration-300 hover:-translate-y-0.5"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  <MessageCircle size={16} />
+                  WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -150,6 +170,38 @@ export default function Kontakt() {
               </p>
 
               <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("contact_page_quick_actions")} className="pc-btn-primary text-sm">
+                    <Phone size={16} />
+                    Sofort anrufen
+                  </a>
+                  <a
+                    href={companyConfig.contact.whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick("contact_page_quick_actions")}
+                    className="inline-flex items-center justify-center gap-2 text-white font-semibold px-4 py-3 rounded-[var(--pc-radius-md)] shadow-[var(--pc-shadow-soft)] bg-green-500 hover:bg-green-600 transition-all duration-300"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    <MessageCircle size={16} />
+                    WhatsApp schreiben
+                  </a>
+                  <a
+                    href="#kontakt-form"
+                    onClick={() =>
+                      trackCtaClick({
+                        cta_id: "contact_quick_form",
+                        cta_text: "Formular öffnen",
+                        cta_location: "contact_page_quick_actions",
+                        destination_url: "#kontakt-form",
+                      })
+                    }
+                    className="pc-btn-outline text-sm sm:col-span-2"
+                  >
+                    Formular öffnen
+                  </a>
+                </div>
+
                 <div className="flex gap-4">
                   <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                     <Phone size={18} className="pc-text-brand" />
@@ -246,6 +298,9 @@ export default function Kontakt() {
                 <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
                   Einsatzgebiete
                 </h3>
+                <p className="pc-text-secondary text-xs mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
+                  Schwerpunkt: {companyConfig.regionMessaging.primaryLabel} ({companyConfig.regionMessaging.coverageLabel})
+                </p>
                 <div className="space-y-2">
                   {leadRegions.map((region) => (
                     <Link key={region.id} href={region.route}>
@@ -275,6 +330,14 @@ export default function Kontakt() {
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                   {resolvedCmsContent.formSection.subtitle}
                 </p>
+                <ul className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {["Wichtige Felder zuerst", "Kostenlos & unverbindlich", `Rückmeldung in ${companyConfig.metrics.responseTime}`].map((item) => (
+                    <li key={item} className="flex items-center gap-2 rounded-md border border-[#DCE8FF] bg-[#F4F8FF] px-3 py-2 text-xs pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <CheckCircle size={14} className="pc-text-brand shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className="pc-form-shell">
                 <QuickContactForm formId="contact_page_quick_contact" formType="contact" source="contact_page" pageType="contact_page" showLeadFields />
@@ -288,3 +351,4 @@ export default function Kontakt() {
     </div>
   );
 }
+

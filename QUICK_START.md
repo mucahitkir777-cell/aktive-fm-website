@@ -1,6 +1,6 @@
-# ProClean Lead-Automatisierungs-Plattform – Quick Start Guide
+﻿# Aktive Facility Management Lead-Automatisierungs-Plattform â€“ Quick Start Guide
 
-## 🚀 5-Minuten-Setup
+## ðŸš€ 5-Minuten-Setup
 
 Folge diesen Schritten, um die Lead-Automatisierungs-Plattform in Betrieb zu nehmen.
 
@@ -14,7 +14,7 @@ Folge diesen Schritten, um die Lead-Automatisierungs-Plattform in Betrieb zu neh
 3. Kopiere die **Measurement ID** (Format: `G-XXXXXXXXXX`)
 
 ### 1.2 GA4-ID in Website eintragen
-Öffne `client/index.html` und ersetze:
+Ã–ffne `client/index.html` und ersetze:
 ```html
 <!-- Vorher -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -35,12 +35,12 @@ Folge diesen Schritten, um die Lead-Automatisierungs-Plattform in Betrieb zu neh
 3. Klicke **+ Create Zap**
 
 ### 2.2 Webhook erstellen
-1. Wähle **Webhooks by Zapier** als Trigger
-2. Wähle **Catch Raw Hook**
+1. WÃ¤hle **Webhooks by Zapier** als Trigger
+2. WÃ¤hle **Catch Raw Hook**
 3. Kopiere die **Webhook URL**
 
 ### 2.3 Webhook-URL in Website eintragen
-Öffne `client/src/lib/webhook.ts` und ersetze:
+Ã–ffne `client/src/lib/webhook.ts` und ersetze:
 ```typescript
 // Vorher
 return "https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KEY";
@@ -58,7 +58,7 @@ return "https://hooks.zapier.com/hooks/catch/12345678/abcdefg";
 ### Option A: HubSpot
 1. Gehe zu https://www.hubspot.com/
 2. Erstelle einen kostenlosen Account
-3. Gehe zu **Settings** → **Integrations** → **Private Apps**
+3. Gehe zu **Settings** â†’ **Integrations** â†’ **Private Apps**
 4. Erstelle eine neue Private App
 5. Kopiere den **Access Token**
 6. In Zapier: Verbinde HubSpot mit deinem Zap
@@ -66,56 +66,56 @@ return "https://hooks.zapier.com/hooks/catch/12345678/abcdefg";
 ### Option B: Pipedrive
 1. Gehe zu https://www.pipedrive.com/
 2. Erstelle einen kostenlosen Account
-3. Gehe zu **Settings** → **Personal Preferences** → **API**
+3. Gehe zu **Settings** â†’ **Personal Preferences** â†’ **API**
 4. Kopiere deinen **API Token**
 5. In Zapier: Verbinde Pipedrive mit deinem Zap
 
-**Fertig!** Leads werden jetzt automatisch in dein CRM übertragen.
+**Fertig!** Leads werden jetzt automatisch in dein CRM Ã¼bertragen.
 
 ---
 
 ## Schritt 4: Testen (1 Minute)
 
 ### 4.1 Test-Lead erstellen
-1. Öffne deine Website: https://www.proclean-gmbh.de/kontakt
-2. Fülle das Formular mit Test-Daten aus
+1. Ã–ffne deine Website: https://www.aktive-fm.de/kontakt
+2. FÃ¼lle das Formular mit Test-Daten aus
 3. Klicke **Anfrage senden**
 
-### 4.2 Ergebnisse prüfen
-- ✅ **GA4**: Gehe zu Analytics → Real-time → Events (sollte `form_submit` zeigen)
-- ✅ **Zapier**: Gehe zu Zap History → sollte "Success" zeigen
-- ✅ **CRM**: Prüfe HubSpot/Pipedrive → sollte neuen Lead zeigen
-- ✅ **E-Mail**: Prüfe dein Postfach → sollte Bestätigungs-E-Mail haben
+### 4.2 Ergebnisse prÃ¼fen
+- âœ… **GA4**: Gehe zu Analytics â†’ Real-time â†’ Events (sollte `form_submit` zeigen)
+- âœ… **Zapier**: Gehe zu Zap History â†’ sollte "Success" zeigen
+- âœ… **CRM**: PrÃ¼fe HubSpot/Pipedrive â†’ sollte neuen Lead zeigen
+- âœ… **E-Mail**: PrÃ¼fe dein Postfach â†’ sollte BestÃ¤tigungs-E-Mail haben
 
-**Alles funktioniert!** 🎉
+**Alles funktioniert!** ðŸŽ‰
 
 ---
 
-## 🎯 Was ist jetzt aktiv?
+## ðŸŽ¯ Was ist jetzt aktiv?
 
 ### Lead-Erfassung
-- ✅ Sticky-Bar mit Telefon, WhatsApp, Anfrage
-- ✅ Kontaktformular mit 9 Feldern
-- ✅ Multi-CTA-Strategie auf allen Seiten
+- âœ… Sticky-Bar mit Telefon, WhatsApp, Anfrage
+- âœ… Kontaktformular mit 9 Feldern
+- âœ… Multi-CTA-Strategie auf allen Seiten
 
 ### Tracking
-- ✅ Google Analytics 4 Event-Tracking
-- ✅ Scroll-Depth Tracking (25%, 50%, 75%, 100%)
-- ✅ Telefon/WhatsApp Click-Tracking
-- ✅ Formular-Submission Tracking
-- ✅ Cookie Consent Management
+- âœ… Google Analytics 4 Event-Tracking
+- âœ… Scroll-Depth Tracking (25%, 50%, 75%, 100%)
+- âœ… Telefon/WhatsApp Click-Tracking
+- âœ… Formular-Submission Tracking
+- âœ… Cookie Consent Management
 
 ### Automatisierung
-- ✅ Formular → Zapier Webhook
-- ✅ Zapier → CRM (HubSpot/Pipedrive)
-- ✅ Zapier → E-Mail-Bestätigung
-- ✅ Zapier → Google Sheets Backup
+- âœ… Formular â†’ Zapier Webhook
+- âœ… Zapier â†’ CRM (HubSpot/Pipedrive)
+- âœ… Zapier â†’ E-Mail-BestÃ¤tigung
+- âœ… Zapier â†’ Google Sheets Backup
 
 ---
 
-## 📊 Dashboard-Links
+## ðŸ“Š Dashboard-Links
 
-Speichere diese Links für schnellen Zugriff:
+Speichere diese Links fÃ¼r schnellen Zugriff:
 
 | Service | Link |
 |---|---|
@@ -128,71 +128,71 @@ Speichere diese Links für schnellen Zugriff:
 
 ---
 
-## 🔍 Monitoring-Checkliste
+## ðŸ” Monitoring-Checkliste
 
-### Täglich
-- [ ] GA4 Events prüfen (sollten > 0 sein)
-- [ ] Neue Leads in CRM prüfen
-- [ ] Zapier Zap Status prüfen (sollte "on" sein)
+### TÃ¤glich
+- [ ] GA4 Events prÃ¼fen (sollten > 0 sein)
+- [ ] Neue Leads in CRM prÃ¼fen
+- [ ] Zapier Zap Status prÃ¼fen (sollte "on" sein)
 
-### Wöchentlich
-- [ ] Leads pro Woche zählen
-- [ ] Lead-Qualität prüfen (vollständige Daten?)
-- [ ] Response-Rate prüfen (wie viele Leads beantwortet?)
+### WÃ¶chentlich
+- [ ] Leads pro Woche zÃ¤hlen
+- [ ] Lead-QualitÃ¤t prÃ¼fen (vollstÃ¤ndige Daten?)
+- [ ] Response-Rate prÃ¼fen (wie viele Leads beantwortet?)
 
 ### Monatlich
 - [ ] GA4 Performance-Report
 - [ ] CRM Lead-Bericht
 - [ ] Conversion-Rate berechnen
-- [ ] Optimierungsmöglichkeiten identifizieren
+- [ ] OptimierungsmÃ¶glichkeiten identifizieren
 
 ---
 
-## ⚙️ Häufige Probleme & Lösungen
+## âš™ï¸ HÃ¤ufige Probleme & LÃ¶sungen
 
 ### Problem: GA4 Events werden nicht gesendet
-**Lösung:**
-1. Prüfe GA4-Measurement ID in `index.html`
-2. Öffne Browser DevTools → Console
+**LÃ¶sung:**
+1. PrÃ¼fe GA4-Measurement ID in `index.html`
+2. Ã–ffne Browser DevTools â†’ Console
 3. Sollte keine Fehler zeigen
-4. Warte 24 Stunden für GA4-Daten
+4. Warte 24 Stunden fÃ¼r GA4-Daten
 
-### Problem: Zapier Zap schlägt fehl
-**Lösung:**
-1. Gehe zu Zapier → Zap History
-2. Prüfe die Fehlermeldung
-3. Häufig: Webhook-URL falsch oder CRM-Verbindung fehlgeschlagen
+### Problem: Zapier Zap schlÃ¤gt fehl
+**LÃ¶sung:**
+1. Gehe zu Zapier â†’ Zap History
+2. PrÃ¼fe die Fehlermeldung
+3. HÃ¤ufig: Webhook-URL falsch oder CRM-Verbindung fehlgeschlagen
 4. Teste Webhook mit `curl` (siehe CRM_INTEGRATION_GUIDE.md)
 
 ### Problem: Leads kommen nicht im CRM an
-**Lösung:**
-1. Prüfe Zapier Zap Status (sollte "on" sein)
-2. Prüfe CRM API-Token (sollte gültig sein)
-3. Prüfe Webhook-Payload in Zapier History
-4. Prüfe CRM Custom Fields (sollten existieren)
+**LÃ¶sung:**
+1. PrÃ¼fe Zapier Zap Status (sollte "on" sein)
+2. PrÃ¼fe CRM API-Token (sollte gÃ¼ltig sein)
+3. PrÃ¼fe Webhook-Payload in Zapier History
+4. PrÃ¼fe CRM Custom Fields (sollten existieren)
 
-### Problem: E-Mail-Bestätigung kommt nicht an
-**Lösung:**
-1. Prüfe Spam-Ordner
-2. Prüfe Zapier Gmail/Outlook Verbindung
-3. Prüfe E-Mail-Template in Zapier
+### Problem: E-Mail-BestÃ¤tigung kommt nicht an
+**LÃ¶sung:**
+1. PrÃ¼fe Spam-Ordner
+2. PrÃ¼fe Zapier Gmail/Outlook Verbindung
+3. PrÃ¼fe E-Mail-Template in Zapier
 4. Teste mit anderer E-Mail-Adresse
 
 ---
 
-## 🚀 Nächste Schritte
+## ðŸš€ NÃ¤chste Schritte
 
 Nach dem Quick Start:
 
 1. **Google Search Console einrichten** (siehe GOOGLE_SEARCH_CONSOLE_SETUP.md)
-2. **Google My Business erstellen** (für lokale Rankings)
+2. **Google My Business erstellen** (fÃ¼r lokale Rankings)
 3. **Lokale Verzeichnisse aktualisieren** (Gelbe Seiten, Handwerkskammer)
 4. **Backlinks aufbauen** (Branchenverzeichnisse, Pressemitteilungen)
 5. **SEO optimieren** (Meta-Tags, Content, interne Links)
 
 ---
 
-## 📞 Support
+## ðŸ“ž Support
 
 Bei Fragen:
 - **Google Analytics**: https://support.google.com/analytics/
@@ -202,14 +202,15 @@ Bei Fragen:
 
 ---
 
-## 🎉 Glückwunsch!
+## ðŸŽ‰ GlÃ¼ckwunsch!
 
 Deine Lead-Automatisierungs-Plattform ist jetzt aktiv. Die Website wird automatisch:
 
 - Besucher tracken
 - Leads erfassen
-- In CRM übertragen
-- Bestätigungs-E-Mails senden
+- In CRM Ã¼bertragen
+- BestÃ¤tigungs-E-Mails senden
 - Daten in Google Sheets sichern
 
-**Viel Erfolg beim Lead-Generieren!** 🚀
+**Viel Erfolg beim Lead-Generieren!** ðŸš€
+

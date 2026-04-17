@@ -1,18 +1,18 @@
-# ProClean CRM-Integration Guide
+﻿# Aktive Facility Management CRM-Integration Guide
 
-## 🎯 Ziel
-Automatische Lead-Erfassung und -Verwaltung in HubSpot oder Pipedrive über Zapier-Webhooks.
+## ðŸŽ¯ Ziel
+Automatische Lead-Erfassung und -Verwaltung in HubSpot oder Pipedrive Ã¼ber Zapier-Webhooks.
 
 ---
 
-## 📋 Option 1: HubSpot Integration
+## ðŸ“‹ Option 1: HubSpot Integration
 
 ### 1. HubSpot Setup
 
 #### Schritt 1: Private App erstellen
-1. Gehe zu **Settings** → **Integrations** → **Private Apps**
+1. Gehe zu **Settings** â†’ **Integrations** â†’ **Private Apps**
 2. Klicke auf **Create app**
-3. Name: `ProClean Website Leads`
+3. Name: `Aktive Facility Management Website Leads`
 4. Gib folgende Scopes ein:
    - `crm.objects.contacts.write`
    - `crm.objects.contacts.read`
@@ -20,9 +20,9 @@ Automatische Lead-Erfassung und -Verwaltung in HubSpot oder Pipedrive über Zapi
    - `crm.objects.deals.read`
 
 #### Schritt 2: Access Token kopieren
-- Kopiere den **Access Token** (wird später in Zapier verwendet)
+- Kopiere den **Access Token** (wird spÃ¤ter in Zapier verwendet)
 
-### 2. Webhook-Struktur für HubSpot
+### 2. Webhook-Struktur fÃ¼r HubSpot
 
 ```json
 {
@@ -48,41 +48,41 @@ Automatische Lead-Erfassung und -Verwaltung in HubSpot oder Pipedrive über Zapi
 ```json
 {
   "properties": {
-    "dealname": "Max Mustermann - Büroreinigung Frankfurt am Main",
+    "dealname": "Mücahit Kir - BÃ¼roreinigung Frankfurt am Main",
     "dealstage": "negotiation",
     "pipeline": "default",
     "amount": 0,
     "hubspot_owner_id": 123456,
-    "description": "Anfrage: Büroreinigung in Frankfurt am Main, wöchentlich, 1000-5000 m²"
+    "description": "Anfrage: BÃ¼roreinigung in Frankfurt am Main, wÃ¶chentlich, 1000-5000 mÂ²"
   }
 }
 ```
 
 ---
 
-## 🔄 Option 2: Pipedrive Integration
+## ðŸ”„ Option 2: Pipedrive Integration
 
 ### 1. Pipedrive Setup
 
 #### Schritt 1: API Token generieren
-1. Gehe zu **Settings** → **Personal Preferences** → **API**
+1. Gehe zu **Settings** â†’ **Personal Preferences** â†’ **API**
 2. Kopiere deinen **API Token**
 
 #### Schritt 2: Custom Fields erstellen
-In Pipedrive müssen folgende Custom Fields erstellt werden:
+In Pipedrive mÃ¼ssen folgende Custom Fields erstellt werden:
 
 | Field Name | Type | Beschreibung |
 |---|---|---|
 | `cleaning_service` | Dropdown | Art der Reinigung |
 | `cleaning_interval` | Dropdown | Reinigungsintervall |
-| `object_size` | Dropdown | Objektgröße |
+| `object_size` | Dropdown | ObjektgrÃ¶ÃŸe |
 | `source_channel` | Text | Lead-Quelle (Website) |
 
-### 2. Webhook-Struktur für Pipedrive
+### 2. Webhook-Struktur fÃ¼r Pipedrive
 
 ```json
 {
-  "name": "Max Mustermann",
+  "name": "Mücahit Kir",
   "email": [
     {
       "value": "max@example.de",
@@ -102,7 +102,7 @@ In Pipedrive müssen folgende Custom Fields erstellt werden:
     "object_size": "medium",
     "source_channel": "website"
   },
-  "notes": "Website-Anfrage: Büroreinigung in Frankfurt am Main"
+  "notes": "Website-Anfrage: BÃ¼roreinigung in Frankfurt am Main"
 }
 ```
 
@@ -110,22 +110,22 @@ In Pipedrive müssen folgende Custom Fields erstellt werden:
 
 ```json
 {
-  "title": "Max Mustermann - Büroreinigung Frankfurt am Main",
+  "title": "Mücahit Kir - BÃ¼roreinigung Frankfurt am Main",
   "person_id": 12345,
   "pipeline_id": 1,
   "stage_id": 1,
   "expected_close_time": "2026-05-12",
   "value": 0,
   "currency": "EUR",
-  "notes": "Anfrage: Büroreinigung in Frankfurt am Main, wöchentlich, 1000-5000 m²"
+  "notes": "Anfrage: BÃ¼roreinigung in Frankfurt am Main, wÃ¶chentlich, 1000-5000 mÂ²"
 }
 ```
 
 ---
 
-## 🤖 Zapier-Automatisierung
+## ðŸ¤– Zapier-Automatisierung
 
-### Automation 1: Formular → CRM (HubSpot)
+### Automation 1: Formular â†’ CRM (HubSpot)
 
 **Trigger:** Website Webhook (Formular-Submission)
 
@@ -151,33 +151,33 @@ In Pipedrive müssen folgende Custom Fields erstellt werden:
 - Description: Website-Anfrage vom {{today}}
 ```
 
-### Automation 2: Formular → E-Mail (Bestätigung)
+### Automation 2: Formular â†’ E-Mail (BestÃ¤tigung)
 
 **Trigger:** Website Webhook (Formular-Submission)
 
 **Action:** Gmail/Outlook - Send Email
 ```
 To: {{form_email}}
-Subject: Vielen Dank für Ihre Anfrage – ProClean
+Subject: Vielen Dank fÃ¼r Ihre Anfrage â€“ Aktive Facility Management
 Body:
 ---
 Hallo {{form_name}},
 
-vielen Dank für Ihre Anfrage. Wir haben folgende Informationen erhalten:
+vielen Dank fÃ¼r Ihre Anfrage. Wir haben folgende Informationen erhalten:
 
 Leistung: {{form_service}}
 Ort: {{form_city}}
 Intervall: {{form_interval}}
-Objektgröße: {{form_object_size}}
+ObjektgrÃ¶ÃŸe: {{form_object_size}}
 
-Wir prüfen Ihre Anfrage und melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.
+Wir prÃ¼fen Ihre Anfrage und melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.
 
-Beste Grüße,
-ProClean Team
+Beste GrÃ¼ÃŸe,
+Aktive Facility Management Team
 ---
 ```
 
-### Automation 3: Formular → Google Sheets (Backup)
+### Automation 3: Formular â†’ Google Sheets (Backup)
 
 **Trigger:** Website Webhook (Formular-Submission)
 
@@ -197,7 +197,7 @@ Columns:
 - Source: website
 ```
 
-### Automation 4: Formular → WhatsApp (Intern)
+### Automation 4: Formular â†’ WhatsApp (Intern)
 
 **Trigger:** Website Webhook (Formular-Submission)
 
@@ -206,7 +206,7 @@ Columns:
 To: +49 123 456789 (Team-Nummer)
 Message:
 ---
-🔔 Neue Lead-Anfrage!
+ðŸ”” Neue Lead-Anfrage!
 
 Name: {{form_name}}
 E-Mail: {{form_email}}
@@ -221,7 +221,7 @@ Link zum CRM: [HubSpot/Pipedrive Link]
 
 ---
 
-## 🔗 Webhook-URL für Website
+## ðŸ”— Webhook-URL fÃ¼r Website
 
 Die Website sendet Formulardaten an diese Zapier-Webhook-URL:
 
@@ -233,7 +233,7 @@ https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KEY
 
 ```json
 {
-  "name": "Max Mustermann",
+  "name": "Mücahit Kir",
   "email": "max@example.de",
   "phone": "+49 123 456789",
   "company": "Musterfirma GmbH",
@@ -249,7 +249,7 @@ https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KEY
 
 ---
 
-## 🧪 Testing
+## ðŸ§ª Testing
 
 ### 1. Webhook testen
 ```bash
@@ -268,41 +268,41 @@ curl -X POST https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KE
   }'
 ```
 
-### 2. CRM-Lead prüfen
+### 2. CRM-Lead prÃ¼fen
 - Gehe zu HubSpot/Pipedrive
 - Suche nach "Test User"
-- Verifiziere, dass alle Daten korrekt übertragen wurden
+- Verifiziere, dass alle Daten korrekt Ã¼bertragen wurden
 
-### 3. E-Mail-Bestätigung prüfen
-- Prüfe dein E-Mail-Postfach
-- Verifiziere, dass die Bestätigungs-E-Mail angekommen ist
+### 3. E-Mail-BestÃ¤tigung prÃ¼fen
+- PrÃ¼fe dein E-Mail-Postfach
+- Verifiziere, dass die BestÃ¤tigungs-E-Mail angekommen ist
 
 ---
 
-## 📊 Monitoring & Troubleshooting
+## ðŸ“Š Monitoring & Troubleshooting
 
 ### Zapier Dashboard
-- Gehe zu **Zaps** → **History**
-- Prüfe auf Fehler oder fehlgeschlagene Executions
+- Gehe zu **Zaps** â†’ **History**
+- PrÃ¼fe auf Fehler oder fehlgeschlagene Executions
 - Klicke auf eine Execution um Details zu sehen
 
-### Häufige Fehler
+### HÃ¤ufige Fehler
 
-| Fehler | Lösung |
+| Fehler | LÃ¶sung |
 |---|---|
 | "Invalid API Token" | API Token in Zapier aktualisieren |
 | "Contact already exists" | Zapier auf "Update" statt "Create" setzen |
-| "Missing required field" | Webhook-Payload prüfen und fehlende Felder hinzufügen |
-| "Rate limit exceeded" | Zapier Delay-Action hinzufügen (2-3 Sekunden) |
+| "Missing required field" | Webhook-Payload prÃ¼fen und fehlende Felder hinzufÃ¼gen |
+| "Rate limit exceeded" | Zapier Delay-Action hinzufÃ¼gen (2-3 Sekunden) |
 
 ---
 
-## 🔒 Sicherheit
+## ðŸ”’ Sicherheit
 
 ### API Token Schutz
 - Speichere API Tokens **nie** im Code
 - Verwende **Umgebungsvariablen** oder **Secret Management**
-- Rotiere Tokens regelmäßig (alle 90 Tage)
+- Rotiere Tokens regelmÃ¤ÃŸig (alle 90 Tage)
 
 ### Webhook-Sicherheit
 - Verwende **HTTPS** nur
@@ -311,11 +311,11 @@ curl -X POST https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KE
 
 ---
 
-## 📈 Lead-Scoring in CRM
+## ðŸ“ˆ Lead-Scoring in CRM
 
 ### HubSpot Lead Score
 ```
-+10 Punkte: Vollständige Kontaktdaten
++10 Punkte: VollstÃ¤ndige Kontaktdaten
 +5 Punkte: Telefon vorhanden
 +5 Punkte: E-Mail vorhanden
 +10 Punkte: Ort in Zielregion
@@ -325,29 +325,30 @@ curl -X POST https://hooks.zapier.com/hooks/catch/YOUR_ZAPIER_ID/YOUR_WEBHOOK_KE
 
 ### Pipedrive Deal Value
 ```
-Basis: €0 (Lead)
-+€500: Nach erstem Kontakt
-+€2.000: Nach Angebot
-+€5.000: Nach Angebots-Annahme
+Basis: â‚¬0 (Lead)
++â‚¬500: Nach erstem Kontakt
++â‚¬2.000: Nach Angebot
++â‚¬5.000: Nach Angebots-Annahme
 ```
 
 ---
 
-## 🚀 Nächste Schritte
+## ðŸš€ NÃ¤chste Schritte
 
-1. **CRM auswählen** (HubSpot oder Pipedrive)
+1. **CRM auswÃ¤hlen** (HubSpot oder Pipedrive)
 2. **API Token generieren** und sicher speichern
 3. **Zapier-Automationen erstellen** (siehe oben)
 4. **Webhook-URL** in Website-Code integrieren
-5. **Testing durchführen** mit Test-Leads
+5. **Testing durchfÃ¼hren** mit Test-Leads
 6. **Live-Schaltung** und Monitoring
-7. **Regelmäßige Überprüfung** der Lead-Qualität
+7. **RegelmÃ¤ÃŸige ÃœberprÃ¼fung** der Lead-QualitÃ¤t
 
 ---
 
-## 📞 Support
+## ðŸ“ž Support
 
 Bei Fragen zu CRM-Integration:
 - HubSpot: https://knowledge.hubspot.com/
 - Pipedrive: https://support.pipedrive.com/
 - Zapier: https://zapier.com/help/
+

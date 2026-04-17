@@ -7,6 +7,7 @@ export type CmsPageSlug = (typeof cmsPageSlugs)[number];
 const pageTitleSchema = z.string().trim().min(1, "Der Titel ist erforderlich.").max(120, "Der Titel ist zu lang.");
 const pageSubtitleSchema = z.string().trim().min(1, "Die Beschreibung ist erforderlich.").max(500, "Die Beschreibung ist zu lang.");
 const pageButtonSchema = z.string().trim().min(1, "Der Button-Text ist erforderlich.").max(60, "Der Button-Text ist zu lang.");
+const longTextSchema = z.string().trim().min(1, "Das Feld ist erforderlich.").max(2000, "Das Feld ist zu lang.");
 const imageUrlSchema = z.string().trim().max(1000, "Die Bild-URL ist zu lang.").default("");
 
 const heroBaseSchema = z.object({
@@ -72,9 +73,9 @@ export const cmsHomeContentSchema = z.object({
     imageUrl: imageUrlSchema,
   }),
   seo: seoSectionSchema.default({
-    seoTitle: "Gebäudereinigung im Rhein-Main-Gebiet | ProClean",
+    seoTitle: "Geb�udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
     seoDescription:
-      "Professionelle Gebäudereinigung für Unternehmen in Offenbach, Frankfurt und Hanau. Jetzt kostenloses Angebot anfragen.",
+      "Professionelle Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
   }),
 });
 
@@ -111,9 +112,9 @@ export const cmsServicesContentSchema = z.object({
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Leistungen für professionelle Gebäudereinigung | ProClean",
+    seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
     seoDescription:
-      "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen im Rhein-Main-Gebiet.",
+      "Unterhaltsreinigung, B�roreinigung, Glasreinigung und Sonderreinigung f�r Unternehmen in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -123,32 +124,102 @@ export const cmsAboutContentSchema = z.object({
   hero: heroBaseSchema,
   companyInfo: z
     .object({
-      title: pageTitleSchema.default("Über uns"),
-      body: pageSubtitleSchema.default(
-        "Wir sind ein regionales Reinigungsunternehmen mit Fokus auf individuelle Betreuung, festen Teams und nachhaltiger Qualität."
+      title: pageTitleSchema.default("Unsere Geschichte"),
+      storyParagraph1: longTextSchema.default(
+        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt."
       ),
+      storyParagraph2: longTextSchema.default(
+        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen."
+      ),
+      storyParagraph3: longTextSchema.default(
+        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen."
+      ),
+      statsYearsLabel: pageTitleSchema.default("Jahre Erfahrung"),
+      statsCustomersLabel: pageTitleSchema.default("Stammkunden"),
+      statsStaffLabel: pageTitleSchema.default("Mitarbeiter"),
+      statsEmployeesLabel: pageTitleSchema.default("Festangestellt"),
+      teamImageUrl: imageUrlSchema,
+      teamImageAlt: z.string().trim().max(160, "Der Alternativtext ist zu lang.").default(""),
+      teamBadgeLabel: pageTitleSchema.default("Zufriedene Kunden"),
     })
     .default({
-      title: "Über uns",
-      body: "Wir sind ein regionales Reinigungsunternehmen mit Fokus auf individuelle Betreuung, festen Teams und nachhaltiger Qualität.",
+      title: "Unsere Geschichte",
+      storyParagraph1:
+        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt.",
+      storyParagraph2:
+        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen.",
+      storyParagraph3:
+        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen.",
+      statsYearsLabel: "Jahre Erfahrung",
+      statsCustomersLabel: "Stammkunden",
+      statsStaffLabel: "Mitarbeiter",
+      statsEmployeesLabel: "Festangestellt",
+      teamImageUrl: "",
+      teamImageAlt: "",
+      teamBadgeLabel: "Zufriedene Kunden",
     }),
   values: z
     .object({
-      title: pageTitleSchema.default("Werte & Vorteile"),
+      title: pageTitleSchema.default("Unsere Werte"),
       subtitle: pageSubtitleSchema.default(
-        "Vertrauen, Verlässlichkeit und Transparenz sind die Basis unserer Arbeit – für zufriedene Kunden im Rhein-Main-Gebiet."
+        "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft."
       ),
+      value1Title: pageTitleSchema.default("Verlässlichkeit"),
+      value1Desc: pageSubtitleSchema.default("Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme."),
+      value2Title: pageTitleSchema.default("Qualität"),
+      value2Desc: pageSubtitleSchema.default("Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig."),
+      value3Title: pageTitleSchema.default("Partnerschaft"),
+      value3Desc: pageSubtitleSchema.default("Wir verstehen uns als langfristiger Partner unserer Kunden."),
+      value4Title: pageTitleSchema.default("Verantwortung"),
+      value4Desc: pageSubtitleSchema.default("Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln."),
     })
     .default({
-      title: "Werte & Vorteile",
-      subtitle:
-        "Vertrauen, Verlässlichkeit und Transparenz sind die Basis unserer Arbeit – für zufriedene Kunden im Rhein-Main-Gebiet.",
+      title: "Unsere Werte",
+      subtitle: "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft.",
+      value1Title: "Verlässlichkeit",
+      value1Desc: "Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme.",
+      value2Title: "Qualität",
+      value2Desc: "Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig.",
+      value3Title: "Partnerschaft",
+      value3Desc: "Wir verstehen uns als langfristiger Partner unserer Kunden.",
+      value4Title: "Verantwortung",
+      value4Desc: "Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln.",
+    }),
+  team: z
+    .object({
+      title: pageTitleSchema.default("Unser Team"),
+      paragraph1: longTextSchema.default(
+        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben."
+      ),
+      paragraph2: longTextSchema.default(
+        "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut."
+      ),
+      bullet1: pageSubtitleSchema.default("Alle Mitarbeiter festangestellt"),
+      bullet2: pageSubtitleSchema.default("Regelmäßige Schulungen und Weiterbildungen"),
+      bullet3: pageSubtitleSchema.default("Zuverlässige Vertretungsregelungen"),
+      bullet4: pageSubtitleSchema.default("Diskret und vertrauenswürdig"),
+      buttonText: pageButtonSchema.default("Kontakt aufnehmen"),
+      imageUrl: imageUrlSchema,
+      imageAlt: z.string().trim().max(160, "Der Alternativtext ist zu lang.").default(""),
+    })
+    .default({
+      title: "Unser Team",
+      paragraph1:
+        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben.",
+      paragraph2: "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut.",
+      bullet1: "Alle Mitarbeiter festangestellt",
+      bullet2: "Regelmäßige Schulungen und Weiterbildungen",
+      bullet3: "Zuverlässige Vertretungsregelungen",
+      bullet4: "Diskret und vertrauenswürdig",
+      buttonText: "Kontakt aufnehmen",
+      imageUrl: "",
+      imageAlt: "",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Über uns | ProClean Gebäudereinigung",
+    seoTitle: "Über uns | Aktive Facility Management Gebäudereinigung",
     seoDescription:
-      "Lernen Sie das Team hinter ProClean kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+      "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
   }),
 });
 
@@ -158,20 +229,21 @@ export const cmsFaqContentSchema = z.object({
   hero: heroBaseSchema,
   questions: z
     .object({
-      title: pageTitleSchema.default("Häufige Fragen"),
+      title: pageTitleSchema.default("FAQ"),
       subtitle: pageSubtitleSchema.default("Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen."),
-      faqText: z.string().trim().max(2000, "Der FAQ-Inhalt ist zu lang.").default(
-        "Was kostet die Reinigung?\nWelchen Service bieten Sie an?\nWie schnell erhalten wir ein Angebot?"
+      faqText: z.string().trim().max(12000, "Der FAQ-Inhalt ist zu lang.").default(
+        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig."
       ),
     })
     .default({
-      title: "Häufige Fragen",
+      title: "FAQ",
       subtitle: "Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen.",
-      faqText: "Was kostet die Reinigung?\nWelchen Service bieten Sie an?\nWie schnell erhalten wir ein Angebot?",
+      faqText:
+        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig.",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "FAQ zur Gebäudereinigung | ProClean",
+    seoTitle: "FAQ zur Gebäudereinigung | Aktive Facility Management",
     seoDescription:
       "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
   }),
@@ -204,9 +276,9 @@ export const cmsContactContentSchema = z.object({
       buttonText: "Nachricht senden",
     }),
   seo: seoSectionSchema.default({
-    seoTitle: "Kontakt | ProClean Gebäudereinigung",
+    seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
     seoDescription:
-      "Kontaktieren Sie ProClean für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung im Rhein-Main-Gebiet.",
+      "Kontaktieren Sie Aktive Facility Management f�r ein kostenloses und unverbindliches Angebot zur Geb�udereinigung in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -242,20 +314,20 @@ export const cmsGlobalContentSchema = z.object({
   }),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
-      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung im Rhein-Main-Gebiet. Qualität, die man sieht."
+      "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht."
     ),
     membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
   }),
   footerContact: z.object({
     phoneLabel: pageTitleSchema.default("Telefon"),
-    phoneDisplay: z.string().trim().min(1, "Die Telefonnummer ist erforderlich.").max(80, "Die Telefonnummer ist zu lang.").default("0800 000 000"),
-    phoneHref: z.string().trim().min(1, "Der Telefon-Link ist erforderlich.").max(200, "Der Telefon-Link ist zu lang.").default("tel:+4900000000000"),
+    phoneDisplay: z.string().trim().min(1, "Die Telefonnummer ist erforderlich.").max(80, "Die Telefonnummer ist zu lang.").default("0178 6660021"),
+    phoneHref: z.string().trim().min(1, "Der Telefon-Link ist erforderlich.").max(200, "Der Telefon-Link ist zu lang.").default("tel:+491786660021"),
     phoneMeta: z.string().trim().min(1, "Die Zusatzinfo ist erforderlich.").max(120, "Die Zusatzinfo ist zu lang.").default("Mo-Fr 7:00-18:00 Uhr"),
     emailLabel: pageTitleSchema.default("E-Mail"),
-    emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@proclean-gmbh.de"),
-    emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@proclean-gmbh.de"),
+    emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@aktive-fm.de"),
+    emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@aktive-fm.de"),
     addressLabel: pageTitleSchema.default("Adresse"),
-    addressLines: multilineTextSchema.default("Musterstraße 1\n12345 Musterstadt"),
+    addressLines: multilineTextSchema.default("Schleussnerstra�e 90\n63263 Neu-Isenburg"),
     hoursLabel: pageTitleSchema.default("Öffnungszeiten"),
     hoursLines: multilineTextSchema.default("Mo-Fr: 07:00-18:00\nSa: 08:00-14:00"),
   }),
@@ -485,7 +557,16 @@ export const cmsPageDefinitions = {
         label: "Unternehmensinfo",
         fields: [
           { key: "title", label: "Titel", input: "text" },
-          { key: "body", label: "Text", input: "textarea", rows: 5 },
+          { key: "storyParagraph1", label: "Text Absatz 1", input: "textarea", rows: 4 },
+          { key: "storyParagraph2", label: "Text Absatz 2", input: "textarea", rows: 4 },
+          { key: "storyParagraph3", label: "Text Absatz 3", input: "textarea", rows: 4 },
+          { key: "statsYearsLabel", label: "Statistik Jahre Label", input: "text" },
+          { key: "statsCustomersLabel", label: "Statistik Kunden Label", input: "text" },
+          { key: "statsStaffLabel", label: "Statistik Mitarbeiter Label", input: "text" },
+          { key: "statsEmployeesLabel", label: "Statistik Festangestellt Label", input: "text" },
+          { key: "teamImageUrl", label: "Story-Bild URL", input: "text" },
+          { key: "teamImageAlt", label: "Story-Bild Alt-Text", input: "text" },
+          { key: "teamBadgeLabel", label: "Story-Badge Label", input: "text" },
         ],
       },
       {
@@ -494,6 +575,30 @@ export const cmsPageDefinitions = {
         fields: [
           { key: "title", label: "Titel", input: "text" },
           { key: "subtitle", label: "Beschreibung", input: "textarea", rows: 4 },
+          { key: "value1Title", label: "Wert 1 Titel", input: "text" },
+          { key: "value1Desc", label: "Wert 1 Text", input: "textarea", rows: 3 },
+          { key: "value2Title", label: "Wert 2 Titel", input: "text" },
+          { key: "value2Desc", label: "Wert 2 Text", input: "textarea", rows: 3 },
+          { key: "value3Title", label: "Wert 3 Titel", input: "text" },
+          { key: "value3Desc", label: "Wert 3 Text", input: "textarea", rows: 3 },
+          { key: "value4Title", label: "Wert 4 Titel", input: "text" },
+          { key: "value4Desc", label: "Wert 4 Text", input: "textarea", rows: 3 },
+        ],
+      },
+      {
+        key: "team",
+        label: "Team-Bereich",
+        fields: [
+          { key: "title", label: "Titel", input: "text" },
+          { key: "paragraph1", label: "Text Absatz 1", input: "textarea", rows: 4 },
+          { key: "paragraph2", label: "Text Absatz 2", input: "textarea", rows: 4 },
+          { key: "bullet1", label: "Bullet 1", input: "text" },
+          { key: "bullet2", label: "Bullet 2", input: "text" },
+          { key: "bullet3", label: "Bullet 3", input: "text" },
+          { key: "bullet4", label: "Bullet 4", input: "text" },
+          { key: "buttonText", label: "Button-Text", input: "text" },
+          { key: "imageUrl", label: "Team-Bild URL", input: "text" },
+          { key: "imageAlt", label: "Team-Bild Alt-Text", input: "text" },
         ],
       },
       {
@@ -535,7 +640,7 @@ export const cmsPageDefinitions = {
         fields: [
           { key: "title", label: "Titel", input: "text" },
           { key: "subtitle", label: "Beschreibung", input: "textarea", rows: 4 },
-          { key: "faqText", label: "FAQ-Inhalt", input: "textarea", rows: 6 },
+          { key: "faqText", label: "FAQ-Inhalt (Kategorie|Frage|Antwort je Zeile)", input: "textarea", rows: 14 },
         ],
       },
       {
@@ -643,19 +748,19 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       ctaHref: "/kontakt",
     },
     footer: {
-      footerText: "Ihr zuverlässiger Partner für professionelle Gebäudereinigung im Rhein-Main-Gebiet. Qualität, die man sieht.",
+      footerText: "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht.",
       membershipLabel: "BIV Bundesinnungsverband",
     },
     footerContact: {
       phoneLabel: "Telefon",
-      phoneDisplay: "0800 000 000",
-      phoneHref: "tel:+4900000000000",
+      phoneDisplay: "0178 6660021",
+      phoneHref: "tel:+491786660021",
       phoneMeta: "Mo-Fr 7:00-18:00 Uhr",
       emailLabel: "E-Mail",
-      emailDisplay: "info@proclean-gmbh.de",
-      emailHref: "mailto:info@proclean-gmbh.de",
+      emailDisplay: "info@aktive-fm.de",
+      emailHref: "mailto:info@aktive-fm.de",
       addressLabel: "Adresse",
-      addressLines: "Musterstraße 1\n12345 Musterstadt",
+      addressLines: "Schleussnerstra�e 90\n63263 Neu-Isenburg",
       hoursLabel: "Öffnungszeiten",
       hoursLines: "Mo-Fr: 07:00-18:00\nSa: 08:00-14:00",
     },
@@ -671,7 +776,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Sauberkeit,",
       accentTitle: "die überzeugt.",
       subtitle:
-        "Zuverlässige Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet - pünktlich, gründlich und diskret. Damit Sie sich auf Ihr Kerngeschäft konzentrieren können.",
+        "Zuverl�ssige Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung - p�nktlich, gr�ndlich und diskret. Damit Sie sich auf Ihr Kerngesch�ft konzentrieren k�nnen.",
       primaryButtonText: "Kostenloses Angebot",
       imageUrl: "",
     },
@@ -691,16 +796,16 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     finalCta: {
       title: "Bereit für saubere Ergebnisse?",
       body:
-        "Fordern Sie jetzt Ihr kostenloses Angebot für Kreis Offenbach, Frankfurt am Main oder Hanau an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+        "Fordern Sie jetzt Ihr kostenloses Angebot f�r Neu-Isenburg und Umgebung an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
       primaryButtonText: "Jetzt Angebot anfragen",
       imageUrl: "",
       seoTitle: "",
       seoDescription: "",
     },
     seo: {
-      seoTitle: "Gebäudereinigung im Rhein-Main-Gebiet | ProClean",
+      seoTitle: "Geb�udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
       seoDescription:
-        "Professionelle Gebäudereinigung für Unternehmen in Offenbach, Frankfurt und Hanau. Jetzt kostenloses Angebot anfragen.",
+        "Professionelle Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
     },
   },
   leistungen: {
@@ -728,9 +833,9 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoDescription: "",
     },
     seo: {
-      seoTitle: "Leistungen für professionelle Gebäudereinigung | ProClean",
+      seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
       seoDescription:
-        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen im Rhein-Main-Gebiet.",
+        "Unterhaltsreinigung, B�roreinigung, Glasreinigung und Sonderreinigung f�r Unternehmen in Neu-Isenburg und Umgebung.",
     },
   },
   "ueber-uns": {
@@ -742,11 +847,44 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     },
     companyInfo: {
       title: "Unsere Geschichte",
-      body: "Mit jahrelanger Erfahrung in der gewerblichen Reinigung setzen wir auf transparente Prozesse, feste Ansprechpartner und nachhaltige Ergebnisse.",
+      storyParagraph1:
+        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt.",
+      storyParagraph2:
+        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen.",
+      storyParagraph3:
+        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen.",
+      statsYearsLabel: "Jahre Erfahrung",
+      statsCustomersLabel: "Stammkunden",
+      statsStaffLabel: "Mitarbeiter",
+      statsEmployeesLabel: "Festangestellt",
+      teamImageUrl: "",
+      teamImageAlt: "",
+      teamBadgeLabel: "Zufriedene Kunden",
     },
     values: {
       title: "Unsere Werte",
-      subtitle: "Zuverlässigkeit, Diskretion und klare Kommunikation stehen bei uns an erster Stelle.",
+      subtitle: "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft.",
+      value1Title: "Verlässlichkeit",
+      value1Desc: "Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme.",
+      value2Title: "Qualität",
+      value2Desc: "Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig.",
+      value3Title: "Partnerschaft",
+      value3Desc: "Wir verstehen uns als langfristiger Partner unserer Kunden.",
+      value4Title: "Verantwortung",
+      value4Desc: "Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln.",
+    },
+    team: {
+      title: "Unser Team",
+      paragraph1:
+        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben.",
+      paragraph2: "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut.",
+      bullet1: "Alle Mitarbeiter festangestellt",
+      bullet2: "Regelmäßige Schulungen und Weiterbildungen",
+      bullet3: "Zuverlässige Vertretungsregelungen",
+      bullet4: "Diskret und vertrauenswürdig",
+      buttonText: "Kontakt aufnehmen",
+      imageUrl: "",
+      imageAlt: "",
     },
     finalCta: {
       title: "Lernen Sie uns kennen",
@@ -756,9 +894,9 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoDescription: "",
     },
     seo: {
-      seoTitle: "Über uns | ProClean Gebäudereinigung",
+      seoTitle: "Über uns | Aktive Facility Management Gebäudereinigung",
       seoDescription:
-        "Lernen Sie das Team hinter ProClean kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+        "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
     },
   },
   faq: {
@@ -771,7 +909,8 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     questions: {
       title: "FAQ",
       subtitle: "Die häufigsten Fragen unserer Kunden – kurz und verständlich beantwortet.",
-      faqText: "Was kostet die Reinigung?\nWelchen Service bieten Sie an?\nWie schnell erhalten wir ein Angebot?",
+      faqText:
+        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig.",
     },
     finalCta: {
       title: "Noch Fragen?",
@@ -781,7 +920,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       seoDescription: "",
     },
     seo: {
-      seoTitle: "FAQ zur Gebäudereinigung | ProClean",
+      seoTitle: "FAQ zur Gebäudereinigung | Aktive Facility Management",
       seoDescription:
         "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
     },
@@ -803,9 +942,9 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       buttonText: "Nachricht senden",
     },
     seo: {
-      seoTitle: "Kontakt | ProClean Gebäudereinigung",
+      seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
       seoDescription:
-        "Kontaktieren Sie ProClean für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung im Rhein-Main-Gebiet.",
+        "Kontaktieren Sie Aktive Facility Management f�r ein kostenloses und unverbindliches Angebot zur Geb�udereinigung in Neu-Isenburg und Umgebung.",
     },
   },
 };
@@ -834,3 +973,8 @@ export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, 
 export function getDefaultCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug): CmsPageContentMap[TSlug] {
   return JSON.parse(JSON.stringify(defaultCmsPageContent[slug])) as CmsPageContentMap[TSlug];
 }
+
+
+
+
+
