@@ -312,6 +312,7 @@ export const cmsGlobalContentSchema = z.object({
     ctaLabel: pageButtonSchema.default("Angebot anfragen"),
     ctaHref: pathFieldSchema.default("/kontakt"),
   }),
+  siteStatus: z.enum(["live", "maintenance"]).default("live"),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
       "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht."
@@ -747,6 +748,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       ctaLabel: "Angebot anfragen",
       ctaHref: "/kontakt",
     },
+    siteStatus: "live",
     footer: {
       footerText: "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht.",
       membershipLabel: "BIV Bundesinnungsverband",

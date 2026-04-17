@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -21,9 +21,11 @@ import Datenschutz from "./pages/Datenschutz";
 import FAQ from "./pages/FAQ";
 import Region from "./pages/Region";
 import Admin from "./pages/Admin";
+import Maintenance from "./pages/Maintenance";
 
 function AppContent() {
   const [location] = useLocation();
+  const [siteStatus, setSiteStatus] = useState<"live" | "maintenance">("live");
 
   useEffect(() => {
     initAnalytics();
@@ -35,6 +37,30 @@ function AppContent() {
     trackPageView({ route: location });
     sendInternalPageView(location);
   }, [location]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/content/pages/global")
+      .then((response) => response.json())
+      .then((result) => {
+        if (!isMounted) return;
+        if (result?.success && result.page?.content?.siteStatus === "maintenance") {
+          setSiteStatus("maintenance");
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return;
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!location.startsWith("/admin") && siteStatus === "maintenance") {
+    return <Maintenance />;
+  }
 
   return (
     <>

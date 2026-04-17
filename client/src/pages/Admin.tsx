@@ -14,11 +14,13 @@ import {
   Users,
   X,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useLocation } from "wouter";
 import type { AdminDashboardStats, AdminRole, AdminSessionUser, AdminUser } from "@shared/admin";
 import {
   cmsPageDefinitions,
   getDefaultCmsPageContent,
+  type CmsGlobalContent,
   type CmsPage,
   type CmsPageSlug,
   type CmsPageSummary,
@@ -138,6 +140,22 @@ type LeadFilterValue =
   | "without-follow-up";
 type LeadSortValue = "newest" | "oldest" | "follow-up-asc" | "follow-up-desc";
 type LeadDueState = "none" | "today" | "overdue" | "upcoming";
+
+type SiteStatus = "live" | "maintenance";
+
+type SidebarNavigationItem = {
+  id: string;
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  access: boolean;
+  activate?: () => void;
+};
+
+type SidebarNavigationGroup = {
+  title: string;
+  items: SidebarNavigationItem[];
+};
 
 interface LeadDraft {
   id: string;
@@ -428,6 +446,10 @@ export default function Admin() {
   const [selectedCmsSection, setSelectedCmsSection] = useState<CmsSectionKey>("hero");
   const [cmsPage, setCmsPage] = useState<CmsPage | null>(null);
   const [cmsDraft, setCmsDraft] = useState<CmsDraft>(() => getDefaultCmsPageContent("home") as CmsDraft);
+  const [globalCmsContent, setGlobalCmsContent] = useState<CmsGlobalContent | null>(null);
+  const [siteStatus, setSiteStatus] = useState<SiteStatus>("live");
+  const [siteStatusLoading, setSiteStatusLoading] = useState(false);
+  const [siteStatusSaving, setSiteStatusSaving] = useState(false);
   const [loadingCms, setLoadingCms] = useState(false);
   const [savingCms, setSavingCms] = useState(false);
   const [mediaItems, setMediaItems] = useState<AdminMediaItem[]>([]);
@@ -729,6 +751,43 @@ export default function Admin() {
 
     setCmsPage(result.page);
     setCmsDraft(createCmsDraft(result.page));
+
+    if (slug === "global") {
+      const globalContent = result.page.content as CmsGlobalContent;
+      setGlobalCmsContent(globalContent);
+      setSiteStatus(globalContent.siteStatus ?? "live");
+    }
+  }
+
+  async function loadGlobalSiteStatus(activeSession = session): Promise<CmsGlobalContent | null> {
+    if (!activeSession || !hasCmsAccess(activeSession.user.role)) {
+      return null;
+    }
+
+    setSiteStatusLoading(true);
+    setError("");
+
+    const { response, result } = await requestJson<CmsPageResponse>(`/api/admin/cms/pages/global`, {
+      headers: {
+        Authorization: `Bearer ${activeSession.token}`,
+      },
+    });
+
+    setSiteStatusLoading(false);
+
+    if (!result) {
+      return null;
+    }
+
+    if (!response.ok || !result.success || !result.page) {
+      setError(result.message ?? "CMS-Seite konnte nicht geladen werden.");
+      return null;
+    }
+
+    const globalContent = result.page.content as CmsGlobalContent;
+    setGlobalCmsContent(globalContent);
+    setSiteStatus(globalContent.siteStatus ?? "live");
+    return globalContent;
   }
 
   async function loadMedia(activeSession = session) {
@@ -879,6 +938,14 @@ export default function Admin() {
 
     void loadUsers(session);
   }, [activePanel, session]);
+
+  useEffect(() => {
+    if (!session || currentSection !== "settings" || !canAccessCmsSection || globalCmsContent) {
+      return;
+    }
+
+    void loadGlobalSiteStatus(session);
+  }, [currentSection, session, canAccessCmsSection, globalCmsContent]);
 
   useEffect(() => {
     if (!session) {
@@ -1214,8 +1281,65 @@ export default function Admin() {
     setCmsPage(result.page);
     setCmsDraft(createCmsDraft(result.page));
     setPreviewRefreshKey((current) => current + 1);
+
+    if (selectedCmsSlug === "global") {
+      const globalContent = result.page.content as CmsGlobalContent;
+      setGlobalCmsContent(globalContent);
+      setSiteStatus(globalContent.siteStatus ?? "live");
+    }
+
     setSuccessMessage(result.message ?? "CMS-Inhalte wurden gespeichert.");
     void loadCmsPages(session);
+  }
+
+  async function handleSiteStatusSave(event: FormEvent) {
+    event.preventDefault();
+    if (!session) {
+      return;
+    }
+
+    let currentGlobalCmsContent = globalCmsContent;
+    if (!currentGlobalCmsContent) {
+      currentGlobalCmsContent = await loadGlobalSiteStatus(session);
+      if (!currentGlobalCmsContent) {
+        setError("CMS-Inhalte konnten nicht geladen werden.");
+        return;
+      }
+    }
+
+    setSiteStatusSaving(true);
+    setError("");
+    setSuccessMessage("");
+
+    const nextContent = {
+      ...currentGlobalCmsContent,
+      siteStatus,
+    };
+
+    const { response, result } = await requestJson<CmsPageResponse>(`/api/admin/cms/pages/global`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content: nextContent }),
+    });
+
+    setSiteStatusSaving(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success || !result.page) {
+      setError(result.message ?? "Website-Status konnte nicht gespeichert werden.");
+      return;
+    }
+
+    const globalContent = result.page.content as CmsGlobalContent;
+    setGlobalCmsContent(globalContent);
+    setSiteStatus(globalContent.siteStatus ?? "live");
+    setSuccessMessage(result.message ?? "Website-Status wurde gespeichert.");
   }
 
   const currentPanelTitle = useMemo(() => {
@@ -1225,47 +1349,81 @@ export default function Admin() {
     return "";
   }, [activePanel]);
 
-  const navigationItems = useMemo(
-    () => [
+  const navigationGroups = useMemo(() => {
+    const baseContent = {
+      href: "/admin/content",
+      icon: PanelTop,
+      access: canAccessCmsSection,
+    };
+
+    return [
       {
-        id: "dashboard" as const,
-        label: "Dashboard",
-        href: "/admin/dashboard",
-        icon: LayoutDashboard,
+        title: "Übersicht",
+        items: [
+          {
+            id: "dashboard",
+            label: "Dashboard",
+            href: "/admin/dashboard",
+            icon: LayoutDashboard,
+            access: canAccessDashboard,
+          },
+          {
+            id: "leads",
+            label: "Leads",
+            href: "/admin/leads",
+            icon: BarChart3,
+            access: canAccessLeads,
+          },
+        ],
       },
       {
-        id: "leads" as const,
-        label: "Leads",
-        href: "/admin/leads",
-        icon: BarChart3,
+        title: "Website",
+        items: [
+          {
+            id: "pages",
+            label: "Seiten",
+            href: "/admin/pages",
+            icon: FileText,
+            access: canAccessCmsSection,
+          },
+          {
+            id: "navigation",
+            label: "Navigation",
+            href: baseContent.href,
+            icon: baseContent.icon,
+            access: baseContent.access,
+            activate: () => setSelectedCmsSection("navigation"),
+          },
+          {
+            id: "media",
+            label: "Medien",
+            href: baseContent.href,
+            icon: baseContent.icon,
+            access: baseContent.access,
+          },
+          {
+            id: "preview",
+            label: "Vorschau",
+            href: "/admin/preview",
+            icon: Eye,
+            access: canAccessCmsSection,
+          },
+        ],
       },
       {
-        id: "settings" as const,
-        label: "Einstellungen",
-        href: "/admin/settings",
-        icon: Settings,
+        title: "Einstellungen",
+        items: [
+          {
+            id: "settings",
+            label: "Einstellungen",
+            href: "/admin/settings",
+            icon: Settings,
+            access: true,
+          },
+        ],
       },
-      {
-        id: "pages" as const,
-        label: "Seiten",
-        href: "/admin/pages",
-        icon: FileText,
-      },
-      {
-        id: "content" as const,
-        label: "Inhalte",
-        href: "/admin/content",
-        icon: PanelTop,
-      },
-      {
-        id: "preview" as const,
-        label: "Vorschau",
-        href: "/admin/preview",
-        icon: Eye,
-      },
-    ].filter((item) => hasSectionAccess(userRole, item.id)),
-    [userRole],
-  );
+    ];
+  }, [canAccessCmsSection, canAccessDashboard, canAccessLeads]);
 
   const currentSectionMeta = useMemo(() => {
     if (currentSection === "leads") {
@@ -1352,126 +1510,149 @@ export default function Admin() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-4 py-8">
       <section className="mx-auto max-w-7xl">
-        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-[#0F2137]">Lead Manager</h1>
-            <p className="text-sm text-[#6B7A8D]">
-              {leadCount} Leads gespeichert, eingeloggt als {session.user.username}
-            </p>
-          </div>
+        <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <aside className="rounded-3xl border border-gray-200 bg-white p-5 text-sm text-[#0F2137] shadow-sm">
+            <div className="mb-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6B7A8D]">Admin</p>
+              <h2 className="mt-3 text-lg font-semibold text-[#0F2137]">Schneller Zugriff</h2>
+              <p className="mt-2 text-sm leading-6 text-[#6B7A8D]">Strukturierte Verwaltung für CMS, Leads und Benutzer.</p>
+            </div>
 
-          <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (canAccessLeads) {
-                    void loadLeads();
-                  }
-                  if (canAccessDashboard) {
-                    void loadStats();
-                  }
-                  if (canAccessCmsSection && (currentSection === "pages" || currentSection === "content" || currentSection === "preview")) {
-                    void loadCmsPages();
-                    void loadCmsPage();
-                    if (currentSection === "content") {
-                      void loadMedia();
-                    }
-                }
-              }}
-              className={secondaryButtonClass}
-            >
-              <span className="inline-flex items-center gap-2">
-                <RefreshCw size={16} />
-                Aktualisieren
-              </span>
-            </button>
+            <div className="space-y-6">
+              {navigationGroups.map((group) => (
+                <div key={group.title} className="space-y-3">
+                  <div className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6B7A8D]">
+                    {group.title}
+                  </div>
+                  <div className="space-y-2">
+                    {group.items
+                      .filter((item) => item.access)
+                      .map((item) => {
+                        const isActive =
+                          item.id === currentSection ||
+                          (currentSection === "content" && item.id === "navigation" && selectedCmsSection === "navigation");
 
-            <div ref={settingsRef} className="relative">
-              <button
-                type="button"
-                onClick={() => setSettingsOpen((current) => !current)}
-                className={secondaryButtonClass}
-                aria-label="Einstellungen"
-              >
-                <span className="inline-flex items-center gap-2">
-                  <Settings size={16} />
-                  Einstellungen
-                </span>
-              </button>
+                        return (
+                          <button
+                            key={item.id}
+                            type="button"
+                            onClick={() => {
+                              setError("");
+                              setSuccessMessage("");
+                              item.activate?.();
+                              setLocation(item.href);
+                            }}
+                            className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm transition ${
+                              isActive
+                                ? "bg-[#0F2137] text-white"
+                                : "border border-gray-200 bg-white text-[#0F2137] hover:border-[#0F2137] hover:bg-[#F7F8FA]"
+                            }`}
+                          >
+                            <item.icon size={16} />
+                            {item.label}
+                          </button>
+                        );
+                      })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
 
-              {settingsOpen && (
-                <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-gray-200 bg-white p-6">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold text-[#0F2137]">{currentSectionMeta.title}</h1>
+                  <p className="mt-2 text-sm text-[#6B7A8D]">Eingeloggt als {session.user.username}</p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
                   <button
                     type="button"
                     onClick={() => {
-                      setSettingsOpen(false);
-                      setActivePanel("change-password");
-                      setError("");
-                      setSuccessMessage("");
+                      if (canAccessLeads) {
+                        void loadLeads();
+                      }
+                      if (canAccessDashboard) {
+                        void loadStats();
+                      }
+                      if (canAccessCmsSection && (currentSection === "pages" || currentSection === "content" || currentSection === "preview")) {
+                        void loadCmsPages();
+                        void loadCmsPage();
+                        if (currentSection === "content") {
+                          void loadMedia();
+                        }
+                      }
                     }}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                    className={secondaryButtonClass}
                   >
-                    <KeyRound size={16} />
-                    Passwort ändern
+                    <span className="inline-flex items-center gap-2">
+                      <RefreshCw size={16} />
+                      Aktualisieren
+                    </span>
                   </button>
 
-                  {isAdmin && (
+                  <div ref={settingsRef} className="relative">
                     <button
                       type="button"
-                      onClick={() => {
-                        setSettingsOpen(false);
-                        setActivePanel("users");
-                        setError("");
-                        setSuccessMessage("");
-                      }}
-                      className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                      onClick={() => setSettingsOpen((current) => !current)}
+                      className={secondaryButtonClass}
+                      aria-label="Einstellungen"
                     >
-                      <Users size={16} />
-                      Benutzer verwalten
+                      <span className="inline-flex items-center gap-2">
+                        <Settings size={16} />
+                        Einstellungen
+                      </span>
                     </button>
-                  )}
 
-                  <button
-                    type="button"
-                    onClick={() => handleLogout("Sie wurden abgemeldet.")}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
+                    {settingsOpen && (
+                      <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSettingsOpen(false);
+                            setActivePanel("change-password");
+                            setError("");
+                            setSuccessMessage("");
+                          }}
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                        >
+                          <KeyRound size={16} />
+                          Passwort ändern
+                        </button>
+
+                        {isAdmin && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSettingsOpen(false);
+                              setActivePanel("users");
+                              setError("");
+                              setSuccessMessage("");
+                            }}
+                            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                          >
+                            <Users size={16} />
+                            Benutzer verwalten
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => handleLogout("Sie wurden abgemeldet.")}
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
+                        >
+                          <LogOut size={16} />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="mb-6 flex flex-wrap gap-2">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentSection === item.id;
-
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => {
-                  setError("");
-                  setSuccessMessage("");
-                  setLocation(item.href);
-                }}
-                className={
-                  isActive
-                    ? `${buttonBaseClass} bg-[#0F2137] text-white`
-                    : `${secondaryButtonClass} text-[#0F2137]`
-                }
-              >
-                <span className="inline-flex items-center gap-2">
-                  <Icon size={16} />
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
         </div>
 
         <div className="mb-6 rounded-lg border border-gray-200 bg-white px-5 py-4">
@@ -2185,7 +2366,7 @@ export default function Admin() {
         )}
 
         {currentSection === "settings" && (
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-4">
             <div className="rounded-lg border border-gray-200 bg-white p-5">
               <h3 className="text-base font-semibold text-[#0F2137]">Passwort</h3>
               <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelles Passwort prüfen und sicher ändern.</p>
@@ -2224,6 +2405,60 @@ export default function Admin() {
               >
                 Benutzer verwalten
               </button>
+            </div>
+
+            <div className="rounded-lg border border-gray-200 bg-white p-5">
+              <h3 className="text-base font-semibold text-[#0F2137]">Website Status</h3>
+              <p className="mt-2 text-sm text-[#6B7A8D]">
+                Besucher sehen bei aktivem Wartungsmodus die Wartungsseite. Der Admin-Bereich bleibt erreichbar.
+              </p>
+              <form onSubmit={handleSiteStatusSave} className="mt-4 space-y-4">
+                <div className="space-y-3 text-sm text-[#0F2137]">
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="siteStatus"
+                      value="live"
+                      checked={siteStatus === "live"}
+                      onChange={() => setSiteStatus("live")}
+                      disabled={!canAccessCmsSection}
+                    />
+                    <span>Live</span>
+                  </label>
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="siteStatus"
+                      value="maintenance"
+                      checked={siteStatus === "maintenance"}
+                      onChange={() => setSiteStatus("maintenance")}
+                      disabled={!canAccessCmsSection}
+                    />
+                    <span>Wartung</span>
+                  </label>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="submit"
+                    disabled={!canAccessCmsSection || siteStatusSaving || siteStatusLoading}
+                    className={primaryButtonClass}
+                  >
+                    {siteStatusSaving ? "Speichert..." : "Status speichern"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (session && canAccessCmsSection) {
+                        void loadGlobalSiteStatus(session);
+                      }
+                    }}
+                    disabled={!canAccessCmsSection || siteStatusLoading}
+                    className={secondaryButtonClass}
+                  >
+                    {siteStatusLoading ? "Lädt..." : "Aktualisieren"}
+                  </button>
+                </div>
+              </form>
             </div>
 
             <div className="rounded-lg border border-gray-200 bg-white p-5">
