@@ -347,8 +347,6 @@ export interface CmsPageSummary<TSlug extends CmsPageSlug = CmsPageSlug> {
   path: string;
   updatedAt: string;
   status: CmsPageStatus;
-  seoTitle: string;
-  seoDescription: string;
 }
 
 export interface CmsPage<TSlug extends CmsPageSlug = CmsPageSlug> extends CmsPageSummary<TSlug> {

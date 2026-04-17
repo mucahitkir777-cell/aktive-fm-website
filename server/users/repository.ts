@@ -1,5 +1,5 @@
-import crypto from "crypto";
-import type { AdminRole, AdminUser } from "../../shared/admin";
+﻿import crypto from "crypto";
+import type { AdminRole, AdminUser } from "@shared/admin";
 import { getDbPool } from "../db";
 import { hashPassword } from "./password";
 
@@ -187,3 +187,4 @@ export async function ensureInitialAdminUser() {
     user,
   };
 }
+

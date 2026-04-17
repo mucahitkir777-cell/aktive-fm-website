@@ -23,6 +23,7 @@ import {
   type CmsGlobalContent,
   type CmsNavigationItem,
   type CmsPage,
+  type CmsPageStatus,
   type CmsPageSlug,
   type CmsPageSummary,
 } from "@shared/cms";
@@ -327,13 +328,11 @@ function toNavigationItems(value: CmsDraftValue | undefined): CmsNavigationItem[
     }));
 }
 
-function getNextNavigationId(items: CmsNavigationItem[]): string {
-  const usedIds = new Set(items.map((item) => item.id));
-  let counter = 1;
-  while (usedIds.has(`custom-${counter}`)) {
-    counter += 1;
+function createNavigationItemId() {
+  if (typeof globalThis !== "undefined" && globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
   }
-  return `custom-${counter}`;
+  throw new Error("Navigation-ID konnte nicht erzeugt werden: crypto.randomUUID ist nicht verfügbar.");
 }
 
 function getLeadFilterBucket(lead: AdminLead): LeadFilterValue {
@@ -473,6 +472,7 @@ export default function Admin() {
   const [selectedCmsSlug, setSelectedCmsSlug] = useState<CmsPageSlug>("home");
   const [selectedCmsSection, setSelectedCmsSection] = useState<CmsSectionKey>("hero");
   const [cmsPage, setCmsPage] = useState<CmsPage | null>(null);
+  const [cmsPageStatus, setCmsPageStatus] = useState<CmsPageStatus>("published");
   const [cmsDraft, setCmsDraft] = useState<CmsDraft>(() => getDefaultCmsPageContent("home") as CmsDraft);
   const [globalCmsContent, setGlobalCmsContent] = useState<CmsGlobalContent | null>(null);
   const [siteStatus, setSiteStatus] = useState<SiteStatus>("live");
@@ -786,6 +786,7 @@ export default function Admin() {
     }
 
     setCmsPage(result.page);
+    setCmsPageStatus(result.page.status);
     setCmsDraft(createCmsDraft(result.page));
 
     if (slug === "global") {
@@ -965,8 +966,9 @@ export default function Admin() {
     setCmsDraft((current) => {
       const navigationSection = (current.navigation ?? {}) as CmsDraftSection;
       const items = toNavigationItems(navigationSection.items);
+      const nextItemId = createNavigationItemId();
       const nextItem: CmsNavigationItem = {
-        id: getNextNavigationId(items),
+        id: nextItemId,
         label: "Neuer Link",
         href: "/",
         visible: true,
@@ -1006,6 +1008,7 @@ export default function Admin() {
     }
 
     setCmsDraft(getDefaultCmsPageContent(selectedCmsSlug) as CmsDraft);
+    setCmsPageStatus("published");
     void loadCmsPages(session);
     void loadCmsPage(selectedCmsSlug, session);
   }, [currentSection, selectedCmsSlug, session]);
@@ -1358,7 +1361,7 @@ export default function Admin() {
         Authorization: `Bearer ${session.token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ content: cmsDraft }),
+      body: JSON.stringify({ content: cmsDraft, status: cmsPageStatus }),
     });
 
     setSavingCms(false);
@@ -1373,6 +1376,7 @@ export default function Admin() {
     }
 
     setCmsPage(result.page);
+    setCmsPageStatus(result.page.status);
     setCmsDraft(createCmsDraft(result.page));
     setPreviewRefreshKey((current) => current + 1);
 
@@ -2306,8 +2310,21 @@ export default function Admin() {
                   <h3 className="text-base font-semibold text-[#0F2137]">{cmsDefinition.title}</h3>
                   <p className="text-sm text-[#6B7A8D]">{cmsSelectedSection.label} bearbeiten</p>
                 </div>
-                <div className="text-sm text-[#6B7A8D]">
-                  {cmsPage?.updatedAt ? `Zuletzt gespeichert: ${formatDate(cmsPage.updatedAt)}` : "Noch keine Speicherung"}
+                <div className="flex flex-col items-start gap-2 text-sm text-[#6B7A8D] sm:items-end">
+                  <label className="text-xs font-medium uppercase tracking-wide text-[#6B7A8D]">
+                    Status
+                    <select
+                      value={cmsPageStatus}
+                      onChange={(event) => setCmsPageStatus(event.target.value as CmsPageStatus)}
+                      className="mt-1 block rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-[#0F2137]"
+                    >
+                      <option value="published">Published</option>
+                      <option value="draft">Draft</option>
+                    </select>
+                  </label>
+                  <div>
+                    {cmsPage?.updatedAt ? `Zuletzt gespeichert: ${formatDate(cmsPage.updatedAt)}` : "Noch keine Speicherung"}
+                  </div>
                 </div>
               </div>
 

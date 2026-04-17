@@ -1,7 +1,7 @@
-import fs from "fs/promises";
+﻿import fs from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
-import type { LeadProviderResult, LeadSubmissionPayload } from "../../shared/lead";
+import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
 import { LEAD_SERVER_CONFIG, hasConfiguredLeadValue } from "./config";
 import { deliverLeadNotification } from "./email";
 import { createLead } from "./repository";
@@ -126,3 +126,4 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
     providerResults,
   };
 }
+

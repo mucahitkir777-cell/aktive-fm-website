@@ -141,18 +141,10 @@ export default function FAQ() {
 
   useEffect(() => {
     applyPageSeo({
-      title: resolveSeoValue(
-        resolvedCmsContent.seo.seoTitle,
-        resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
-      ),
-      description: resolveSeoValue(
-        resolvedCmsContent.seo.seoDescription,
-        resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
-      ),
+      title: resolveSeoValue(resolvedCmsContent.seo.seoTitle, companyConfig.seo.title),
+      description: resolveSeoValue(resolvedCmsContent.seo.seoDescription, companyConfig.seo.description),
     });
   }, [
-    resolvedCmsContent.finalCta.seoDescription,
-    resolvedCmsContent.finalCta.seoTitle,
     resolvedCmsContent.seo.seoDescription,
     resolvedCmsContent.seo.seoTitle,
   ]);

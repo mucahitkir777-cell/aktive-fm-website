@@ -28,8 +28,6 @@ const finalCtaSchema = z.object({
   title: pageTitleSchema,
   body: pageSubtitleSchema,
   primaryButtonText: pageButtonSchema.default("Jetzt anfragen"),
-  seoTitle: z.string().trim().max(120, "Der SEO-Titel ist zu lang.").default(""),
-  seoDescription: z.string().trim().max(500, "Die SEO-Beschreibung ist zu lang.").default(""),
 });
 
 const seoSectionSchema = z.object({

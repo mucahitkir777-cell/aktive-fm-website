@@ -1,6 +1,6 @@
-import crypto from "crypto";
+﻿import crypto from "crypto";
 import type { NextFunction, Request, Response } from "express";
-import type { AdminRole, AdminSessionUser } from "../shared/admin";
+import type { AdminRole, AdminSessionUser } from "@shared/admin";
 import { getAuthUserById } from "./users/repository";
 
 interface AdminTokenPayload extends AdminSessionUser {
@@ -192,3 +192,4 @@ export function requireAdminAnyRole(roles: readonly AdminRole[]) {
     next();
   };
 }
+

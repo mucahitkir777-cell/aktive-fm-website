@@ -290,22 +290,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const seoTitle = resolveSeoValue(
-      resolvedCmsContent.seo.seoTitle,
-      resolveSeoValue(resolvedCmsContent.finalCta.seoTitle, companyConfig.seo.title),
-    );
-    const seoDescription = resolveSeoValue(
-      resolvedCmsContent.seo.seoDescription,
-      resolveSeoValue(resolvedCmsContent.finalCta.seoDescription, companyConfig.seo.description),
-    );
+    const seoTitle = resolveSeoValue(resolvedCmsContent.seo.seoTitle, companyConfig.seo.title);
+    const seoDescription = resolveSeoValue(resolvedCmsContent.seo.seoDescription, companyConfig.seo.description);
 
     applyPageSeo({
       title: seoTitle,
       description: seoDescription,
     });
   }, [
-    resolvedCmsContent.finalCta.seoDescription,
-    resolvedCmsContent.finalCta.seoTitle,
     resolvedCmsContent.seo.seoDescription,
     resolvedCmsContent.seo.seoTitle,
   ]);

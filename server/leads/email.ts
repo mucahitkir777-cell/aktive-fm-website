@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
-import type { LeadProviderResult, LeadSubmissionPayload } from "../../shared/lead";
+﻿import nodemailer from "nodemailer";
+import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
 import { LEAD_SERVER_CONFIG, hasConfiguredLeadSmtp, hasConfiguredLeadValue } from "./config";
 
 interface StoredLeadEmailInput {
@@ -42,7 +42,7 @@ function buildNotificationText(input: StoredLeadEmailInput) {
     "Nachricht:",
     payload.message?.trim() || "Keine Nachricht angegeben.",
     "",
-    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfügbar.",
+    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfÃ¼gbar.",
     `Lead-ID: ${input.leadId}`,
   ].join("\n");
 }
@@ -140,3 +140,4 @@ export async function deliverLeadNotification(input: StoredLeadEmailInput): Prom
 
   return postLeadNotificationEndpoint(input);
 }
+

@@ -1,4 +1,4 @@
-import type { AdminLead, AdminLeadUpdateInput, LeadStatus } from "../../shared/lead";
+﻿import type { AdminLead, AdminLeadUpdateInput, LeadStatus } from "@shared/lead";
 import { getDbPool } from "../db";
 import type { StoredLead } from "./adapters";
 
@@ -191,3 +191,4 @@ export async function updateLead(id: string, input: AdminLeadUpdateInput) {
 
   return result.rows[0] ? mapLeadRow(result.rows[0]) : null;
 }
+

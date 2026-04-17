@@ -67,8 +67,6 @@ export const defaultCmsPageContent: CmsPageContentMap = {
         "Fordern Sie jetzt Ihr kostenloses Angebot fÃ¼r Neu-Isenburg und Umgebung an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
       primaryButtonText: "Jetzt Angebot anfragen",
       imageUrl: "",
-      seoTitle: "",
-      seoDescription: "",
     },
     seo: {
       seoTitle: "GebÃ¤udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
@@ -97,8 +95,6 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Jetzt Angebot anfragen",
       body: "Fordern Sie ein individuelles Reinigungsangebot an und erhalten Sie eine kostenfreie Beratung fÃ¼r Ihr Unternehmen.",
       primaryButtonText: "Angebot anfragen",
-      seoTitle: "",
-      seoDescription: "",
     },
     seo: {
       seoTitle: "Leistungen fÃ¼r professionelle GebÃ¤udereinigung | Aktive Facility Management",
@@ -158,8 +154,6 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Lernen Sie uns kennen",
       body: "Vereinbaren Sie ein unverbindliches GesprÃ¤ch und erfahren Sie, wie wir Ihre Reinigungsanforderungen umsetzen.",
       primaryButtonText: "Kontakt aufnehmen",
-      seoTitle: "",
-      seoDescription: "",
     },
     seo: {
       seoTitle: "Ãœber uns | Aktive Facility Management GebÃ¤udereinigung",
@@ -184,8 +178,6 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Noch Fragen?",
       body: "Rufen Sie uns an oder senden Sie uns eine Nachricht â€“ wir beraten Sie persÃ¶nlich und schnell.",
       primaryButtonText: "Jetzt kontaktieren",
-      seoTitle: "",
-      seoDescription: "",
     },
     seo: {
       seoTitle: "FAQ zur GebÃ¤udereinigung | Aktive Facility Management",
@@ -216,14 +208,6 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     },
   },
 };
-
-const legacyNavigationMapping = [
-  { id: "home", label: "Startseite", href: "/", keyPrefix: "home" },
-  { id: "services", label: "Leistungen", href: "/leistungen", keyPrefix: "services" },
-  { id: "about", label: "Ãœber uns", href: "/ueber-uns", keyPrefix: "about" },
-  { id: "faq", label: "FAQ", href: "/faq", keyPrefix: "faq" },
-  { id: "contact", label: "Kontakt", href: "/kontakt", keyPrefix: "contact" },
-] as const;
 
 function sortNavigationItems(items: CmsNavigationItem[]) {
   return [...items].sort((left, right) => {
@@ -272,81 +256,9 @@ function normalizeNavigationItems(items: unknown): CmsNavigationItem[] {
   return sortNavigationItems(deduped.length > 0 ? deduped : defaults);
 }
 
-function migrateLegacyGlobalContent(content: unknown): unknown {
-  if (!content || typeof content !== "object" || Array.isArray(content)) {
-    return content;
-  }
-
-  const typedContent = content as Record<string, unknown>;
-  const navigation =
-    typedContent.navigation && typeof typedContent.navigation === "object" && !Array.isArray(typedContent.navigation)
-      ? (typedContent.navigation as Record<string, unknown>)
-      : {};
-
-  const hasLegacyKeys = legacyNavigationMapping.some((item) =>
-    Object.prototype.hasOwnProperty.call(navigation, `${item.keyPrefix}Label`),
-  );
-
-  if (!hasLegacyKeys && Array.isArray(navigation.items)) {
-    return {
-      ...typedContent,
-      navigation: {
-        ...navigation,
-        items: normalizeNavigationItems(navigation.items),
-      },
-    };
-  }
-
-  const existingById = new Map(
-    normalizeNavigationItems(navigation.items).map((item) => [item.id, item] as const),
-  );
-  const migratedItems = legacyNavigationMapping.map((legacyItem, index) => {
-    const existing = existingById.get(legacyItem.id);
-    const label = navigation[`${legacyItem.keyPrefix}Label`];
-    const href = navigation[`${legacyItem.keyPrefix}Href`];
-    const visible = navigation[`${legacyItem.keyPrefix}Visible`];
-    const sortOrder = navigation[`${legacyItem.keyPrefix}SortOrder`];
-    return {
-      id: legacyItem.id,
-      label:
-        typeof label === "string" && label.trim()
-          ? label.trim()
-          : (existing?.label ?? legacyItem.label),
-      href:
-        typeof href === "string" && href.trim()
-          ? href.trim()
-          : (existing?.href ?? legacyItem.href),
-      visible: typeof visible === "boolean" ? visible : (existing?.visible ?? true),
-      sortOrder:
-        typeof sortOrder === "number" && Number.isFinite(sortOrder)
-          ? Math.max(1, Math.floor(sortOrder))
-          : (existing?.sortOrder ?? index + 1),
-      type: existing?.type ?? "page",
-      target: existing?.target ?? "_self",
-    } satisfies CmsNavigationItem;
-  });
-
-  return {
-    ...typedContent,
-    navigation: {
-      ...navigation,
-      items: sortNavigationItems(migratedItems),
-      ctaLabel:
-        typeof navigation.ctaLabel === "string" && navigation.ctaLabel.trim()
-          ? navigation.ctaLabel.trim()
-          : defaultCmsPageContent.global.navigation.ctaLabel,
-      ctaHref:
-        typeof navigation.ctaHref === "string" && navigation.ctaHref.trim()
-          ? navigation.ctaHref.trim()
-          : defaultCmsPageContent.global.navigation.ctaHref,
-    },
-  };
-}
-
 export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, content: unknown): CmsPageContentMap[TSlug] {
   const schema = cmsPageSchemas[slug];
-  const candidateContent = slug === "global" ? migrateLegacyGlobalContent(content) : content;
-  const parsed = schema.safeParse(candidateContent);
+  const parsed = schema.safeParse(content);
   if (parsed.success) {
     if (slug === "global") {
       const globalContent = parsed.data as CmsPageContentMap["global"];
@@ -367,6 +279,7 @@ export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, 
 export function getDefaultCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug): CmsPageContentMap[TSlug] {
   return JSON.parse(JSON.stringify(defaultCmsPageContent[slug])) as CmsPageContentMap[TSlug];
 }
+
 
 
 

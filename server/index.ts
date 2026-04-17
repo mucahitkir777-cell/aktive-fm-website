@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -7,15 +7,16 @@ import {
   adminChangePasswordSchema,
   adminCreateUserSchema,
   adminLoginSchema,
-} from "../shared/admin";
+} from "@shared/admin";
 import {
   cmsPageSchemas,
   cmsPageSlugSchema,
-} from "../shared/cms";
+  type CmsPageStatus,
+} from "@shared/cms";
 import {
   adminLeadUpdateSchema,
   validateLeadSubmission,
-} from "../shared/lead";
+} from "@shared/lead";
 import { createAdminToken, requireAdminAnyRole, requireAdminAuth, requireAdminRole } from "./auth";
 import { getAdminDashboardStats } from "./admin/stats";
 import { recordPageView } from "./analytics/repository";
@@ -159,7 +160,7 @@ async function startServer() {
         message:
           parsedBody.error.flatten().fieldErrors.currentPassword?.[0]
           ?? parsedBody.error.flatten().fieldErrors.newPassword?.[0]
-          ?? "Bitte prüfen Sie Ihre Eingaben.",
+          ?? "Bitte prÃ¼fen Sie Ihre Eingaben.",
       });
       return;
     }
@@ -229,7 +230,7 @@ async function startServer() {
       const fieldErrors = parsedBody.error.flatten().fieldErrors;
       res.status(400).json({
         success: false,
-        message: fieldErrors.username?.[0] ?? fieldErrors.password?.[0] ?? fieldErrors.role?.[0] ?? "Bitte prüfen Sie Ihre Eingaben.",
+        message: fieldErrors.username?.[0] ?? fieldErrors.password?.[0] ?? fieldErrors.role?.[0] ?? "Bitte prÃ¼fen Sie Ihre Eingaben.",
       });
       return;
     }
@@ -314,17 +315,29 @@ async function startServer() {
       return;
     }
 
+    const parsedStatus = z.enum(["draft", "published"]).safeParse(req.body?.status ?? "published");
+    if (!parsedStatus.success) {
+      res.status(400).json({
+        success: false,
+        message: "UngÃ¼ltiger Seitenstatus.",
+      });
+      return;
+    }
+
     const parsedContent = cmsPageSchemas[parsedSlug.data].safeParse(req.body?.content ?? {});
     if (!parsedContent.success) {
       res.status(400).json({
         success: false,
-        message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungültig.",
+        message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungÃ¼ltig.",
       });
       return;
     }
 
     try {
-      const page = await updateCmsPageContent(parsedSlug.data, parsedContent.data);
+      const page = await updateCmsPageContent(parsedSlug.data, {
+        content: parsedContent.data,
+        status: parsedStatus.data as CmsPageStatus,
+      });
       res.status(200).json({ success: true, page, message: "CMS-Inhalte wurden gespeichert." });
     } catch (error) {
       res.status(500).json({
@@ -352,7 +365,7 @@ async function startServer() {
     if (!parsedBody.success) {
       res.status(400).json({
         success: false,
-        message: parsedBody.error.issues[0]?.message ?? "Ungültige Upload-Daten.",
+        message: parsedBody.error.issues[0]?.message ?? "UngÃ¼ltige Upload-Daten.",
       });
       return;
     }
@@ -367,7 +380,7 @@ async function startServer() {
     } catch (error) {
       const message = error instanceof Error ? error.message : "Bild konnte nicht hochgeladen werden.";
       const isClientError =
-        message.includes("Ungültiges Bildformat")
+        message.includes("UngÃ¼ltiges Bildformat")
         || message.includes("Nur JPG")
         || message.includes("ist leer")
         || message.includes("zu gross");
@@ -385,7 +398,7 @@ async function startServer() {
     if (!validation.success) {
       res.status(400).json({
         success: false,
-        message: "Bitte prüfen Sie Ihre Angaben.",
+        message: "Bitte prÃ¼fen Sie Ihre Angaben.",
         fieldErrors: validation.fieldErrors,
       });
       return;
@@ -443,7 +456,7 @@ async function startServer() {
     const parsedUpdate = adminLeadUpdateSchema.safeParse(req.body ?? {});
 
     if (!parsedUpdate.success) {
-      res.status(400).json({ success: false, message: "Ungültige Lead-Daten." });
+      res.status(400).json({ success: false, message: "UngÃ¼ltige Lead-Daten." });
       return;
     }
 
@@ -468,7 +481,7 @@ async function startServer() {
     const parsedBody = pageViewSchema.safeParse(req.body ?? {});
 
     if (!parsedBody.success) {
-      res.status(400).json({ success: false, message: "Ungültiger Pageview." });
+      res.status(400).json({ success: false, message: "UngÃ¼ltiger Pageview." });
       return;
     }
 
@@ -494,6 +507,10 @@ async function startServer() {
     try {
       const page = await getCmsPage(parsedSlug.data);
       if (!page) {
+        res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
+        return;
+      }
+      if (page.status !== "published") {
         res.status(404).json({ success: false, message: "CMS-Seite nicht gefunden." });
         return;
       }
@@ -528,3 +545,4 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
+

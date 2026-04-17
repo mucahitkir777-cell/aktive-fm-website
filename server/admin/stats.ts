@@ -1,5 +1,5 @@
-import type { AdminDashboardStats, AdminDueLead, AdminRecentLead } from "../../shared/admin";
-import { leadStatusValues, type LeadStatus } from "../../shared/lead";
+﻿import type { AdminDashboardStats, AdminDueLead, AdminRecentLead } from "@shared/admin";
+import { leadStatusValues, type LeadStatus } from "@shared/lead";
 import { getPageViewStats } from "../analytics/repository";
 import { getDbPool } from "../db";
 
@@ -181,3 +181,4 @@ export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
     overdueLeads: overdueLeadResult.rows.map(mapDueLeadRow),
   };
 }
+

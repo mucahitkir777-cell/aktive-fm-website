@@ -1,4 +1,4 @@
-import type { LeadStatus } from "../../shared/lead";
+﻿import type { LeadStatus } from "@shared/lead";
 import { getDbPool } from "../db";
 
 type LeadReminderStatus = "due_today" | "overdue";
@@ -138,3 +138,4 @@ export async function runLeadReminderJob(options: RunLeadReminderJobOptions = {}
     failed,
   };
 }
+
