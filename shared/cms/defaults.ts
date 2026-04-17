@@ -273,6 +273,15 @@ export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, 
     return parsed.data as CmsPageContentMap[TSlug];
   }
 
+  console.warn("Invalid CMS content detected", {
+    slug,
+    reason: parsed.error.issues.map((issue) => ({
+      path: issue.path.join("."),
+      message: issue.message,
+      code: issue.code,
+    })),
+  });
+
   return getDefaultCmsPageContent(slug);
 }
 

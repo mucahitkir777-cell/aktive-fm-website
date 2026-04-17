@@ -151,11 +151,11 @@ export async function initializeDatabase() {
 
   await db.query(`
     ALTER TABLE cms_pages
-    ADD COLUMN IF NOT EXISTS seo_title TEXT
+    DROP COLUMN IF EXISTS seo_title
   `);
 
   await db.query(`
     ALTER TABLE cms_pages
-    ADD COLUMN IF NOT EXISTS seo_description TEXT
+    DROP COLUMN IF EXISTS seo_description
   `);
 }

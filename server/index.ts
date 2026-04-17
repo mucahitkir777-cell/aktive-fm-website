@@ -11,6 +11,8 @@ import {
 import {
   cmsPageSchemas,
   cmsPageSlugSchema,
+  type CmsGlobalContent,
+  type CmsNavigationItem,
   type CmsPageStatus,
 } from "@shared/cms";
 import {
@@ -53,6 +55,39 @@ const mediaUploadSchema = z.object({
   filename: z.string().trim().min(1).max(255),
   dataUrl: z.string().trim().min(1).max(16_000_000),
 });
+
+function validateNavigationItems(items: CmsNavigationItem[]) {
+  const duplicateIds = new Set<string>();
+  const duplicateSortOrders = new Set<number>();
+  const seenIds = new Set<string>();
+  const seenSortOrders = new Set<number>();
+
+  for (const item of items) {
+    const normalizedId = item.id.trim();
+    const normalizedHref = item.href.trim();
+    if (!normalizedHref) {
+      throw new Error(`Navigationseintrag "${normalizedId || "(ohne ID)"}" hat einen leeren href.`);
+    }
+
+    if (seenIds.has(normalizedId)) {
+      duplicateIds.add(normalizedId);
+    }
+    seenIds.add(normalizedId);
+
+    if (seenSortOrders.has(item.sortOrder)) {
+      duplicateSortOrders.add(item.sortOrder);
+    }
+    seenSortOrders.add(item.sortOrder);
+  }
+
+  if (duplicateIds.size > 0) {
+    throw new Error(`Doppelte Navigation-IDs: ${Array.from(duplicateIds).join(", ")}`);
+  }
+
+  if (duplicateSortOrders.size > 0) {
+    throw new Error(`Doppelte Navigation-Reihenfolgen: ${Array.from(duplicateSortOrders).join(", ")}`);
+  }
+}
 
 function isSchedulerEnabled() {
   return String(process.env.LEAD_REMINDER_SCHEDULER_ENABLED ?? "").toLowerCase() === "true";
@@ -331,6 +366,19 @@ async function startServer() {
         message: parsedContent.error.issues[0]?.message ?? "CMS-Inhalte sind ungÃ¼ltig.",
       });
       return;
+    }
+
+    if (parsedSlug.data === "global") {
+      try {
+        const globalContent = parsedContent.data as CmsGlobalContent;
+        validateNavigationItems(globalContent.navigation.items);
+      } catch (error) {
+        res.status(400).json({
+          success: false,
+          message: error instanceof Error ? error.message : "Navigation ist ungültig.",
+        });
+        return;
+      }
     }
 
     try {
