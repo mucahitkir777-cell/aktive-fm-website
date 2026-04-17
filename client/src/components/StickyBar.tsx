@@ -90,7 +90,7 @@ export default function StickyBar() {
               href={requestHref}
               onClick={handleRequestClick}
               className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
-              aria-label={`${requestLabel} öffnen`}
+              aria-label={`${requestLabel} Ã¶ffnen`}
             >
               <Send size={16} />
               <span>{requestLabel}</span>
@@ -128,7 +128,7 @@ export default function StickyBar() {
             href={requestHref}
             onClick={handleRequestClick}
             className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 px-2 py-2 pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
-            aria-label={`${requestLabel} öffnen`}
+            aria-label={`${requestLabel} Ã¶ffnen`}
           >
             <Send size={20} />
             <span className="text-xs font-semibold">Anfrage</span>

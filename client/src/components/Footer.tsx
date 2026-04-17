@@ -87,7 +87,7 @@ export default function Footer() {
                 "Büroreinigung",
                 "Unterhaltsreinigung",
                 "Glasreinigung",
-                "Treppenhaus & Aussen",
+                "Treppenhaus & Außen",
                 "Sonderreinigung",
                 "Grundreinigung",
               ].map((item) => (

@@ -1510,8 +1510,8 @@ export default function Admin() {
   return (
     <main className="min-h-screen bg-[#F7F8FA] px-4 py-8">
       <section className="mx-auto max-w-7xl">
-        <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="rounded-3xl border border-gray-200 bg-white p-5 text-sm text-[#0F2137] shadow-sm">
+        <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <aside className="h-fit rounded-3xl border border-gray-200 bg-white p-5 text-sm text-[#0F2137] shadow-sm lg:sticky lg:top-8">
             <div className="mb-6">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6B7A8D]">Admin</p>
               <h2 className="mt-3 text-lg font-semibold text-[#0F2137]">Schneller Zugriff</h2>
@@ -1559,7 +1559,7 @@ export default function Admin() {
             </div>
           </aside>
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <div className="rounded-3xl border border-gray-200 bg-white p-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
@@ -1652,21 +1652,18 @@ export default function Admin() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="mb-6 rounded-lg border border-gray-200 bg-white px-5 py-4">
+        <div className="rounded-lg border border-gray-200 bg-white px-5 py-4">
           <h2 className="text-xl font-semibold text-[#0F2137]">{currentSectionMeta.title}</h2>
           <p className="mt-1 text-sm text-[#6B7A8D]">{currentSectionMeta.description}</p>
         </div>
 
         {successMessage && (
-          <div className="mb-4 rounded-lg border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-700">
+          <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-700">
             {successMessage}
           </div>
         )}
 
-        {error && <div className="mb-4 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+        {error && <div className="rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
 
         {currentSection === "dashboard" && (
           <div className="space-y-6">
@@ -2474,6 +2471,8 @@ export default function Admin() {
             </div>
           </div>
         )}
+          </div>
+        </div>
       </section>
 
       {activePanel && (

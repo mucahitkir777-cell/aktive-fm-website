@@ -73,9 +73,9 @@ export const cmsHomeContentSchema = z.object({
     imageUrl: imageUrlSchema,
   }),
   seo: seoSectionSchema.default({
-    seoTitle: "Geb�udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
+    seoTitle: "Gebäudereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
     seoDescription:
-      "Professionelle Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
+      "Professionelle Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
   }),
 });
 
@@ -114,7 +114,7 @@ export const cmsServicesContentSchema = z.object({
   seo: seoSectionSchema.default({
     seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
     seoDescription:
-      "Unterhaltsreinigung, B�roreinigung, Glasreinigung und Sonderreinigung f�r Unternehmen in Neu-Isenburg und Umgebung.",
+      "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -278,7 +278,7 @@ export const cmsContactContentSchema = z.object({
   seo: seoSectionSchema.default({
     seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
     seoDescription:
-      "Kontaktieren Sie Aktive Facility Management f�r ein kostenloses und unverbindliches Angebot zur Geb�udereinigung in Neu-Isenburg und Umgebung.",
+      "Kontaktieren Sie Aktive Facility Management für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -315,7 +315,7 @@ export const cmsGlobalContentSchema = z.object({
   siteStatus: z.enum(["live", "maintenance"]).default("live"),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
-      "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht."
+      "Ihr zuverläßiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht."
     ),
     membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
   }),
@@ -328,7 +328,7 @@ export const cmsGlobalContentSchema = z.object({
     emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@aktive-fm.de"),
     emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@aktive-fm.de"),
     addressLabel: pageTitleSchema.default("Adresse"),
-    addressLines: multilineTextSchema.default("Schleussnerstra�e 90\n63263 Neu-Isenburg"),
+    addressLines: multilineTextSchema.default("Schleussnerstraße 90\n63263 Neu-Isenburg"),
     hoursLabel: pageTitleSchema.default("Öffnungszeiten"),
     hoursLines: multilineTextSchema.default("Mo-Fr: 07:00-18:00\nSa: 08:00-14:00"),
   }),
@@ -750,7 +750,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     },
     siteStatus: "live",
     footer: {
-      footerText: "Ihr zuverl�ssiger Partner f�r professionelle Geb�udereinigung in Neu-Isenburg und Umgebung. Qualit�t, die man sieht.",
+      footerText: "Ihr zuverläßiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",
       membershipLabel: "BIV Bundesinnungsverband",
     },
     footerContact: {
@@ -762,7 +762,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       emailDisplay: "info@aktive-fm.de",
       emailHref: "mailto:info@aktive-fm.de",
       addressLabel: "Adresse",
-      addressLines: "Schleussnerstra�e 90\n63263 Neu-Isenburg",
+      addressLines: "Schleussnerstraße 90\n63263 Neu-Isenburg",
       hoursLabel: "Öffnungszeiten",
       hoursLines: "Mo-Fr: 07:00-18:00\nSa: 08:00-14:00",
     },
@@ -778,7 +778,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Sauberkeit,",
       accentTitle: "die überzeugt.",
       subtitle:
-        "Zuverl�ssige Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung - p�nktlich, gr�ndlich und diskret. Damit Sie sich auf Ihr Kerngesch�ft konzentrieren k�nnen.",
+        "Zuverläßige Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung - pünktlich, gründlich und diskret. Damit Sie sich auf Ihr Kerngeschäft konzentrieren können.",
       primaryButtonText: "Kostenloses Angebot",
       imageUrl: "",
     },
@@ -798,16 +798,16 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     finalCta: {
       title: "Bereit für saubere Ergebnisse?",
       body:
-        "Fordern Sie jetzt Ihr kostenloses Angebot f�r Neu-Isenburg und Umgebung an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+        "Fordern Sie jetzt Ihr kostenloses Angebot für Neu-Isenburg und Umgebung an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
       primaryButtonText: "Jetzt Angebot anfragen",
       imageUrl: "",
       seoTitle: "",
       seoDescription: "",
     },
     seo: {
-      seoTitle: "Geb�udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
+      seoTitle: "Gebäudereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
       seoDescription:
-        "Professionelle Geb�udereinigung f�r Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
+        "Professionelle Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
     },
   },
   leistungen: {
@@ -837,7 +837,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     seo: {
       seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
       seoDescription:
-        "Unterhaltsreinigung, B�roreinigung, Glasreinigung und Sonderreinigung f�r Unternehmen in Neu-Isenburg und Umgebung.",
+        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen in Neu-Isenburg und Umgebung.",
     },
   },
   "ueber-uns": {
@@ -946,7 +946,7 @@ export const defaultCmsPageContent: CmsPageContentMap = {
     seo: {
       seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
       seoDescription:
-        "Kontaktieren Sie Aktive Facility Management f�r ein kostenloses und unverbindliches Angebot zur Geb�udereinigung in Neu-Isenburg und Umgebung.",
+        "Kontaktieren Sie Aktive Facility Management für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung in Neu-Isenburg und Umgebung.",
     },
   },
 };
