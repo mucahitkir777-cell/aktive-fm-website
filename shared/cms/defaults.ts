@@ -61,6 +61,19 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       subtitle:
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     },
+    reviews: {
+      title: "Bewertungen & Vertrauen",
+      subtitle: "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz.",
+      googleImageUrl: "/assets/review-logos/google.svg",
+      googleScore: "5,0",
+      googleLabel: "Kundenrezensionen",
+      trustpilotImageUrl: "/assets/review-logos/trustpilot.svg",
+      trustpilotScore: "5,0",
+      trustpilotLabel: "Verifizierte Bewertungen",
+      provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
+      provenexpertScore: "SEHR GUT",
+      provenexpertLabel: "Empfehlungen",
+    },
     finalCta: {
       title: "Bereit für saubere Ergebnisse?",
       body:
@@ -288,6 +301,7 @@ export function normalizeCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug, 
 export function getDefaultCmsPageContent<TSlug extends CmsPageSlug>(slug: TSlug): CmsPageContentMap[TSlug] {
   return JSON.parse(JSON.stringify(defaultCmsPageContent[slug])) as CmsPageContentMap[TSlug];
 }
+
 
 
 

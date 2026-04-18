@@ -1,0 +1,27 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">AK logo</title>
+  <desc id="desc">Rounded rectangular AK logo with a teal left segment, dark blue right segment, and white initials.</desc>
+  <defs>
+    <linearGradient id="leftGrad" x1="120" y1="120" x2="520" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#52C5BF"/>
+      <stop offset="1" stop-color="#3FA7A3"/>
+    </linearGradient>
+    <linearGradient id="rightGrad" x1="520" y1="80" x2="1080" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#245A86"/>
+      <stop offset="1" stop-color="#1F4E6B"/>
+    </linearGradient>
+    <clipPath id="logoClip">
+      <rect x="80" y="120" width="1040" height="360" rx="64" ry="64"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#logoClip)">
+    <rect x="80" y="120" width="1040" height="360" fill="url(#rightGrad)"/>
+    <polygon points="80,120 590,120 470,480 80,480" fill="url(#leftGrad)"/>
+    <polygon points="480,480 600,120 618,120 498,480" fill="#FFFFFF"/>
+  </g>
+  <rect x="80" y="120" width="1040" height="360" rx="64" ry="64" stroke="#D7E3EA" stroke-width="2"/>
+  <g fill="#FFFFFF">
+    <path d="M227 398L313 202H387L473 398H394L378 357H321L304 398H227ZM339 304H360L349 276L339 304Z"/>
+    <path d="M505 202H583V282L650 202H742L668 286L748 398H654L602 322L583 342V398H505V202Z"/>
+  </g>
+</svg>

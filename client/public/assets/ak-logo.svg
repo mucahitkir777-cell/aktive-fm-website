@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="304" height="184" viewBox="0 0 304 184" role="img" aria-label="AK Logo">
+  <defs>
+    <linearGradient id="akGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3FA7A3" />
+      <stop offset="50%" stop-color="#2F6F8F" />
+      <stop offset="100%" stop-color="#1F4E6B" />
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="300" height="180" rx="38" fill="url(#akGradient)" />
+
+  <line x1="156" y1="8" x2="124" y2="176" stroke="rgba(255,255,255,0.2)" stroke-width="4" />
+
+  <text
+    x="152"
+    y="124"
+    text-anchor="middle"
+    fill="#FFFFFF"
+    font-size="102"
+    font-family="Inter, Arial, sans-serif"
+    font-weight="800"
+    letter-spacing="-6"
+  >
+    AK
+  </text>
+</svg>

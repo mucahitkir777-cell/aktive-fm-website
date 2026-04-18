@@ -1,9 +1,9 @@
-﻿/*
+/*
  * Aktive Facility Management Testimonials & Bewertungen
  * Trust-Building Element mit Kundenzitaten und Ratings
  */
 
-import { Star, Users, Clock, Award, ShieldCheck } from "lucide-react";
+import { Star, Users, Clock, Award } from "lucide-react";
 import { companyConfig } from "@/config/company";
 
 const testimonials = [
@@ -53,78 +53,6 @@ const trustMetrics = [
   },
 ];
 
-const reviewPlatforms = [
-  {
-    id: "google",
-    name: "Google",
-    score: companyConfig.metrics.googleRating.replace("★", ""),
-    label: "Kundenrezensionen",
-    brandClass: "text-[#4285F4]",
-    badgeClass: "bg-[#F8FAFF] text-[#1F4E6B]",
-  },
-  {
-    id: "trustpilot",
-    name: "Trustpilot",
-    score: "5,0",
-    label: "Verifizierte Bewertungen",
-    brandClass: "text-[#00B67A]",
-    badgeClass: "bg-[#F3FFF9] text-[#0B5D4A]",
-  },
-  {
-    id: "provenexpert",
-    name: "ProvenExpert",
-    score: "SEHR GUT",
-    label: "Empfehlungen",
-    brandClass: "text-[#1F4E6B]",
-    badgeClass: "bg-[#FFF9EA] text-[#8A6A1E]",
-  },
-];
-
-export function ReviewPlatformsStrip() {
-  return (
-    <div className="mb-16">
-      <div className="max-w-xl mb-8">
-        <span className="pc-accent-line" />
-        <h2 className="pc-section-title">Bewertungen & Vertrauen</h2>
-        <p className="pc-section-subtitle">
-          Starke Rezensionen auf führenden Plattformen sorgen für zusätzliche Sicherheit bei der Auswahl.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {reviewPlatforms.map((platform) => (
-          <div
-            key={platform.id}
-            className="bg-white rounded-xl border pc-border p-5 shadow-[0_16px_36px_-28px_rgba(15,33,55,0.4)]"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <p className={`text-xl font-bold ${platform.brandClass}`} style={{ fontFamily: "Inter, sans-serif" }}>
-                {platform.name}
-              </p>
-              <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${platform.badgeClass}`} style={{ fontFamily: "Inter, sans-serif" }}>
-                {platform.score}
-              </span>
-            </div>
-
-            <div className="mt-4 flex items-center gap-1.5">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star key={`${platform.id}-${index}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
-              ))}
-            </div>
-
-            <div className="mt-4 flex items-center gap-2">
-              <ShieldCheck size={16} className="pc-text-brand" />
-              <p className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                {platform.label}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function TrustMetrics() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -148,19 +76,16 @@ export function TestimonialsGrid() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {testimonials.map((testimonial) => (
         <div key={testimonial.name} className="bg-white rounded-xl p-6 shadow-[0_16px_36px_-28px_rgba(15,33,55,0.4)] border pc-border hover:shadow-[0_18px_40px_-26px_rgba(15,33,55,0.5)] transition-shadow">
-          {/* Stars */}
           <div className="flex gap-1 mb-4">
             {Array.from({ length: testimonial.rating }).map((_, i) => (
               <Star key={i} size={16} className="fill-[#FFB800] text-[#FFB800]" />
             ))}
           </div>
 
-          {/* Zitat */}
           <p className="pc-text-secondary text-sm leading-relaxed mb-4 italic" style={{ fontFamily: "Inter, sans-serif" }}>
             "{testimonial.text}"
           </p>
 
-          {/* Autor */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full pc-bg-brand text-white flex items-center justify-center font-bold text-sm">
               {testimonial.initials}
@@ -184,9 +109,6 @@ export default function TestimonialsSection() {
   return (
     <section className="pc-section pc-bg-section">
       <div className="container">
-        <ReviewPlatformsStrip />
-
-        {/* Trust Metrics */}
         <div className="mb-16">
           <div className="max-w-xl mb-8">
             <span className="pc-accent-line" />
@@ -198,7 +120,6 @@ export default function TestimonialsSection() {
           <TrustMetrics />
         </div>
 
-        {/* Testimonials */}
         <div>
           <div className="max-w-xl mb-8">
             <span className="pc-accent-line" />
@@ -213,4 +134,3 @@ export default function TestimonialsSection() {
     </section>
   );
 }
-

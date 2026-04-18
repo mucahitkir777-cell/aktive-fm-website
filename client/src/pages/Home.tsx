@@ -235,6 +235,7 @@ function mergeCmsHomeContent(content: unknown): CmsHomeContent {
     hero: mergeCmsSection(defaults.hero, (content as Record<string, unknown>).hero),
     services: mergeCmsSection(defaults.services, (content as Record<string, unknown>).services),
     usps: mergeCmsSection(defaults.usps, (content as Record<string, unknown>).usps),
+    reviews: mergeCmsSection(defaults.reviews, (content as Record<string, unknown>).reviews),
     finalCta: mergeCmsSection(defaults.finalCta, (content as Record<string, unknown>).finalCta),
     seo: mergeCmsSection(defaults.seo, (content as Record<string, unknown>).seo),
   };
@@ -248,6 +249,26 @@ export default function Home() {
   const uspsImageUrl = resolvedCmsContent.usps.imageUrl || IMAGES.heroOffice;
   const servicesFeatureImageUrl = resolvedCmsContent.services.imageUrl || IMAGES.serviceGlass;
   const finalCtaImageUrl = resolvedCmsContent.finalCta.imageUrl || IMAGES.aboutTeam;
+  const homeReviewItems = [
+    {
+      id: "google",
+      logoUrl: resolvedCmsContent.reviews.googleImageUrl,
+      score: resolvedCmsContent.reviews.googleScore,
+      label: resolvedCmsContent.reviews.googleLabel,
+    },
+    {
+      id: "trustpilot",
+      logoUrl: resolvedCmsContent.reviews.trustpilotImageUrl,
+      score: resolvedCmsContent.reviews.trustpilotScore,
+      label: resolvedCmsContent.reviews.trustpilotLabel,
+    },
+    {
+      id: "provenexpert",
+      logoUrl: resolvedCmsContent.reviews.provenexpertImageUrl,
+      score: resolvedCmsContent.reviews.provenexpertScore,
+      label: resolvedCmsContent.reviews.provenexpertLabel,
+    },
+  ];
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -424,6 +445,45 @@ export default function Home() {
             <StatCounter value={companyConfig.metrics.customers} suffix="+" label="Zufriedene Kunden" />
             <StatCounter value={companyConfig.metrics.staff} suffix="+" label="Fachkräfte im Team" />
             <StatCounter value={companyConfig.metrics.satisfactionPercent} suffix="%" label="Kundenzufriedenheit" />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── BEWERTUNGEN ─── */}
+      <section className="bg-white border-b pc-border py-10">
+        <div className="container">
+          <div className="max-w-xl mb-8">
+            <span className="pc-accent-line" />
+            <h2 className="pc-section-title">{resolvedCmsContent.reviews.title}</h2>
+            <p className="pc-section-subtitle">{resolvedCmsContent.reviews.subtitle}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {homeReviewItems.map((item) => (
+              <div key={item.id} className="rounded-xl border pc-border bg-white p-5 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
+                <div className="h-14 flex items-center justify-start">
+                  <img
+                    src={item.logoUrl}
+                    alt={`${item.id} Logo`}
+                    className="max-h-12 w-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="mt-4 flex items-center gap-1.5">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star key={`${item.id}-${index}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
+                  ))}
+                </div>
+
+                <p className="mt-3 text-lg font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {item.score}
+                </p>
+                <p className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {item.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -808,5 +868,6 @@ export default function Home() {
     </div>
   );
 }
+
 
 

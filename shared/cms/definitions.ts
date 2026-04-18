@@ -87,6 +87,23 @@ export const cmsPageDefinitions = {
         ],
       },
       {
+        key: "reviews",
+        label: "Bewertungen",
+        fields: [
+          { key: "title", label: "Bereichstitel", input: "text" },
+          { key: "subtitle", label: "Bereichsbeschreibung", input: "textarea", rows: 4 },
+          { key: "googleImageUrl", label: "Google Logo URL", input: "text" },
+          { key: "googleScore", label: "Google Score", input: "text" },
+          { key: "googleLabel", label: "Google Label", input: "text" },
+          { key: "trustpilotImageUrl", label: "Trustpilot Logo URL", input: "text" },
+          { key: "trustpilotScore", label: "Trustpilot Score", input: "text" },
+          { key: "trustpilotLabel", label: "Trustpilot Label", input: "text" },
+          { key: "provenexpertImageUrl", label: "ProvenExpert Logo URL", input: "text" },
+          { key: "provenexpertScore", label: "ProvenExpert Score", input: "text" },
+          { key: "provenexpertLabel", label: "ProvenExpert Label", input: "text" },
+        ],
+      },
+      {
         key: "finalCta",
         label: "Kontaktbereich",
         fields: [
@@ -352,6 +369,7 @@ export interface CmsPageSummary<TSlug extends CmsPageSlug = CmsPageSlug> {
 export interface CmsPage<TSlug extends CmsPageSlug = CmsPageSlug> extends CmsPageSummary<TSlug> {
   content: CmsPageContentMap[TSlug];
 }
+
 
 
 

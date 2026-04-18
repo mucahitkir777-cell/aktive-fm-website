@@ -35,7 +35,7 @@ export const companyConfig = {
     legalName: "Aktive Facility Management GmbH",
     initials: "AFM",
     descriptor: "Gebäudereinigung",
-    logoUrl: "/assets/aktive-fm-logo.png",
+    logoUrl: "/aktive-ak-logo.svg",
     siteUrl: "https://aktive-fm.de",
     footerText:
       "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",
@@ -231,5 +231,6 @@ export const companyConfig = {
 
 export const getCopyrightLine = (year = new Date().getFullYear()) =>
   `© ${year} ${companyConfig.brand.legalName}. Alle Rechte vorbehalten.`;
+
 
 

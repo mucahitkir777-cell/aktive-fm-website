@@ -7,7 +7,7 @@
 /*
  * Aktive Facility Management Design System
  * Philosophy: Helle Business-Optik
- * Primary: #1F4E6B | Secondary: #2F6F8F | Accent: #3FA7A3
+ * Primary: #1F4E6B | Secondary: #245A86 | Accent: #3FA7A3
  * Background: Soft Gray #F5F7FA | Text: Ink #0F2137
  * Fonts: Inter (Headlines + Body)
  */
@@ -33,7 +33,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
+  --color-border: var(--border-soft);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
@@ -52,21 +52,32 @@
 }
 
 :root {
+  --primary-dark: #1F4E6B;
+  --primary-mid:  #245A86;
+  --accent:       #3FA7A3;
+  --accent-light: #52C5BF;
+  --border-soft:  #D7E3EA;
+  --white:        #FFFFFF;
+  --bg-soft:      #F5F7F9;
+  --text:         #1A1A1A;
+  --text-muted:   #6B7280;
+  --border:       #E5E7EB;
+
   /* Core Color Tokens */
-  --color-primary: #1F4E6B;
-  --color-primary-hover: #1B445D;
-  --color-bg: #ffffff;
-  --color-bg-section: #f5f7fa;
-  --color-bg-soft: #EAF1F5;
-  --color-card: #ffffff;
-  --color-text: #13212B;
-  --color-text-secondary: #3F5563;
-  --color-text-muted: #6A7C88;
-  --color-border: #D8E2E8;
-  --color-accent: #3FA7A3;
+  --color-primary: var(--primary-dark);
+  --color-primary-hover: var(--primary-mid);
+  --color-bg: var(--white);
+  --color-bg-section: var(--bg-soft);
+  --color-bg-soft: var(--bg-soft);
+  --color-card: var(--white);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-muted);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border-soft);
+  --color-accent: var(--accent);
   --color-highlight: #5FE3D0;
-  --color-success: #2F6F8F;
-  --color-placeholder: #8AA0AE;
+  --color-success: var(--primary-mid);
+  --color-placeholder: #9CA3AF;
 
   /* Typography Tokens */
   --font-family-heading: "Inter", sans-serif;
@@ -107,16 +118,15 @@
   --secondary-foreground: var(--color-text);
   --muted: var(--color-bg-section);
   --muted-foreground: var(--color-text-secondary);
-  --accent: var(--color-accent);
   --accent-foreground: var(--color-text);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --border: var(--color-border);
   --input: var(--color-border);
   --ring: var(--color-primary);
-  --chart-1: var(--color-primary);
-  --chart-2: #2F6F8F;
-  --chart-3: #5A8EA8;
+  --chart-1: var(--primary-dark);
+  --chart-2: var(--primary-mid);
+  --chart-3: #4E88A2;
   --chart-4: var(--color-accent);
   --chart-5: var(--color-success);
   --sidebar: var(--color-bg);
@@ -382,4 +392,5 @@
     transform: none;
   }
 }
+
 

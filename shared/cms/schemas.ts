@@ -66,6 +66,35 @@ export const cmsHomeContentSchema = z.object({
       subtitle:
         "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     }),
+  reviews: z
+    .object({
+      title: pageTitleSchema.default("Bewertungen & Vertrauen"),
+      subtitle: pageSubtitleSchema.default(
+        "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz."
+      ),
+      googleImageUrl: imageUrlSchema.default("/assets/review-logos/google.svg"),
+      googleScore: pageTitleSchema.default("5,0"),
+      googleLabel: pageSubtitleSchema.default("Kundenrezensionen"),
+      trustpilotImageUrl: imageUrlSchema.default("/assets/review-logos/trustpilot.svg"),
+      trustpilotScore: pageTitleSchema.default("5,0"),
+      trustpilotLabel: pageSubtitleSchema.default("Verifizierte Bewertungen"),
+      provenexpertImageUrl: imageUrlSchema.default("/assets/review-logos/provenexpert.png"),
+      provenexpertScore: pageTitleSchema.default("SEHR GUT"),
+      provenexpertLabel: pageSubtitleSchema.default("Empfehlungen"),
+    })
+    .default({
+      title: "Bewertungen & Vertrauen",
+      subtitle: "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz.",
+      googleImageUrl: "/assets/review-logos/google.svg",
+      googleScore: "5,0",
+      googleLabel: "Kundenrezensionen",
+      trustpilotImageUrl: "/assets/review-logos/trustpilot.svg",
+      trustpilotScore: "5,0",
+      trustpilotLabel: "Verifizierte Bewertungen",
+      provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
+      provenexpertScore: "SEHR GUT",
+      provenexpertLabel: "Empfehlungen",
+    }),
   finalCta: finalCtaSchema.extend({
     imageUrl: imageUrlSchema,
   }),
@@ -353,5 +382,6 @@ export const cmsPageSchemas = {
   faq: cmsFaqContentSchema,
   kontakt: cmsContactContentSchema,
 } as const;
+
 
 
