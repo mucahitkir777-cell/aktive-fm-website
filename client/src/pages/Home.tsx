@@ -326,7 +326,7 @@ export default function Home() {
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen lg:min-h-[88vh] flex items-center overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-y-0 inset-x-0 lg:inset-x-6 xl:inset-x-10 2xl:inset-x-16 lg:rounded-[2rem] overflow-hidden">
+        <div className="absolute inset-y-0 left-1/2 w-[calc(100%-1.5rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-200/70 shadow-[0_28px_68px_-42px_rgba(15,33,55,0.72)] sm:w-[calc(100%-2.5rem)] lg:w-[min(1540px,calc(100%-6rem))] lg:rounded-[2rem] xl:w-[min(1540px,calc(100%-10rem))] 2xl:w-[min(1540px,calc(100%-14rem))]">
           <img
             src={heroImageUrl}
             alt="Professionelle Gebäudereinigung"
