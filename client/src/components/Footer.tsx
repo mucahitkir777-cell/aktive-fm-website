@@ -92,10 +92,10 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                "BÃ¼roreinigung",
+                "Büroreinigung",
                 "Unterhaltsreinigung",
                 "Glasreinigung",
-                "Treppenhaus & AuÃŸen",
+                "Treppenhaus & Außen",
                 "Sonderreinigung",
                 "Grundreinigung",
               ].map((item) => (

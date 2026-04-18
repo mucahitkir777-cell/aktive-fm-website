@@ -36,8 +36,8 @@ export const cmsPageDefinitions = {
           { key: "emailHref", label: "E-Mail Link", input: "text" },
           { key: "addressLabel", label: "Adresse Label", input: "text" },
           { key: "addressLines", label: "Adresse Zeilen", input: "textarea", rows: 3 },
-          { key: "hoursLabel", label: "Ã–ffnungszeiten Label", input: "text" },
-          { key: "hoursLines", label: "Ã–ffnungszeiten Zeilen", input: "textarea", rows: 3 },
+          { key: "hoursLabel", label: "Öffnungszeiten Label", input: "text" },
+          { key: "hoursLines", label: "Öffnungszeiten Zeilen", input: "textarea", rows: 3 },
         ],
       },
       {
@@ -122,7 +122,7 @@ export const cmsPageDefinitions = {
       },
       {
         key: "overview",
-        label: "LeistungsÃ¼bersicht",
+        label: "Leistungsübersicht",
         fields: [
           { key: "title", label: "Titel", input: "text" },
           { key: "subtitle", label: "Beschreibung", input: "textarea", rows: 4 },
@@ -158,7 +158,7 @@ export const cmsPageDefinitions = {
     ],
   },
   "ueber-uns": {
-    title: "Ãœber uns",
+    title: "Über uns",
     path: "/ueber-uns",
     sections: [
       {

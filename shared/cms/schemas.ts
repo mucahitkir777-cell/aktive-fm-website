@@ -41,14 +41,14 @@ export const cmsHomeContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Unsere Leistungen"),
       subtitle: pageSubtitleSchema.default(
-        "Von der tÃ¤glichen BÃ¼roreinigung bis zur Glasfassade â€“ wir bieten das vollstÃ¤ndige Spektrum professioneller GebÃ¤udereinigung."
+        "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung."
       ),
       buttonText: pageButtonSchema.default("Alle Leistungen ansehen"),
       imageUrl: imageUrlSchema,
     })
     .default({
       title: "Unsere Leistungen",
-      subtitle: "Von der tÃ¤glichen BÃ¼roreinigung bis zur Glasfassade â€“ wir bieten das vollstÃ¤ndige Spektrum professioneller GebÃ¤udereinigung.",
+      subtitle: "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.",
       buttonText: "Alle Leistungen ansehen",
       imageUrl: "",
     }),
@@ -57,22 +57,22 @@ export const cmsHomeContentSchema = z.object({
       title: pageTitleSchema.default("Warum Unternehmen uns vertrauen"),
       imageUrl: imageUrlSchema,
       subtitle: pageSubtitleSchema.default(
-        "Wir sind kein anonymer GroÃŸbetrieb. Als mittelstÃ¤ndisches Reinigungsunternehmen kennen wir unsere Kunden persÃ¶nlich und arbeiten mit festen Teams â€“ fÃ¼r gleichbleibende QualitÃ¤t und echtes Vertrauen."
+        "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen."
       ),
     })
     .default({
       title: "Warum Unternehmen uns vertrauen",
       imageUrl: "",
       subtitle:
-        "Wir sind kein anonymer GroÃŸbetrieb. Als mittelstÃ¤ndisches Reinigungsunternehmen kennen wir unsere Kunden persÃ¶nlich und arbeiten mit festen Teams â€“ fÃ¼r gleichbleibende QualitÃ¤t und echtes Vertrauen.",
+        "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
     }),
   finalCta: finalCtaSchema.extend({
     imageUrl: imageUrlSchema,
   }),
   seo: seoSectionSchema.default({
-    seoTitle: "GebÃ¤udereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
+    seoTitle: "Gebäudereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
     seoDescription:
-      "Professionelle GebÃ¤udereinigung fÃ¼r Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
+      "Professionelle Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
   }),
 });
 
@@ -82,16 +82,16 @@ export const cmsServicesContentSchema = z.object({
   hero: heroBaseSchema,
   overview: z
     .object({
-      title: pageTitleSchema.default("LeistungsÃ¼bersicht"),
+      title: pageTitleSchema.default("Leistungsübersicht"),
       subtitle: pageSubtitleSchema.default(
-        "Ein Ãœberblick Ã¼ber unser Leistungsspektrum: von tÃ¤glicher BÃ¼roreinigung bis zur Glas- und Sonderreinigung."
+        "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung."
       ),
       imageUrl1: imageUrlSchema,
       imageUrl2: imageUrlSchema,
     })
     .default({
-      title: "LeistungsÃ¼bersicht",
-      subtitle: "Ein Ãœberblick Ã¼ber unser Leistungsspektrum: von tÃ¤glicher BÃ¼roreinigung bis zur Glas- und Sonderreinigung.",
+      title: "Leistungsübersicht",
+      subtitle: "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung.",
       imageUrl1: "",
       imageUrl2: "",
     }),
@@ -99,19 +99,19 @@ export const cmsServicesContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Ihre Vorteile"),
       subtitle: pageSubtitleSchema.default(
-        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher ZuverlÃ¤ssigkeit â€“ genau das, was Unternehmen erwarten."
+        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher Zuverlässigkeit – genau das, was Unternehmen erwarten."
       ),
     })
     .default({
       title: "Ihre Vorteile",
       subtitle:
-        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher ZuverlÃ¤ssigkeit â€“ genau das, was Unternehmen erwarten.",
+        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher Zuverlässigkeit – genau das, was Unternehmen erwarten.",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Leistungen fÃ¼r professionelle GebÃ¤udereinigung | Aktive Facility Management",
+    seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
     seoDescription:
-      "Unterhaltsreinigung, BÃ¼roreinigung, Glasreinigung und Sonderreinigung fÃ¼r Unternehmen in Neu-Isenburg und Umgebung.",
+      "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -123,13 +123,13 @@ export const cmsAboutContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Unsere Geschichte"),
       storyParagraph1: longTextSchema.default(
-        "Aktive Facility Management wurde gegrÃ¼ndet mit einer klaren Vision: GebÃ¤udereinigung auf einem Niveau anzubieten, das Unternehmen wirklich Ã¼berzeugt."
+        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt."
       ),
       storyParagraph2: longTextSchema.default(
-        "Was als kleines lokales Unternehmen begann, ist heute ein verlÃ¤sslicher Partner fÃ¼r Unternehmen aus verschiedensten Branchen."
+        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen."
       ),
       storyParagraph3: longTextSchema.default(
-        "Wir beschÃ¤ftigen ausschlieÃŸlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Ãœberraschungen."
+        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen."
       ),
       statsYearsLabel: pageTitleSchema.default("Jahre Erfahrung"),
       statsCustomersLabel: pageTitleSchema.default("Stammkunden"),
@@ -142,11 +142,11 @@ export const cmsAboutContentSchema = z.object({
     .default({
       title: "Unsere Geschichte",
       storyParagraph1:
-        "Aktive Facility Management wurde gegrÃ¼ndet mit einer klaren Vision: GebÃ¤udereinigung auf einem Niveau anzubieten, das Unternehmen wirklich Ã¼berzeugt.",
+        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt.",
       storyParagraph2:
-        "Was als kleines lokales Unternehmen begann, ist heute ein verlÃ¤sslicher Partner fÃ¼r Unternehmen aus verschiedensten Branchen.",
+        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen.",
       storyParagraph3:
-        "Wir beschÃ¤ftigen ausschlieÃŸlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Ãœberraschungen.",
+        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen.",
       statsYearsLabel: "Jahre Erfahrung",
       statsCustomersLabel: "Stammkunden",
       statsStaffLabel: "Mitarbeiter",
@@ -159,42 +159,42 @@ export const cmsAboutContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Unsere Werte"),
       subtitle: pageSubtitleSchema.default(
-        "Diese GrundsÃ¤tze leiten unser Handeln â€“ gegenÃ¼ber Kunden, Mitarbeitern und der Gesellschaft."
+        "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft."
       ),
-      value1Title: pageTitleSchema.default("VerlÃ¤sslichkeit"),
-      value1Desc: pageSubtitleSchema.default("Wir halten, was wir versprechen. Termine, QualitÃ¤t und Absprachen â€“ ohne Ausnahme."),
-      value2Title: pageTitleSchema.default("QualitÃ¤t"),
-      value2Desc: pageSubtitleSchema.default("Kein Kompromiss bei der AusfÃ¼hrung. Wir arbeiten grÃ¼ndlich und sorgfÃ¤ltig."),
+      value1Title: pageTitleSchema.default("Verlässlichkeit"),
+      value1Desc: pageSubtitleSchema.default("Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme."),
+      value2Title: pageTitleSchema.default("Qualität"),
+      value2Desc: pageSubtitleSchema.default("Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig."),
       value3Title: pageTitleSchema.default("Partnerschaft"),
       value3Desc: pageSubtitleSchema.default("Wir verstehen uns als langfristiger Partner unserer Kunden."),
       value4Title: pageTitleSchema.default("Verantwortung"),
-      value4Desc: pageSubtitleSchema.default("Verantwortung gegenÃ¼ber Kunden, Mitarbeitern und der Umwelt prÃ¤gt unser Handeln."),
+      value4Desc: pageSubtitleSchema.default("Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln."),
     })
     .default({
       title: "Unsere Werte",
-      subtitle: "Diese GrundsÃ¤tze leiten unser Handeln â€“ gegenÃ¼ber Kunden, Mitarbeitern und der Gesellschaft.",
-      value1Title: "VerlÃ¤sslichkeit",
-      value1Desc: "Wir halten, was wir versprechen. Termine, QualitÃ¤t und Absprachen â€“ ohne Ausnahme.",
-      value2Title: "QualitÃ¤t",
-      value2Desc: "Kein Kompromiss bei der AusfÃ¼hrung. Wir arbeiten grÃ¼ndlich und sorgfÃ¤ltig.",
+      subtitle: "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft.",
+      value1Title: "Verlässlichkeit",
+      value1Desc: "Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme.",
+      value2Title: "Qualität",
+      value2Desc: "Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig.",
       value3Title: "Partnerschaft",
       value3Desc: "Wir verstehen uns als langfristiger Partner unserer Kunden.",
       value4Title: "Verantwortung",
-      value4Desc: "Verantwortung gegenÃ¼ber Kunden, Mitarbeitern und der Umwelt prÃ¤gt unser Handeln.",
+      value4Desc: "Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln.",
     }),
   team: z
     .object({
       title: pageTitleSchema.default("Unser Team"),
       paragraph1: longTextSchema.default(
-        "Unser Team besteht aus erfahrenen, geschulten FachkrÃ¤ften, die ihren Beruf mit Sorgfalt und Engagement ausÃ¼ben."
+        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben."
       ),
       paragraph2: longTextSchema.default(
-        "Wir legen groÃŸen Wert auf KontinuitÃ¤t: Ihre Objekte werden von festen Teams betreut."
+        "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut."
       ),
       bullet1: pageSubtitleSchema.default("Alle Mitarbeiter festangestellt"),
-      bullet2: pageSubtitleSchema.default("RegelmÃ¤ÃŸige Schulungen und Weiterbildungen"),
-      bullet3: pageSubtitleSchema.default("ZuverlÃ¤ssige Vertretungsregelungen"),
-      bullet4: pageSubtitleSchema.default("Diskret und vertrauenswÃ¼rdig"),
+      bullet2: pageSubtitleSchema.default("Regelmäßige Schulungen und Weiterbildungen"),
+      bullet3: pageSubtitleSchema.default("Zuverlässige Vertretungsregelungen"),
+      bullet4: pageSubtitleSchema.default("Diskret und vertrauenswürdig"),
       buttonText: pageButtonSchema.default("Kontakt aufnehmen"),
       imageUrl: imageUrlSchema,
       imageAlt: z.string().trim().max(160, "Der Alternativtext ist zu lang.").default(""),
@@ -202,21 +202,21 @@ export const cmsAboutContentSchema = z.object({
     .default({
       title: "Unser Team",
       paragraph1:
-        "Unser Team besteht aus erfahrenen, geschulten FachkrÃ¤ften, die ihren Beruf mit Sorgfalt und Engagement ausÃ¼ben.",
-      paragraph2: "Wir legen groÃŸen Wert auf KontinuitÃ¤t: Ihre Objekte werden von festen Teams betreut.",
+        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben.",
+      paragraph2: "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut.",
       bullet1: "Alle Mitarbeiter festangestellt",
-      bullet2: "RegelmÃ¤ÃŸige Schulungen und Weiterbildungen",
-      bullet3: "ZuverlÃ¤ssige Vertretungsregelungen",
-      bullet4: "Diskret und vertrauenswÃ¼rdig",
+      bullet2: "Regelmäßige Schulungen und Weiterbildungen",
+      bullet3: "Zuverlässige Vertretungsregelungen",
+      bullet4: "Diskret und vertrauenswürdig",
       buttonText: "Kontakt aufnehmen",
       imageUrl: "",
       imageAlt: "",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Ãœber uns | Aktive Facility Management GebÃ¤udereinigung",
+    seoTitle: "Über uns | Aktive Facility Management Gebäudereinigung",
     seoDescription:
-      "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte FachkrÃ¤fte, klare Prozesse und zuverlÃ¤ssige QualitÃ¤t.",
+      "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
   }),
 });
 
@@ -229,20 +229,20 @@ export const cmsFaqContentSchema = z.object({
       title: pageTitleSchema.default("FAQ"),
       subtitle: pageSubtitleSchema.default("Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen."),
       faqText: z.string().trim().max(12000, "Der FAQ-Inhalt ist zu lang.").default(
-        "Allgemeines|FÃ¼r welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: BÃ¼ros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie hÃ¤ufig wird gereinigt?|Wir bieten tÃ¤gliche, wÃ¶chentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung auÃŸerhalb unserer GeschÃ¤ftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualitÃ¤t & Vertrauen|Wie stellen Sie gleichbleibende QualitÃ¤t sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persÃ¶nliche QualitÃ¤tskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollstÃ¤ndig."
+        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig."
       ),
     })
     .default({
       title: "FAQ",
       subtitle: "Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen.",
       faqText:
-        "Allgemeines|FÃ¼r welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: BÃ¼ros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie hÃ¤ufig wird gereinigt?|Wir bieten tÃ¤gliche, wÃ¶chentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung auÃŸerhalb unserer GeschÃ¤ftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualitÃ¤t & Vertrauen|Wie stellen Sie gleichbleibende QualitÃ¤t sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persÃ¶nliche QualitÃ¤tskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollstÃ¤ndig.",
+        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig.",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "FAQ zur GebÃ¤udereinigung | Aktive Facility Management",
+    seoTitle: "FAQ zur Gebäudereinigung | Aktive Facility Management",
     seoDescription:
-      "Antworten auf hÃ¤ufige Fragen zu Leistungen, Ablauf, Kosten und QualitÃ¤t unserer professionellen GebÃ¤udereinigung.",
+      "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
   }),
 });
 
@@ -254,12 +254,12 @@ export const cmsContactContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Kontaktinformationen"),
       subtitle: pageSubtitleSchema.default(
-        "Nutzen Sie unsere KontaktmÃ¶glichkeiten fÃ¼r schnelle RÃ¼ckmeldung und individuelle Beratung."
+        "Nutzen Sie unsere Kontaktmöglichkeiten für schnelle Rückmeldung und individuelle Beratung."
       ),
     })
     .default({
       title: "Kontaktinformationen",
-      subtitle: "Nutzen Sie unsere KontaktmÃ¶glichkeiten fÃ¼r schnelle RÃ¼ckmeldung und individuelle Beratung.",
+      subtitle: "Nutzen Sie unsere Kontaktmöglichkeiten für schnelle Rückmeldung und individuelle Beratung.",
     }),
   formSection: z
     .object({
@@ -273,9 +273,9 @@ export const cmsContactContentSchema = z.object({
       buttonText: "Nachricht senden",
     }),
   seo: seoSectionSchema.default({
-    seoTitle: "Kontakt | Aktive Facility Management GebÃ¤udereinigung",
+    seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
     seoDescription:
-      "Kontaktieren Sie Aktive Facility Management fÃ¼r ein kostenloses und unverbindliches Angebot zur GebÃ¤udereinigung in Neu-Isenburg und Umgebung.",
+      "Kontaktieren Sie Aktive Facility Management für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung in Neu-Isenburg und Umgebung.",
   }),
 });
 
@@ -286,7 +286,7 @@ const multilineTextSchema = z.string().trim().min(1, "Das Feld ist erforderlich.
 const defaultNavigationItems = [
   { id: "home", label: "Startseite", href: "/", visible: true, sortOrder: 1, type: "page", target: "_self" },
   { id: "services", label: "Leistungen", href: "/leistungen", visible: true, sortOrder: 2, type: "page", target: "_self" },
-  { id: "about", label: "Ãœber uns", href: "/ueber-uns", visible: true, sortOrder: 3, type: "page", target: "_self" },
+  { id: "about", label: "Über uns", href: "/ueber-uns", visible: true, sortOrder: 3, type: "page", target: "_self" },
   { id: "faq", label: "FAQ", href: "/faq", visible: true, sortOrder: 4, type: "page", target: "_self" },
   { id: "contact", label: "Kontakt", href: "/kontakt", visible: true, sortOrder: 5, type: "page", target: "_self" },
 ] satisfies Array<{
@@ -318,7 +318,7 @@ export const cmsGlobalContentSchema = z.object({
   siteStatus: z.enum(["live", "maintenance"]).default("live"),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
-      "Ihr zuverlÃ¤ssiger Partner fÃ¼r professionelle GebÃ¤udereinigung in Neu-Isenburg und Umgebung. QualitÃ¤t, die man sieht."
+      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht."
     ),
     membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
   }),
@@ -331,8 +331,8 @@ export const cmsGlobalContentSchema = z.object({
     emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@aktive-fm.de"),
     emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@aktive-fm.de"),
     addressLabel: pageTitleSchema.default("Adresse"),
-    addressLines: multilineTextSchema.default("SchleussnerstraÃŸe 90\n63263 Neu-Isenburg"),
-    hoursLabel: pageTitleSchema.default("Ã–ffnungszeiten"),
+    addressLines: multilineTextSchema.default("Schleussnerstraße 90\n63263 Neu-Isenburg"),
+    hoursLabel: pageTitleSchema.default("Öffnungszeiten"),
     hoursLines: multilineTextSchema.default("Mo-Fr: 07:00-18:00\nSa: 08:00-14:00"),
   }),
   legal: z.object({
