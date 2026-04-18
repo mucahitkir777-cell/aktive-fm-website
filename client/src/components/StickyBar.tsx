@@ -6,7 +6,7 @@ import { companyConfig } from "@/config/company";
 import { trackCtaClick, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 import { fetchPublicCmsPage } from "@/lib/cms";
 
-const MOBILE_BAR_BASE_HEIGHT = 72;
+const MOBILE_BAR_BASE_HEIGHT = 60;
 
 export default function StickyBar() {
   const [location] = useLocation();
@@ -64,12 +64,12 @@ export default function StickyBar() {
   return (
     <>
       <div className="fixed bottom-5 right-5 z-40 hidden md:block">
-        <div className="rounded-2xl border pc-border bg-white/96 p-2 shadow-[0_24px_36px_-30px_rgba(15,33,55,0.55)] backdrop-blur">
+        <div className="min-w-[190px] rounded-2xl border pc-border bg-white/96 p-2.5 shadow-[0_24px_36px_-28px_rgba(15,33,55,0.6)] backdrop-blur">
           <div className="flex flex-col gap-1.5">
             <a
               href={phoneHref}
               onClick={handlePhoneClick}
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+              className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
               aria-label={`Telefonisch kontaktieren: ${phoneDisplay}`}
             >
               <Phone size={16} />
@@ -80,7 +80,7 @@ export default function StickyBar() {
               onClick={handleWhatsAppClick}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
+              className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
               aria-label="Kontakt per WhatsApp"
             >
               <MessageCircle size={16} />
@@ -89,7 +89,7 @@ export default function StickyBar() {
             <Link
               href={requestHref}
               onClick={handleRequestClick}
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+              className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
               aria-label={`${requestLabel} öffnen`}
             >
               <Send size={16} />
@@ -107,10 +107,10 @@ export default function StickyBar() {
           <a
             href={phoneHref}
             onClick={handlePhoneClick}
-            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+            className="inline-flex min-h-[60px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-1.5 pc-text-brand transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
             aria-label={`Telefonisch kontaktieren: ${phoneDisplay}`}
           >
-            <Phone size={20} />
+            <Phone size={18} />
             <span className="text-xs font-semibold">Anrufen</span>
           </a>
           <a
@@ -118,19 +118,19 @@ export default function StickyBar() {
             onClick={handleWhatsAppClick}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
+            className="inline-flex min-h-[60px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-1.5 pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
             aria-label="Kontakt per WhatsApp"
           >
-            <MessageCircle size={20} />
+            <MessageCircle size={18} />
             <span className="text-xs font-semibold">WhatsApp</span>
           </a>
           <Link
             href={requestHref}
             onClick={handleRequestClick}
-            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 px-2 py-2 pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
+            className="inline-flex min-h-[60px] flex-col items-center justify-center gap-1 px-2 py-1.5 pc-text-primary transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-primary)]"
             aria-label={`${requestLabel} öffnen`}
           >
-            <Send size={20} />
+            <Send size={18} />
             <span className="text-xs font-semibold">Anfrage</span>
           </Link>
         </div>

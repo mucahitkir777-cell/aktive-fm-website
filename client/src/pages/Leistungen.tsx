@@ -320,7 +320,7 @@ export default function Leistungen() {
                       <img
                         src={cmsServiceImageUrl}
                         alt={service.title}
-                        className="w-full h-72 lg:h-96 object-cover hover:scale-105 transition-transform duration-700"
+                        className="w-full h-64 sm:h-72 lg:h-96 object-contain sm:object-cover bg-[var(--color-bg-soft)] sm:hover:scale-105 transition-transform duration-700"
                         loading="lazy"
                       />
                     </div>

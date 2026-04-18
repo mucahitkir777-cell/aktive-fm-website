@@ -98,20 +98,20 @@ export default function Navigation() {
       }`}
     >
       <div className="container">
-        <div className="flex items-center justify-between h-20 lg:h-24">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/">
             <div className="flex items-center group">
               <img
                 src={companyConfig.brand.logoUrl}
                 alt={`${companyConfig.brand.name} Logo`}
-                className="h-14 w-auto sm:h-16 lg:h-20"
+                className="h-10 w-auto sm:h-12 lg:h-14"
                 loading="eager"
                 decoding="async"
               />
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               link.target === "_blank" ? (
                 <a
@@ -141,7 +141,7 @@ export default function Navigation() {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <a
               href={companyConfig.contact.phoneHref}
               onClick={() => handlePhoneClick("navigation_desktop")}
