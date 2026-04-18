@@ -12,7 +12,7 @@ export default function AdminShell({ sidebar, header, alerts, children }: AdminS
   return (
     <main className={shellClass}>
       <section className={shellContainerClass}>
-        <div className="grid items-start gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
+        <div className="grid items-start gap-6 lg:grid-cols-[248px_minmax(0,1fr)]">
           {sidebar}
           <div className="min-w-0 space-y-6">
             {header}

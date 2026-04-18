@@ -179,7 +179,7 @@ const secondaryButtonClass = `${buttonBaseClass} border border-slate-300 bg-whit
 const primaryButtonClass = `${buttonBaseClass} border border-[#1D6FA4] bg-[#1D6FA4] text-white hover:bg-[#155d8e] disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-300`;
 const dangerButtonClass = `${buttonBaseClass} border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60`;
 const shellClass = "min-h-screen bg-[#F2F4F7] px-4 py-6 md:px-6 md:py-8";
-const shellContainerClass = "mx-auto max-w-[1460px]";
+const shellContainerClass = "mx-auto max-w-[1600px]";
 const surfaceClass = "rounded-2xl border border-slate-200 bg-white shadow-[0_12px_30px_-24px_rgba(15,33,55,0.65)]";
 const surfaceMutedClass = "rounded-2xl border border-slate-200 bg-slate-50/70";
 const fieldLabelClass = "block text-sm font-medium text-slate-800";
@@ -1664,8 +1664,8 @@ export default function Admin() {
   return (
     <main className={shellClass}>
       <section className={shellContainerClass}>
-        <div className="grid items-start gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
-          <aside className={`${surfaceClass} max-h-[calc(100vh-3rem)] overflow-y-auto p-5 text-sm text-slate-800 lg:sticky lg:top-6`}>
+        <div className="grid items-start gap-6 lg:grid-cols-[248px_minmax(0,1fr)]">
+          <aside className={`${surfaceClass} max-h-[calc(100vh-3rem)] overflow-y-auto p-4 text-sm text-slate-800 lg:sticky lg:top-6`}>
             <div className="mb-6 border-b border-slate-200 pb-5">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Admin</p>
               <h2 className="mt-3 text-lg font-semibold text-slate-900">Workspace</h2>
@@ -1696,7 +1696,7 @@ export default function Admin() {
                               item.activate?.();
                               setLocation(item.href);
                             }}
-                            className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm transition ${
+                            className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm transition ${
                               isActive
                                 ? "bg-slate-900 text-white shadow-[0_8px_20px_-16px_rgba(15,33,55,0.9)]"
                                 : "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
@@ -2046,7 +2046,7 @@ export default function Admin() {
         {currentSection === "leads" && (
           <div className="space-y-4">
             <div className={`${surfaceClass} p-4`}>
-              <div className="grid gap-3 lg:grid-cols-[240px_minmax(0,1fr)_240px_auto]">
+              <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-[190px_minmax(0,1fr)_190px_auto]">
                 <label className={fieldLabelClass}>
                   Filter
                   <select
@@ -2099,7 +2099,7 @@ export default function Admin() {
             </div>
 
             <div className={`${surfaceClass} overflow-x-auto`}>
-              <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+              <table className="w-full min-w-[1040px] border-collapse text-left text-sm">
                 <thead className={tableHeadClass}>
                   <tr>
                     <th className={tableHeaderCellClass}>Datum</th>
@@ -2167,7 +2167,7 @@ export default function Admin() {
                             {lead.phone}
                           </a>
                         </td>
-                        <td className="max-w-sm px-4 py-3 text-sm text-slate-500">
+                        <td className="max-w-[20rem] px-4 py-3 text-sm text-slate-500">
                           <div>{lead.message || "Keine Nachricht"}</div>
                           {(lead.regionLabel || lead.serviceLabel) && (
                             <div className="mt-2 text-xs">
@@ -2253,9 +2253,9 @@ export default function Admin() {
         )}
 
         {currentSection === "content" && (
-          <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
-            <div className="space-y-4 xl:sticky xl:top-6">
-              <div className={`${surfaceClass} p-4`}>
+          <div className="space-y-4">
+            <div className={`${surfaceClass} p-4`}>
+              <div className="grid gap-4 xl:grid-cols-[260px_minmax(0,1fr)] xl:items-end">
                 <label className={fieldLabelClass}>
                   Seite
                   <select
@@ -2270,25 +2270,25 @@ export default function Admin() {
                     ))}
                   </select>
                 </label>
-              </div>
 
-              <div className={`${surfaceClass} p-4`}>
-                <p className="text-sm font-medium text-slate-900">Sektionen</p>
-                <div className="mt-3 space-y-2">
-                  {cmsSections.map((section) => (
-                    <button
-                      key={section.key}
-                      type="button"
-                      onClick={() => setSelectedCmsSection(section.key as CmsSectionKey)}
-                      className={
-                        selectedCmsSection === section.key
-                          ? "w-full rounded-lg border border-slate-900 bg-slate-900 px-3 py-2 text-left text-sm font-medium text-white"
-                          : "w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-900 hover:bg-slate-50"
-                      }
-                    >
-                      {section.label}
-                    </button>
-                  ))}
+                <div>
+                  <p className={fieldLabelClass}>Sektion</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {cmsSections.map((section) => (
+                      <button
+                        key={section.key}
+                        type="button"
+                        onClick={() => setSelectedCmsSection(section.key as CmsSectionKey)}
+                        className={
+                          selectedCmsSection === section.key
+                            ? "rounded-lg border border-slate-900 bg-slate-900 px-3 py-2 text-sm font-medium text-white"
+                            : "rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+                        }
+                      >
+                        {section.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
