@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+﻿import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { BarChart3, Eye, FileText, LayoutDashboard, PanelTop, Settings } from "lucide-react";
 import { useLocation } from "wouter";
 import type { AdminDashboardStats, AdminRole, AdminSessionUser, AdminUser } from "@shared/admin";
@@ -48,6 +48,7 @@ import {
   type CmsDraft,
   type CmsDraftSection,
   type CmsDraftValue,
+  type CmsImagePlacementOption,
   type CmsPreviewViewport,
   type CmsSectionKey,
   type LeadDraft,
@@ -323,6 +324,8 @@ export default function Admin() {
   const [mediaItems, setMediaItems] = useState<AdminMediaItem[]>([]);
   const [loadingMedia, setLoadingMedia] = useState(false);
   const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [selectedImagePlacementKey, setSelectedImagePlacementKey] = useState("");
+  const [autoApplyUploadedMedia, setAutoApplyUploadedMedia] = useState(true);
   const [previewViewport, setPreviewViewport] = useState<CmsPreviewViewport>("desktop");
   const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
   const [loadingLeads, setLoadingLeads] = useState(false);
@@ -423,9 +426,19 @@ export default function Admin() {
     const sectionValue = (cmsDraft.navigation ?? {}) as CmsDraftSection;
     return toNavigationItems(sectionValue.items);
   }, [cmsDraft.navigation, isGlobalNavigationSection]);
-  const activeImageField = useMemo(
-    () => cmsSelectedSection.fields.find((field) => field.input === "text" && field.key.toLowerCase().includes("imageurl")) ?? null,
-    [cmsSelectedSection],
+  const imagePlacementOptions = useMemo<CmsImagePlacementOption[]>(
+    () =>
+      cmsSections.flatMap((section) =>
+        section.fields
+          .filter((field) => field.input === "text" && field.key.toLowerCase().includes("imageurl"))
+          .map((field) => ({
+            key: `${section.key}.${field.key}`,
+            label: `${section.label}: ${field.label}`,
+            sectionKey: section.key,
+            fieldKey: field.key,
+          })),
+      ),
+    [cmsSections],
   );
   const previewWidthClass = useMemo(() => {
     if (previewViewport === "mobile") return "mx-auto w-[390px] max-w-full";
@@ -465,6 +478,8 @@ export default function Admin() {
     setCmsPage(null);
     setCmsDraft(getDefaultCmsPageContent("home"));
     setMediaItems([]);
+    setSelectedImagePlacementKey("");
+    setAutoApplyUploadedMedia(true);
     setSelectedCmsSlug("home");
     setSelectedCmsSection("hero");
     setPreviewRefreshKey(0);
@@ -694,13 +709,28 @@ export default function Admin() {
     setMediaItems(result.media ?? []);
   }
 
-  async function handleMediaUpload(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
+  function resolveImagePlacement(placementKey?: string) {
+    const resolvedKey = placementKey ?? selectedImagePlacementKey;
+    if (!resolvedKey) {
+      return null;
+    }
+    return imagePlacementOptions.find((option) => option.key === resolvedKey) ?? null;
+  }
+
+  function applyMediaToPlacement(url: string, placementKey?: string) {
+    const target = resolveImagePlacement(placementKey);
+    if (!target) {
+      return null;
+    }
+
+    updateCmsField(target.sectionKey, target.fieldKey, url);
+    return target;
+  }
+
+  async function handleMediaUpload(file: File, placementKey?: string) {
     if (!file || !session) {
       return;
     }
-
-    event.target.value = "";
 
     setUploadingMedia(true);
     setError("");
@@ -731,7 +761,9 @@ export default function Admin() {
       }
 
       setMediaItems((current) => [result.media!, ...current.filter((item) => item.filename !== result.media!.filename)]);
-      setSuccessMessage(result.message ?? "Bild wurde hochgeladen.");
+      const appliedPlacement = applyMediaToPlacement(result.media.url, placementKey);
+      const message = result.message ?? "Bild wurde hochgeladen.";
+      setSuccessMessage(appliedPlacement ? `${message} Ziel: ${appliedPlacement.label}.` : message);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Bild konnte nicht hochgeladen werden.");
     } finally {
@@ -862,6 +894,20 @@ export default function Admin() {
       setSelectedCmsSection(firstSection.key);
     }
   }, [selectedCmsSection, selectedCmsSlug]);
+
+  useEffect(() => {
+    if (imagePlacementOptions.length === 0) {
+      setSelectedImagePlacementKey("");
+      return;
+    }
+
+    setSelectedImagePlacementKey((current) => {
+      if (current && imagePlacementOptions.some((option) => option.key === current)) {
+        return current;
+      }
+      return imagePlacementOptions[0].key;
+    });
+  }, [imagePlacementOptions]);
 
   useEffect(() => {
     if (!session || activePanel !== "users" || session.user.role !== "admin") {
@@ -1554,18 +1600,18 @@ export default function Admin() {
             mediaItems={mediaItems}
             loadingMedia={loadingMedia}
             uploadingMedia={uploadingMedia}
-            activeImageFieldKey={activeImageField?.key ?? null}
+            imagePlacementOptions={imagePlacementOptions}
+            selectedImagePlacementKey={selectedImagePlacementKey}
+            autoApplyUploadedMedia={autoApplyUploadedMedia}
             onSelectSlug={setSelectedCmsSlug}
             onSelectSection={setSelectedCmsSection}
-            onMediaUpload={handleMediaUpload}
+            onSelectImagePlacementKey={setSelectedImagePlacementKey}
+            onSetAutoApplyUploadedMedia={setAutoApplyUploadedMedia}
+            onPickMediaFile={handleMediaUpload}
             onCopyMediaUrl={(url) => {
               void copyMediaUrl(url);
             }}
-            onApplyMediaToActiveField={(url) => {
-              if (activeImageField) {
-                updateCmsField(cmsSelectedSection.key, activeImageField.key, url);
-              }
-            }}
+            onApplyMediaToPlacement={applyMediaToPlacement}
             onSubmit={handleCmsSave}
             onReset={() => setCmsDraft(createCmsDraft(cmsPage, selectedCmsSlug))}
             onSetCmsPageStatus={setCmsPageStatus}

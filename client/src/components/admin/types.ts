@@ -21,6 +21,13 @@ export interface AdminMediaItem {
   uploadedAt: string;
 }
 
+export interface CmsImagePlacementOption {
+  key: string;
+  label: string;
+  sectionKey: string;
+  fieldKey: string;
+}
+
 export type ActivePanel = "lead-edit" | "change-password" | "users" | null;
 export type AdminSection = "dashboard" | "leads" | "settings" | "pages" | "content" | "preview";
 export type CmsSectionKey = string;
