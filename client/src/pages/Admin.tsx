@@ -146,6 +146,123 @@ async function fileToDataUrl(file: File) {
   });
 }
 
+const MAX_UPLOAD_FILE_BYTES = 20 * 1024 * 1024;
+const MAX_STORED_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_UPLOAD_IMAGE_DIMENSION = 1920;
+
+function estimateDataUrlBytes(dataUrl: string) {
+  const base64Start = dataUrl.indexOf(",");
+  if (base64Start < 0) {
+    return 0;
+  }
+
+  const base64Length = dataUrl.length - base64Start - 1;
+  return Math.ceil((base64Length * 3) / 4);
+}
+
+function replaceFileExtension(filename: string, nextExtension: string) {
+  const index = filename.lastIndexOf(".");
+  if (index <= 0) {
+    return `${filename}.${nextExtension}`;
+  }
+  return `${filename.slice(0, index)}.${nextExtension}`;
+}
+
+async function decodeImageDimensions(file: File) {
+  if (typeof createImageBitmap === "function") {
+    const bitmap = await createImageBitmap(file);
+    const dimensions = { width: bitmap.width, height: bitmap.height };
+    bitmap.close();
+    return dimensions;
+  }
+
+  return await new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+      resolve({ width: image.naturalWidth, height: image.naturalHeight });
+      URL.revokeObjectURL(objectUrl);
+    };
+    image.onerror = () => {
+      reject(new Error("Bild konnte nicht verarbeitet werden."));
+      URL.revokeObjectURL(objectUrl);
+    };
+    image.src = objectUrl;
+  });
+}
+
+async function createCompressedUploadData(file: File) {
+  const dimensions = await decodeImageDimensions(file);
+  const scale = Math.min(1, MAX_UPLOAD_IMAGE_DIMENSION / Math.max(dimensions.width, dimensions.height));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(dimensions.width * scale));
+  canvas.height = Math.max(1, Math.round(dimensions.height * scale));
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    throw new Error("Bildkomprimierung konnte nicht initialisiert werden.");
+  }
+
+  const objectUrl = URL.createObjectURL(file);
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const nextImage = new Image();
+    nextImage.onload = () => resolve(nextImage);
+    nextImage.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Bild konnte nicht geladen werden."));
+    };
+    nextImage.src = objectUrl;
+  });
+
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  URL.revokeObjectURL(objectUrl);
+
+  let compressedDataUrl = "";
+  for (const quality of [0.84, 0.76, 0.68]) {
+    const candidate = canvas.toDataURL("image/webp", quality);
+    compressedDataUrl = candidate;
+    if (estimateDataUrlBytes(candidate) <= MAX_STORED_IMAGE_BYTES) {
+      break;
+    }
+  }
+
+  if (!compressedDataUrl) {
+    throw new Error("Bild konnte nicht komprimiert werden.");
+  }
+
+  if (estimateDataUrlBytes(compressedDataUrl) > MAX_STORED_IMAGE_BYTES) {
+    throw new Error("Bild ist auch nach Komprimierung zu groß. Bitte kleineres Bild wählen.");
+  }
+
+  return {
+    filename: replaceFileExtension(file.name, "webp"),
+    dataUrl: compressedDataUrl,
+  };
+}
+
+async function prepareMediaUpload(file: File) {
+  if (file.size > MAX_UPLOAD_FILE_BYTES) {
+    throw new Error("Bild ist zu groß. Maximal 20 MB als Quelldatei erlaubt.");
+  }
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Nur Bilddateien sind erlaubt.");
+  }
+
+  if (file.size <= MAX_STORED_IMAGE_BYTES) {
+    const dataUrl = await fileToDataUrl(file);
+    return { filename: file.name, dataUrl };
+  }
+
+  if (file.type === "image/gif") {
+    throw new Error("GIF-Dateien über 8 MB werden nicht unterstützt. Bitte JPG, PNG oder WEBP nutzen.");
+  }
+
+  return await createCompressedUploadData(file);
+}
+
 function getStoredSession(): SessionState | null {
   if (typeof window === "undefined") {
     return null;
@@ -585,17 +702,12 @@ export default function Admin() {
 
     event.target.value = "";
 
-    if (!file.type.startsWith("image/")) {
-      setError("Nur Bilddateien sind erlaubt.");
-      return;
-    }
-
     setUploadingMedia(true);
     setError("");
     setSuccessMessage("");
 
     try {
-      const dataUrl = await fileToDataUrl(file);
+      const upload = await prepareMediaUpload(file);
 
       const { response, result } = await requestJson<AdminMediaUploadResponse>("/api/admin/media/upload", {
         method: "POST",
@@ -604,8 +716,8 @@ export default function Admin() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          filename: file.name,
-          dataUrl,
+          filename: upload.filename,
+          dataUrl: upload.dataUrl,
         }),
       });
 
@@ -1479,6 +1591,10 @@ export default function Admin() {
             onSelectViewport={setPreviewViewport}
             onEditContent={() => setLocation("/admin/content")}
             onRefreshPreview={() => setPreviewRefreshKey((current) => current + 1)}
+            cmsSections={cmsSections}
+            cmsDraft={cmsDraft}
+            onSelectSection={setSelectedCmsSection}
+            onUpdateCmsField={updateCmsField}
           />
         )}
 
