@@ -15,7 +15,7 @@ export default function AdminSidebar({
   onNavigate,
 }: AdminSidebarProps) {
   return (
-    <aside className={`${surfaceClass} max-h-[calc(100vh-3rem)] overflow-y-auto p-5 text-sm text-slate-800 lg:sticky lg:top-6`}>
+    <aside className={`${surfaceClass} max-h-[calc(100vh-3rem)] overflow-y-auto p-4 text-sm text-slate-800 lg:sticky lg:top-6`}>
       <div className="mb-6 border-b border-slate-200 pb-5">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Admin</p>
         <h2 className="mt-3 text-lg font-semibold text-slate-900">Workspace</h2>
@@ -41,7 +41,7 @@ export default function AdminSidebar({
                       key={item.id}
                       type="button"
                       onClick={() => onNavigate(item)}
-                      className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm transition ${
+                      className={`flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm transition ${
                         isActive
                           ? "bg-slate-900 text-white shadow-[0_8px_20px_-16px_rgba(15,33,55,0.9)]"
                           : "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"

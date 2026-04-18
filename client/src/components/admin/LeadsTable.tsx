@@ -28,7 +28,7 @@ export default function LeadsTable({
   onOpenLeadEditor,
 }: LeadsTableProps) {
   return (
-    <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+    <table className="w-full min-w-[1040px] border-collapse text-left text-sm">
       <thead className={tableHeadClass}>
         <tr>
           <th className={tableHeaderCellClass}>Datum</th>
@@ -96,7 +96,7 @@ export default function LeadsTable({
                   {lead.phone}
                 </a>
               </td>
-              <td className="max-w-sm px-4 py-3 text-sm text-slate-500">
+              <td className="max-w-[20rem] px-4 py-3 text-sm text-slate-500">
                 <div>{lead.message || "Keine Nachricht"}</div>
                 {(lead.regionLabel || lead.serviceLabel) && (
                   <div className="mt-2 text-xs">

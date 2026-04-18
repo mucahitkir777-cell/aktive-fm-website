@@ -1,7 +1,6 @@
 import type { FormEvent } from "react";
 import AdminAlert from "./AdminAlert";
 import {
-  errorAlertClass,
   fieldControlClass,
   fieldLabelClass,
   helperTextClass,
@@ -36,7 +35,7 @@ export default function AdminLogin({
         <h1 className="mb-2 text-2xl font-bold text-slate-900">Admin Login</h1>
         <p className={`mb-6 ${helperTextClass}`}>Melden Sie sich an, um Leads und Benutzer zu verwalten.</p>
 
-        {error && <AdminAlert type="error" message={error} className={`mb-4 ${errorAlertClass}`} />}
+        {error && <AdminAlert type="error" message={error} className="mb-4" />}
 
         <form onSubmit={onSubmit} className="space-y-4">
           <label className={fieldLabelClass}>
