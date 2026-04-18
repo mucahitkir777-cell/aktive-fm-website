@@ -324,9 +324,9 @@ export default function Home() {
       <Navigation />
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative min-h-screen lg:min-h-[88vh] flex items-center overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-y-0 inset-x-0 lg:inset-x-6 xl:inset-x-10 2xl:inset-x-16 lg:rounded-[2rem] overflow-hidden">
           <img
             src={heroImageUrl}
             alt="Professionelle Gebäudereinigung"
@@ -337,7 +337,7 @@ export default function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="container relative z-10 pt-20">
+        <div className="container relative z-10 pt-20 pb-8 lg:pb-10">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-8 h-0.5 pc-bg-brand" />
