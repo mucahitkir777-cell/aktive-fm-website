@@ -207,7 +207,7 @@ export default function QuickContactForm({
         <div className="w-16 h-16 pc-bg-soft rounded-full flex items-center justify-center mx-auto mb-5">
           <CheckCircle size={32} className="pc-text-brand" />
         </div>
-        <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+        <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
           Vielen Dank!
         </h3>
         <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -222,8 +222,8 @@ export default function QuickContactForm({
   const submitDisabled = loading || !formData.privacyConsent;
   return (
     <form onSubmit={handleSubmit} onFocusCapture={handleFormStart} className="space-y-5" noValidate>
-      <div className="rounded-lg border border-[#DCE8FF] bg-[#F4F8FF] px-4 py-3">
-        <p className="text-sm font-semibold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+      <div className="rounded-lg border pc-border pc-bg-soft px-4 py-3">
+        <p className="text-sm font-semibold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
           In unter 1 Minute anfragen
         </p>
         <p className="pc-text-secondary text-xs mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -445,7 +445,7 @@ export default function QuickContactForm({
       <button
         type="submit"
         disabled={submitDisabled}
-        className="w-full pc-btn-primary disabled:bg-gray-400"
+        className="w-full pc-btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         style={{ fontFamily: "Inter, sans-serif" }}
       >
         <Send size={16} />

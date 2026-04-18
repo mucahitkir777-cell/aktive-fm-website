@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Leistungen-Seite
  * Design: Architektonischer Minimalismus
  */
@@ -229,7 +229,7 @@ export default function Leistungen() {
       <Navigation />
 
       {/* Page Hero */}
-      <section className="relative overflow-hidden pt-28 pb-16 border-b pc-border bg-gradient-to-b from-white to-[#EEF4FF]">
+      <section className="relative overflow-hidden pt-28 pb-16 border-b pc-border bg-gradient-to-b from-white to-[var(--color-bg-section)]">
         <div className="absolute inset-0">
           <img
             src={heroImageUrl}
@@ -242,7 +242,7 @@ export default function Leistungen() {
         <div className="container">
           <div className="relative z-10 max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.title}
             </h1>
             <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -289,8 +289,8 @@ export default function Leistungen() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h3 className="text-2xl font-semibold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <div className="rounded-3xl border pc-border bg-white p-8 shadow-sm">
+              <h3 className="text-2xl font-semibold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.benefits.title}
               </h3>
               <p className="pc-text-secondary leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -331,7 +331,7 @@ export default function Leistungen() {
 
                   {/* Content */}
                   <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                    <h2 className="text-2xl lg:text-3xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                    <h2 className="text-2xl lg:text-3xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                       {service.title}
                     </h2>
                     <p className="pc-text-secondary leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -342,7 +342,7 @@ export default function Leistungen() {
                       {service.features.map((feature) => (
                         <li key={feature} className="flex items-start gap-2.5">
                           <CheckCircle size={16} className="pc-text-brand mt-0.5 shrink-0" />
-                          <span className="text-[#1A2332] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                          <span className="pc-text-primary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                             {feature}
                           </span>
                         </li>
@@ -372,7 +372,7 @@ export default function Leistungen() {
       {/* Final CTA - Lead-Maschine */}
       <section className="pc-bg-soft py-16 lg:py-20 border-y pc-border">
         <div className="container text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+          <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
             {resolvedCmsContent.finalCta.title}
           </h2>
           <p className="pc-text-secondary mb-8 max-w-lg mx-auto text-lg" style={{ fontFamily: "Inter, sans-serif" }}>

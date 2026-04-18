@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -7,9 +7,9 @@
 /*
  * Aktive Facility Management Design System
  * Philosophy: Helle Business-Optik
- * Primary: Royal Blue #1E3A8A | Accent: Sky #38BDF8
+ * Primary: #1F4E6B | Secondary: #2F6F8F | Accent: #3FA7A3
  * Background: Soft Gray #F5F7FA | Text: Ink #0F2137
- * Fonts: Plus Jakarta Sans (Headlines) + Inter (Body)
+ * Fonts: Inter (Headlines + Body)
  */
 
 @theme inline {
@@ -53,22 +53,23 @@
 
 :root {
   /* Core Color Tokens */
-  --color-primary: #1e3a8a;
-  --color-primary-hover: #1a3277;
+  --color-primary: #1F4E6B;
+  --color-primary-hover: #1B445D;
   --color-bg: #ffffff;
   --color-bg-section: #f5f7fa;
-  --color-bg-soft: #eef4ff;
+  --color-bg-soft: #EAF1F5;
   --color-card: #ffffff;
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
-  --color-accent: #38bdf8;
-  --color-success: #14b8a6;
-  --color-placeholder: #94a3b8;
+  --color-text: #13212B;
+  --color-text-secondary: #3F5563;
+  --color-text-muted: #6A7C88;
+  --color-border: #D8E2E8;
+  --color-accent: #3FA7A3;
+  --color-highlight: #5FE3D0;
+  --color-success: #2F6F8F;
+  --color-placeholder: #8AA0AE;
 
   /* Typography Tokens */
-  --font-family-heading: "Plus Jakarta Sans", sans-serif;
+  --font-family-heading: "Inter", sans-serif;
   --font-family-body: "Inter", sans-serif;
   --font-size-h1: clamp(2rem, 3vw, 3rem);
   --font-size-h2: clamp(1.625rem, 2.5vw, 2.25rem);
@@ -114,8 +115,8 @@
   --input: var(--color-border);
   --ring: var(--color-primary);
   --chart-1: var(--color-primary);
-  --chart-2: #3552a8;
-  --chart-3: #5f79bd;
+  --chart-2: #2F6F8F;
+  --chart-3: #5A8EA8;
   --chart-4: var(--color-accent);
   --chart-5: var(--color-success);
   --sidebar: var(--color-bg);
@@ -211,12 +212,12 @@
   }
 
   .pc-accent-line {
-    @apply block w-12 h-0.5 mt-4 mb-6;
+    @apply block w-14 h-0.5 mt-4 mb-6;
     background-color: var(--color-accent);
   }
 
   .pc-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0;
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 transition-colors duration-200;
     background-color: var(--color-primary);
     border-radius: var(--pc-radius-md);
     box-shadow: var(--pc-shadow-soft);
@@ -228,19 +229,19 @@
   }
 
   .pc-btn-outline {
-    @apply inline-flex items-center justify-center gap-2 border-2 bg-white font-semibold px-6 py-3.5 transition-all duration-300 hover:text-white hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 border-2 bg-white font-semibold px-6 py-3.5 transition-colors duration-200;
     border-color: var(--color-primary);
     color: var(--color-primary);
     border-radius: var(--pc-radius-md);
     font-family: var(--font-family-body);
   }
   .pc-btn-outline:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
     box-shadow: var(--pc-shadow-soft);
   }
 
   .pc-btn-white {
-    @apply inline-flex items-center justify-center gap-2 bg-white border font-semibold px-6 py-3.5 transition-all duration-300 hover:bg-[#F8FBFF] hover:-translate-y-0.5;
+    @apply inline-flex items-center justify-center gap-2 bg-white border font-semibold px-6 py-3.5 transition-colors duration-200 hover:bg-[#F8FBFF];
     color: var(--color-primary);
     border-color: var(--color-border);
     border-radius: var(--pc-radius-md);
@@ -249,8 +250,20 @@
   }
   .pc-btn-white:hover { box-shadow: var(--pc-shadow-soft-hover); }
 
+  .pc-btn-accent {
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 transition-colors duration-200;
+    background-color: var(--color-accent);
+    border-radius: var(--pc-radius-md);
+    box-shadow: var(--pc-shadow-soft);
+    font-family: var(--font-family-body);
+  }
+  .pc-btn-accent:hover {
+    background-color: #37918e;
+    box-shadow: var(--pc-shadow-soft-hover);
+  }
+
   .pc-card {
-    @apply bg-white p-7 border transition-all duration-300 hover:-translate-y-1;
+    @apply bg-white p-7 border transition-shadow duration-200;
     border-color: var(--color-border);
     border-radius: var(--pc-radius-md);
     box-shadow: var(--pc-shadow-soft);
@@ -273,7 +286,7 @@
   .pc-page-hero {
     @apply border-b pt-28 pb-16;
     border-color: var(--color-border);
-    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-soft) 100%);
+    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-section) 100%);
   }
 
   .pc-h1 {
@@ -328,7 +341,7 @@
   .pc-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+    box-shadow: 0 0 0 3px rgba(31, 78, 107, 0.14);
   }
 
   .pc-checkbox {
@@ -359,14 +372,14 @@
 
   /* Scroll animation utility */
   .pc-fade-up {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .pc-fade-up.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 

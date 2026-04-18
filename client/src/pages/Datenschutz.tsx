@@ -29,7 +29,7 @@ export default function Datenschutz() {
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               Datenschutzerklärung
             </h1>
             <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -42,14 +42,14 @@ export default function Datenschutz() {
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl">
-            <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8 pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+            <div className="bg-white rounded-xl p-8 lg:p-10 border pc-border shadow-sm space-y-8 pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
               <div>
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   1. Verantwortliche Stelle
                 </h2>
                 <p className="mb-3">Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
                 <div className="pc-bg-section rounded-lg p-4 space-y-1">
-                  <p className="font-semibold text-[#1A2332]">{companyConfig.brand.legalName}</p>
+                  <p className="font-semibold pc-text-primary">{companyConfig.brand.legalName}</p>
                   {companyConfig.address.lines.map((line) => (
                     <p key={line}>{line}</p>
                   ))}
@@ -58,8 +58,8 @@ export default function Datenschutz() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   2. Zugriffsdaten und Hosting
                 </h2>
                 <p>
@@ -68,8 +68,8 @@ export default function Datenschutz() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   3. Kontaktformular und Anfragen
                 </h2>
                 <p className="mb-3">
@@ -82,8 +82,8 @@ export default function Datenschutz() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   4. Cookies, Consent und Tracking
                 </h2>
                 <p className="mb-3">
@@ -96,8 +96,8 @@ export default function Datenschutz() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   5. Speicherdauer
                 </h2>
                 <p>
@@ -106,8 +106,8 @@ export default function Datenschutz() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   6. Ihre Rechte
                 </h2>
                 <p className="mb-3">Sie haben insbesondere folgende Rechte:</p>
@@ -132,8 +132,8 @@ export default function Datenschutz() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   7. Kontakt zu Datenschutzanfragen
                 </h2>
                 <p>
@@ -143,7 +143,7 @@ export default function Datenschutz() {
                   </a>
                   .
                 </p>
-                <p className="mt-3 text-xs text-[#9CA3AF]">
+                <p className="mt-3 text-xs pc-text-muted">
                   Stand: {new Date().toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
                 </p>
               </div>
@@ -156,3 +156,4 @@ export default function Datenschutz() {
     </div>
   );
 }
+

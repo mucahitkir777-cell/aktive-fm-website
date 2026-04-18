@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+﻿import { Link } from "wouter";
 import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -94,7 +94,7 @@ export default function UeberUns() {
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.title}
             </h1>
             <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -148,7 +148,7 @@ export default function UeberUns() {
               <div className="grid grid-cols-2 gap-4">
                 {storyStats.map((stat) => (
                   <div key={stat.label} className="pc-bg-section rounded-lg p-4">
-                    <div className="text-2xl font-bold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                    <div className="text-2xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
                       {stat.num}
                     </div>
                     <div className="pc-text-secondary text-sm mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -164,7 +164,7 @@ export default function UeberUns() {
                 <img src={storyImageUrl} alt={storyImageAlt} className="w-full h-96 lg:h-[500px] object-cover" loading="lazy" />
               </div>
               <div className="absolute -top-4 -right-4 pc-bg-accent pc-text-primary rounded-xl p-5 shadow-xl">
-                <div className="text-2xl font-bold" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>{companyConfig.metrics.customers}+</div>
+                <div className="text-2xl font-bold" style={{ fontFamily: "Inter, sans-serif" }}>{companyConfig.metrics.customers}+</div>
                 <div className="pc-text-brand text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
                   {resolvedCmsContent.companyInfo.teamBadgeLabel}
                 </div>
@@ -187,10 +187,10 @@ export default function UeberUns() {
               const Icon = VALUE_ICONS[i] ?? Shield;
               return (
                 <div key={value.title} className="pc-card pc-fade-up" style={{ transitionDelay: `${i * 80}ms` }}>
-                  <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-11 h-11 pc-bg-soft rounded-lg flex items-center justify-center mb-4">
                     <Icon size={20} className="pc-text-brand" />
                   </div>
-                  <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
                     {value.title}
                   </h3>
                   <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -222,7 +222,7 @@ export default function UeberUns() {
                 {teamBullets.map((item) => (
                   <li key={item} className="flex items-center gap-2.5">
                     <CheckCircle size={15} className="pc-text-brand shrink-0" />
-                    <span className="text-[#1A2332] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                    <span className="pc-text-primary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                       {item}
                     </span>
                   </li>
@@ -241,7 +241,7 @@ export default function UeberUns() {
 
       <section className="pc-bg-soft py-16 border-y pc-border">
         <div className="container text-center">
-          <h2 className="text-3xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+          <h2 className="text-3xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
             {resolvedCmsContent.finalCta.title}
           </h2>
           <p className="pc-text-secondary mb-8 max-w-lg mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -263,7 +263,7 @@ export default function UeberUns() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackWhatsAppClick("about_final_cta")}
-              className="inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 rounded-[var(--pc-radius-md)] shadow-[var(--pc-shadow-soft)] bg-green-500 hover:bg-green-600 transition-all duration-300 hover:-translate-y-0.5"
+              className="pc-btn-accent"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               <MessageCircle size={16} />

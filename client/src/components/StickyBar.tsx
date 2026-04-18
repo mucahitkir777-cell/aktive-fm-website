@@ -80,7 +80,7 @@ export default function StickyBar() {
               onClick={handleWhatsAppClick}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
               aria-label="Kontakt per WhatsApp"
             >
               <MessageCircle size={16} />
@@ -118,7 +118,7 @@ export default function StickyBar() {
             onClick={handleWhatsAppClick}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 text-emerald-700 transition-colors hover:bg-emerald-50 active:bg-emerald-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            className="inline-flex min-h-[72px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-2 pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
             aria-label="Kontakt per WhatsApp"
           >
             <MessageCircle size={20} />

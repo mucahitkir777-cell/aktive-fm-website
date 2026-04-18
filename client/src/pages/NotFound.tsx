@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management 404-Seite
  * Design: Architektonischer Minimalismus
  */
@@ -16,10 +16,10 @@ export default function NotFound() {
       <section className="pc-page-hero min-h-[60vh] flex items-center">
         <div className="container">
           <div className="max-w-lg">
-            <span className="pc-text-brand font-bold text-8xl lg:text-9xl block mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <span className="pc-text-brand font-bold text-8xl lg:text-9xl block mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               404
             </span>
-            <h1 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               Seite nicht gefunden
             </h1>
             <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>

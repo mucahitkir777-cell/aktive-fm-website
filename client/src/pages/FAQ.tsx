@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -90,7 +90,7 @@ function parseFaqText(faqText: string): FaqCategory[] {
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <div className="border-b pc-border last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-start justify-between gap-4 py-5 text-left"
@@ -161,7 +161,7 @@ export default function FAQ() {
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.title}
             </h1>
             <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -200,7 +200,7 @@ export default function FAQ() {
         <div className="container">
           <div className="max-w-3xl mx-auto">
             <div className="mb-10">
-              <h2 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <h2 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.questions.title}
               </h2>
               <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -210,10 +210,10 @@ export default function FAQ() {
 
             {faqCategories.map((category) => (
               <div key={category.category} className="mb-10">
-                <h2 className="text-lg font-bold pc-text-primary mb-4 pb-3 border-b-2 border-[#38BDF8] inline-block" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4 pb-3 border-b-2 border-[var(--color-accent)] inline-block" style={{ fontFamily: "Inter, sans-serif" }}>
                   {category.category}
                 </h2>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-6">
+                <div className="bg-white rounded-xl border pc-border shadow-sm px-6">
                   {category.items.map((item) => (
                     <FAQItem key={item.q} q={item.q} a={item.a} />
                   ))}
@@ -222,7 +222,7 @@ export default function FAQ() {
             ))}
 
             <div className="pc-bg-soft border pc-border rounded-xl p-8 text-center mt-12">
-              <h3 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <h3 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.finalCta.title}
               </h3>
               <p className="pc-text-secondary mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -244,7 +244,7 @@ export default function FAQ() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackWhatsAppClick("faq_final_cta")}
-                  className="inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 rounded-[var(--pc-radius-md)] shadow-[var(--pc-shadow-soft)] bg-green-500 hover:bg-green-600 transition-all duration-300 hover:-translate-y-0.5"
+                  className="pc-btn-accent"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <MessageCircle size={16} />
@@ -260,3 +260,4 @@ export default function FAQ() {
     </div>
   );
 }
+

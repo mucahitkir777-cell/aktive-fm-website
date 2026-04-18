@@ -63,19 +63,18 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-white text-[#1A2332] border-t pc-border">
+    <footer className="bg-white pc-text-primary border-t pc-border">
       <div className="container py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-8 pc-bg-brand rounded-lg flex items-center justify-center shadow-[0_10px_22px_-16px_rgba(30,58,138,0.9)]">
-                <span className="text-white font-bold text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  {companyConfig.brand.initials}
-                </span>
-              </div>
-              <span className="font-bold text-lg pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                {companyConfig.brand.name}
-              </span>
+            <div className="mb-5">
+              <img
+                src={companyConfig.brand.logoUrl}
+                alt={`${companyConfig.brand.name} Logo`}
+                className="h-16 w-auto sm:h-20"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <p className="pc-text-secondary text-sm leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.footer.footerText}
@@ -87,7 +86,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Leistungen
             </h4>
             <ul className="space-y-2.5">
@@ -111,7 +110,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Unternehmen
             </h4>
             <ul className="space-y-2.5">
@@ -140,7 +139,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Kontakt
             </h4>
             <ul className="space-y-4">
@@ -221,7 +220,6 @@ export default function Footer() {
     </footer>
   );
 }
-
 
 
 

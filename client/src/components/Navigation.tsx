@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Navigation Component
  * Design: Architektonischer Minimalismus
  * - Transparent on hero, solid white on scroll
@@ -98,28 +98,16 @@ export default function Navigation() {
       }`}
     >
       <div className="container">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-20 lg:h-24">
           <Link href="/">
-            <div className="flex items-center gap-2 group">
-              <div className="w-8 h-8 pc-bg-brand rounded-lg flex items-center justify-center shadow-[0_10px_22px_-14px_rgba(30,58,138,0.8)]">
-                <span className="text-white font-bold text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
-                  {companyConfig.brand.initials}
-                </span>
-              </div>
-              <div>
-                <span
-                  className="font-bold text-lg leading-none transition-colors duration-300 pc-text-primary"
-                  style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}
-                >
-                  {companyConfig.brand.name}
-                </span>
-                <span
-                  className="block text-xs font-normal leading-none transition-colors duration-300 pc-text-muted"
-                  style={{ fontFamily: "Inter, sans-serif" }}
-                >
-                  {companyConfig.brand.descriptor}
-                </span>
-              </div>
+            <div className="flex items-center group">
+              <img
+                src={companyConfig.brand.logoUrl}
+                alt={`${companyConfig.brand.name} Logo`}
+                className="h-14 w-auto sm:h-16 lg:h-20"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           </Link>
 
@@ -231,4 +219,5 @@ export default function Navigation() {
     </header>
   );
 }
+
 

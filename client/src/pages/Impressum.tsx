@@ -29,7 +29,7 @@ export default function Impressum() {
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               Impressum
             </h1>
             <p className="pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -42,13 +42,13 @@ export default function Impressum() {
       <section className="pc-section">
         <div className="container">
           <div className="max-w-3xl">
-            <div className="bg-white rounded-xl p-8 lg:p-10 border border-gray-100 shadow-sm space-y-8">
+            <div className="bg-white rounded-xl p-8 lg:p-10 border pc-border shadow-sm space-y-8">
               <div>
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Angaben gemäß § 5 TMG
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
-                  <p className="font-semibold text-[#1A2332]">{companyConfig.brand.legalName}</p>
+                  <p className="font-semibold pc-text-primary">{companyConfig.brand.legalName}</p>
                   {companyConfig.address.lines.map((line) => (
                     <p key={line}>{line}</p>
                   ))}
@@ -56,8 +56,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Kontakt
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -76,8 +76,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Vertreten durch
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -85,8 +85,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Registereintrag
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -96,8 +96,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Umsatzsteuer-ID
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -106,8 +106,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Verantwortlich nach § 55 Abs. 2 RStV
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -118,8 +118,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Berufsbezeichnung und berufsrechtliche Regelungen
                 </h2>
                 <div className="pc-text-secondary text-sm leading-relaxed space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -129,8 +129,8 @@ export default function Impressum() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Haftung für Inhalte
                 </h2>
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -141,8 +141,8 @@ export default function Impressum() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Haftung für Links
                 </h2>
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -150,8 +150,8 @@ export default function Impressum() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Urheberrecht
                 </h2>
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -159,8 +159,8 @@ export default function Impressum() {
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 pt-6">
-                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="border-t pc-border pt-6">
+                <h2 className="text-lg font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Hinweis zu beteiligten Unternehmen
                 </h2>
                 <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -176,3 +176,4 @@ export default function Impressum() {
     </div>
   );
 }
+

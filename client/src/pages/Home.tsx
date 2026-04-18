@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Startseite
  * Design: Architektonischer Minimalismus
  * Conversion-Architektur: Hero → Trust → Leistungen → USPs → Prozess → Testimonials → CTA
@@ -200,7 +200,7 @@ function StatCounter({ value, suffix, label }: { value: number; suffix: string; 
   const { count, ref } = useCounter(value);
   return (
     <div ref={ref} className="text-center">
-      <div className="text-3xl lg:text-4xl font-bold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+      <div className="text-3xl lg:text-4xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
         {count}{suffix}
       </div>
       <div className="text-sm pc-text-secondary mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -324,7 +324,7 @@ export default function Home() {
       <Navigation />
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen lg:min-h-[88vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[78vh] lg:min-h-[84vh] flex items-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-y-0 left-1/2 w-[calc(100%-1.5rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-200/70 shadow-[0_28px_68px_-42px_rgba(15,33,55,0.72)] sm:w-[calc(100%-2.5rem)] lg:w-[min(1540px,calc(100%-6rem))] lg:rounded-[2rem] xl:w-[min(1540px,calc(100%-10rem))] 2xl:w-[min(1540px,calc(100%-14rem))]">
           <img
@@ -348,13 +348,13 @@ export default function Home() {
 
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-bold pc-text-primary leading-tight mb-6"
-              style={{ fontFamily: "Plus Jakarta Sans, sans-serif", letterSpacing: "-0.02em" }}
+              style={{ fontFamily: "Inter, sans-serif", letterSpacing: "-0.02em" }}
             >
               {resolvedCmsContent.hero.title}<br />
               <span className="pc-text-brand">{resolvedCmsContent.hero.accentTitle}</span>
             </h1>
 
-            <p className="text-[#4F5F76] text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary text-lg leading-relaxed mb-8 max-w-lg" style={{ fontFamily: "Inter, sans-serif" }}>
               {resolvedCmsContent.hero.subtitle}
             </p>
             <p className="text-sm pc-text-secondary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -401,7 +401,7 @@ export default function Home() {
               ].map((badge) => (
                 <div key={badge} className="flex items-center gap-1.5">
                   <CheckCircle size={15} className="pc-text-brand" />
-                  <span className="text-[#334155] text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                  <span className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                     {badge}
                   </span>
                 </div>
@@ -411,15 +411,15 @@ export default function Home() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#94A3B8]">
-          <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#94A3B8]" />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pc-text-muted">
+          <div className="w-px h-12 bg-gradient-to-b from-transparent to-[var(--color-text-muted)]" />
         </div>
       </section>
 
       {/* ─── TRUST BAR ─── */}
-      <section className="bg-white border-b border-gray-100 py-8">
+      <section className="bg-white border-b pc-border py-8">
         <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-gray-100">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-[var(--color-border)]">
             <StatCounter value={companyConfig.metrics.yearsExperience} suffix="+" label="Jahre Erfahrung" />
             <StatCounter value={companyConfig.metrics.customers} suffix="+" label="Zufriedene Kunden" />
             <StatCounter value={companyConfig.metrics.staff} suffix="+" label="Fachkräfte im Team" />
@@ -447,10 +447,10 @@ export default function Home() {
                   className="pc-card pc-fade-up block h-full"
                   style={{ transitionDelay: `${i * 80}ms` }}
                 >
-                  <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-11 h-11 pc-bg-soft rounded-lg flex items-center justify-center mb-4">
                     <MapPin size={20} className="pc-text-brand" />
                   </div>
-                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
                     {region.label}
                   </h3>
                   <p className="pc-text-secondary text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -484,10 +484,10 @@ export default function Home() {
                 className="pc-card pc-fade-up group"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
-                <div className="w-11 h-11 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[var(--pc-primary)] transition-colors duration-300">
+                <div className="w-11 h-11 pc-bg-soft rounded-lg flex items-center justify-center mb-4 group-hover:bg-[var(--color-primary)] transition-colors duration-300">
                   <service.icon size={20} className="pc-text-brand group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
                   {service.title}
                 </h3>
                 <p className="pc-text-secondary text-sm leading-relaxed mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -539,7 +539,7 @@ export default function Home() {
               </div>
               {/* Floating Badge */}
               <div className="absolute -bottom-4 -right-4 pc-bg-accent pc-text-primary rounded-xl p-5 shadow-xl">
-                <div className="text-3xl font-bold" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>{companyConfig.metrics.yearsExperience}+</div>
+                <div className="text-3xl font-bold" style={{ fontFamily: "Inter, sans-serif" }}>{companyConfig.metrics.yearsExperience}+</div>
                 <div className="pc-text-brand text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>Jahre Erfahrung</div>
               </div>
             </div>
@@ -557,11 +557,11 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {usps.map((usp) => (
                   <div key={usp.title} className="flex gap-3">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 pc-bg-soft rounded-lg flex items-center justify-center shrink-0">
                       <usp.icon size={18} className="pc-text-brand" />
                     </div>
                     <div>
-                      <h4 className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                      <h4 className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Inter, sans-serif" }}>
                         {usp.title}
                       </h4>
                       <p className="pc-text-secondary text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -590,7 +590,7 @@ export default function Home() {
         <div className="container">
           <div className="max-w-xl mb-14 pc-fade-up">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary leading-tight" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary leading-tight" style={{ fontFamily: "Inter, sans-serif" }}>
               So einfach geht's
             </h2>
             <p className="pc-text-secondary text-lg leading-relaxed mt-4" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -603,13 +603,13 @@ export default function Home() {
               <div key={step.num} className="relative pc-fade-up" style={{ transitionDelay: `${i * 100}ms` }}>
                 {/* Connector line */}
                 {i < processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-[#D9E4F8] z-0" />
+                  <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-[var(--color-border)] z-0" />
                 )}
                 <div className="relative z-10">
-                  <div className="text-5xl font-bold text-[#9DB2D8] mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  <div className="text-5xl font-bold text-[var(--color-placeholder)] mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                     {step.num}
                   </div>
-                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                  <h3 className="text-lg font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
                     {step.title}
                   </h3>
                   <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -637,7 +637,7 @@ export default function Home() {
             {sectors.map((sector, i) => (
               <div
                 key={sector.label}
-                className="bg-white rounded-lg p-5 text-center border border-gray-100 hover:border-[#1E3A8A] hover:shadow-md transition-all duration-300 pc-fade-up"
+                className="bg-white rounded-lg p-5 text-center border pc-border hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 pc-fade-up"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <sector.icon size={24} className="pc-text-brand mx-auto mb-3" />
@@ -676,11 +676,11 @@ export default function Home() {
                     <Star key={j} size={14} className="text-amber-400 fill-amber-400" />
                   ))}
                 </div>
-                <p className="text-[#1A2332] text-sm leading-relaxed mb-5 italic" style={{ fontFamily: "Inter, sans-serif" }}>
+                <p className="pc-text-primary text-sm leading-relaxed mb-5 italic" style={{ fontFamily: "Inter, sans-serif" }}>
                   „{t.text}"
                 </p>
-                <div className="border-t border-gray-100 pt-4">
-                  <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <div className="border-t pc-border pt-4">
+                  <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                     {t.name}
                   </div>
                   <div className="pc-text-secondary text-xs mt-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -703,10 +703,10 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center">
           <div className="text-center pc-text-primary max-w-2xl px-4">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               Glasreinigung auf höchstem Niveau
             </h2>
-            <p className="text-[#44546B] mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="pc-text-secondary mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
               Von der Innenverglasung bis zur Glasfassade – streifenfrei, sicher und professionell.
             </p>
             <Link href="/leistungen">
@@ -736,7 +736,7 @@ export default function Home() {
               {/* Content */}
               <div className="p-10 lg:p-14">
                 <span className="block w-10 h-0.5 pc-bg-brand mb-6" />
-                <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   {resolvedCmsContent.finalCta.title}
                 </h2>
                 <p className="pc-text-secondary leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -808,4 +808,5 @@ export default function Home() {
     </div>
   );
 }
+
 

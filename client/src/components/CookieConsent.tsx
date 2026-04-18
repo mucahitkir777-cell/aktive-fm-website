@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Cookie Consent Banner
  * DSGVO-konform
  * Speichert Nutzer-Präferenzen in localStorage
@@ -54,7 +54,7 @@ export default function CookieConsent() {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Content */}
           <div className="flex-1">
-            <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
               Wir respektieren Ihre Privatsphäre
             </h3>
             <p className="text-sm pc-text-secondary leading-relaxed mb-4 lg:mb-0" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -70,7 +70,7 @@ export default function CookieConsent() {
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <button
               onClick={handleRejectAll}
-              className="px-4 py-2.5 text-sm font-medium pc-text-secondary border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2.5 text-sm font-medium pc-text-secondary border pc-border rounded-lg hover:bg-[var(--color-bg-section)] transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               Ablehnen
@@ -87,15 +87,15 @@ export default function CookieConsent() {
           {/* Close Button */}
           <button
             onClick={handleRejectAll}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            className="absolute top-4 right-4 pc-text-muted hover:pc-text-secondary"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Expandable Details (optional) */}
-        <details className="mt-4 pt-4 border-t border-gray-200">
-          <summary className="cursor-pointer text-sm font-semibold pc-text-primary hover:text-[var(--pc-primary)]" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+        <details className="mt-4 pt-4 border-t pc-border">
+          <summary className="cursor-pointer text-sm font-semibold pc-text-primary hover:text-[var(--pc-primary)]" style={{ fontFamily: "Inter, sans-serif" }}>
             Detaillierte Einstellungen
           </summary>
           <div className="mt-4 space-y-3">
@@ -109,7 +109,7 @@ export default function CookieConsent() {
                     analytics: e.target.checked,
                   }))
                 }
-                className="w-4 h-4 rounded border-gray-300"
+                className="w-4 h-4 rounded pc-border"
               />
               <span className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
                 <strong>Analyse-Cookies</strong> – Helfen uns, die Website zu verbessern
@@ -125,7 +125,7 @@ export default function CookieConsent() {
                     marketing: e.target.checked,
                   }))
                 }
-                className="w-4 h-4 rounded border-gray-300"
+                className="w-4 h-4 rounded pc-border"
               />
               <span className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
                 <strong>Marketing-Cookies</strong> – Personalisierte Inhalte und Anzeigen

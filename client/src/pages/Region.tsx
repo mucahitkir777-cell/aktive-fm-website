@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Region-Seite
  * Kuratierte Lead-Seiten für priorisierte Rhein-Main-Regionen.
  */
@@ -227,7 +227,7 @@ export default function Region() {
         <div className="container">
           <div className="max-w-2xl">
             <span className="block w-12 h-0.5 pc-bg-accent mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+            <h1 className="text-4xl lg:text-5xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
               {pageH1}
             </h1>
             <p className="pc-text-secondary text-lg leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -272,9 +272,9 @@ export default function Region() {
                     <Link key={service.id} href={serviceHref}>
                       <span
                         onClick={() => handleServiceClick(service, serviceHref)}
-                        className="bg-white rounded-lg p-5 border border-gray-100 hover:border-[#1E3A8A] hover:shadow-md transition-all duration-300 block h-full"
+                        className="bg-white rounded-lg p-5 border pc-border hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 block h-full"
                       >
-                        <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                        <h3 className="font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
                           {service.label}
                         </h3>
                         <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -286,8 +286,8 @@ export default function Region() {
                 })}
               </div>
 
-              <div className="bg-white rounded-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="bg-white rounded-lg p-6 border pc-border">
+                <h3 className="text-xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                   Direkt für {region.shortLabel} anfragen
                 </h3>
                 <p className="pc-text-secondary text-sm leading-relaxed mb-5" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -296,8 +296,8 @@ export default function Region() {
                 {renderContactCtas("region_mid_cta")}
               </div>
 
-              <div className="bg-white rounded-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="bg-white rounded-lg p-6 border pc-border">
+                <h3 className="text-xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                   Regionale Abstimmung
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -311,8 +311,8 @@ export default function Region() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="bg-white rounded-lg p-6 border border-gray-100">
-                  <h3 className="font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <div className="bg-white rounded-lg p-6 border pc-border">
+                  <h3 className="font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                     Weitere Regionen
                   </h3>
                   <div className="space-y-3">
@@ -320,7 +320,7 @@ export default function Region() {
                       <Link key={targetRegion.id} href={targetRegion.route}>
                         <span
                           onClick={() => handleRegionLinkClick(targetRegion)}
-                          className="flex items-center justify-between gap-3 pc-text-brand hover:text-[#1A3277] text-sm font-semibold"
+                          className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
                           style={{ fontFamily: "Inter, sans-serif" }}
                         >
                           {targetRegion.label}
@@ -331,15 +331,15 @@ export default function Region() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-6 border border-gray-100">
-                  <h3 className="font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+                <div className="bg-white rounded-lg p-6 border pc-border">
+                  <h3 className="font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                     Leistungen verbinden
                   </h3>
                   <div className="space-y-3">
                     <Link href="/leistungen">
                       <span
                         onClick={() => handleCtaClick("region_link_services", "Leistungen", "region_internal_links", "/leistungen")}
-                        className="flex items-center justify-between gap-3 pc-text-brand hover:text-[#1A3277] text-sm font-semibold"
+                        className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
                         style={{ fontFamily: "Inter, sans-serif" }}
                       >
                         Alle Leistungen
@@ -350,7 +350,7 @@ export default function Region() {
                       <Link key={route.id} href={route.route}>
                         <span
                           onClick={() => handleCtaClick(`region_link_${route.id}`, route.h1, "region_internal_links", route.route)}
-                          className="flex items-center justify-between gap-3 pc-text-brand hover:text-[#1A3277] text-sm font-semibold"
+                          className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
                           style={{ fontFamily: "Inter, sans-serif" }}
                         >
                           {route.h1}
@@ -364,8 +364,8 @@ export default function Region() {
             </div>
 
             <aside className="lg:col-span-1 pc-fade-up">
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 sticky top-24">
-                <h3 className="text-lg font-bold pc-text-primary mb-3" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="bg-white rounded-xl p-8 shadow-sm border pc-border sticky top-24">
+                <h3 className="text-lg font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                   Anfrage für {region.shortLabel}
                 </h3>
                 <p className="pc-text-secondary text-sm leading-relaxed mb-5" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -390,7 +390,7 @@ export default function Region() {
 
       <section className="pc-bg-soft py-16 border-y pc-border">
         <div className="container text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+          <h2 className="text-3xl lg:text-4xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
             Reinigung in {region.label} planen
           </h2>
           <p className="pc-text-secondary mb-8 max-w-lg mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -404,4 +404,5 @@ export default function Region() {
     </div>
   );
 }
+
 

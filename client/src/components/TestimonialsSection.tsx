@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Aktive Facility Management Testimonials & Bewertungen
  * Trust-Building Element mit Kundenzitaten und Ratings
  */
@@ -59,7 +59,7 @@ export function TrustMetrics() {
       {trustMetrics.map((metric) => (
         <div key={metric.label} className="bg-white rounded-xl p-5 shadow-[0_16px_36px_-28px_rgba(15,33,55,0.4)] border pc-border text-center">
           <metric.icon size={24} className="pc-text-brand mx-auto mb-2" />
-          <div className="text-xl lg:text-2xl font-bold pc-text-primary" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+          <div className="text-xl lg:text-2xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
             {metric.number}
           </div>
           <div className="text-xs lg:text-sm pc-text-secondary mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -94,7 +94,7 @@ export function TestimonialsGrid() {
               {testimonial.initials}
             </div>
             <div>
-              <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Plus Jakarta Sans, sans-serif" }}>
+              <div className="font-semibold pc-text-primary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
                 {testimonial.name}
               </div>
               <div className="pc-text-secondary text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
