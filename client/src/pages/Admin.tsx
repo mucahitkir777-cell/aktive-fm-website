@@ -174,9 +174,25 @@ type CmsDraftValue = string | number | boolean | CmsNavigationItem[];
 type CmsDraftSection = Record<string, CmsDraftValue>;
 type CmsDraft = Record<string, CmsDraftSection>;
 
-const buttonBaseClass = "rounded-lg px-4 py-2 text-sm font-semibold transition-colors";
-const secondaryButtonClass = `${buttonBaseClass} border border-gray-200 bg-white text-[#0F2137] hover:bg-gray-50`;
-const primaryButtonClass = `${buttonBaseClass} bg-[#1D6FA4] text-white hover:bg-[#155d8e] disabled:bg-gray-400`;
+const buttonBaseClass = "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors";
+const secondaryButtonClass = `${buttonBaseClass} border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60`;
+const primaryButtonClass = `${buttonBaseClass} border border-[#1D6FA4] bg-[#1D6FA4] text-white hover:bg-[#155d8e] disabled:cursor-not-allowed disabled:border-slate-300 disabled:bg-slate-300`;
+const dangerButtonClass = `${buttonBaseClass} border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60`;
+const shellClass = "min-h-screen bg-[#F2F4F7] px-4 py-6 md:px-6 md:py-8";
+const shellContainerClass = "mx-auto max-w-[1460px]";
+const surfaceClass = "rounded-2xl border border-slate-200 bg-white shadow-[0_12px_30px_-24px_rgba(15,33,55,0.65)]";
+const surfaceMutedClass = "rounded-2xl border border-slate-200 bg-slate-50/70";
+const fieldLabelClass = "block text-sm font-medium text-slate-800";
+const fieldControlClass = "mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition focus:border-[#1D6FA4] focus:outline-none focus:ring-4 focus:ring-[#1D6FA4]/15";
+const helperTextClass = "text-sm text-slate-500";
+const tableHeadClass = "bg-slate-50 text-xs uppercase text-slate-500";
+const tableHeaderCellClass = "px-4 py-3 font-semibold tracking-wide";
+const tableCellClass = "px-4 py-3 text-sm text-slate-700";
+const successAlertClass = "rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700";
+const errorAlertClass = "rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700";
+const emptyStateClass = "rounded-xl border border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500";
+const neutralBadgeClass = "inline-flex rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700";
+const infoPanelClass = "rounded-xl border border-slate-200 bg-slate-50 p-4";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("de-DE", {
@@ -458,6 +474,46 @@ function formatRoleLabel(role: AdminRole) {
   if (role === "admin") return "admin";
   if (role === "editor") return "editor";
   return "staff (legacy)";
+}
+
+function getLeadStatusLabel(status: LeadStatus | string | null | undefined) {
+  if (!status) return "Ohne Status";
+  if (status === "new") return "Neu";
+  if (status === "contacted") return "Kontaktiert";
+  if (status === "qualified") return "Qualifiziert";
+  if (status === "done") return "Abgeschlossen";
+  if (status === "archived") return "Archiviert";
+  return status;
+}
+
+function getLeadStatusBadgeClass(status: LeadStatus | string | null | undefined) {
+  if (!status) return neutralBadgeClass;
+  if (status === "new") return "inline-flex rounded-lg border border-[#1D6FA4]/30 bg-[#1D6FA4]/10 px-2.5 py-1 text-xs font-semibold text-[#1D6FA4]";
+  if (status === "contacted" || status === "qualified") {
+    return "inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700";
+  }
+  if (status === "done") return "inline-flex rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700";
+  return neutralBadgeClass;
+}
+
+function getLeadDueStateLabel(state: LeadDueState) {
+  if (state === "overdue") return "Überfällig";
+  if (state === "today") return "Heute fällig";
+  if (state === "upcoming") return "Geplant";
+  return "-";
+}
+
+function getLeadDueStateBadgeClass(state: LeadDueState) {
+  if (state === "overdue") {
+    return "inline-flex rounded-lg border border-red-200 bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700";
+  }
+  if (state === "today") {
+    return "inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700";
+  }
+  if (state === "upcoming") {
+    return neutralBadgeClass;
+  }
+  return "text-sm text-slate-500";
 }
 
 export default function Admin() {
@@ -1567,31 +1623,31 @@ export default function Admin() {
 
   if (!session) {
     return (
-      <main className="min-h-screen bg-[#F7F8FA] px-4 py-10">
-        <section className="mx-auto max-w-md rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-          <h1 className="mb-2 text-2xl font-bold text-[#0F2137]">Admin Login</h1>
-          <p className="mb-6 text-sm text-[#6B7A8D]">Melden Sie sich an, um Leads und Benutzer zu verwalten.</p>
+      <main className={shellClass}>
+        <section className={`${shellContainerClass} max-w-md ${surfaceClass} p-7`}>
+          <h1 className="mb-2 text-2xl font-bold text-slate-900">Admin Login</h1>
+          <p className={`mb-6 ${helperTextClass}`}>Melden Sie sich an, um Leads und Benutzer zu verwalten.</p>
 
-          {error && <div className="mb-4 rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+          {error && <div className={`mb-4 ${errorAlertClass}`}>{error}</div>}
 
           <form onSubmit={handleLogin} className="space-y-4">
-            <label className="block text-sm font-medium text-[#0F2137]">
+            <label className={fieldLabelClass}>
               Benutzername
               <input
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                className={fieldControlClass}
                 autoComplete="username"
               />
             </label>
 
-            <label className="block text-sm font-medium text-[#0F2137]">
+            <label className={fieldLabelClass}>
               Passwort
               <input
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 type="password"
-                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                className={fieldControlClass}
                 autoComplete="current-password"
               />
             </label>
@@ -1606,20 +1662,20 @@ export default function Admin() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F8FA] px-4 py-8">
-      <section className="mx-auto max-w-7xl">
-        <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="h-fit rounded-3xl border border-gray-200 bg-white p-5 text-sm text-[#0F2137] shadow-sm lg:sticky lg:top-8">
-            <div className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6B7A8D]">Admin</p>
-              <h2 className="mt-3 text-lg font-semibold text-[#0F2137]">Schneller Zugriff</h2>
-              <p className="mt-2 text-sm leading-6 text-[#6B7A8D]">Strukturierte Verwaltung für CMS, Leads und Benutzer.</p>
+    <main className={shellClass}>
+      <section className={shellContainerClass}>
+        <div className="grid items-start gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
+          <aside className={`${surfaceClass} max-h-[calc(100vh-3rem)] overflow-y-auto p-5 text-sm text-slate-800 lg:sticky lg:top-6`}>
+            <div className="mb-6 border-b border-slate-200 pb-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Admin</p>
+              <h2 className="mt-3 text-lg font-semibold text-slate-900">Workspace</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">Strukturierte Verwaltung für CMS, Leads und Benutzer.</p>
             </div>
 
             <div className="space-y-6">
               {navigationGroups.map((group) => (
                 <div key={group.title} className="space-y-3">
-                  <div className="text-xs font-semibold uppercase tracking-[0.24em] text-[#6B7A8D]">
+                  <div className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
                     {group.title}
                   </div>
                   <div className="space-y-2">
@@ -1642,8 +1698,8 @@ export default function Admin() {
                             }}
                             className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm transition ${
                               isActive
-                                ? "bg-[#0F2137] text-white"
-                                : "border border-gray-200 bg-white text-[#0F2137] hover:border-[#0F2137] hover:bg-[#F7F8FA]"
+                                ? "bg-slate-900 text-white shadow-[0_8px_20px_-16px_rgba(15,33,55,0.9)]"
+                                : "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
                             }`}
                           >
                             <item.icon size={16} />
@@ -1658,11 +1714,14 @@ export default function Admin() {
           </aside>
 
           <div className="min-w-0 space-y-6">
-            <div className="rounded-3xl border border-gray-200 bg-white p-6">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className={`${surfaceClass} p-6`}>
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-[#0F2137]">{currentSectionMeta.title}</h1>
-                  <p className="mt-2 text-sm text-[#6B7A8D]">Eingeloggt als {session.user.username}</p>
+                  <h1 className="text-3xl font-bold text-slate-900">{currentSectionMeta.title}</h1>
+                  <p className={`mt-2 max-w-2xl ${helperTextClass}`}>{currentSectionMeta.description}</p>
+                  <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    Eingeloggt als {session.user.username}
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -1705,7 +1764,7 @@ export default function Admin() {
                     </button>
 
                     {settingsOpen && (
-                      <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+                      <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
                         <button
                           type="button"
                           onClick={() => {
@@ -1714,7 +1773,7 @@ export default function Admin() {
                             setError("");
                             setSuccessMessage("");
                           }}
-                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-900 hover:bg-slate-50"
                         >
                           <KeyRound size={16} />
                           Passwort ändern
@@ -1729,7 +1788,7 @@ export default function Admin() {
                               setError("");
                               setSuccessMessage("");
                             }}
-                            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-[#0F2137] hover:bg-gray-50"
+                            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-900 hover:bg-slate-50"
                           >
                             <Users size={16} />
                             Benutzer verwalten
@@ -1750,77 +1809,72 @@ export default function Admin() {
                 </div>
               </div>
             </div>
-        <div className="rounded-lg border border-gray-200 bg-white px-5 py-4">
-          <h2 className="text-xl font-semibold text-[#0F2137]">{currentSectionMeta.title}</h2>
-          <p className="mt-1 text-sm text-[#6B7A8D]">{currentSectionMeta.description}</p>
-        </div>
-
         {successMessage && (
-          <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-700">
+          <div className={successAlertClass}>
             {successMessage}
           </div>
         )}
 
-        {error && <div className="rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+        {error && <div className={errorAlertClass}>{error}</div>}
 
         {currentSection === "dashboard" && (
           <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-7">
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Gesamtleads</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Gesamtleads</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.leads.total ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Neue Leads heute</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Neue Leads heute</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.leads.today ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Leads diese Woche</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Leads diese Woche</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.leads.thisWeek ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Seitenaufrufe heute</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Seitenaufrufe heute</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.pageViews.today ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Seitenaufrufe 7 Tage</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Seitenaufrufe 7 Tage</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.pageViews.last7Days ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">Heute fällig</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Heute fällig</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.leads.dueToday ?? 0}
                 </p>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <p className="text-sm font-medium text-[#6B7A8D]">überfällig</p>
-                <p className="mt-2 text-3xl font-bold text-[#0F2137]">
+              <div className={`${surfaceClass} p-5`}>
+                <p className="text-sm font-medium text-slate-500">Überfällig</p>
+                <p className="mt-2 text-3xl font-bold text-slate-900">
                   {loadingStats && !stats ? "..." : stats?.leads.overdue ?? 0}
                 </p>
               </div>
             </div>
 
             <div className="grid gap-6 xl:grid-cols-3">
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
+              <div className={`${surfaceClass} p-5`}>
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">Neu eingegangen</h3>
-                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads von heute, sortiert nach Eingang.</p>
+                    <h3 className="text-base font-semibold text-slate-900">Neu eingegangen</h3>
+                    <p className="mt-1 text-sm text-slate-500">Leads von heute, sortiert nach Eingang.</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setLocation("/admin/leads")}
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                    className={secondaryButtonClass}
                   >
                     Leadliste
                   </button>
@@ -1828,13 +1882,13 @@ export default function Admin() {
 
                 <div className="mt-4 space-y-3">
                   {loadingStats && !stats && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Dashboard wird geladen...
                     </div>
                   )}
 
                   {!loadingStats && (stats?.newLeadsToday.length ?? 0) === 0 && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Heute sind noch keine neuen Leads eingegangen.
                     </div>
                   )}
@@ -1844,15 +1898,15 @@ export default function Admin() {
                       key={lead.id}
                       type="button"
                       onClick={() => void openLeadEditorById(lead.id)}
-                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                      className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
-                          <p className="mt-1 text-sm text-[#6B7A8D]">Eingegangen am {formatDate(lead.createdAt)}</p>
+                          <p className="text-sm font-semibold text-slate-900">{lead.name}</p>
+                          <p className="mt-1 text-sm text-slate-500">Eingegangen am {formatDate(lead.createdAt)}</p>
                         </div>
-                        <span className="inline-flex rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137]">
-                          {lead.status}
+                        <span className={getLeadStatusBadgeClass(lead.status)}>
+                          {getLeadStatusLabel(lead.status)}
                         </span>
                       </div>
                     </button>
@@ -1860,16 +1914,16 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
+              <div className={`${surfaceClass} p-5`}>
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">Heute fällig</h3>
-                    <p className="mt-1 text-sm text-[#6B7A8D]">Leads mit Wiedervorlage für heute.</p>
+                    <h3 className="text-base font-semibold text-slate-900">Heute fällig</h3>
+                    <p className="mt-1 text-sm text-slate-500">Leads mit Wiedervorlage für heute.</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setLocation("/admin/leads")}
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                    className={secondaryButtonClass}
                   >
                     Leadliste
                   </button>
@@ -1877,13 +1931,13 @@ export default function Admin() {
 
                 <div className="mt-4 space-y-3">
                   {loadingStats && !stats && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Dashboard wird geladen...
                     </div>
                   )}
 
                   {!loadingStats && (stats?.dueTodayLeads.length ?? 0) === 0 && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Keine Leads für heute fällig.
                     </div>
                   )}
@@ -1893,15 +1947,15 @@ export default function Admin() {
                       key={lead.id}
                       type="button"
                       onClick={() => void openLeadEditorById(lead.id)}
-                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                      className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
-                          <p className="mt-1 text-sm text-[#6B7A8D]">Fällig am {formatDateOnly(lead.followUpDate)}</p>
+                          <p className="text-sm font-semibold text-slate-900">{lead.name}</p>
+                          <p className="mt-1 text-sm text-slate-500">Fällig am {formatDateOnly(lead.followUpDate)}</p>
                         </div>
-                        <span className="inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
-                          {lead.status}
+                        <span className={getLeadStatusBadgeClass(lead.status)}>
+                          {getLeadStatusLabel(lead.status)}
                         </span>
                       </div>
                     </button>
@@ -1909,16 +1963,16 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
+              <div className={`${surfaceClass} p-5`}>
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">überfällig</h3>
-                    <p className="mt-1 text-sm text-[#6B7A8D]">Offene Wiedervorlagen vor dem heutigen Datum.</p>
+                    <h3 className="text-base font-semibold text-slate-900">Überfällig</h3>
+                    <p className="mt-1 text-sm text-slate-500">Offene Wiedervorlagen vor dem heutigen Datum.</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setLocation("/admin/leads")}
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                    className={secondaryButtonClass}
                   >
                     Leadliste
                   </button>
@@ -1926,13 +1980,13 @@ export default function Admin() {
 
                 <div className="mt-4 space-y-3">
                   {loadingStats && !stats && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Dashboard wird geladen...
                     </div>
                   )}
 
                   {!loadingStats && (stats?.overdueLeads.length ?? 0) === 0 && (
-                    <div className="rounded-lg border border-gray-100 bg-[#F7F8FA] px-4 py-8 text-center text-sm text-[#6B7A8D]">
+                    <div className={emptyStateClass}>
                       Keine überfälligen Leads vorhanden.
                     </div>
                   )}
@@ -1942,15 +1996,15 @@ export default function Admin() {
                       key={lead.id}
                       type="button"
                       onClick={() => void openLeadEditorById(lead.id)}
-                      className="block w-full rounded-lg border border-gray-100 bg-[#F7F8FA] p-4 text-left transition-colors hover:bg-gray-50"
+                      className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-sm font-semibold text-[#0F2137]">{lead.name}</p>
-                          <p className="mt-1 text-sm text-[#6B7A8D]">Fällig am {formatDateOnly(lead.followUpDate)}</p>
+                          <p className="text-sm font-semibold text-slate-900">{lead.name}</p>
+                          <p className="mt-1 text-sm text-slate-500">Fällig am {formatDateOnly(lead.followUpDate)}</p>
                         </div>
-                        <span className="inline-flex rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-700">
-                          {lead.status}
+                        <span className={getLeadStatusBadgeClass(lead.status)}>
+                          {getLeadStatusLabel(lead.status)}
                         </span>
                       </div>
                     </button>
@@ -1959,8 +2013,8 @@ export default function Admin() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-5">
-              <h3 className="text-base font-semibold text-[#0F2137]">Leads nach Status</h3>
+            <div className={`${surfaceClass} p-5`}>
+              <h3 className="text-base font-semibold text-slate-900">Leads nach Status</h3>
               <div className="mt-4 grid gap-3 lg:grid-cols-5">
                 {leadStatuses.map((status) => {
                   const count = stats?.leads.byStatus[status] ?? 0;
@@ -1968,10 +2022,10 @@ export default function Admin() {
                   const width = total > 0 ? Math.max((count / total) * 100, count > 0 ? 8 : 0) : 0;
 
                   return (
-                    <div key={status} className="rounded-lg border border-gray-100 bg-[#F7F8FA] p-4">
+                    <div key={status} className="rounded-lg border border-slate-100 bg-slate-50 p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-medium capitalize text-[#0F2137]">{status}</p>
-                        <p className="text-sm font-semibold text-[#0F2137]">
+                        <p className="text-sm font-medium text-slate-900">{getLeadStatusLabel(status)}</p>
+                        <p className="text-sm font-semibold text-slate-900">
                           {loadingStats && !stats ? "..." : count}
                         </p>
                       </div>
@@ -1991,14 +2045,14 @@ export default function Admin() {
 
         {currentSection === "leads" && (
           <div className="space-y-4">
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
+            <div className={`${surfaceClass} p-4`}>
               <div className="grid gap-3 lg:grid-cols-[240px_minmax(0,1fr)_240px_auto]">
-                <label className="block text-sm font-medium text-[#0F2137]">
+                <label className={fieldLabelClass}>
                   Filter
                   <select
                     value={leadFilter}
                     onChange={(event) => setLeadFilter(event.target.value as LeadFilterValue)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   >
                     <option value="all">Alle</option>
                     <option value="new">Neu</option>
@@ -2006,28 +2060,28 @@ export default function Admin() {
                     <option value="completed">Abgeschlossen</option>
                     <option value="without-status">Ohne Status</option>
                     <option value="due-today">Heute fällig</option>
-                    <option value="overdue">überfällig</option>
+                    <option value="overdue">Überfällig</option>
                     <option value="with-follow-up">Mit Wiedervorlage</option>
                     <option value="without-follow-up">Ohne Wiedervorlage</option>
                   </select>
                 </label>
 
-                <label className="block text-sm font-medium text-[#0F2137]">
+                <label className={fieldLabelClass}>
                   Suche
                   <input
                     value={leadSearch}
                     onChange={(event) => setLeadSearch(event.target.value)}
                     placeholder="Nach Name, E-Mail oder Telefon suchen"
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   />
                 </label>
 
-                <label className="block text-sm font-medium text-[#0F2137]">
+                <label className={fieldLabelClass}>
                   Sortierung
                   <select
                     value={leadSort}
                     onChange={(event) => setLeadSort(event.target.value as LeadSortValue)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   >
                     <option value="newest">Neueste zuerst</option>
                     <option value="oldest">Älteste zuerst</option>
@@ -2037,31 +2091,31 @@ export default function Admin() {
                 </label>
 
                 <div className="flex items-end">
-                  <div className="w-full rounded-lg border border-gray-200 bg-[#F7F8FA] px-4 py-2 text-sm text-[#0F2137]">
+                  <div className={infoPanelClass}>
                     {filteredLeads.length} von {leadCount} Leads
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+            <div className={`${surfaceClass} overflow-x-auto`}>
               <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
-                <thead className="bg-gray-50 text-xs uppercase text-[#6B7A8D]">
+                <thead className={tableHeadClass}>
                   <tr>
-                    <th className="px-4 py-3">Datum</th>
-                    <th className="px-4 py-3">Wiedervorlage</th>
-                    <th className="px-4 py-3">Name</th>
-                    <th className="px-4 py-3">E-Mail</th>
-                    <th className="px-4 py-3">Telefon</th>
-                    <th className="px-4 py-3">Nachricht</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Aktion</th>
+                    <th className={tableHeaderCellClass}>Datum</th>
+                    <th className={tableHeaderCellClass}>Wiedervorlage</th>
+                    <th className={tableHeaderCellClass}>Name</th>
+                    <th className={tableHeaderCellClass}>E-Mail</th>
+                    <th className={tableHeaderCellClass}>Telefon</th>
+                    <th className={tableHeaderCellClass}>Nachricht</th>
+                    <th className={tableHeaderCellClass}>Status</th>
+                    <th className={tableHeaderCellClass}>Aktion</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loadingLeads && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                      <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-500">
                         Leads werden geladen...
                       </td>
                     </tr>
@@ -2069,7 +2123,7 @@ export default function Admin() {
 
                   {!loadingLeads && leads.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                      <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-500">
                         Noch keine Leads vorhanden.
                       </td>
                     </tr>
@@ -2077,7 +2131,7 @@ export default function Admin() {
 
                   {!loadingLeads && leads.length > 0 && filteredLeads.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-[#6B7A8D]">
+                      <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-500">
                         Keine Leads für die aktuelle Auswahl gefunden.
                       </td>
                     </tr>
@@ -2085,47 +2139,35 @@ export default function Admin() {
 
                   {!loadingLeads &&
                     filteredLeads.map((lead) => (
-                      <tr key={lead.id} className="border-t border-gray-100 align-top">
-                        <td className="px-4 py-3 text-[#6B7A8D]">{formatDate(lead.createdAt)}</td>
-                        <td className="px-4 py-3">
+                      <tr key={lead.id} className="border-t border-slate-100 align-top transition-colors hover:bg-slate-50/70">
+                        <td className={tableCellClass}>{formatDate(lead.createdAt)}</td>
+                        <td className={tableCellClass}>
                           {lead.followUpDate ? (
                             <div className="space-y-2">
-                              <div className="font-medium text-[#0F2137]">{formatDateOnly(lead.followUpDate)}</div>
-                              <span
-                                className={
-                                  getLeadDueState(lead) === "overdue"
-                                    ? "inline-flex rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-700"
-                                    : getLeadDueState(lead) === "today"
-                                      ? "inline-flex rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700"
-                                      : "inline-flex rounded-lg border border-gray-200 bg-[#F7F8FA] px-2 py-1 text-xs font-medium text-[#0F2137]"
-                                }
-                              >
-                                {getLeadDueState(lead) === "overdue"
-                                  ? "überfällig"
-                                  : getLeadDueState(lead) === "today"
-                                    ? "Heute fällig"
-                                    : "Geplant"}
+                              <div className="font-medium text-slate-900">{formatDateOnly(lead.followUpDate)}</div>
+                              <span className={getLeadDueStateBadgeClass(getLeadDueState(lead))}>
+                                {getLeadDueStateLabel(getLeadDueState(lead))}
                               </span>
                             </div>
                           ) : (
-                            <span className="text-[#6B7A8D]">-</span>
+                            <span className="text-slate-500">-</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 font-medium text-[#0F2137]">
+                        <td className={`${tableCellClass} font-medium text-slate-900`}>
                           {lead.name}
-                          {lead.company && <span className="block text-xs font-normal text-[#6B7A8D]">{lead.company}</span>}
+                          {lead.company && <span className="block text-xs font-normal text-slate-500">{lead.company}</span>}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={tableCellClass}>
                           <a href={`mailto:${lead.email}`} className="text-[#1D6FA4]">
                             {lead.email}
                           </a>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={tableCellClass}>
                           <a href={`tel:${lead.phone}`} className="text-[#1D6FA4]">
                             {lead.phone}
                           </a>
                         </td>
-                        <td className="max-w-sm px-4 py-3 text-[#6B7A8D]">
+                        <td className="max-w-sm px-4 py-3 text-sm text-slate-500">
                           <div>{lead.message || "Keine Nachricht"}</div>
                           {(lead.regionLabel || lead.serviceLabel) && (
                             <div className="mt-2 text-xs">
@@ -2133,20 +2175,20 @@ export default function Admin() {
                             </div>
                           )}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={tableCellClass}>
                           <select
                             value={lead.status}
                             onChange={(event) => void handleStatusChange(lead.id, event.target.value as LeadStatus)}
-                            className="rounded-lg border border-gray-200 px-2 py-1 text-sm"
+                            className="rounded-lg border border-slate-200 px-2 py-1 text-sm"
                           >
                             {leadStatuses.map((status) => (
                               <option key={status} value={status}>
-                                {status}
+                                {getLeadStatusLabel(status)}
                               </option>
                             ))}
                           </select>
                         </td>
-                        <td className="px-4 py-3">
+                        <td className={tableCellClass}>
                           <button type="button" onClick={() => openLeadEditor(lead)} className={secondaryButtonClass}>
                             <span className="inline-flex items-center gap-2">
                               <PencilLine size={15} />
@@ -2165,16 +2207,16 @@ export default function Admin() {
         {currentSection === "pages" && (
           <div className="grid gap-4 lg:grid-cols-2">
             {cmsPageOptions.map((page) => (
-              <div key={page.slug} className="rounded-lg border border-gray-200 bg-white p-5">
+              <div key={page.slug} className={`${surfaceClass} p-5`}>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">{page.title}</h3>
-                    <p className="mt-1 text-sm text-[#6B7A8D]">{page.path}</p>
-                    <p className="mt-3 text-sm text-[#6B7A8D]">
+                    <h3 className="text-base font-semibold text-slate-900">{page.title}</h3>
+                    <p className="mt-1 text-sm text-slate-500">{page.path}</p>
+                    <p className="mt-3 text-sm text-slate-500">
                       {page.updatedAt ? `Zuletzt aktualisiert: ${formatDate(page.updatedAt)}` : "Noch nicht gespeichert."}
                     </p>
                   </div>
-                  <span className="inline-flex rounded-lg border border-gray-200 bg-[#F7F8FA] px-2 py-1 text-xs font-medium text-[#0F2137]">
+                  <span className="inline-flex rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-900">
                     {page.slug}
                   </span>
                 </div>
@@ -2212,14 +2254,14 @@ export default function Admin() {
 
         {currentSection === "content" && (
           <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
-            <div className="space-y-4">
-              <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <label className="block text-sm font-medium text-[#0F2137]">
+            <div className="space-y-4 xl:sticky xl:top-6">
+              <div className={`${surfaceClass} p-4`}>
+                <label className={fieldLabelClass}>
                   Seite
                   <select
                     value={selectedCmsSlug}
                     onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   >
                     {cmsPageOptions.map((page) => (
                       <option key={page.slug} value={page.slug}>
@@ -2230,8 +2272,8 @@ export default function Admin() {
                 </label>
               </div>
 
-              <div className="rounded-lg border border-gray-200 bg-white p-4">
-                <p className="text-sm font-medium text-[#0F2137]">Sektionen</p>
+              <div className={`${surfaceClass} p-4`}>
+                <p className="text-sm font-medium text-slate-900">Sektionen</p>
                 <div className="mt-3 space-y-2">
                   {cmsSections.map((section) => (
                     <button
@@ -2240,8 +2282,8 @@ export default function Admin() {
                       onClick={() => setSelectedCmsSection(section.key as CmsSectionKey)}
                       className={
                         selectedCmsSection === section.key
-                          ? "w-full rounded-lg border border-[#0F2137] bg-[#0F2137] px-3 py-2 text-left text-sm font-medium text-white"
-                          : "w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-sm font-medium text-[#0F2137] hover:bg-gray-50"
+                          ? "w-full rounded-lg border border-slate-900 bg-slate-900 px-3 py-2 text-left text-sm font-medium text-white"
+                          : "w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-900 hover:bg-slate-50"
                       }
                     >
                       {section.label}
@@ -2252,11 +2294,11 @@ export default function Admin() {
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-lg border border-gray-200 bg-white p-5">
-                <div className="flex flex-col gap-3 border-b border-gray-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className={`${surfaceClass} p-5`}>
+                <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <h3 className="text-base font-semibold text-[#0F2137]">Medienverwaltung</h3>
-                    <p className="text-sm text-[#6B7A8D]">Bilder hochladen und URL direkt in CMS-Felder verwenden.</p>
+                    <h3 className="text-base font-semibold text-slate-900">Medienverwaltung</h3>
+                    <p className="text-sm text-slate-500">Bilder hochladen und URL direkt in CMS-Felder verwenden.</p>
                   </div>
                   <label className={`${secondaryButtonClass} inline-flex items-center justify-center`}>
                     <input
@@ -2271,28 +2313,28 @@ export default function Admin() {
                 </div>
 
                 {loadingMedia ? (
-                  <div className="py-6 text-sm text-[#6B7A8D]">Medien werden geladen...</div>
+                  <div className="py-6 text-sm text-slate-500">Medien werden geladen...</div>
                 ) : mediaItems.length === 0 ? (
-                  <div className="py-6 text-sm text-[#6B7A8D]">Noch keine Bilder hochgeladen.</div>
+                  <div className="py-6 text-sm text-slate-500">Noch keine Bilder hochgeladen.</div>
                 ) : (
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {mediaItems.map((media) => (
-                      <div key={media.filename} className="rounded-lg border border-gray-200 bg-[#F7F8FA] p-3">
-                        <div className="aspect-[16/10] overflow-hidden rounded-md border border-gray-200 bg-white">
+                      <div key={media.filename} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                        <div className="aspect-[16/10] overflow-hidden rounded-md border border-slate-200 bg-white">
                           <img src={media.url} alt={media.filename} className="h-full w-full object-cover" loading="lazy" />
                         </div>
-                        <p className="mt-3 truncate text-xs font-medium text-[#0F2137]">{media.filename}</p>
-                        <p className="mt-1 text-xs text-[#6B7A8D]">{formatFileSize(media.size)} · {formatDate(media.uploadedAt)}</p>
-                        <input value={media.url} readOnly className="mt-2 w-full rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-[#0F2137]" />
+                        <p className="mt-3 truncate text-xs font-medium text-slate-900">{media.filename}</p>
+                        <p className="mt-1 text-xs text-slate-500">{formatFileSize(media.size)} · {formatDate(media.uploadedAt)}</p>
+                        <input value={media.url} readOnly className="mt-2 w-full rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-900" />
                         <div className="mt-2 flex flex-wrap gap-2">
-                          <button type="button" onClick={() => void copyMediaUrl(media.url)} className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50">
+                          <button type="button" onClick={() => void copyMediaUrl(media.url)} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50">
                             URL kopieren
                           </button>
                           {activeImageField && (
                             <button
                               type="button"
                               onClick={() => updateCmsField(cmsSelectedSection.key, activeImageField.key, media.url)}
-                              className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50"
+                              className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50"
                             >
                               In Feld übernehmen
                             </button>
@@ -2304,99 +2346,99 @@ export default function Admin() {
                 )}
               </div>
 
-              <form onSubmit={handleCmsSave} className="rounded-lg border border-gray-200 bg-white p-5">
-              <div className="flex flex-col gap-2 border-b border-gray-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 className="text-base font-semibold text-[#0F2137]">{cmsDefinition.title}</h3>
-                  <p className="text-sm text-[#6B7A8D]">{cmsSelectedSection.label} bearbeiten</p>
-                </div>
-                <div className="flex flex-col items-start gap-2 text-sm text-[#6B7A8D] sm:items-end">
-                  <label className="text-xs font-medium uppercase tracking-wide text-[#6B7A8D]">
-                    Status
-                    <select
-                      value={cmsPageStatus}
-                      onChange={(event) => setCmsPageStatus(event.target.value as CmsPageStatus)}
-                      className="mt-1 block rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-[#0F2137]"
-                    >
-                      <option value="published">Published</option>
-                      <option value="draft">Draft</option>
-                    </select>
-                  </label>
+              <form onSubmit={handleCmsSave} className={`${surfaceClass} p-5`}>
+                <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    {cmsPage?.updatedAt ? `Zuletzt gespeichert: ${formatDate(cmsPage.updatedAt)}` : "Noch keine Speicherung"}
+                    <h3 className="text-base font-semibold text-slate-900">{cmsDefinition.title}</h3>
+                    <p className="text-sm text-slate-500">{cmsSelectedSection.label} bearbeiten</p>
+                  </div>
+                  <div className="flex flex-col items-start gap-2 text-sm text-slate-500 sm:items-end">
+                    <label className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                      Status
+                      <select
+                        value={cmsPageStatus}
+                        onChange={(event) => setCmsPageStatus(event.target.value as CmsPageStatus)}
+                        className={fieldControlClass}
+                      >
+                        <option value="published">Veröffentlicht</option>
+                        <option value="draft">Entwurf</option>
+                      </select>
+                    </label>
+                    <div>
+                      {cmsPage?.updatedAt ? `Zuletzt gespeichert: ${formatDate(cmsPage.updatedAt)}` : "Noch keine Speicherung"}
+                    </div>
                   </div>
                 </div>
-              </div>
 
               {loadingCms ? (
-                <div className="py-10 text-center text-sm text-[#6B7A8D]">CMS-Inhalte werden geladen...</div>
+                <div className="py-10 text-center text-sm text-slate-500">CMS-Inhalte werden geladen...</div>
               ) : (
                 <div className="mt-5 space-y-4">
                   {isGlobalNavigationSection ? (
                     <>
                       <div className="space-y-3">
                         {navigationDraftItems.map((item, index) => (
-                          <div key={item.id} className="rounded-lg border border-gray-200 bg-[#F7F8FA] p-3">
+                          <div key={item.id} className={infoPanelClass}>
                             <div className="mb-3 flex items-center justify-between">
-                              <p className="text-sm font-semibold text-[#0F2137]">
+                              <p className="text-sm font-semibold text-slate-900">
                                 {item.id}
                               </p>
                               <button
                                 type="button"
                                 onClick={() => removeNavigationItem(item.id)}
-                                className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-[#0F2137] hover:bg-gray-50"
+                                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50"
                               >
                                 Entfernen
                               </button>
                             </div>
                             <div className="grid gap-3 md:grid-cols-2">
-                              <label className="block text-sm font-medium text-[#0F2137]">
+                              <label className={fieldLabelClass}>
                                 Label
                                 <input
                                   value={item.label}
                                   onChange={(event) => updateNavigationItem(index, { label: event.target.value })}
-                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                  className={fieldControlClass}
                                 />
                               </label>
-                              <label className="block text-sm font-medium text-[#0F2137]">
+                              <label className={fieldLabelClass}>
                                 Pfad / URL
                                 <input
                                   value={item.href}
                                   onChange={(event) => updateNavigationItem(index, { href: event.target.value })}
-                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                  className={fieldControlClass}
                                 />
                               </label>
-                              <label className="block text-sm font-medium text-[#0F2137]">
+                              <label className={fieldLabelClass}>
                                 Typ
                                 <select
                                   value={item.type}
                                   onChange={(event) => updateNavigationItem(index, { type: event.target.value as CmsNavigationItem["type"] })}
-                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                  className={fieldControlClass}
                                 >
                                   <option value="page">Seite</option>
-                                  <option value="custom">Custom</option>
+                                  <option value="custom">Eigener Link</option>
                                 </select>
                               </label>
-                              <label className="block text-sm font-medium text-[#0F2137]">
+                              <label className={fieldLabelClass}>
                                 Ziel
                                 <select
                                   value={item.target}
                                   onChange={(event) => updateNavigationItem(index, { target: event.target.value as CmsNavigationItem["target"] })}
-                                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                  className={fieldControlClass}
                                 >
                                   <option value="_self">Gleiches Tab</option>
                                   <option value="_blank">Neues Tab</option>
                                 </select>
                               </label>
-                              <label className="block text-sm font-medium text-[#0F2137]">
+                              <label className={fieldLabelClass}>
                                 Sichtbar
-                                <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2">
+                                <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
                                   <input
                                     type="checkbox"
                                     checked={item.visible}
                                     onChange={(event) => updateNavigationItem(index, { visible: event.target.checked })}
                                   />
-                                  <span className="text-sm text-[#0F2137]">{item.visible ? "Ja" : "Nein"}</span>
+                                  <span className="text-sm text-slate-900">{item.visible ? "Ja" : "Nein"}</span>
                                 </div>
                               </label>
                             </div>
@@ -2406,20 +2448,20 @@ export default function Admin() {
                       <button type="button" onClick={addNavigationItem} className={secondaryButtonClass}>
                         Link hinzufügen
                       </button>
-                      <label className="block text-sm font-medium text-[#0F2137]">
+                      <label className={fieldLabelClass}>
                         CTA Label
                         <input
                           value={String(((cmsDraft.navigation ?? {}) as CmsDraftSection).ctaLabel ?? "")}
                           onChange={(event) => updateCmsField("navigation", "ctaLabel", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          className={fieldControlClass}
                         />
                       </label>
-                      <label className="block text-sm font-medium text-[#0F2137]">
+                      <label className={fieldLabelClass}>
                         CTA Pfad
                         <input
                           value={String(((cmsDraft.navigation ?? {}) as CmsDraftSection).ctaHref ?? "")}
                           onChange={(event) => updateCmsField("navigation", "ctaHref", event.target.value)}
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          className={fieldControlClass}
                         />
                       </label>
                     </>
@@ -2441,23 +2483,23 @@ export default function Admin() {
                         const numberValue = Number.isNaN(parsedNumber) ? "" : parsedNumber;
 
                         return (
-                          <label key={fieldKey} className="block text-sm font-medium text-[#0F2137]">
+                          <label key={fieldKey} className={fieldLabelClass}>
                             {field.label}
                             {inputType === "textarea" ? (
                               <textarea
                                 value={textValue}
                                 onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.value)}
                                 rows={"rows" in field && typeof field.rows === "number" ? field.rows : 4}
-                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                className={fieldControlClass}
                               />
                             ) : inputType === "checkbox" ? (
-                              <div className="mt-2 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+                              <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
                                 <input
                                   type="checkbox"
                                   checked={checkedValue}
                                   onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.checked)}
                                 />
-                                <span className="text-sm text-[#0F2137]">{checkedValue ? "Ja" : "Nein"}</span>
+                                <span className="text-sm text-slate-900">{checkedValue ? "Ja" : "Nein"}</span>
                               </div>
                             ) : inputType === "number" ? (
                               <input
@@ -2472,13 +2514,13 @@ export default function Admin() {
                                   }
                                   updateCmsField(cmsSelectedSection.key, fieldKey, nextValue);
                                 }}
-                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                className={fieldControlClass}
                               />
                             ) : (
                               <input
                                 value={textValue}
                                 onChange={(event) => updateCmsField(cmsSelectedSection.key, fieldKey, event.target.value)}
-                                className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                                className={fieldControlClass}
                               />
                             )}
                           </label>
@@ -2489,7 +2531,7 @@ export default function Admin() {
                 </div>
               )}
 
-              <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-gray-100 pt-4">
+              <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-slate-100 pt-4">
                 <button
                   type="button"
                   onClick={() => setCmsDraft(createCmsDraft(cmsPage, selectedCmsSlug))}
@@ -2508,14 +2550,14 @@ export default function Admin() {
 
         {currentSection === "preview" && (
           <div className="space-y-4">
-            <div className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className={`${surfaceClass} flex flex-col gap-4 p-4 lg:flex-row lg:items-end lg:justify-between`}>
               <div className="grid gap-3 md:grid-cols-2">
-                <label className="block text-sm font-medium text-[#0F2137]">
+                <label className={fieldLabelClass}>
                   Seite
                   <select
                     value={selectedCmsSlug}
                     onChange={(event) => setSelectedCmsSlug(event.target.value as CmsPageSlug)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   >
                     {cmsPageOptions.map((page) => (
                       <option key={page.slug} value={page.slug}>
@@ -2525,12 +2567,12 @@ export default function Admin() {
                   </select>
                 </label>
 
-                <label className="block text-sm font-medium text-[#0F2137]">
+                <label className={fieldLabelClass}>
                   Ansicht
                   <select
                     value={previewViewport}
                     onChange={(event) => setPreviewViewport(event.target.value as CmsPreviewViewport)}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                    className={fieldControlClass}
                   >
                     <option value="desktop">Desktop</option>
                     <option value="tablet">Tablet</option>
@@ -2557,8 +2599,8 @@ export default function Admin() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-4">
-              <div className={`overflow-hidden rounded-lg border border-gray-200 bg-[#F7F8FA] ${previewWidthClass}`}>
+            <div className={`${surfaceClass} p-4`}>
+              <div className={`overflow-hidden rounded-xl border border-slate-200 bg-slate-50 ${previewWidthClass}`}>
                 <iframe
                   key={`${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}
                   src={cmsDefinition.path}
@@ -2571,10 +2613,10 @@ export default function Admin() {
         )}
 
         {currentSection === "settings" && (
-          <div className="grid gap-4 lg:grid-cols-4">
-            <div className="rounded-lg border border-gray-200 bg-white p-5">
-              <h3 className="text-base font-semibold text-[#0F2137]">Passwort</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelles Passwort prüfen und sicher ändern.</p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className={`${surfaceClass} p-5`}>
+              <h3 className="text-base font-semibold text-slate-900">Passwort</h3>
+              <p className="mt-2 text-sm text-slate-500">Aktuelles Passwort prüfen und sicher ändern.</p>
               <button
                 type="button"
                 onClick={() => {
@@ -2588,9 +2630,9 @@ export default function Admin() {
               </button>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-5">
-              <h3 className="text-base font-semibold text-[#0F2137]">Benutzer</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">
+            <div className={`${surfaceClass} p-5`}>
+              <h3 className="text-base font-semibold text-slate-900">Benutzer</h3>
+              <p className="mt-2 text-sm text-slate-500">
                 {isAdmin ? "Benutzer ansehen und neue Zugänge anlegen." : "Nur Admins dürfen Benutzer verwalten."}
               </p>
               <button
@@ -2612,14 +2654,14 @@ export default function Admin() {
               </button>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-5">
-              <h3 className="text-base font-semibold text-[#0F2137]">Website Status</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">
+            <div className={`${surfaceClass} p-5`}>
+              <h3 className="text-base font-semibold text-slate-900">Website Status</h3>
+              <p className="mt-2 text-sm text-slate-500">
                 Besucher sehen bei aktivem Wartungsmodus die Wartungsseite. Der Admin-Bereich bleibt erreichbar.
               </p>
               <form onSubmit={handleSiteStatusSave} className="mt-4 space-y-4">
-                <div className="space-y-3 text-sm text-[#0F2137]">
-                  <label className="flex items-center gap-3">
+                <div className="space-y-3 text-sm text-slate-900">
+                  <label className={`${infoPanelClass} flex items-center`}>
                     <input
                       type="radio"
                       name="siteStatus"
@@ -2628,9 +2670,9 @@ export default function Admin() {
                       onChange={() => setSiteStatus("live")}
                       disabled={!canAccessCmsSection}
                     />
-                    <span>Live</span>
+                    <span className="ml-3 font-medium">Live</span>
                   </label>
-                  <label className="flex items-center gap-3">
+                  <label className={`${infoPanelClass} flex items-center`}>
                     <input
                       type="radio"
                       name="siteStatus"
@@ -2639,7 +2681,7 @@ export default function Admin() {
                       onChange={() => setSiteStatus("maintenance")}
                       disabled={!canAccessCmsSection}
                     />
-                    <span>Wartung</span>
+                    <span className="ml-3 font-medium">Wartung</span>
                   </label>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -2666,9 +2708,9 @@ export default function Admin() {
               </form>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-white p-5">
-              <h3 className="text-base font-semibold text-[#0F2137]">Sitzung</h3>
-              <p className="mt-2 text-sm text-[#6B7A8D]">Aktuelle Sitzung gültig bis {formatDate(session.expiresAt)}.</p>
+            <div className={`${surfaceClass} p-5`}>
+              <h3 className="text-base font-semibold text-slate-900">Sitzung</h3>
+              <p className="mt-2 text-sm text-slate-500">Aktuelle Sitzung gültig bis {formatDate(session.expiresAt)}.</p>
               <button
                 type="button"
                 onClick={() => handleLogout("Sie wurden abgemeldet.")}
@@ -2684,12 +2726,12 @@ export default function Admin() {
       </section>
 
       {activePanel && (
-        <div className="fixed inset-0 z-40 flex justify-end bg-[#0F2137]/30">
+        <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/30 backdrop-blur-[1px]">
           <div className="h-full w-full max-w-xl overflow-y-auto bg-white shadow-xl">
-            <div className="sticky top-0 flex items-center justify-between border-b border-gray-100 bg-white px-6 py-4">
+            <div className="sticky top-0 flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4">
               <div>
-                <h2 className="text-xl font-bold text-[#0F2137]">{currentPanelTitle}</h2>
-                <p className="text-sm text-[#6B7A8D]">
+                <h2 className="text-xl font-bold text-slate-900">{currentPanelTitle}</h2>
+                <p className="text-sm text-slate-500">
                   {activePanel === "lead-edit" && "Lead-Daten in PostgreSQL aktualisieren."}
                   {activePanel === "change-password" && "Aktuelles Passwort prüfen und sicher ersetzen."}
                   {activePanel === "users" && "Interne Benutzer ansehen und neue Benutzer anlegen."}
@@ -2703,7 +2745,7 @@ export default function Admin() {
                   setError("");
                   setSuccessMessage("");
                 }}
-                className="rounded-lg border border-gray-200 p-2 text-[#0F2137] hover:bg-gray-50"
+                className="rounded-xl border border-slate-200 p-2 text-slate-900 hover:bg-slate-50"
                 aria-label="Panel schließen"
               >
                 <X size={18} />
@@ -2713,74 +2755,74 @@ export default function Admin() {
             <div className="px-6 py-6">
               {activePanel === "lead-edit" && selectedLead && (
                 <form onSubmit={handleLeadSave} className="space-y-4">
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Name
                     <input
                       value={selectedLead.name}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, name: event.target.value } : current)}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     E-Mail
                     <input
                       type="email"
                       value={selectedLead.email}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, email: event.target.value } : current)}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Telefon
                     <input
                       value={selectedLead.phone}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, phone: event.target.value } : current)}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Nachricht
                     <textarea
                       value={selectedLead.message}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, message: event.target.value } : current)}
                       rows={6}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Interne Notiz
                     <textarea
                       value={selectedLead.internalNote}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, internalNote: event.target.value } : current)}
                       rows={5}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Wiedervorlage
                     <input
                       type="date"
                       value={selectedLead.followUpDate}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, followUpDate: event.target.value } : current)}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Status
                     <select
                       value={selectedLead.status}
                       onChange={(event) => setSelectedLead((current) => current ? { ...current, status: event.target.value as LeadStatus } : current)}
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                     >
                       {leadStatuses.map((status) => (
                         <option key={status} value={status}>
-                          {status}
+                          {getLeadStatusLabel(status)}
                         </option>
                       ))}
                     </select>
@@ -2788,7 +2830,7 @@ export default function Admin() {
 
                   <div className="flex justify-end gap-2 pt-2">
                     <button type="button" onClick={() => setActivePanel(null)} className={secondaryButtonClass}>
-                      Schliessen
+                      Schließen
                     </button>
                     <button type="submit" disabled={submittingPanel} className={primaryButtonClass}>
                       {submittingPanel ? "Speichert..." : "Speichern"}
@@ -2799,7 +2841,7 @@ export default function Admin() {
 
               {activePanel === "change-password" && (
                 <form onSubmit={handleChangePassword} className="space-y-4">
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Aktuelles Passwort
                     <input
                       type="password"
@@ -2807,12 +2849,12 @@ export default function Admin() {
                       onChange={(event) =>
                         setChangePasswordForm((current) => ({ ...current, currentPassword: event.target.value }))
                       }
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                       autoComplete="current-password"
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Neues Passwort
                     <input
                       type="password"
@@ -2820,12 +2862,12 @@ export default function Admin() {
                       onChange={(event) =>
                         setChangePasswordForm((current) => ({ ...current, newPassword: event.target.value }))
                       }
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                       autoComplete="new-password"
                     />
                   </label>
 
-                  <label className="block text-sm font-medium text-[#0F2137]">
+                  <label className={fieldLabelClass}>
                     Neues Passwort wiederholen
                     <input
                       type="password"
@@ -2833,7 +2875,7 @@ export default function Admin() {
                       onChange={(event) =>
                         setChangePasswordForm((current) => ({ ...current, confirmPassword: event.target.value }))
                       }
-                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                      className={fieldControlClass}
                       autoComplete="new-password"
                     />
                   </label>
@@ -2851,28 +2893,28 @@ export default function Admin() {
 
               {activePanel === "users" && (
                 <div className="space-y-6">
-                  <div className="overflow-hidden rounded-lg border border-gray-200">
+                  <div className="overflow-hidden rounded-xl border border-slate-200">
                     <table className="w-full border-collapse text-left text-sm">
-                      <thead className="bg-gray-50 text-xs uppercase text-[#6B7A8D]">
+                      <thead className={tableHeadClass}>
                         <tr>
-                          <th className="px-4 py-3">Benutzer</th>
-                          <th className="px-4 py-3">Rolle</th>
-                          <th className="px-4 py-3">Status</th>
-                          <th className="px-4 py-3">Erstellt</th>
+                          <th className={tableHeaderCellClass}>Benutzer</th>
+                          <th className={tableHeaderCellClass}>Rolle</th>
+                          <th className={tableHeaderCellClass}>Status</th>
+                          <th className={tableHeaderCellClass}>Erstellt</th>
                         </tr>
                       </thead>
                       <tbody>
                         {users.map((user) => (
-                          <tr key={user.id} className="border-t border-gray-100">
-                            <td className="px-4 py-3 font-medium text-[#0F2137]">{user.username}</td>
-                            <td className="px-4 py-3 text-[#6B7A8D]">{formatRoleLabel(user.role)}</td>
-                            <td className="px-4 py-3 text-[#6B7A8D]">{user.isActive ? "aktiv" : "inaktiv"}</td>
-                            <td className="px-4 py-3 text-[#6B7A8D]">{formatDate(user.createdAt)}</td>
+                          <tr key={user.id} className="border-t border-slate-100">
+                            <td className={`${tableCellClass} font-medium text-slate-900`}>{user.username}</td>
+                            <td className={tableCellClass}>{formatRoleLabel(user.role)}</td>
+                            <td className={tableCellClass}>{user.isActive ? "aktiv" : "inaktiv"}</td>
+                            <td className={tableCellClass}>{formatDate(user.createdAt)}</td>
                           </tr>
                         ))}
                         {users.length === 0 && (
                           <tr>
-                            <td colSpan={4} className="px-4 py-6 text-center text-[#6B7A8D]">
+                            <td colSpan={4} className="px-4 py-8 text-center text-sm text-slate-500">
                               Keine Benutzer vorhanden.
                             </td>
                           </tr>
@@ -2881,26 +2923,26 @@ export default function Admin() {
                     </table>
                   </div>
 
-                  <form onSubmit={handleCreateUser} className="rounded-lg border border-gray-200 bg-[#F7F8FA] p-4">
+                  <form onSubmit={handleCreateUser} className={`${surfaceMutedClass} p-4`}>
                     <div className="mb-4 flex items-center gap-2">
                       <UserPlus size={18} className="text-[#1D6FA4]" />
-                      <h3 className="text-base font-semibold text-[#0F2137]">Neuen Benutzer anlegen</h3>
+                      <h3 className="text-base font-semibold text-slate-900">Neuen Benutzer anlegen</h3>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-3">
-                      <label className="block text-sm font-medium text-[#0F2137]">
+                      <label className={fieldLabelClass}>
                         Benutzername
                         <input
                           value={userCreateForm.username}
                           onChange={(event) =>
                             setUserCreateForm((current) => ({ ...current, username: event.target.value }))
                           }
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          className={fieldControlClass}
                           autoComplete="off"
                         />
                       </label>
 
-                      <label className="block text-sm font-medium text-[#0F2137]">
+                      <label className={fieldLabelClass}>
                         Passwort
                         <input
                           type="password"
@@ -2908,19 +2950,19 @@ export default function Admin() {
                           onChange={(event) =>
                             setUserCreateForm((current) => ({ ...current, password: event.target.value }))
                           }
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          className={fieldControlClass}
                           autoComplete="new-password"
                         />
                       </label>
 
-                      <label className="block text-sm font-medium text-[#0F2137]">
+                      <label className={fieldLabelClass}>
                         Rolle
                         <select
                           value={userCreateForm.role}
                           onChange={(event) =>
                             setUserCreateForm((current) => ({ ...current, role: event.target.value as AdminRole }))
                           }
-                          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm"
+                          className={fieldControlClass}
                         >
                           {userCreationRoles.map((role) => (
                             <option key={role} value={role}>
