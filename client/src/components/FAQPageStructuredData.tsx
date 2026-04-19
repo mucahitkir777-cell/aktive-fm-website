@@ -8,6 +8,7 @@ interface FAQCategory {
 
 interface FAQPageStructuredDataProps {
   faqCategories: FAQCategory[];
+  pagePath: string;
 }
 
 function normalizeValue(value: string | undefined | null) {
@@ -15,7 +16,7 @@ function normalizeValue(value: string | undefined | null) {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-export default function FAQPageStructuredData({ faqCategories }: FAQPageStructuredDataProps) {
+export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPageStructuredDataProps) {
   const structuredData = useMemo(() => {
     const seenEntries = new Set<string>();
 
@@ -49,10 +50,16 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
 
     const publisherName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const publisherUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const normalizedPagePath = normalizeValue(pagePath);
+    const pageUrl =
+      publisherUrl && normalizedPagePath
+        ? `${publisherUrl}${normalizedPagePath}`
+        : undefined;
 
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
       mainEntity,
       ...(publisherName && publisherUrl
         ? {
@@ -66,7 +73,7 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
     };
 
     return data;
-  }, [faqCategories]);
+  }, [faqCategories, pagePath]);
 
   if (structuredData.mainEntity.length === 0) {
     return null;
