@@ -10,6 +10,7 @@ interface ServiceItem {
 
 interface ServiceStructuredDataProps {
   services: ServiceItem[];
+  pagePath: string;
 }
 
 function normalizeValue(value: string | undefined | null) {
@@ -17,10 +18,15 @@ function normalizeValue(value: string | undefined | null) {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-export default function ServiceStructuredData({ services }: ServiceStructuredDataProps) {
+export default function ServiceStructuredData({ services, pagePath }: ServiceStructuredDataProps) {
   const structuredData = useMemo(() => {
     const providerName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const providerUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const normalizedPagePath = normalizeValue(pagePath);
+    const pageUrl =
+      providerUrl && normalizedPagePath
+        ? `${providerUrl}${normalizedPagePath}`
+        : undefined;
 
     const areaServed = companyConfig.regions
       .map((region) => normalizeValue(region.label))
@@ -40,10 +46,10 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
           return null;
         }
 
-        const url = providerUrl
+        const url = pageUrl
           ? slug
-            ? `${providerUrl}/leistungen#${slug}`
-            : `${providerUrl}/leistungen`
+            ? `${pageUrl}#${slug}`
+            : pageUrl
           : undefined;
 
         return {
@@ -83,9 +89,10 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
     return {
       "@context": "https://schema.org",
       "@type": "ItemList",
+      ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
       itemListElement,
     };
-  }, [services]);
+  }, [services, pagePath]);
 
   if (structuredData.itemListElement.length === 0) {
     return null;
