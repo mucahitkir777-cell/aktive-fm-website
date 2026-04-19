@@ -314,7 +314,8 @@ export default function Leistungen() {
               return (
                 <div
                   key={service.slug}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center pc-fade-up`}
+                  id={service.slug}
+                  className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center pc-fade-up scroll-mt-28`}
                 >
                   {/* Image */}
                   <div className={`relative ${i % 2 === 1 ? "lg:order-2" : ""}`}>
