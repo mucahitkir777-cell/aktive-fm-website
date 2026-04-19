@@ -14,6 +14,10 @@ function normalizeValue(value: string | undefined | null) {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function getUniqueValues(values: Array<string | null>) {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value))));
+}
+
 export default function RegionalServiceStructuredData({
   regionLabel,
   serviceName,
@@ -47,13 +51,15 @@ export default function RegionalServiceStructuredData({
         return typeof entry.dayOfWeek === "string" && Boolean(normalizeValue(entry.dayOfWeek));
       });
 
-    const areaServed = nearbyAreas
-      .map((area) => normalizeValue(area))
-      .filter((area): area is string => Boolean(area))
-      .map((area) => ({
-        "@type": "City",
-        name: area,
-      }));
+    const areaServed = getUniqueValues(nearbyAreas.map((area) => normalizeValue(area))).map((area) => ({
+      "@type": "City",
+      name: area,
+    }));
+
+    const streetAddress = normalizeValue(companyConfig.address.street);
+    const postalCode = normalizeValue(companyConfig.address.postalCode);
+    const addressLocality = normalizeValue(companyConfig.address.city);
+    const addressCountry = normalizeValue(companyConfig.address.countryCode);
 
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
@@ -69,13 +75,16 @@ export default function RegionalServiceStructuredData({
           : undefined,
       telephone: normalizeValue(companyConfig.contact.phoneInternational),
       email: normalizeValue(companyConfig.contact.email),
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: companyConfig.address.street,
-        postalCode: companyConfig.address.postalCode,
-        addressLocality: companyConfig.address.city,
-        addressCountry: companyConfig.address.countryCode,
-      },
+      address:
+        streetAddress || postalCode || addressLocality || addressCountry
+          ? {
+              "@type": "PostalAddress",
+              ...(streetAddress ? { streetAddress } : {}),
+              ...(postalCode ? { postalCode } : {}),
+              ...(addressLocality ? { addressLocality } : {}),
+              ...(addressCountry ? { addressCountry } : {}),
+            }
+          : undefined,
       ...(areaServed.length > 0 ? { areaServed } : {}),
       service:
         normalizedServiceName && normalizedDescription
