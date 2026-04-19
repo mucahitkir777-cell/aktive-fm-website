@@ -20,6 +20,15 @@ export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPa
   const structuredData = useMemo(() => {
     const seenEntries = new Set<string>();
 
+    const publisherName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
+    const publisherUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const normalizedPagePath = normalizeValue(pagePath);
+    const pageUrl =
+      publisherUrl && normalizedPagePath
+        ? `${publisherUrl}${normalizedPagePath}`
+        : undefined;
+    const pageId = pageUrl ? `${pageUrl}#faqpage` : undefined;
+
     const mainEntity = faqCategories
       .flatMap((category) =>
         category.items.map((item) => {
@@ -37,28 +46,28 @@ export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPa
           seenEntries.add(entryKey);
 
           return {
-            "@type": "Question",
-            name: question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: answer,
-            },
+            entryKey,
+            question,
+            answer,
           };
         }),
       )
-      .filter((entry): entry is { "@type": "Question"; name: string; acceptedAnswer: { "@type": "Answer"; text: string } } => Boolean(entry));
-
-    const publisherName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
-    const publisherUrl = normalizeValue(companyConfig.brand.siteUrl);
-    const normalizedPagePath = normalizeValue(pagePath);
-    const pageUrl =
-      publisherUrl && normalizedPagePath
-        ? `${publisherUrl}${normalizedPagePath}`
-        : undefined;
+      .filter((entry): entry is { entryKey: string; question: string; answer: string } => Boolean(entry))
+      .map((entry, index) => ({
+        "@type": "Question",
+        ...(pageUrl ? { "@id": `${pageUrl}#faq-${index + 1}` } : {}),
+        name: entry.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          ...(pageUrl ? { "@id": `${pageUrl}#answer-${index + 1}` } : {}),
+          text: entry.answer,
+        },
+      }));
 
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      ...(pageId ? { "@id": pageId } : {}),
       ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
       mainEntity,
       ...(publisherName && publisherUrl
