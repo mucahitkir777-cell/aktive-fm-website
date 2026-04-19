@@ -3,7 +3,7 @@ import path from "path";
 import { randomUUID } from "crypto";
 import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
 import { LEAD_SERVER_CONFIG, hasConfiguredLeadValue } from "./config";
-import { deliverLeadNotification } from "./email";
+import { deliverLeadNotification, deliverLeadConfirmation } from "./email";
 import { createLead } from "./repository";
 
 export interface StoredLead {
@@ -111,9 +111,8 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
     providerResults.push(await postJson("crm", LEAD_SERVER_CONFIG.crm.endpoint, storedLead));
   }
 
-  if (LEAD_SERVER_CONFIG.email.enabled) {
-    providerResults.push(await deliverLeadNotification(storedLead));
-  }
+  providerResults.push(await deliverLeadNotification(storedLead));
+  providerResults.push(await deliverLeadConfirmation(storedLead));
 
   const hasSuccessfulProcessing = providerResults.some((result) => result.status === "success");
 

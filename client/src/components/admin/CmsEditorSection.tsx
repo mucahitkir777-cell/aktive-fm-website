@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+﻿import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import type {
   CmsNavigationItem,
   CmsPage,
@@ -16,7 +16,14 @@ import type {
   CmsSectionKey,
 } from "./types";
 import CmsNavigationEditor from "./CmsNavigationEditor";
-import { fieldControlClass, fieldLabelClass, primaryButtonClass, secondaryButtonClass, surfaceClass } from "./styles";
+import {
+  fieldControlClass,
+  fieldLabelClass,
+  primaryButtonClass,
+  secondaryButtonClass,
+  subtleSurfaceClass,
+  surfacePanelClass,
+} from "./styles";
 
 interface CmsEditorSectionProps {
   cmsPageOptions: CmsPageSummary[];
@@ -173,7 +180,7 @@ export default function CmsEditorSection({
 
   return (
     <div className="space-y-4">
-      <div className={`${surfaceClass} p-4`}>
+      <div className={surfacePanelClass}>
         <div className="grid gap-4 xl:grid-cols-[260px_minmax(0,1fr)] xl:items-end">
           <label className={fieldLabelClass}>
             Seite
@@ -200,8 +207,8 @@ export default function CmsEditorSection({
                   onClick={() => onSelectSection(section.key)}
                   className={
                     selectedCmsSectionKey === section.key
-                      ? "rounded-lg border border-slate-900 bg-slate-900 px-3 py-2 text-sm font-medium text-white"
-                      : "rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 hover:bg-slate-50"
+                      ? "rounded-lg border border-slate-900 bg-slate-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,33,55,0.95)]"
+                      : "rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 transition-colors hover:border-slate-300 hover:bg-slate-50"
                   }
                 >
                   {section.label}
@@ -213,13 +220,11 @@ export default function CmsEditorSection({
       </div>
 
       <div className="space-y-4">
-        <div className={`${surfaceClass} p-5`}>
-          <div className="flex flex-col gap-3 border-b border-slate-100 pb-4">
+        <div className={surfacePanelClass}>
+          <div className="flex flex-col gap-4 border-b border-slate-200 pb-5">
             <div>
               <h3 className="text-base font-semibold text-slate-900">Medienverwaltung</h3>
-              <p className="text-sm text-slate-500">
-                Bilder hochladen und URL direkt in CMS-Felder verwenden.
-              </p>
+              <p className="mt-1 text-sm text-slate-500">Bilder hochladen und URLs direkt in CMS-Felder übernehmen.</p>
             </div>
 
             <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
@@ -262,18 +267,20 @@ export default function CmsEditorSection({
                     void openMediaPicker();
                   }}
                   disabled={uploadingMedia}
-                  className={`${secondaryButtonClass} inline-flex items-center justify-center`}
+                  className={secondaryButtonClass}
                 >
                   {uploadingMedia ? "Upload läuft..." : "Bild hochladen"}
                 </button>
               </div>
             </div>
 
-            <p className="text-xs text-slate-500">
-              {selectedImagePlacement
-                ? `Aktives Ziel: ${selectedImagePlacement.label}`
-                : "Wählen Sie ein Bildfeld als Ziel aus."}
-            </p>
+            <div className={subtleSurfaceClass}>
+              <p className="text-xs text-slate-500">
+                {selectedImagePlacement
+                  ? `Aktives Ziel: ${selectedImagePlacement.label}`
+                  : "Wählen Sie ein Bildfeld als Ziel aus."}
+              </p>
+            </div>
 
             <input
               ref={fileInputRef}
@@ -291,38 +298,40 @@ export default function CmsEditorSection({
             <div className="py-6 text-sm text-slate-500">Noch keine Bilder hochgeladen.</div>
           ) : (
             <>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {visibleMediaItems.map((media) => (
-                <div key={media.filename} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <div className="aspect-[16/10] overflow-hidden rounded-md border border-slate-200 bg-white">
-                    <img src={media.url} alt={media.filename} className="h-full w-full object-cover" loading="lazy" />
-                  </div>
-                  <p className="mt-3 truncate text-xs font-medium text-slate-900">{media.filename}</p>
-                  <p className="mt-1 text-xs text-slate-500">{formatFileSize(media.size)} · {formatDate(media.uploadedAt)}</p>
-                  <input
-                    value={media.url}
-                    readOnly
-                    className="mt-2 w-full rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-900"
-                  />
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onCopyMediaUrl(media.url)}
-                      className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50"
-                    >
-                      URL kopieren
-                    </button>
-                    {selectedImagePlacement && (
+                  <div key={media.filename} className={subtleSurfaceClass}>
+                    <div className="aspect-[16/10] overflow-hidden rounded-xl border border-slate-200 bg-white">
+                      <img src={media.url} alt={media.filename} className="h-full w-full object-cover" loading="lazy" />
+                    </div>
+                    <p className="mt-3 truncate text-xs font-semibold text-slate-900">{media.filename}</p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {formatFileSize(media.size)} · {formatDate(media.uploadedAt)}
+                    </p>
+                    <input
+                      value={media.url}
+                      readOnly
+                      className={`${fieldControlClass} mt-2 px-2.5 py-2 text-xs`}
+                    />
+                    <div className="mt-3 flex flex-wrap gap-2">
                       <button
                         type="button"
-                        onClick={() => onApplyMediaToPlacement(media.url)}
-                        className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50"
+                        onClick={() => onCopyMediaUrl(media.url)}
+                        className={secondaryButtonClass}
                       >
-                        In Ziel übernehmen
+                        URL kopieren
                       </button>
-                    )}
+                      {selectedImagePlacement && (
+                        <button
+                          type="button"
+                          onClick={() => onApplyMediaToPlacement(media.url)}
+                          className={secondaryButtonClass}
+                        >
+                          In Ziel übernehmen
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
                 ))}
               </div>
 
@@ -341,11 +350,11 @@ export default function CmsEditorSection({
           )}
         </div>
 
-        <form onSubmit={onSubmit} className={`${surfaceClass} p-5`}>
-          <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <form onSubmit={onSubmit} className={surfacePanelClass}>
+          <div className="flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="text-base font-semibold text-slate-900">{cmsDefinitionTitle}</h3>
-              <p className="text-sm text-slate-500">{cmsSelectedSection.label} bearbeiten</p>
+              <p className="mt-1 text-sm text-slate-500">{cmsSelectedSection.label} bearbeiten</p>
             </div>
             <div className="flex flex-col items-start gap-2 text-sm text-slate-500 sm:items-end">
               <label className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -407,7 +416,7 @@ export default function CmsEditorSection({
                             className={fieldControlClass}
                           />
                         ) : inputType === "checkbox" ? (
-                          <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+                          <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
                             <input
                               type="checkbox"
                               checked={checkedValue}
@@ -445,7 +454,7 @@ export default function CmsEditorSection({
             </div>
           )}
 
-          <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-slate-100 pt-4">
+          <div className="mt-6 flex flex-wrap justify-end gap-2 border-t border-slate-200 pt-4">
             <button type="button" onClick={onReset} className={secondaryButtonClass}>
               Reset
             </button>

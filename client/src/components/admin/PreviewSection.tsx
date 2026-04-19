@@ -1,7 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CmsPageSlug, CmsPageSummary, CmsSectionDefinition } from "@shared/cms";
 import type { CmsDraft, CmsDraftValue, CmsPreviewViewport, CmsSectionKey } from "./types";
-import { fieldControlClass, fieldLabelClass, helperTextClass, secondaryButtonClass, surfaceClass } from "./styles";
+import {
+  fieldControlClass,
+  fieldLabelClass,
+  helperTextClass,
+  secondaryButtonClass,
+  subtleSurfaceClass,
+  surfacePanelClass,
+} from "./styles";
 
 interface PreviewSectionProps {
   cmsPageOptions: CmsPageSummary[];
@@ -292,7 +299,7 @@ export default function PreviewSection({
 
   return (
     <div className="space-y-4">
-      <div className={`${surfaceClass} flex flex-col gap-4 p-4 lg:flex-row lg:items-end lg:justify-between`}>
+      <div className={`${surfacePanelClass} flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between`}>
         <div className="grid gap-3 md:grid-cols-2">
           <label className={fieldLabelClass}>
             Seite
@@ -333,13 +340,13 @@ export default function PreviewSection({
         </div>
       </div>
 
-      <div className={`${surfaceClass} p-4`}>
+      <div className={surfacePanelClass}>
         <p className={helperTextClass}>
           Klick auf ein Bild oder einen Text in der Vorschau öffnet die Schnellbearbeitung für das zugeordnete CMS-Feld.
         </p>
 
         {activeField ? (
-          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className={`${subtleSurfaceClass} mt-4`}>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-sm font-semibold text-slate-900">{activeField.fieldLabel}</p>
@@ -368,13 +375,11 @@ export default function PreviewSection({
             )}
           </div>
         ) : (
-          <p className="mt-3 text-xs text-slate-500">
-            Noch kein Element ausgewählt.
-          </p>
+          <p className="mt-3 text-xs text-slate-500">Noch kein Element ausgewählt.</p>
         )}
       </div>
 
-      <div className={`${surfaceClass} p-4`}>
+      <div className={surfacePanelClass}>
         <div className={`overflow-hidden rounded-xl border border-slate-200 bg-slate-50 ${previewWidthClass}`}>
           <iframe
             ref={iframeRef}

@@ -43,6 +43,12 @@ export const LEAD_SERVER_CONFIG = {
   },
   email: {
     enabled: readBooleanEnv("LEAD_EMAIL_ENABLED", false),
+    notification: {
+      enabled: readBooleanEnv("LEAD_EMAIL_NOTIFICATION_ENABLED", false),
+    },
+    confirmation: {
+      enabled: readBooleanEnv("LEAD_EMAIL_CONFIRMATION_ENABLED", false),
+    },
     endpoint: readEnv("LEAD_EMAIL_ENDPOINT", "https://email.example.com/send-lead"),
     provider: readEnv("LEAD_EMAIL_PROVIDER", "placeholder"),
     smtp: {

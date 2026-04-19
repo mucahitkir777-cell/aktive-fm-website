@@ -9,6 +9,7 @@ import { ArrowRight, CheckCircle, MapPin, MessageCircle, Phone } from "lucide-re
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import QuickContactForm from "@/components/QuickContactForm";
+import RegionalServiceStructuredData from "@/components/RegionalServiceStructuredData";
 import { getLeadRegionBySlug, getLeadServiceById, leadRegions, leadServices, type LeadRegion, type LeadService } from "@/data/leadTargets";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest, trackWhatsAppClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
@@ -220,6 +221,14 @@ export default function Region() {
 
   return (
     <div className="min-h-screen pc-bg-section">
+      {selectedService && (
+        <RegionalServiceStructuredData
+          regionLabel={region.label}
+          serviceName={selectedService.label}
+          description={pageIntro}
+          nearbyAreas={region.nearbyAreas}
+        />
+      )}
       <Navigation />
 
       <section className="pc-page-hero">

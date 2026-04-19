@@ -11,19 +11,20 @@ export const defaultCmsPageContent: CmsPageContentMap = {
         { id: "faq", label: "FAQ", href: "/faq", visible: true, sortOrder: 4, type: "page", target: "_self" },
         { id: "contact", label: "Kontakt", href: "/kontakt", visible: true, sortOrder: 5, type: "page", target: "_self" },
       ],
-      ctaLabel: "Angebot anfragen",
+      ctaLabel: "Kostenloses Angebot",
       ctaHref: "/kontakt",
     },
     siteStatus: "live",
     footer: {
-      footerText: "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",
+      footerText:
+        "Aktive Facility Management betreut Büros, Praxen und Gewerbeflächen in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau mit planbarer Gebäudereinigung und festen Teams.",
       membershipLabel: "BIV Bundesinnungsverband",
     },
     footerContact: {
       phoneLabel: "Telefon",
       phoneDisplay: "0178 6660021",
       phoneHref: "tel:+491786660021",
-      phoneMeta: "Mo-Fr 7:00-18:00 Uhr",
+      phoneMeta: "Mo-Fr 07:00-18:00 Uhr",
       emailLabel: "E-Mail",
       emailDisplay: "info@aktive-fm.de",
       emailHref: "mailto:info@aktive-fm.de",
@@ -41,17 +42,17 @@ export const defaultCmsPageContent: CmsPageContentMap = {
   },
   home: {
     hero: {
-      title: "Sauberkeit,",
-      accentTitle: "die überzeugt.",
+      title: "Gebäudereinigung,",
+      accentTitle: "die im Alltag funktioniert.",
       subtitle:
-        "Zuverlässige Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung - pünktlich, gründlich und diskret. Damit Sie sich auf Ihr Kerngeschäft konzentrieren können.",
+        "Für Büros, Praxen und Gewerbeflächen in Neu-Isenburg, Offenbach, Frankfurt und Hanau. Pünktlich geplant, gründlich ausgeführt und mit festen Ansprechpartnern.",
       primaryButtonText: "Kostenloses Angebot",
       imageUrl: "",
     },
     services: {
       title: "Unsere Leistungen",
       subtitle:
-        "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.",
+        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderleistungen für Unternehmen im Rhein-Main-Gebiet.",
       buttonText: "Alle Leistungen ansehen",
       imageUrl: "",
     },
@@ -59,165 +60,174 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       title: "Warum Unternehmen uns vertrauen",
       imageUrl: "",
       subtitle:
-        "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
+        "Feste Teams, klare Abläufe und persönliche Erreichbarkeit sorgen dafür, dass Reinigungsqualität planbar bleibt und Ihr Tagesgeschäft ohne Reibungsverluste weiterläuft.",
     },
     reviews: {
-      title: "Bewertungen & Vertrauen",
-      subtitle: "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz.",
+      title: "Bewertungen & Referenzen",
+      subtitle: "Öffentliche Profile und echte Rückmeldungen geben einen schnellen Eindruck davon, wie wir arbeiten.",
       googleImageUrl: "/assets/review-logos/google.svg",
       googleScore: "5,0",
-      googleLabel: "Kundenrezensionen",
+      googleLabel: "Google Rezensionen",
       trustpilotImageUrl: "/assets/review-logos/trustpilot.svg",
       trustpilotScore: "5,0",
-      trustpilotLabel: "Verifizierte Bewertungen",
+      trustpilotLabel: "Unternehmensprofil",
       provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
       provenexpertScore: "SEHR GUT",
-      provenexpertLabel: "Empfehlungen",
+      provenexpertLabel: "Verifizierte Bewertungen",
     },
     finalCta: {
-      title: "Bereit für saubere Ergebnisse?",
+      title: "Sauberkeit planbar organisieren",
       body:
-        "Fordern Sie jetzt Ihr kostenloses Angebot für Neu-Isenburg und Umgebung an. Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+        "Lassen Sie uns Ihr Objekt und Ihren Reinigungsbedarf kurz abstimmen. Sie erhalten ein nachvollziehbares Angebot ohne unnötige Umwege.",
       primaryButtonText: "Jetzt Angebot anfragen",
       imageUrl: "",
     },
     seo: {
-      seoTitle: "Gebäudereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
+      seoTitle: "Gebäudereinigung in Neu-Isenburg, Offenbach und Frankfurt | Aktive Facility Management",
       seoDescription:
-        "Professionelle Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
+        "Gebäudereinigung für Büros, Praxen und Gewerbeflächen in Neu-Isenburg, Offenbach, Frankfurt und Hanau. Feste Teams, klare Abläufe, persönlicher Ansprechpartner.",
     },
   },
   leistungen: {
     hero: {
-      title: "Professionelle Reinigungsleistungen",
-      subtitle: "Unser Team reinigt Büro-, Praxis- und Gewerbeflächen mit hoher Sorgfalt und planbarer Frequenz.",
-      buttonText: "Mehr erfahren",
+      title: "Gebäudereinigung für Unternehmen",
+      subtitle: "Wir reinigen Büros, Praxen, Treppenhäuser und Gewerbeflächen im Rhein-Main-Gebiet mit festen Teams und klarer Abstimmung.",
+      buttonText: "Kostenloses Angebot",
       imageUrl: "",
     },
     overview: {
-      title: "Unser Angebot im Überblick",
-      subtitle: "Von der Unterhaltsreinigung bis zur Grundreinigung: Wir bieten passgenaue Lösungen für Ihr Objekt.",
+      title: "Leistungen im Überblick",
+      subtitle:
+        "Von der laufenden Unterhaltsreinigung bis zur gründlichen Sonderleistung: Wir planen Reinigungsintervalle und Leistungsumfang passend zu Ihrem Objekt.",
       imageUrl1: "",
       imageUrl2: "",
     },
     benefits: {
-      title: "Ihre Vorteile",
-      subtitle: "Feste Teams, transparente Preise und zuverlässige Qualität – so unterstützen wir Ihren Geschäftsbetrieb.",
+      title: "Was Sie davon haben",
+      subtitle:
+        "Klare Ansprechpartner, nachvollziehbare Leistungen und feste Einsatztage sorgen dafür, dass Reinigung im Alltag verlässlich funktioniert.",
     },
     finalCta: {
-      title: "Jetzt Angebot anfragen",
-      body: "Fordern Sie ein individuelles Reinigungsangebot an und erhalten Sie eine kostenfreie Beratung für Ihr Unternehmen.",
-      primaryButtonText: "Angebot anfragen",
+      title: "Reinigungsbedarf kurz abstimmen",
+      body:
+        "Wir besprechen Objekt, Intervall und Anforderungen und erstellen darauf aufbauend ein transparentes Angebot.",
+      primaryButtonText: "Kostenloses Angebot",
     },
     seo: {
-      seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
+      seoTitle: "Leistungen der Gebäudereinigung im Rhein-Main-Gebiet | Aktive Facility Management",
       seoDescription:
-        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen in Neu-Isenburg und Umgebung.",
+        "Büroreinigung, Unterhaltsreinigung, Glasreinigung, Treppenhausreinigung und Sonderleistungen für Unternehmen in Neu-Isenburg, Offenbach, Frankfurt und Hanau.",
     },
   },
   "ueber-uns": {
     hero: {
-      title: "Wir reinigen mit Vertrauen",
-      subtitle: "Lernen Sie unser regionales Team kennen und erfahren Sie, wie wir Qualität, Sicherheit und Service verbinden.",
-      buttonText: "Mehr erfahren",
+      title: "Regional. Verlässlich. Direkt ansprechbar.",
+      subtitle:
+        "Aktive Facility Management steht für Gebäudereinigung mit festen Teams, klarer Kommunikation und planbaren Abläufen im Rhein-Main-Gebiet.",
+      buttonText: "Kontakt aufnehmen",
       imageUrl: "",
     },
     companyInfo: {
-      title: "Unsere Geschichte",
+      title: "Wer wir sind",
       storyParagraph1:
-        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt.",
+        "Aktive Facility Management betreut Unternehmen in Neu-Isenburg und im Rhein-Main-Gebiet mit professioneller Gebäudereinigung.",
       storyParagraph2:
-        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen.",
+        "Im Mittelpunkt stehen für uns saubere Abläufe, feste Ansprechpartner und Leistungen, die im Tagesgeschäft tatsächlich entlasten.",
       storyParagraph3:
-        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen.",
+        "Deshalb arbeiten wir mit geschulten, festangestellten Teams und setzen auf direkte Abstimmung statt wechselnder Zuständigkeiten.",
       statsYearsLabel: "Jahre Erfahrung",
       statsCustomersLabel: "Stammkunden",
       statsStaffLabel: "Mitarbeiter",
       statsEmployeesLabel: "Festangestellt",
       teamImageUrl: "",
       teamImageAlt: "",
-      teamBadgeLabel: "Zufriedene Kunden",
+      teamBadgeLabel: "Betreute Kunden",
     },
     values: {
       title: "Unsere Werte",
-      subtitle: "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft.",
+      subtitle: "Diese Punkte prägen unsere Zusammenarbeit mit Kunden und unser tägliches Arbeiten im Objekt.",
       value1Title: "Verlässlichkeit",
-      value1Desc: "Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme.",
+      value1Desc: "Absprachen, Reinigungszeiten und Ergebnisse müssen im Tagesgeschäft verlässlich funktionieren.",
       value2Title: "Qualität",
-      value2Desc: "Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig.",
+      value2Desc: "Wir arbeiten gründlich, dokumentiert und mit Blick für sensible Bereiche.",
       value3Title: "Partnerschaft",
-      value3Desc: "Wir verstehen uns als langfristiger Partner unserer Kunden.",
+      value3Desc: "Wir denken nicht in Einzeleinsätzen, sondern in stabilen, langfristigen Kundenbeziehungen.",
       value4Title: "Verantwortung",
-      value4Desc: "Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln.",
+      value4Desc: "Wir gehen sorgfältig mit Räumen, Material, Mitarbeitern und den Abläufen unserer Kunden um.",
     },
     team: {
-      title: "Unser Team",
+      title: "Wie wir arbeiten",
       paragraph1:
-        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben.",
-      paragraph2: "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut.",
+        "Unsere Mitarbeiter sind geschult, festangestellt und mit den Anforderungen gewerblicher Objekte vertraut.",
+      paragraph2:
+        "Wo möglich, setzen wir feste Teams ein. Das reduziert Abstimmungsaufwand und sorgt für gleichbleibende Qualität.",
       bullet1: "Alle Mitarbeiter festangestellt",
-      bullet2: "Regelmäßige Schulungen und Weiterbildungen",
-      bullet3: "Zuverlässige Vertretungsregelungen",
+      bullet2: "Einarbeitung nach Objekt und Reinigungsplan",
+      bullet3: "Verlässliche Vertretung bei Urlaub oder Ausfall",
       bullet4: "Diskret und vertrauenswürdig",
-      buttonText: "Kontakt aufnehmen",
+      buttonText: "Anfrage besprechen",
       imageUrl: "",
       imageAlt: "",
     },
     finalCta: {
-      title: "Lernen Sie uns kennen",
-      body: "Vereinbaren Sie ein unverbindliches Gespräch und erfahren Sie, wie wir Ihre Reinigungsanforderungen umsetzen.",
+      title: "Lernen Sie unsere Arbeitsweise kennen",
+      body:
+        "Wenn Sie eine Reinigung suchen, die zuverlässig in Ihren Betriebsablauf passt, sprechen Sie mit uns.",
       primaryButtonText: "Kontakt aufnehmen",
     },
     seo: {
-      seoTitle: "Über uns | Aktive Facility Management Gebäudereinigung",
+      seoTitle: "Über Aktive Facility Management | Gebäudereinigung aus Neu-Isenburg",
       seoDescription:
-        "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+        "Lernen Sie Aktive Facility Management aus Neu-Isenburg kennen: feste Teams, direkte Ansprechpartner und planbare Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet.",
     },
   },
   faq: {
     hero: {
-      title: "Häufige Fragen",
-      subtitle: "Antworten auf die wichtigsten Fragen zu unseren Reinigungsleistungen und unserem Service.",
-      buttonText: "Mehr erfahren",
+      title: "Fragen zur Zusammenarbeit",
+      subtitle: "Hier finden Sie die wichtigsten Antworten zu Ablauf, Angeboten, Einsatzzeiten und Qualitätssicherung.",
+      buttonText: "Kontakt aufnehmen",
       imageUrl: "",
     },
     questions: {
-      title: "FAQ",
-      subtitle: "Die häufigsten Fragen unserer Kunden – kurz und verständlich beantwortet.",
+      title: "Häufige Fragen",
+      subtitle: "Kurz beantwortet: So läuft die Zusammenarbeit mit Aktive Facility Management ab.",
       faqText:
-        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig.",
+        "Allgemeines|Für welche Objekte arbeiten Sie?|Wir reinigen vor allem Büros, Praxen, Kanzleien, Treppenhäuser, Gewerbeflächen und weitere gewerblich genutzte Objekte im Rhein-Main-Gebiet.\nAllgemeines|In welchen Regionen sind Sie im Einsatz?|Unser Schwerpunkt liegt in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau.\nAngebot & Start|Wie läuft eine Anfrage ab?|Nach Ihrer Anfrage stimmen wir die Anforderungen kurz mit Ihnen ab, besichtigen das Objekt bei Bedarf und erstellen ein transparentes Angebot.\nAngebot & Start|Wie schnell erhalte ich ein Angebot?|In der Regel melden wir uns innerhalb von 24 Stunden zurück und planen die nächsten Schritte direkt mit Ihnen.\nLeistungen & Ablauf|Zu welchen Zeiten kann gereinigt werden?|Je nach Objekt reinigen wir vor Arbeitsbeginn, tagsüber in abgestimmten Bereichen oder nach Betriebsschluss.\nLeistungen & Ablauf|Arbeiten Sie mit festen Teams?|Ja, wenn möglich betreuen feste Reinigungsteams Ihr Objekt. Das verbessert Abstimmung, Sicherheit und gleichbleibende Qualität.\nQualität & Vertrauen|Wie sichern Sie die Qualität?|Durch eingearbeitete Teams, klare Leistungsverzeichnisse, direkte Ansprechpartner und regelmäßige Kontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unsere Angebote sind nachvollziehbar aufgebaut und enthalten die abgestimmten Leistungen transparent.",
     },
     finalCta: {
       title: "Noch Fragen?",
-      body: "Rufen Sie uns an oder senden Sie uns eine Nachricht – wir beraten Sie persönlich und schnell.",
-      primaryButtonText: "Jetzt kontaktieren",
+      body: "Wenn Ihre Frage hier nicht beantwortet wurde, klären wir sie direkt persönlich.",
+      primaryButtonText: "Kontakt aufnehmen",
     },
     seo: {
-      seoTitle: "FAQ zur Gebäudereinigung | Aktive Facility Management",
+      seoTitle: "FAQ zur Gebäudereinigung für Unternehmen | Aktive Facility Management",
       seoDescription:
-        "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
+        "Antworten zu Angebot, Ablauf, Einsatzzeiten, Qualität und Kosten unserer Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet.",
     },
   },
   kontakt: {
     hero: {
-      title: "Kontakt aufnehmen",
-      subtitle: "Wir sind für Sie da – schreiben Sie uns oder rufen Sie an. Wir melden uns schnellstmöglich zurück.",
+      title: "Kontakt & Angebot",
+      subtitle:
+        "Ob Erstgespräch, Rückruf oder konkrete Angebotsanfrage: Wir reagieren schnell und klären den Bedarf direkt mit Ihnen.",
       buttonText: "Anfrage senden",
       imageUrl: "",
     },
     contactInfo: {
       title: "Kontaktinformationen",
-      subtitle: "Telefon, E-Mail und persönliche Beratung – alle Wege führen schnell zu uns.",
+      subtitle:
+        "Telefon, E-Mail oder WhatsApp: Hier erreichen Sie uns schnell für Rückfragen, Besichtigungen und Angebotsabstimmungen.",
     },
     formSection: {
-      title: "Senden Sie uns Ihre Anfrage",
-      subtitle: "Nutzen Sie das Formular für Ihr Anliegen und wir melden uns innerhalb von 24 Stunden.",
+      title: "Anfrage direkt senden",
+      subtitle:
+        "Beschreiben Sie kurz Objekt, Standort und gewünschten Intervall. Wir melden uns zeitnah mit den nächsten Schritten.",
       buttonText: "Nachricht senden",
     },
     seo: {
-      seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
+      seoTitle: "Kontakt für Gebäudereinigung im Rhein-Main-Gebiet | Aktive Facility Management",
       seoDescription:
-        "Kontaktieren Sie Aktive Facility Management für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung in Neu-Isenburg und Umgebung.",
+        "Kontaktieren Sie Aktive Facility Management für Gebäudereinigung in Neu-Isenburg, Offenbach, Frankfurt und Hanau. Schnelle Rückmeldung und klare Angebotsabstimmung.",
     },
   },
 };

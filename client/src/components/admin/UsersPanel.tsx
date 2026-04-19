@@ -1,7 +1,18 @@
-import { UserPlus } from "lucide-react";
+﻿import { UserPlus } from "lucide-react";
 import type { FormEvent } from "react";
 import type { AdminRole, AdminUser } from "@shared/admin";
-import { fieldControlClass, fieldLabelClass, surfaceMutedClass, tableCellClass, tableHeadClass, tableHeaderCellClass, primaryButtonClass } from "./styles";
+import {
+  fieldControlClass,
+  fieldLabelClass,
+  primaryButtonClass,
+  subtleSurfaceClass,
+  surfacePanelClass,
+  tableCellClass,
+  tableHeadClass,
+  tableHeaderCellClass,
+  tableRowClass,
+  tableWrapperClass,
+} from "./styles";
 
 interface UserCreateFormValue {
   username: string;
@@ -32,7 +43,7 @@ export default function UsersPanel({
 }: UsersPanelProps) {
   return (
     <div className="space-y-6">
-      <div className="overflow-hidden rounded-xl border border-slate-200">
+      <div className={tableWrapperClass}>
         <table className="w-full border-collapse text-left text-sm">
           <thead className={tableHeadClass}>
             <tr>
@@ -44,7 +55,7 @@ export default function UsersPanel({
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-t border-slate-100">
+              <tr key={user.id} className={tableRowClass}>
                 <td className={`${tableCellClass} font-medium text-slate-900`}>{user.username}</td>
                 <td className={tableCellClass}>{formatRoleLabel(user.role)}</td>
                 <td className={tableCellClass}>{user.isActive ? "aktiv" : "inaktiv"}</td>
@@ -53,7 +64,7 @@ export default function UsersPanel({
             ))}
             {users.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-sm text-slate-500">
+                <td colSpan={4} className="px-5 py-10 text-center text-sm text-slate-500">
                   Keine Benutzer vorhanden.
                 </td>
               </tr>
@@ -62,13 +73,13 @@ export default function UsersPanel({
         </table>
       </div>
 
-      <form onSubmit={onSubmitCreateUser} className={`${surfaceMutedClass} p-4`}>
-        <div className="mb-4 flex items-center gap-2">
+      <form onSubmit={onSubmitCreateUser} className={surfacePanelClass}>
+        <div className="mb-4 flex items-center gap-2 border-b border-slate-200 pb-4">
           <UserPlus size={18} className="text-[#1D6FA4]" />
           <h3 className="text-base font-semibold text-slate-900">Neuen Benutzer anlegen</h3>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className={`${subtleSurfaceClass} grid gap-4 md:grid-cols-3`}>
           <label className={fieldLabelClass}>
             Benutzername
             <input

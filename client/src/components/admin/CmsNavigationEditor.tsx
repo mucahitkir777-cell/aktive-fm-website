@@ -1,4 +1,4 @@
-import type { CmsNavigationItem } from "@shared/cms";
+﻿import type { CmsNavigationItem } from "@shared/cms";
 import type { CmsDraftSection } from "./types";
 import { fieldControlClass, fieldLabelClass, infoPanelClass, secondaryButtonClass } from "./styles";
 
@@ -26,12 +26,12 @@ export default function CmsNavigationEditor({
       <div className="space-y-3">
         {navigationDraftItems.map((item, index) => (
           <div key={item.id} className={infoPanelClass}>
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between gap-3 border-b border-slate-200 pb-3">
               <p className="text-sm font-semibold text-slate-900">{item.id}</p>
               <button
                 type="button"
                 onClick={() => onRemoveItem(item.id)}
-                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-900 hover:bg-slate-50"
+                className={secondaryButtonClass}
               >
                 Entfernen
               </button>
@@ -82,7 +82,7 @@ export default function CmsNavigationEditor({
 
               <label className={fieldLabelClass}>
                 Sichtbar
-                <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2">
+                <div className="mt-2 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
                   <input
                     type="checkbox"
                     checked={item.visible}

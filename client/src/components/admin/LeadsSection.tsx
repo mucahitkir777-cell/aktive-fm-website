@@ -1,7 +1,13 @@
-import type { AdminLead, LeadStatus } from "@shared/lead";
+﻿import type { AdminLead, LeadStatus } from "@shared/lead";
 import type { LeadFilterValue, LeadSortValue } from "./types";
 import LeadsTable from "./LeadsTable";
-import { fieldControlClass, fieldLabelClass, infoPanelClass, surfaceClass } from "./styles";
+import {
+  fieldControlClass,
+  fieldLabelClass,
+  infoPanelClass,
+  surfacePanelClass,
+  tableWrapperClass,
+} from "./styles";
 
 interface LeadsSectionProps {
   leadFilter: LeadFilterValue;
@@ -34,8 +40,8 @@ export default function LeadsSection({
 }: LeadsSectionProps) {
   return (
     <div className="space-y-4">
-      <div className={`${surfaceClass} p-4`}>
-        <div className="grid gap-3 lg:grid-cols-2 xl:grid-cols-[190px_minmax(0,1fr)_190px_auto]">
+      <div className={surfacePanelClass}>
+        <div className="grid gap-4 xl:grid-cols-[190px_minmax(0,1fr)_190px_auto] xl:items-end">
           <label className={fieldLabelClass}>
             Filter
             <select
@@ -80,14 +86,14 @@ export default function LeadsSection({
           </label>
 
           <div className="flex items-end">
-            <div className={infoPanelClass}>
+            <div className={`${infoPanelClass} min-w-[170px] text-center font-medium`}>
               {filteredLeads.length} von {leads.length} Leads
             </div>
           </div>
         </div>
       </div>
 
-      <div className={`${surfaceClass} overflow-x-auto`}>
+      <div className={tableWrapperClass}>
         <LeadsTable
           leads={leads}
           filteredLeads={filteredLeads}

@@ -1,9 +1,9 @@
-import type { AdminDashboardStats } from "@shared/admin";
+﻿import type { AdminDashboardStats } from "@shared/admin";
 import type { LeadStatus } from "@shared/lead";
 import AdminEmptyState from "./AdminEmptyState";
 import AdminStatusBadge from "./AdminStatusBadge";
 import { formatDate, formatDateOnly, getLeadStatusLabel } from "./helpers";
-import { secondaryButtonClass, surfaceClass } from "./styles";
+import { secondaryButtonClass, subtleSurfaceClass, surfacePanelClass } from "./styles";
 
 interface DashboardSectionProps {
   stats: AdminDashboardStats | null;
@@ -12,6 +12,16 @@ interface DashboardSectionProps {
   onOpenLeadEditorById: (id: string) => void;
   onOpenLeadsList: () => void;
 }
+
+const statCards = [
+  { key: "total", label: "Gesamtleads", getValue: (stats: AdminDashboardStats) => stats.leads.total },
+  { key: "today", label: "Neue Leads heute", getValue: (stats: AdminDashboardStats) => stats.leads.today },
+  { key: "week", label: "Leads diese Woche", getValue: (stats: AdminDashboardStats) => stats.leads.thisWeek },
+  { key: "viewsToday", label: "Seitenaufrufe heute", getValue: (stats: AdminDashboardStats) => stats.pageViews.today },
+  { key: "views7", label: "Seitenaufrufe 7 Tage", getValue: (stats: AdminDashboardStats) => stats.pageViews.last7Days },
+  { key: "dueToday", label: "Heute fällig", getValue: (stats: AdminDashboardStats) => stats.leads.dueToday },
+  { key: "overdue", label: "Überfällig", getValue: (stats: AdminDashboardStats) => stats.leads.overdue },
+] as const;
 
 export default function DashboardSection({
   stats,
@@ -23,53 +33,19 @@ export default function DashboardSection({
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-7">
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Gesamtleads</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.leads.total ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Neue Leads heute</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.leads.today ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Leads diese Woche</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.leads.thisWeek ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Seitenaufrufe heute</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.pageViews.today ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Seitenaufrufe 7 Tage</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.pageViews.last7Days ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Heute fällig</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.leads.dueToday ?? 0}
-          </p>
-        </div>
-        <div className={`${surfaceClass} p-5`}>
-          <p className="text-sm font-medium text-slate-500">Überfällig</p>
-          <p className="mt-2 text-3xl font-bold text-slate-900">
-            {loadingStats && !stats ? "..." : stats?.leads.overdue ?? 0}
-          </p>
-        </div>
+        {statCards.map((card) => (
+          <div key={card.key} className={surfacePanelClass}>
+            <p className="text-sm font-medium text-slate-500">{card.label}</p>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+              {loadingStats && !stats ? "..." : stats ? card.getValue(stats) : 0}
+            </p>
+          </div>
+        ))}
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3">
-        <div className={`${surfaceClass} p-5`}>
-          <div className="flex items-center justify-between gap-3">
+        <div className={surfacePanelClass}>
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
               <h3 className="text-base font-semibold text-slate-900">Neu eingegangen</h3>
               <p className="mt-1 text-sm text-slate-500">Leads von heute, sortiert nach Eingang.</p>
@@ -91,7 +67,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -105,8 +81,8 @@ export default function DashboardSection({
           </div>
         </div>
 
-        <div className={`${surfaceClass} p-5`}>
-          <div className="flex items-center justify-between gap-3">
+        <div className={surfacePanelClass}>
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
               <h3 className="text-base font-semibold text-slate-900">Heute fällig</h3>
               <p className="mt-1 text-sm text-slate-500">Leads mit Wiedervorlage für heute.</p>
@@ -128,7 +104,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -142,8 +118,8 @@ export default function DashboardSection({
           </div>
         </div>
 
-        <div className={`${surfaceClass} p-5`}>
-          <div className="flex items-center justify-between gap-3">
+        <div className={surfacePanelClass}>
+          <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
               <h3 className="text-base font-semibold text-slate-900">Überfällig</h3>
               <p className="mt-1 text-sm text-slate-500">Offene Wiedervorlagen vor dem heutigen Datum.</p>
@@ -165,7 +141,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className="block w-full rounded-lg border border-slate-100 bg-slate-50 p-4 text-left transition-colors hover:bg-slate-50"
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -180,8 +156,10 @@ export default function DashboardSection({
         </div>
       </div>
 
-      <div className={`${surfaceClass} p-5`}>
-        <h3 className="text-base font-semibold text-slate-900">Leads nach Status</h3>
+      <div className={surfacePanelClass}>
+        <div className="border-b border-slate-200 pb-4">
+          <h3 className="text-base font-semibold text-slate-900">Leads nach Status</h3>
+        </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-5">
           {leadStatuses.map((status) => {
             const count = stats?.leads.byStatus[status] ?? 0;
@@ -189,7 +167,7 @@ export default function DashboardSection({
             const width = total > 0 ? Math.max((count / total) * 100, count > 0 ? 8 : 0) : 0;
 
             return (
-              <div key={status} className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+              <div key={status} className={subtleSurfaceClass}>
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-medium text-slate-900">{getLeadStatusLabel(status)}</p>
                   <p className="text-sm font-semibold text-slate-900">

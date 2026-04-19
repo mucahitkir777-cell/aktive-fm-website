@@ -119,7 +119,7 @@ export default function Kontakt() {
               {resolvedCmsContent.hero.subtitle}
             </p>
             <p className="mt-3 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-              Schnellster Weg: anrufen, WhatsApp schreiben oder in unter 1 Minute anfragen.
+              Direkt erreichbar per Telefon, WhatsApp oder Anfrageformular.
             </p>
             <div className="mt-8">
               <div className="flex flex-col sm:flex-row gap-3">
@@ -275,14 +275,14 @@ export default function Kontakt() {
               {/* Trust Points */}
               <div className="mt-8 pc-form-shell">
                 <h3 className="font-bold pc-text-primary text-sm mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-                  Ihr Angebot ist:
+                  Ihre Anfrage ist:
                 </h3>
                 <ul className="space-y-2">
                   {[
-                    "Kostenlos & unverbindlich",
-                    "Individuell auf Sie zugeschnitten",
-                    "Transparent und ohne versteckte Kosten",
-                    "Innerhalb von 24 Stunden",
+                    "Kostenlos und unverbindlich",
+                    "Auf Objekt und Intervall abgestimmt",
+                    "Transparent kalkuliert",
+                    "Schnell rückgemeldet",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2">
                       <CheckCircle size={14} className="pc-text-brand shrink-0" />
@@ -331,7 +331,7 @@ export default function Kontakt() {
                   {resolvedCmsContent.formSection.subtitle}
                 </p>
                 <ul className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {["Wichtige Felder zuerst", "Kostenlos & unverbindlich", `Rückmeldung in ${companyConfig.metrics.responseTime}`].map((item) => (
+                  {["Objekt und Intervall angeben", "Kostenlos & unverbindlich", `Rückmeldung in ${companyConfig.metrics.responseTime}`].map((item) => (
                     <li key={item} className="flex items-center gap-2 rounded-md border pc-border pc-bg-soft px-3 py-2 text-xs pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
                       <CheckCircle size={14} className="pc-text-brand shrink-0" />
                       {item}

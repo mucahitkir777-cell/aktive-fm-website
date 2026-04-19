@@ -12,7 +12,7 @@ const imageUrlSchema = z.string().trim().max(1000, "Die Bild-URL ist zu lang.").
 const heroBaseSchema = z.object({
   title: pageTitleSchema,
   subtitle: pageSubtitleSchema,
-  buttonText: pageButtonSchema.default("Mehr erfahren"),
+  buttonText: pageButtonSchema.default("Kontakt aufnehmen"),
   imageUrl: imageUrlSchema,
 });
 
@@ -41,14 +41,14 @@ export const cmsHomeContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Unsere Leistungen"),
       subtitle: pageSubtitleSchema.default(
-        "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung."
+        "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderleistungen für Unternehmen im Rhein-Main-Gebiet."
       ),
       buttonText: pageButtonSchema.default("Alle Leistungen ansehen"),
       imageUrl: imageUrlSchema,
     })
     .default({
       title: "Unsere Leistungen",
-      subtitle: "Von der täglichen Büroreinigung bis zur Glasfassade – wir bieten das vollständige Spektrum professioneller Gebäudereinigung.",
+      subtitle: "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderleistungen für Unternehmen im Rhein-Main-Gebiet.",
       buttonText: "Alle Leistungen ansehen",
       imageUrl: "",
     }),
@@ -57,51 +57,51 @@ export const cmsHomeContentSchema = z.object({
       title: pageTitleSchema.default("Warum Unternehmen uns vertrauen"),
       imageUrl: imageUrlSchema,
       subtitle: pageSubtitleSchema.default(
-        "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen."
+        "Feste Teams, klare Abläufe und persönliche Erreichbarkeit sorgen dafür, dass Reinigungsqualität planbar bleibt und Ihr Tagesgeschäft ohne Reibungsverluste weiterläuft."
       ),
     })
     .default({
       title: "Warum Unternehmen uns vertrauen",
       imageUrl: "",
       subtitle:
-        "Wir sind kein anonymer Großbetrieb. Als mittelständisches Reinigungsunternehmen kennen wir unsere Kunden persönlich und arbeiten mit festen Teams – für gleichbleibende Qualität und echtes Vertrauen.",
+        "Feste Teams, klare Abläufe und persönliche Erreichbarkeit sorgen dafür, dass Reinigungsqualität planbar bleibt und Ihr Tagesgeschäft ohne Reibungsverluste weiterläuft.",
     }),
   reviews: z
     .object({
-      title: pageTitleSchema.default("Bewertungen & Vertrauen"),
+      title: pageTitleSchema.default("Bewertungen & Referenzen"),
       subtitle: pageSubtitleSchema.default(
-        "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz."
+        "Öffentliche Profile und echte Rückmeldungen geben einen schnellen Eindruck davon, wie wir arbeiten."
       ),
       googleImageUrl: imageUrlSchema.default("/assets/review-logos/google.svg"),
       googleScore: pageTitleSchema.default("5,0"),
-      googleLabel: pageSubtitleSchema.default("Kundenrezensionen"),
+      googleLabel: pageSubtitleSchema.default("Google Rezensionen"),
       trustpilotImageUrl: imageUrlSchema.default("/assets/review-logos/trustpilot.svg"),
       trustpilotScore: pageTitleSchema.default("5,0"),
-      trustpilotLabel: pageSubtitleSchema.default("Verifizierte Bewertungen"),
+      trustpilotLabel: pageSubtitleSchema.default("Unternehmensprofil"),
       provenexpertImageUrl: imageUrlSchema.default("/assets/review-logos/provenexpert.png"),
       provenexpertScore: pageTitleSchema.default("SEHR GUT"),
-      provenexpertLabel: pageSubtitleSchema.default("Empfehlungen"),
+      provenexpertLabel: pageSubtitleSchema.default("Verifizierte Bewertungen"),
     })
     .default({
-      title: "Bewertungen & Vertrauen",
-      subtitle: "Unabhängige Plattformen bestätigen unsere Qualität und Zuverlässigkeit im täglichen Einsatz.",
+      title: "Bewertungen & Referenzen",
+      subtitle: "Öffentliche Profile und echte Rückmeldungen geben einen schnellen Eindruck davon, wie wir arbeiten.",
       googleImageUrl: "/assets/review-logos/google.svg",
       googleScore: "5,0",
-      googleLabel: "Kundenrezensionen",
+      googleLabel: "Google Rezensionen",
       trustpilotImageUrl: "/assets/review-logos/trustpilot.svg",
       trustpilotScore: "5,0",
-      trustpilotLabel: "Verifizierte Bewertungen",
+      trustpilotLabel: "Unternehmensprofil",
       provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
       provenexpertScore: "SEHR GUT",
-      provenexpertLabel: "Empfehlungen",
+      provenexpertLabel: "Verifizierte Bewertungen",
     }),
   finalCta: finalCtaSchema.extend({
     imageUrl: imageUrlSchema,
   }),
   seo: seoSectionSchema.default({
-    seoTitle: "Gebäudereinigung in Neu-Isenburg und Umgebung | Aktive Facility Management",
+    seoTitle: "Gebäudereinigung in Neu-Isenburg, Offenbach und Frankfurt | Aktive Facility Management",
     seoDescription:
-      "Professionelle Gebäudereinigung für Unternehmen in Neu-Isenburg und Umgebung. Jetzt kostenloses Angebot anfragen.",
+      "Gebäudereinigung für Büros, Praxen und Gewerbeflächen in Neu-Isenburg, Offenbach, Frankfurt und Hanau. Feste Teams, klare Abläufe, persönlicher Ansprechpartner.",
   }),
 });
 
@@ -113,14 +113,14 @@ export const cmsServicesContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Leistungsübersicht"),
       subtitle: pageSubtitleSchema.default(
-        "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung."
+        "Von der laufenden Unterhaltsreinigung bis zur gründlichen Sonderleistung: Wir planen Reinigungsintervalle und Leistungsumfang passend zu Ihrem Objekt."
       ),
       imageUrl1: imageUrlSchema,
       imageUrl2: imageUrlSchema,
     })
     .default({
       title: "Leistungsübersicht",
-      subtitle: "Ein Überblick über unser Leistungsspektrum: von täglicher Büroreinigung bis zur Glas- und Sonderreinigung.",
+      subtitle: "Von der laufenden Unterhaltsreinigung bis zur gründlichen Sonderleistung: Wir planen Reinigungsintervalle und Leistungsumfang passend zu Ihrem Objekt.",
       imageUrl1: "",
       imageUrl2: "",
     }),
@@ -128,19 +128,19 @@ export const cmsServicesContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Ihre Vorteile"),
       subtitle: pageSubtitleSchema.default(
-        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher Zuverlässigkeit – genau das, was Unternehmen erwarten."
+        "Klare Ansprechpartner, nachvollziehbare Leistungen und feste Einsatztage sorgen dafür, dass Reinigung im Alltag verlässlich funktioniert."
       ),
     })
     .default({
       title: "Ihre Vorteile",
       subtitle:
-        "Wir arbeiten mit festen Teams, transparenter Abrechnung und hoher Zuverlässigkeit – genau das, was Unternehmen erwarten.",
+        "Klare Ansprechpartner, nachvollziehbare Leistungen und feste Einsatztage sorgen dafür, dass Reinigung im Alltag verlässlich funktioniert.",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Leistungen für professionelle Gebäudereinigung | Aktive Facility Management",
+    seoTitle: "Leistungen der Gebäudereinigung im Rhein-Main-Gebiet | Aktive Facility Management",
     seoDescription:
-      "Unterhaltsreinigung, Büroreinigung, Glasreinigung und Sonderreinigung für Unternehmen in Neu-Isenburg und Umgebung.",
+      "Büroreinigung, Unterhaltsreinigung, Glasreinigung, Treppenhausreinigung und Sonderleistungen für Unternehmen in Neu-Isenburg, Offenbach, Frankfurt und Hanau.",
   }),
 });
 
@@ -150,15 +150,15 @@ export const cmsAboutContentSchema = z.object({
   hero: heroBaseSchema,
   companyInfo: z
     .object({
-      title: pageTitleSchema.default("Unsere Geschichte"),
+      title: pageTitleSchema.default("Wer wir sind"),
       storyParagraph1: longTextSchema.default(
-        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt."
+        "Aktive Facility Management betreut Unternehmen in Neu-Isenburg und im Rhein-Main-Gebiet mit professioneller Gebäudereinigung."
       ),
       storyParagraph2: longTextSchema.default(
-        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen."
+        "Im Mittelpunkt stehen für uns saubere Abläufe, feste Ansprechpartner und Leistungen, die im Tagesgeschäft tatsächlich entlasten."
       ),
       storyParagraph3: longTextSchema.default(
-        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen."
+        "Deshalb arbeiten wir mit geschulten, festangestellten Teams und setzen auf direkte Abstimmung statt wechselnder Zuständigkeiten."
       ),
       statsYearsLabel: pageTitleSchema.default("Jahre Erfahrung"),
       statsCustomersLabel: pageTitleSchema.default("Stammkunden"),
@@ -166,86 +166,86 @@ export const cmsAboutContentSchema = z.object({
       statsEmployeesLabel: pageTitleSchema.default("Festangestellt"),
       teamImageUrl: imageUrlSchema,
       teamImageAlt: z.string().trim().max(160, "Der Alternativtext ist zu lang.").default(""),
-      teamBadgeLabel: pageTitleSchema.default("Zufriedene Kunden"),
+      teamBadgeLabel: pageTitleSchema.default("Betreute Kunden"),
     })
     .default({
-      title: "Unsere Geschichte",
+      title: "Wer wir sind",
       storyParagraph1:
-        "Aktive Facility Management wurde gegründet mit einer klaren Vision: Gebäudereinigung auf einem Niveau anzubieten, das Unternehmen wirklich überzeugt.",
+        "Aktive Facility Management betreut Unternehmen in Neu-Isenburg und im Rhein-Main-Gebiet mit professioneller Gebäudereinigung.",
       storyParagraph2:
-        "Was als kleines lokales Unternehmen begann, ist heute ein verlässlicher Partner für Unternehmen aus verschiedensten Branchen.",
+        "Im Mittelpunkt stehen für uns saubere Abläufe, feste Ansprechpartner und Leistungen, die im Tagesgeschäft tatsächlich entlasten.",
       storyParagraph3:
-        "Wir beschäftigen ausschließlich festangestellte, geschulte Mitarbeiter. Keine Subunternehmer, keine Überraschungen.",
+        "Deshalb arbeiten wir mit geschulten, festangestellten Teams und setzen auf direkte Abstimmung statt wechselnder Zuständigkeiten.",
       statsYearsLabel: "Jahre Erfahrung",
       statsCustomersLabel: "Stammkunden",
       statsStaffLabel: "Mitarbeiter",
       statsEmployeesLabel: "Festangestellt",
       teamImageUrl: "",
       teamImageAlt: "",
-      teamBadgeLabel: "Zufriedene Kunden",
+      teamBadgeLabel: "Betreute Kunden",
     }),
   values: z
     .object({
       title: pageTitleSchema.default("Unsere Werte"),
       subtitle: pageSubtitleSchema.default(
-        "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft."
+        "Diese Punkte prägen unsere Zusammenarbeit mit Kunden und unser tägliches Arbeiten im Objekt."
       ),
       value1Title: pageTitleSchema.default("Verlässlichkeit"),
-      value1Desc: pageSubtitleSchema.default("Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme."),
+      value1Desc: pageSubtitleSchema.default("Absprachen, Reinigungszeiten und Ergebnisse müssen im Tagesgeschäft verlässlich funktionieren."),
       value2Title: pageTitleSchema.default("Qualität"),
-      value2Desc: pageSubtitleSchema.default("Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig."),
+      value2Desc: pageSubtitleSchema.default("Wir arbeiten gründlich, dokumentiert und mit Blick für sensible Bereiche."),
       value3Title: pageTitleSchema.default("Partnerschaft"),
-      value3Desc: pageSubtitleSchema.default("Wir verstehen uns als langfristiger Partner unserer Kunden."),
+      value3Desc: pageSubtitleSchema.default("Wir denken nicht in Einzeleinsätzen, sondern in stabilen, langfristigen Kundenbeziehungen."),
       value4Title: pageTitleSchema.default("Verantwortung"),
-      value4Desc: pageSubtitleSchema.default("Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln."),
+      value4Desc: pageSubtitleSchema.default("Wir gehen sorgfältig mit Räumen, Material, Mitarbeitern und den Abläufen unserer Kunden um."),
     })
     .default({
       title: "Unsere Werte",
-      subtitle: "Diese Grundsätze leiten unser Handeln – gegenüber Kunden, Mitarbeitern und der Gesellschaft.",
+      subtitle: "Diese Punkte prägen unsere Zusammenarbeit mit Kunden und unser tägliches Arbeiten im Objekt.",
       value1Title: "Verlässlichkeit",
-      value1Desc: "Wir halten, was wir versprechen. Termine, Qualität und Absprachen – ohne Ausnahme.",
+      value1Desc: "Absprachen, Reinigungszeiten und Ergebnisse müssen im Tagesgeschäft verlässlich funktionieren.",
       value2Title: "Qualität",
-      value2Desc: "Kein Kompromiss bei der Ausführung. Wir arbeiten gründlich und sorgfältig.",
+      value2Desc: "Wir arbeiten gründlich, dokumentiert und mit Blick für sensible Bereiche.",
       value3Title: "Partnerschaft",
-      value3Desc: "Wir verstehen uns als langfristiger Partner unserer Kunden.",
+      value3Desc: "Wir denken nicht in Einzeleinsätzen, sondern in stabilen, langfristigen Kundenbeziehungen.",
       value4Title: "Verantwortung",
-      value4Desc: "Verantwortung gegenüber Kunden, Mitarbeitern und der Umwelt prägt unser Handeln.",
+      value4Desc: "Wir gehen sorgfältig mit Räumen, Material, Mitarbeitern und den Abläufen unserer Kunden um.",
     }),
   team: z
     .object({
-      title: pageTitleSchema.default("Unser Team"),
+      title: pageTitleSchema.default("Wie wir arbeiten"),
       paragraph1: longTextSchema.default(
-        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben."
+        "Unsere Mitarbeiter sind geschult, festangestellt und mit den Anforderungen gewerblicher Objekte vertraut."
       ),
       paragraph2: longTextSchema.default(
-        "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut."
+        "Wo möglich, setzen wir feste Teams ein. Das reduziert Abstimmungsaufwand und sorgt für gleichbleibende Qualität."
       ),
       bullet1: pageSubtitleSchema.default("Alle Mitarbeiter festangestellt"),
-      bullet2: pageSubtitleSchema.default("Regelmäßige Schulungen und Weiterbildungen"),
-      bullet3: pageSubtitleSchema.default("Zuverlässige Vertretungsregelungen"),
+      bullet2: pageSubtitleSchema.default("Einarbeitung nach Objekt und Reinigungsplan"),
+      bullet3: pageSubtitleSchema.default("Verlässliche Vertretung bei Urlaub oder Ausfall"),
       bullet4: pageSubtitleSchema.default("Diskret und vertrauenswürdig"),
-      buttonText: pageButtonSchema.default("Kontakt aufnehmen"),
+      buttonText: pageButtonSchema.default("Anfrage besprechen"),
       imageUrl: imageUrlSchema,
       imageAlt: z.string().trim().max(160, "Der Alternativtext ist zu lang.").default(""),
     })
     .default({
-      title: "Unser Team",
+      title: "Wie wir arbeiten",
       paragraph1:
-        "Unser Team besteht aus erfahrenen, geschulten Fachkräften, die ihren Beruf mit Sorgfalt und Engagement ausüben.",
-      paragraph2: "Wir legen großen Wert auf Kontinuität: Ihre Objekte werden von festen Teams betreut.",
+        "Unsere Mitarbeiter sind geschult, festangestellt und mit den Anforderungen gewerblicher Objekte vertraut.",
+      paragraph2: "Wo möglich, setzen wir feste Teams ein. Das reduziert Abstimmungsaufwand und sorgt für gleichbleibende Qualität.",
       bullet1: "Alle Mitarbeiter festangestellt",
-      bullet2: "Regelmäßige Schulungen und Weiterbildungen",
-      bullet3: "Zuverlässige Vertretungsregelungen",
+      bullet2: "Einarbeitung nach Objekt und Reinigungsplan",
+      bullet3: "Verlässliche Vertretung bei Urlaub oder Ausfall",
       bullet4: "Diskret und vertrauenswürdig",
-      buttonText: "Kontakt aufnehmen",
+      buttonText: "Anfrage besprechen",
       imageUrl: "",
       imageAlt: "",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "Über uns | Aktive Facility Management Gebäudereinigung",
+    seoTitle: "Über Aktive Facility Management | Gebäudereinigung aus Neu-Isenburg",
     seoDescription:
-      "Lernen Sie das Team hinter Aktive Facility Management kennen. Festangestellte Fachkräfte, klare Prozesse und zuverlässige Qualität.",
+      "Lernen Sie Aktive Facility Management aus Neu-Isenburg kennen: feste Teams, direkte Ansprechpartner und planbare Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet.",
   }),
 });
 
@@ -255,23 +255,23 @@ export const cmsFaqContentSchema = z.object({
   hero: heroBaseSchema,
   questions: z
     .object({
-      title: pageTitleSchema.default("FAQ"),
-      subtitle: pageSubtitleSchema.default("Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen."),
+      title: pageTitleSchema.default("Häufige Fragen"),
+      subtitle: pageSubtitleSchema.default("Kurz beantwortet: So läuft die Zusammenarbeit mit Aktive Facility Management ab."),
       faqText: z.string().trim().max(12000, "Der FAQ-Inhalt ist zu lang.").default(
-        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig."
+        "Allgemeines|Für welche Objekte arbeiten Sie?|Wir reinigen vor allem Büros, Praxen, Kanzleien, Treppenhäuser, Gewerbeflächen und weitere gewerblich genutzte Objekte im Rhein-Main-Gebiet.\nAllgemeines|In welchen Regionen sind Sie im Einsatz?|Unser Schwerpunkt liegt in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau.\nAngebot & Start|Wie läuft eine Anfrage ab?|Nach Ihrer Anfrage stimmen wir die Anforderungen kurz mit Ihnen ab, besichtigen das Objekt bei Bedarf und erstellen ein transparentes Angebot.\nAngebot & Start|Wie schnell erhalte ich ein Angebot?|In der Regel melden wir uns innerhalb von 24 Stunden zurück und planen die nächsten Schritte direkt mit Ihnen.\nLeistungen & Ablauf|Zu welchen Zeiten kann gereinigt werden?|Je nach Objekt reinigen wir vor Arbeitsbeginn, tagsüber in abgestimmten Bereichen oder nach Betriebsschluss.\nLeistungen & Ablauf|Arbeiten Sie mit festen Teams?|Ja, wenn möglich betreuen feste Reinigungsteams Ihr Objekt. Das verbessert Abstimmung, Sicherheit und gleichbleibende Qualität.\nQualität & Vertrauen|Wie sichern Sie die Qualität?|Durch eingearbeitete Teams, klare Leistungsverzeichnisse, direkte Ansprechpartner und regelmäßige Kontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unsere Angebote sind nachvollziehbar aufgebaut und enthalten die abgestimmten Leistungen transparent."
       ),
     })
     .default({
-      title: "FAQ",
-      subtitle: "Hier finden Sie Antworten auf die wichtigsten Fragen rund um unsere Reinigungsleistungen.",
+      title: "Häufige Fragen",
+      subtitle: "Kurz beantwortet: So läuft die Zusammenarbeit mit Aktive Facility Management ab.",
       faqText:
-        "Allgemeines|Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?|Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel und Industrieanlagen.\nAllgemeines|Wie schnell kann ich ein Angebot erhalten?|Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden.\nLeistungen & Ablauf|Wie häufig wird gereinigt?|Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an.\nLeistungen & Ablauf|Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?|Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.\nQualität & Vertrauen|Wie stellen Sie gleichbleibende Qualität sicher?|Durch feste Teams, Schulungen, Reinigungsprotokolle und persönliche Qualitätskontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unser Angebot ist transparent und vollständig.",
+        "Allgemeines|Für welche Objekte arbeiten Sie?|Wir reinigen vor allem Büros, Praxen, Kanzleien, Treppenhäuser, Gewerbeflächen und weitere gewerblich genutzte Objekte im Rhein-Main-Gebiet.\nAllgemeines|In welchen Regionen sind Sie im Einsatz?|Unser Schwerpunkt liegt in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau.\nAngebot & Start|Wie läuft eine Anfrage ab?|Nach Ihrer Anfrage stimmen wir die Anforderungen kurz mit Ihnen ab, besichtigen das Objekt bei Bedarf und erstellen ein transparentes Angebot.\nAngebot & Start|Wie schnell erhalte ich ein Angebot?|In der Regel melden wir uns innerhalb von 24 Stunden zurück und planen die nächsten Schritte direkt mit Ihnen.\nLeistungen & Ablauf|Zu welchen Zeiten kann gereinigt werden?|Je nach Objekt reinigen wir vor Arbeitsbeginn, tagsüber in abgestimmten Bereichen oder nach Betriebsschluss.\nLeistungen & Ablauf|Arbeiten Sie mit festen Teams?|Ja, wenn möglich betreuen feste Reinigungsteams Ihr Objekt. Das verbessert Abstimmung, Sicherheit und gleichbleibende Qualität.\nQualität & Vertrauen|Wie sichern Sie die Qualität?|Durch eingearbeitete Teams, klare Leistungsverzeichnisse, direkte Ansprechpartner und regelmäßige Kontrollen.\nVertrag & Kosten|Gibt es versteckte Kosten?|Nein. Unsere Angebote sind nachvollziehbar aufgebaut und enthalten die abgestimmten Leistungen transparent.",
     }),
   finalCta: finalCtaSchema,
   seo: seoSectionSchema.default({
-    seoTitle: "FAQ zur Gebäudereinigung | Aktive Facility Management",
+    seoTitle: "FAQ zur Gebäudereinigung für Unternehmen | Aktive Facility Management",
     seoDescription:
-      "Antworten auf häufige Fragen zu Leistungen, Ablauf, Kosten und Qualität unserer professionellen Gebäudereinigung.",
+      "Antworten zu Angebot, Ablauf, Einsatzzeiten, Qualität und Kosten unserer Gebäudereinigung für Unternehmen im Rhein-Main-Gebiet.",
   }),
 });
 
@@ -283,28 +283,28 @@ export const cmsContactContentSchema = z.object({
     .object({
       title: pageTitleSchema.default("Kontaktinformationen"),
       subtitle: pageSubtitleSchema.default(
-        "Nutzen Sie unsere Kontaktmöglichkeiten für schnelle Rückmeldung und individuelle Beratung."
+        "Telefon, E-Mail oder WhatsApp: Hier erreichen Sie uns schnell für Rückfragen, Besichtigungen und Angebotsabstimmungen."
       ),
     })
     .default({
       title: "Kontaktinformationen",
-      subtitle: "Nutzen Sie unsere Kontaktmöglichkeiten für schnelle Rückmeldung und individuelle Beratung.",
+      subtitle: "Telefon, E-Mail oder WhatsApp: Hier erreichen Sie uns schnell für Rückfragen, Besichtigungen und Angebotsabstimmungen.",
     }),
   formSection: z
     .object({
-      title: pageTitleSchema.default("Anfrage senden"),
-      subtitle: pageSubtitleSchema.default("Senden Sie uns Ihre Anfrage und wir melden uns innerhalb von 24 Stunden.") ,
+      title: pageTitleSchema.default("Anfrage direkt senden"),
+      subtitle: pageSubtitleSchema.default("Beschreiben Sie kurz Objekt, Standort und gewünschten Intervall. Wir melden uns zeitnah mit den nächsten Schritten."),
       buttonText: pageButtonSchema.default("Nachricht senden"),
     })
     .default({
-      title: "Anfrage senden",
-      subtitle: "Senden Sie uns Ihre Anfrage und wir melden uns innerhalb von 24 Stunden.",
+      title: "Anfrage direkt senden",
+      subtitle: "Beschreiben Sie kurz Objekt, Standort und gewünschten Intervall. Wir melden uns zeitnah mit den nächsten Schritten.",
       buttonText: "Nachricht senden",
     }),
   seo: seoSectionSchema.default({
-    seoTitle: "Kontakt | Aktive Facility Management Gebäudereinigung",
+    seoTitle: "Kontakt für Gebäudereinigung im Rhein-Main-Gebiet | Aktive Facility Management",
     seoDescription:
-      "Kontaktieren Sie Aktive Facility Management für ein kostenloses und unverbindliches Angebot zur Gebäudereinigung in Neu-Isenburg und Umgebung.",
+      "Kontaktieren Sie Aktive Facility Management für Gebäudereinigung in Neu-Isenburg, Offenbach, Frankfurt und Hanau. Schnelle Rückmeldung und klare Angebotsabstimmung.",
   }),
 });
 
@@ -341,13 +341,13 @@ export const cmsNavigationItemSchema = z.object({
 export const cmsGlobalContentSchema = z.object({
   navigation: z.object({
     items: z.array(cmsNavigationItemSchema).min(1).default(defaultNavigationItems),
-    ctaLabel: pageButtonSchema.default("Angebot anfragen"),
+    ctaLabel: pageButtonSchema.default("Kostenloses Angebot"),
     ctaHref: pathFieldSchema.default("/kontakt"),
   }),
   siteStatus: z.enum(["live", "maintenance"]).default("live"),
   footer: z.object({
     footerText: pageSubtitleSchema.default(
-      "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht."
+      "Aktive Facility Management betreut Büros, Praxen und Gewerbeflächen in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau mit planbarer Gebäudereinigung und festen Teams."
     ),
     membershipLabel: z.string().trim().min(1, "Die Mitgliedschaft ist erforderlich.").max(120, "Die Mitgliedschaft ist zu lang.").default("BIV Bundesinnungsverband"),
   }),
@@ -355,7 +355,7 @@ export const cmsGlobalContentSchema = z.object({
     phoneLabel: pageTitleSchema.default("Telefon"),
     phoneDisplay: z.string().trim().min(1, "Die Telefonnummer ist erforderlich.").max(80, "Die Telefonnummer ist zu lang.").default("0178 6660021"),
     phoneHref: z.string().trim().min(1, "Der Telefon-Link ist erforderlich.").max(200, "Der Telefon-Link ist zu lang.").default("tel:+491786660021"),
-    phoneMeta: z.string().trim().min(1, "Die Zusatzinfo ist erforderlich.").max(120, "Die Zusatzinfo ist zu lang.").default("Mo-Fr 7:00-18:00 Uhr"),
+    phoneMeta: z.string().trim().min(1, "Die Zusatzinfo ist erforderlich.").max(120, "Die Zusatzinfo ist zu lang.").default("Mo-Fr 07:00-18:00 Uhr"),
     emailLabel: pageTitleSchema.default("E-Mail"),
     emailDisplay: z.string().trim().min(1, "Die E-Mail ist erforderlich.").max(120, "Die E-Mail ist zu lang.").default("info@aktive-fm.de"),
     emailHref: z.string().trim().min(1, "Der E-Mail-Link ist erforderlich.").max(200, "Der E-Mail-Link ist zu lang.").default("mailto:info@aktive-fm.de"),

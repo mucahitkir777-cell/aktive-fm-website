@@ -1,6 +1,12 @@
-import type { FormEvent } from "react";
+﻿import type { FormEvent } from "react";
 import type { SiteStatus } from "./types";
-import { infoPanelClass, primaryButtonClass, secondaryButtonClass, surfaceClass } from "./styles";
+import {
+  infoPanelClass,
+  primaryButtonClass,
+  secondaryButtonClass,
+  subtleSurfaceClass,
+  surfacePanelClass,
+} from "./styles";
 
 interface SettingsSectionProps {
   isAdmin: boolean;
@@ -33,7 +39,7 @@ export default function SettingsSection({
 }: SettingsSectionProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <div className={`${surfaceClass} p-5`}>
+      <div className={surfacePanelClass}>
         <h3 className="text-base font-semibold text-slate-900">Passwort</h3>
         <p className="mt-2 text-sm text-slate-500">Aktuelles Passwort prüfen und sicher ändern.</p>
         <button type="button" onClick={onOpenChangePassword} className={`mt-4 ${secondaryButtonClass}`}>
@@ -41,7 +47,7 @@ export default function SettingsSection({
         </button>
       </div>
 
-      <div className={`${surfaceClass} p-5`}>
+      <div className={surfacePanelClass}>
         <h3 className="text-base font-semibold text-slate-900">Benutzer</h3>
         <p className="mt-2 text-sm text-slate-500">
           {isAdmin ? "Benutzer ansehen und neue Zugänge anlegen." : "Nur Admins dürfen Benutzer verwalten."}
@@ -51,7 +57,7 @@ export default function SettingsSection({
         </button>
       </div>
 
-      <div className={`${surfaceClass} p-5`}>
+      <div className={surfacePanelClass}>
         <h3 className="text-base font-semibold text-slate-900">Website Status</h3>
         <p className="mt-2 text-sm text-slate-500">
           Besucher sehen bei aktivem Wartungsmodus die Wartungsseite. Der Admin-Bereich bleibt erreichbar.
@@ -101,9 +107,12 @@ export default function SettingsSection({
         </form>
       </div>
 
-      <div className={`${surfaceClass} p-5`}>
+      <div className={surfacePanelClass}>
         <h3 className="text-base font-semibold text-slate-900">Sitzung</h3>
         <p className="mt-2 text-sm text-slate-500">Aktuelle Sitzung gültig bis {sessionExpiresAtLabel}.</p>
+        <div className={`${subtleSurfaceClass} mt-4`}>
+          <p className="text-sm text-slate-700">Die Sitzung bleibt bis zum Ablaufdatum aktiv, sofern sie nicht manuell beendet wird.</p>
+        </div>
         <button type="button" onClick={onLogout} className={`mt-4 ${secondaryButtonClass}`}>
           Logout
         </button>

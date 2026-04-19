@@ -1,5 +1,7 @@
 ﻿User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
 
 Sitemap: https://aktive-fm.de/sitemap.xml
 

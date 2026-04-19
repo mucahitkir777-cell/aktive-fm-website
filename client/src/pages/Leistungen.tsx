@@ -7,6 +7,7 @@ import { Link } from "wouter";
 import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ServiceStructuredData from "@/components/ServiceStructuredData";
 import { trackCtaClick, trackPhoneClick, trackServiceInterest } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
@@ -36,13 +37,13 @@ const services = [
     icon: Building2,
     title: "Büroreinigung",
     slug: "buero",
-    shortDesc: "Regelmäßige, diskrete Reinigung Ihrer Büroflächen.",
-    fullDesc: "Unsere Büroreinigung sorgt dafür, dass Ihre Mitarbeiter und Besucher täglich eine saubere, gepflegte Arbeitsumgebung vorfinden. Wir reinigen Schreibtische, Böden, Sanitäranlagen, Küchen und Gemeinschaftsflächen – nach einem festen Reinigungsplan und mit geschultem Personal.",
+    shortDesc: "Regelmäßige Reinigung für Arbeitsplätze und Besprechungsbereiche.",
+    fullDesc: "Wir reinigen Büroflächen so, dass Arbeitsplätze, Besprechungsräume, Küchen und Sanitärbereiche dauerhaft gepflegt bleiben. Die Einsätze werden passend zu Ihrem Betriebsablauf geplant und mit festen Ansprechpartnern abgestimmt.",
     features: [
-      "Tägliche oder wöchentliche Reinigung nach Wunsch",
-      "Reinigung außerhalb der Geschäftszeiten möglich",
-      "Festes Reinigungsteam für Ihr Objekt",
-      "Umweltfreundliche Reinigungsmittel",
+      "Reinigung im abgestimmten Intervall",
+      "Einsätze vor, während oder nach dem Betrieb möglich",
+      "Feste Teams für wiederkehrende Objekte",
+      "Saubere Pflege von Arbeits-, Küchen- und Sanitärbereichen",
       "Regelmäßige Qualitätskontrollen",
     ],
     image: IMAGES.heroOffice,
@@ -51,13 +52,13 @@ const services = [
     icon: Sparkles,
     title: "Unterhaltsreinigung",
     slug: "unterhalts",
-    shortDesc: "Kontinuierliche Pflege nach festem Reinigungsplan.",
-    fullDesc: "Die Unterhaltsreinigung ist das Herzstück unserer Dienstleistungen. Wir übernehmen die regelmäßige, systematische Reinigung Ihrer Immobilie – damit Sauberkeit kein Zufall ist, sondern Programm. Ob täglich, wöchentlich oder nach individuellem Rhythmus.",
+    shortDesc: "Laufende Reinigung nach klarem Leistungsverzeichnis.",
+    fullDesc: "Die Unterhaltsreinigung bildet die verlässliche Basis für saubere Immobilien im Alltag. Wir definieren gemeinsam mit Ihnen Leistungen, Intervalle und Zuständigkeiten und setzen diese planbar im laufenden Betrieb um.",
     features: [
       "Individuelle Reinigungsintervalle",
-      "Dokumentierte Reinigungsprotokolle",
-      "Zuverlässige Vertretungsregelungen",
-      "Transparente Abrechnung",
+      "Leistungen nach abgestimmtem Reinigungsplan",
+      "Verlässliche Vertretung bei Ausfällen",
+      "Nachvollziehbare Abrechnung",
       "Direkter Ansprechpartner",
     ],
     image: IMAGES.serviceOffice,
@@ -66,14 +67,14 @@ const services = [
     icon: Wind,
     title: "Glasreinigung",
     slug: "glas",
-    shortDesc: "Streifenfreie Reinigung von Fenstern und Glasfassaden.",
-    fullDesc: "Saubere Glasflächen sind das Aushängeschild Ihres Unternehmens. Wir reinigen Fenster, Glastrennwände, Glasfassaden und Schaufenster – innen und außen, streifenfrei und professionell. Auch Hochhaus-Fassaden und schwer zugängliche Bereiche.",
+    shortDesc: "Streifenfreie Reinigung von Fenstern und Glasflächen.",
+    fullDesc: "Saubere Glasflächen prägen den ersten Eindruck Ihres Standorts. Wir reinigen Fenster, Schaufenster, Eingangsbereiche und Innenverglasungen gründlich, streifenfrei und passend zu den Gegebenheiten Ihres Objekts.",
     features: [
       "Innen- und Außenreinigung",
-      "Glasfassaden und Hochhäuser",
+      "Fenster, Eingänge und Glasfronten",
       "Schaufenster und Schaufronten",
       "Glastrennwände und Innenverglasung",
-      "Zertifizierte Höhenarbeiter",
+      "Abgestimmte Intervalle für dauerhaft gepflegte Glasflächen",
     ],
     image: IMAGES.serviceGlass,
   },
@@ -81,14 +82,14 @@ const services = [
     icon: Layers,
     title: "Treppenhaus & Außenanlagen",
     slug: "treppenhaus",
-    shortDesc: "Pflege von Treppenhäusern, Eingängen und Außenbereichen.",
-    fullDesc: "Der erste Eindruck zählt. Wir sorgen dafür, dass Treppenhäuser, Eingangsbereiche, Aufzüge und Außenanlagen Ihres Objekts stets gepflegt und einladend wirken. Regelmäßige Reinigung nach Plan – zuverlässig und gründlich.",
+    shortDesc: "Pflege von Treppenhäusern, Eingängen und Außenflächen.",
+    fullDesc: "Treppenhäuser, Eingangsbereiche und Außenflächen werden im Alltag stark beansprucht. Wir sorgen dafür, dass diese Zonen sauber, ordentlich und für Mitarbeiter, Besucher oder Bewohner jederzeit gepflegt wirken.",
     features: [
       "Treppenhäuser und Flure",
       "Eingangsbereiche und Foyers",
       "Aufzüge und Aufzugskabinen",
-      "Außenanlagen und Parkplätze",
-      "Müllbereiche und Technikräume",
+      "Außenflächen und Zuwegungen",
+      "Müllbereiche und Allgemeinflächen",
     ],
     image: IMAGES.heroOffice,
   },
@@ -96,14 +97,14 @@ const services = [
     icon: Wrench,
     title: "Grundreinigung",
     slug: "grund",
-    shortDesc: "Intensive Tiefenreinigung für besonders beanspruchte Bereiche.",
-    fullDesc: "Wenn normale Unterhaltsreinigung nicht ausreicht, kommt unsere Grundreinigung zum Einsatz. Wir reinigen intensiv und gründlich – Böden, Wände, Einrichtungen und schwer zugängliche Bereiche. Ideal nach Umzügen, Renovierungen oder als saisonale Tiefenreinigung.",
+    shortDesc: "Intensive Reinigung für stark beanspruchte Flächen.",
+    fullDesc: "Wenn laufende Reinigung nicht mehr ausreicht, übernimmt die Grundreinigung die gründliche Aufarbeitung von Böden, Oberflächen und schwer erreichbaren Bereichen. Sie eignet sich besonders bei hoher Beanspruchung, vor Übergaben oder nach Umbauten.",
     features: [
-      "Intensive Bodenreinigung und -pflege",
-      "Maschinelle Reinigungsverfahren",
+      "Intensive Bodenreinigung und Pflege",
       "Entfernung hartnäckiger Verschmutzungen",
-      "Nach Umzug oder Renovierung",
-      "Saisonale Tiefenreinigung",
+      "Aufarbeitung stark beanspruchter Bereiche",
+      "Geeignet vor Übergaben oder nach Umbauten",
+      "Maschinelle Verfahren nach Bedarf",
     ],
     image: IMAGES.serviceOffice,
   },
@@ -111,14 +112,14 @@ const services = [
     icon: HomeIcon,
     title: "Sonderreinigung",
     slug: "sonder",
-    shortDesc: "Maßgeschneiderte Lösungen für besondere Anforderungen.",
-    fullDesc: "Nicht jede Reinigungsaufgabe ist Standard. Für spezielle Anforderungen bieten wir individuelle Sonderreinigungen an – von der Baureinigung über Veranstaltungsreinigung bis hin zu hygienekritischen Bereichen in Praxen und Labors.",
+    shortDesc: "Spezielle Leistungen für besondere Anforderungen.",
+    fullDesc: "Nicht jede Reinigungsaufgabe lässt sich mit Standardleistungen abdecken. Für besondere Anforderungen planen wir Sonderreinigungen individuell nach Objekt, Anlass und gewünschtem Ergebnis.",
     features: [
-      "Baureinigung nach Renovierung",
-      "Veranstaltungsreinigung",
-      "Hygienekritische Bereiche",
-      "Desinfektionsreinigung",
-      "Individuelle Konzepte auf Anfrage",
+      "Baureinigung nach Umbau oder Renovierung",
+      "Zusatzleistungen für besondere Anlässe",
+      "Reinigung hygienisch sensibler Bereiche",
+      "Individuelle Sonderaufträge nach Abstimmung",
+      "Konzepte passend zum Objekt",
     ],
     image: IMAGES.serviceGlass,
   },
@@ -226,6 +227,7 @@ export default function Leistungen() {
 
   return (
     <div className="min-h-screen pc-bg-section">
+      <ServiceStructuredData services={services} />
       <Navigation />
 
       {/* Page Hero */}
@@ -272,9 +274,9 @@ export default function Leistungen() {
                 WhatsApp
               </a>
             </div>
-            <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-              Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
-            </p>
+          <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+            Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+          </p>
           </div>
         </div>
       </section>
@@ -401,7 +403,7 @@ export default function Leistungen() {
             </a>
           </div>
           <p className="mt-4 pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
-            Schneller Kontaktweg: Telefon oder WhatsApp, alternativ Anfrageformular.
+            Direkter Kontakt per Telefon, WhatsApp oder Anfrageformular.
           </p>
         </div>
       </section>

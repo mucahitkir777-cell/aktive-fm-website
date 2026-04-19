@@ -102,8 +102,8 @@ export default function UeberUns() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/kontakt">
-                <span onClick={() => trackCtaClick({ cta_id: "about_hero_contact", cta_text: "Kostenloses Angebot", cta_location: "about_hero", destination_url: "/kontakt" })} className="pc-btn-primary">
-                  Kostenloses Angebot
+                <span onClick={() => trackCtaClick({ cta_id: "about_hero_contact", cta_text: resolvedCmsContent.hero.buttonText, cta_location: "about_hero", destination_url: "/kontakt" })} className="pc-btn-primary">
+                  {resolvedCmsContent.hero.buttonText}
                   <ArrowRight size={16} />
                 </span>
               </Link>
@@ -123,7 +123,7 @@ export default function UeberUns() {
               </a>
             </div>
             <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-              Direkter Kontakt ohne Wartezeit. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+              Direkter Kontakt ohne Umwege. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
             </p>
           </div>
         </div>

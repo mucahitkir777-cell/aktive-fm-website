@@ -1,6 +1,12 @@
-import { KeyRound, LogOut, RefreshCw, Settings, Users } from "lucide-react";
+﻿import { KeyRound, LogOut, RefreshCw, Settings, Users } from "lucide-react";
 import type { RefObject } from "react";
-import { helperTextClass, secondaryButtonClass, surfaceClass } from "./styles";
+import {
+  helperTextClass,
+  menuItemClass,
+  menuPopupClass,
+  secondaryButtonClass,
+  surfaceClass,
+} from "./styles";
 import type { AdminSectionMeta } from "./types";
 
 interface AdminHeaderProps {
@@ -29,12 +35,13 @@ export default function AdminHeader({
   onLogout,
 }: AdminHeaderProps) {
   return (
-    <div className={`${surfaceClass} p-6`}>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">{sectionMeta.title}</h1>
+    <div className={`${surfaceClass} p-5 md:p-6`}>
+      <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Adminbereich</p>
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">{sectionMeta.title}</h1>
           <p className={`mt-2 max-w-2xl ${helperTextClass}`}>{sectionMeta.description}</p>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
             Eingeloggt als {username}
           </p>
         </div>
@@ -57,11 +64,11 @@ export default function AdminHeader({
             </button>
 
             {settingsOpen && (
-              <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
+              <div className={menuPopupClass}>
                 <button
                   type="button"
                   onClick={onOpenChangePassword}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-900 hover:bg-slate-50"
+                  className={menuItemClass}
                 >
                   <KeyRound size={16} />
                   Passwort ändern
@@ -71,7 +78,7 @@ export default function AdminHeader({
                   <button
                     type="button"
                     onClick={onOpenUsers}
-                    className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-900 hover:bg-slate-50"
+                    className={menuItemClass}
                   >
                     <Users size={16} />
                     Benutzer verwalten
@@ -81,7 +88,7 @@ export default function AdminHeader({
                 <button
                   type="button"
                   onClick={onLogout}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
+                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-red-700 transition-colors hover:bg-red-50"
                 >
                   <LogOut size={16} />
                   Logout

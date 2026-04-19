@@ -42,9 +42,32 @@ function buildNotificationText(input: StoredLeadEmailInput) {
     "Nachricht:",
     payload.message?.trim() || "Keine Nachricht angegeben.",
     "",
-    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfÃ¼gbar.",
+    "Hinweis: Der Lead ist im Adminbereich unter /admin/leads verfügbar.",
     `Lead-ID: ${input.leadId}`,
   ].join("\n");
+}
+
+function buildConfirmationText(input: StoredLeadEmailInput) {
+  const { payload } = input;
+
+  return [
+    `Hallo ${payload.name},`,
+    "",
+    "vielen Dank für Ihre Anfrage! Wir haben Ihre Nachricht erhalten und werden uns in Kürze mit Ihnen in Verbindung setzen.",
+    "",
+    "Ihre Anfrage:",
+    `- Name: ${payload.name}`,
+    `- Telefon: ${payload.phone}`,
+    `- E-Mail: ${payload.email}`,
+    payload.message ? `- Nachricht: ${payload.message.trim()}` : "",
+    "",
+    "Falls Sie weitere Fragen haben, können Sie uns gerne kontaktieren.",
+    "",
+    "Viele Grüße",
+    "Ihr Team von aktive-FM",
+    "",
+    `(Lead-ID: ${input.leadId})`,
+  ].filter((line) => line !== "").join("\n");
 }
 
 async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
@@ -76,6 +99,41 @@ async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<L
 
     return {
       provider: "email",
+      status: "error",
+      message,
+    };
+  }
+}
+
+async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
+  if (!hasConfiguredLeadSmtp()) {
+    return {
+      provider: "email_confirmation",
+      status: "skipped",
+      message: "SMTP confirmation is not configured.",
+    };
+  }
+
+  try {
+    const mailTransporter = getTransporter();
+    await mailTransporter.sendMail({
+      from: LEAD_SERVER_CONFIG.email.smtp.from,
+      to: input.payload.email,
+      subject: "Bestätigung Ihrer Anfrage – aktive-FM",
+      text: buildConfirmationText(input),
+    });
+
+    return {
+      provider: "email_confirmation",
+      status: "success",
+      message: "Confirmation email sent to lead.",
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "SMTP confirmation email send failed.";
+    console.error("[lead-email-confirmation]", message);
+
+    return {
+      provider: "email_confirmation",
       status: "error",
       message,
     };
@@ -130,7 +188,15 @@ export async function deliverLeadNotification(input: StoredLeadEmailInput): Prom
     return {
       provider: "email",
       status: "skipped",
-      message: "Lead notification email is disabled.",
+      message: "Lead notification email is disabled globally.",
+    };
+  }
+
+  if (!LEAD_SERVER_CONFIG.email.notification.enabled) {
+    return {
+      provider: "email",
+      status: "skipped",
+      message: "Lead team notification is disabled.",
     };
   }
 
@@ -139,5 +205,25 @@ export async function deliverLeadNotification(input: StoredLeadEmailInput): Prom
   }
 
   return postLeadNotificationEndpoint(input);
+}
+
+export async function deliverLeadConfirmation(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
+  if (!LEAD_SERVER_CONFIG.email.enabled) {
+    return {
+      provider: "email_confirmation",
+      status: "skipped",
+      message: "Lead confirmation email is disabled globally.",
+    };
+  }
+
+  if (!LEAD_SERVER_CONFIG.email.confirmation.enabled) {
+    return {
+      provider: "email_confirmation",
+      status: "skipped",
+      message: "Lead confirmation email is disabled.",
+    };
+  }
+
+  return sendLeadConfirmationEmailToLead(input);
 }
 

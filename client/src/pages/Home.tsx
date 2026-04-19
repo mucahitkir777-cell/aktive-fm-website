@@ -49,37 +49,37 @@ const services = [
   {
     icon: Building2,
     title: "Büroreinigung",
-    desc: "Regelmäßige Reinigung von Büros, Konferenzräumen und Gemeinschaftsflächen – zuverlässig und diskret.",
+    desc: "Saubere Arbeitsplätze, Besprechungsräume und Sanitärbereiche im festen Intervall.",
     href: "/leistungen",
   },
   {
     icon: Sparkles,
     title: "Unterhaltsreinigung",
-    desc: "Kontinuierliche Pflege Ihrer Immobilie nach festem Reinigungsplan – damit Sauberkeit kein Zufall ist.",
+    desc: "Laufende Reinigung nach Leistungsverzeichnis und abgestimmten Einsatztagen.",
     href: "/leistungen",
   },
   {
     icon: Wind,
     title: "Glasreinigung",
-    desc: "Streifenfreie Reinigung von Fenstern, Glasfassaden und Glastrennwänden – innen und außen.",
+    desc: "Fenster, Glasflächen und Eingangsbereiche streifenfrei und sauber gepflegt.",
     href: "/leistungen",
   },
   {
     icon: Layers,
     title: "Treppenhaus & Außen",
-    desc: "Professionelle Pflege von Treppenhäusern, Eingangsbereichen und Außenanlagen.",
+    desc: "Treppenhäuser, Eingänge und Außenbereiche ordentlich und gepflegt gehalten.",
     href: "/leistungen",
   },
   {
     icon: Wrench,
     title: "Grundreinigung",
-    desc: "Intensive Tiefenreinigung für besonders beanspruchte Bereiche – gründlich und nachhaltig.",
+    desc: "Intensive Reinigung bei starkem Verschmutzungsgrad, vor Übergaben oder nach Umbauten.",
     href: "/leistungen",
   },
   {
     icon: HomeIcon,
     title: "Sonderreinigung",
-    desc: "Maßgeschneiderte Reinigungslösungen für spezielle Anforderungen und Sondersituationen.",
+    desc: "Spezielle Leistungen für besondere Anforderungen, Materialien oder Situationen.",
     href: "/leistungen",
   },
 ];
@@ -88,54 +88,54 @@ const usps = [
   {
     icon: Shield,
     title: "Vollständig versichert",
-    desc: "Alle Mitarbeiter und Einsätze sind umfassend haftpflichtversichert. Sie tragen kein Risiko.",
+    desc: "Haftpflichtversichert und mit klaren Zuständigkeiten im laufenden Einsatz.",
   },
   {
     icon: Users,
     title: "Festes Reinigungsteam",
-    desc: "Sie erhalten immer dasselbe geschulte Team – für gleichbleibende Qualität und Vertrauen.",
+    desc: "Wiederkehrende Ansprechpartner und eingearbeitete Teams für Ihr Objekt.",
   },
   {
     icon: Clock,
     title: "Pünktlich & zuverlässig",
-    desc: "Wir halten Termine und Absprachen ein. Keine Überraschungen, keine Ausfälle ohne Ersatz.",
+    desc: "Verbindliche Einsatzzeiten und saubere Abstimmung mit Ihrem Betriebsablauf.",
   },
   {
     icon: Award,
     title: "Geprüfte Qualität",
-    desc: "Regelmäßige Qualitätskontrollen und direkte Ansprechpartner – für Ihr dauerhaftes Wohlbefinden.",
+    desc: "Kontrollen, Rückmeldeschleifen und direkte Erreichbarkeit statt anonymer Übergaben.",
   },
 ];
 
 const processSteps = [
   {
     num: "01",
-    title: "Anfrage stellen",
-    desc: "Kontaktieren Sie uns per Telefon, E-Mail oder über unser Formular. Wir melden uns innerhalb von 24 Stunden.",
+    title: "Anfrage senden",
+    desc: "Sie nennen Objekt, Standort und gewünschten Rhythmus. Wir melden uns kurzfristig zurück.",
     imageUrl: IMAGES.aboutTeam,
     imageAlt: "Persoenliche Erstberatung zur Reinigungsanfrage",
     imagePosition: "center",
   },
   {
     num: "02",
-    title: "Vor-Ort-Besichtigung",
-    desc: "Wir besichtigen Ihr Objekt kostenlos und unverbindlich – um Ihren Bedarf genau zu verstehen.",
+    title: "Objekt abstimmen",
+    desc: "Bei Bedarf sehen wir uns die Flächen vor Ort an und klären Aufwand, sensible Bereiche und Zeiten.",
     imageUrl: IMAGES.heroOffice,
     imageAlt: "Vor-Ort-Termin zur Besichtigung des Objekts",
     imagePosition: "center",
   },
   {
     num: "03",
-    title: "Individuelles Angebot",
-    desc: "Sie erhalten ein transparentes, maßgeschneidertes Angebot ohne versteckte Kosten.",
+    title: "Angebot erhalten",
+    desc: "Sie bekommen ein nachvollziehbares Angebot mit klaren Leistungen, Intervallen und Kosten.",
     imageUrl: IMAGES.heroMain,
     imageAlt: "Planung und Erstellung eines individuellen Reinigungsangebots",
     imagePosition: "center",
   },
   {
     num: "04",
-    title: "Reinigung starten",
-    desc: "Nach Ihrer Freigabe beginnen wir termingerecht – zuverlässig, diskret und professionell.",
+    title: "Einsatz starten",
+    desc: "Nach Freigabe beginnt Ihr fest eingeplantes Reinigungsteam zum vereinbarten Termin.",
     imageUrl: IMAGES.serviceGlass,
     imageAlt: "Professionelle Reinigung im Einsatz",
     imagePosition: "center",
@@ -209,9 +209,9 @@ const sectors = [
 ];
 
 const trustSectionQuotes = [
-  "Sehr zuverlässig und gründlich. Absolute Empfehlung.",
-  "Top Service, pünktlich vor Ort und sauber gearbeitet.",
-  "Freundliches Team, schnelle Abstimmung und starke Qualität.",
+  "Saubere Ausführung, verlässliche Termine und schnelle Abstimmung.",
+  "Professioneller Ablauf und konstante Qualität im laufenden Einsatz.",
+  "Freundliche Kommunikation, klare Angebote und überzeugende Ergebnisse.",
 ];
 
 const trustSectionCertifications = [
@@ -277,7 +277,7 @@ export default function Home() {
       logoUrl: resolvedCmsContent.reviews.googleImageUrl,
       score: resolvedCmsContent.reviews.googleScore,
       label: resolvedCmsContent.reviews.googleLabel,
-      href: "https://example.com/google",
+      href: "https://www.google.com/search?tbm=lcl&q=Aktive+Facility+Management+GmbH+Neu-Isenburg",
       quote: trustSectionQuotes[0],
     },
     {
@@ -286,7 +286,7 @@ export default function Home() {
       logoUrl: resolvedCmsContent.reviews.trustpilotImageUrl,
       score: resolvedCmsContent.reviews.trustpilotScore,
       label: resolvedCmsContent.reviews.trustpilotLabel,
-      href: "https://example.com/trustpilot",
+      href: "https://de.trustpilot.com/search?query=Aktive%20Facility%20Management%20GmbH",
       quote: trustSectionQuotes[1],
     },
     {
@@ -295,7 +295,7 @@ export default function Home() {
       logoUrl: resolvedCmsContent.reviews.provenexpertImageUrl,
       score: resolvedCmsContent.reviews.provenexpertScore,
       label: resolvedCmsContent.reviews.provenexpertLabel,
-      href: "https://example.com/provenexpert",
+      href: "https://www.provenexpert.com/aktive-facility-management-gmbh/",
       quote: trustSectionQuotes[2],
     },
   ];
@@ -474,9 +474,9 @@ export default function Home() {
             <div>
               <div className="max-w-xl mb-8">
                 <span className="pc-accent-line" />
-                <h2 className="pc-section-title">Das sagen unsere Kunden</h2>
+                <h2 className="pc-section-title">{resolvedCmsContent.reviews.title}</h2>
                 <p className="pc-section-subtitle">
-                  Bewertungen, Empfehlungen und verifizierte Profile auf einen Blick.
+                  {resolvedCmsContent.reviews.subtitle}
                 </p>
               </div>
 
@@ -531,16 +531,16 @@ export default function Home() {
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Weiteres Bewertungsprofil. Der direkte Profil-Link wird hier hinterlegt.
+                    Branchenprofil mit aktuellen Unternehmensdaten und öffentlicher Bewertung.
                   </p>
                   <a
-                    href="https://example.com/11880"
+                    href="https://www.11880.com/branchenbuch/dreieich/061331911B107212052/aktive-facility-management-gmbh.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
-                    Profil ansehen <ChevronRight size={14} />
+                    11880-Profil öffnen <ChevronRight size={14} />
                   </a>
                 </div>
 
@@ -554,16 +554,16 @@ export default function Home() {
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Weiteres Bewertungsprofil. Der direkte Profil-Link wird hier hinterlegt.
+                    Trustlocal-Profil mit zusammengefassten Bewertungen und Unternehmensangaben.
                   </p>
                   <a
-                    href="https://example.com/trustlocal"
+                    href="https://trustlocal.de/hessen/neu-isenburg/reinigungsfirma/aktive-facility-management-gmbh/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
-                    Profil ansehen <ChevronRight size={14} />
+                    Trustlocal-Profil öffnen <ChevronRight size={14} />
                   </a>
                 </div>
               </div>
@@ -672,12 +672,12 @@ export default function Home() {
                         cta_location: "home_services",
                         destination_url: service.href,
                       });
-                      handleHomeCtaClick("home_service_more", "Mehr erfahren", "home_services", service.href, service.title);
+                      handleHomeCtaClick("home_service_more", "Leistung ansehen", "home_services", service.href, service.title);
                     }}
                     className="inline-flex items-center gap-1 pc-text-brand text-sm font-medium hover:gap-2 transition-all duration-200"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
-                    Mehr erfahren <ChevronRight size={14} />
+                    Leistung ansehen <ChevronRight size={14} />
                   </span>
                 </Link>
               </div>
@@ -766,7 +766,7 @@ export default function Home() {
               So einfach geht's
             </h2>
             <p className="pc-text-secondary text-lg leading-relaxed mt-4" style={{ fontFamily: "Inter, sans-serif" }}>
-              Von der ersten Anfrage bis zum ersten Reinigungstermin – unkompliziert und transparent.
+              Vom Erstkontakt bis zum Starttermin in vier klaren Schritten.
             </p>
           </div>
 
@@ -812,7 +812,7 @@ export default function Home() {
             <span className="pc-accent-line" />
             <h2 className="pc-section-title">Unsere Einsatzbereiche</h2>
             <p className="pc-section-subtitle">
-              Wir reinigen für Unternehmen aus verschiedensten Branchen – mit dem jeweils passenden Konzept.
+              Für jede Branche stimmen wir Reinigungsumfang, Zeiten und sensible Bereiche passend ab.
             </p>
           </div>
 
@@ -898,10 +898,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center">
           <div className="text-center pc-text-primary max-w-2xl px-4">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-              Glasreinigung auf höchstem Niveau
+              Glasflächen sauber im Blick
             </h2>
             <p className="pc-text-secondary mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
-              Von der Innenverglasung bis zur Glasfassade – streifenfrei, sicher und professionell.
+              Für Fenster, Eingangsbereiche und Innenverglasungen mit klarem Qualitätsanspruch.
             </p>
             <Link href="/leistungen">
               <span
@@ -910,11 +910,11 @@ export default function Home() {
                     cta_location: "home_glass_section",
                     destination_url: "/leistungen",
                   });
-                  handleHomeCtaClick("home_glass_service", "Zur Glasreinigung", "home_glass_section", "/leistungen", "Glasreinigung");
+                  handleHomeCtaClick("home_glass_service", "Glasreinigung ansehen", "home_glass_section", "/leistungen", "Glasreinigung");
                 }}
                 className="pc-btn-white"
               >
-                Zur Glasreinigung
+                Glasreinigung ansehen
                 <ArrowRight size={16} />
               </span>
             </Link>
@@ -969,9 +969,9 @@ export default function Home() {
 
                 <div className="flex flex-col gap-2">
                   {[
-                    "Kostenlos & unverbindlich",
-                    "Antwort innerhalb von 24 Stunden",
-                    "Persönliche Beratung vor Ort",
+                    "Kostenloses Erstgespräch",
+                    "Rückmeldung in der Regel innerhalb von 24 Stunden",
+                    "Besichtigung bei Bedarf vor Ort",
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2">
                       <CheckCircle size={14} className="pc-text-brand" />

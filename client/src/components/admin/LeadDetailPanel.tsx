@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+﻿import type { FormEvent } from "react";
 import type { LeadStatus } from "@shared/lead";
 import type { LeadDraft } from "./types";
 import { getLeadStatusLabel } from "./helpers";
@@ -96,7 +96,7 @@ export default function LeadDetailPanel({
         </select>
       </label>
 
-      <div className="flex justify-end gap-2 pt-2">
+      <div className="flex justify-end gap-2 border-t border-slate-200 pt-4">
         <button type="button" onClick={onClose} className={secondaryButtonClass}>
           Schließen
         </button>

@@ -2,6 +2,7 @@
 import { Link } from "wouter";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import FAQPageStructuredData from "@/components/FAQPageStructuredData";
 import { ChevronDown, ArrowRight, Phone, MessageCircle } from "lucide-react";
 import { trackCtaClick, trackPhoneClick, trackWhatsAppClick } from "@/lib/analytics";
 import { companyConfig } from "@/config/company";
@@ -17,16 +18,29 @@ const DEFAULT_FAQS: FaqCategory[] = [
     category: "Allgemeines",
     items: [
       {
-        q: "Für welche Objekte bieten Sie Ihre Reinigungsleistungen an?",
-        a: "Wir reinigen gewerbliche Objekte aller Art: Büros, Praxen, Kanzleien, Hotels, Einzelhandel, Industrieanlagen, Schulen und weitere Einrichtungen.",
+        q: "Für welche Objekte arbeiten Sie?",
+        a: "Wir reinigen vor allem Büros, Praxen, Kanzleien, Treppenhäuser, Gewerbeflächen und weitere gewerblich genutzte Objekte im Rhein-Main-Gebiet.",
       },
       {
-        q: "Wie schnell kann ich ein Angebot erhalten?",
-        a: "Nach Ihrer Anfrage melden wir uns in der Regel innerhalb von 24 Stunden. Danach erhalten Sie ein transparentes, individuelles Angebot.",
+        q: "In welchen Regionen sind Sie im Einsatz?",
+        a: "Unser Schwerpunkt liegt in Neu-Isenburg, im Kreis Offenbach, in Frankfurt am Main und in Hanau.",
       },
       {
-        q: "Arbeiten Sie mit Subunternehmern?",
-        a: "Nein. Alle Reinigungsleistungen werden ausschließlich durch unser eigenes, festangestelltes Personal erbracht.",
+        q: "Wie schnell erhalte ich eine Rückmeldung?",
+        a: "In der Regel melden wir uns innerhalb von 24 Stunden zurück und besprechen die nächsten Schritte direkt mit Ihnen.",
+      },
+    ],
+  },
+  {
+    category: "Angebot & Start",
+    items: [
+      {
+        q: "Wie läuft eine Anfrage ab?",
+        a: "Nach Ihrer Anfrage stimmen wir die Anforderungen kurz mit Ihnen ab, besichtigen das Objekt bei Bedarf und erstellen ein transparentes Angebot.",
+      },
+      {
+        q: "Wann kann die Reinigung starten?",
+        a: "Das hängt von Objekt, Umfang und gewünschtem Intervall ab. Nach Abstimmung planen wir den Starttermin verbindlich mit Ihnen ein.",
       },
     ],
   },
@@ -34,12 +48,12 @@ const DEFAULT_FAQS: FaqCategory[] = [
     category: "Leistungen & Ablauf",
     items: [
       {
-        q: "Wie häufig wird gereinigt?",
-        a: "Wir bieten tägliche, wöchentliche oder individuelle Reinigungsintervalle an – passend zu Ihrem Bedarf.",
+        q: "Zu welchen Zeiten kann gereinigt werden?",
+        a: "Je nach Objekt reinigen wir vor Arbeitsbeginn, tagsüber in abgestimmten Bereichen oder nach Betriebsschluss.",
       },
       {
-        q: "Kann die Reinigung außerhalb unserer Geschäftszeiten stattfinden?",
-        a: "Ja, wir reinigen auf Wunsch vor Arbeitsbeginn, nach Feierabend oder am Wochenende.",
+        q: "Arbeiten Sie mit festen Teams?",
+        a: "Ja, wenn möglich betreuen feste Reinigungsteams Ihr Objekt. Das verbessert Abstimmung, Sicherheit und gleichbleibende Qualität.",
       },
     ],
   },
@@ -47,8 +61,21 @@ const DEFAULT_FAQS: FaqCategory[] = [
     category: "Qualität & Vertrauen",
     items: [
       {
-        q: "Wie stellen Sie gleichbleibende Qualität sicher?",
-        a: "Durch feste Teams pro Objekt, regelmäßige Schulungen, dokumentierte Reinigungsprotokolle und persönliche Qualitätskontrollen.",
+        q: "Wie sichern Sie die Qualität?",
+        a: "Durch eingearbeitete Teams, klare Leistungsverzeichnisse, direkte Ansprechpartner und regelmäßige Kontrollen.",
+      },
+      {
+        q: "Arbeiten Sie mit Subunternehmern?",
+        a: "Nein. Wir setzen auf eigene, festangestellte Mitarbeiter und direkte Verantwortung im Objekt.",
+      },
+    ],
+  },
+  {
+    category: "Vertrag & Kosten",
+    items: [
+      {
+        q: "Gibt es versteckte Kosten?",
+        a: "Nein. Unsere Angebote sind nachvollziehbar aufgebaut und enthalten die abgestimmten Leistungen transparent.",
       },
     ],
   },
@@ -155,6 +182,7 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen pc-bg-section">
+      <FAQPageStructuredData faqCategories={faqCategories} />
       <Navigation />
 
       <section className="pc-page-hero">
@@ -169,8 +197,8 @@ export default function FAQ() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/kontakt">
-                <span onClick={() => trackCtaClick({ cta_id: "faq_hero_contact", cta_text: "Jetzt Anfrage senden", cta_location: "faq_hero", destination_url: "/kontakt" })} className="pc-btn-primary">
-                  Jetzt Anfrage senden
+                <span onClick={() => trackCtaClick({ cta_id: "faq_hero_contact", cta_text: resolvedCmsContent.hero.buttonText, cta_location: "faq_hero", destination_url: "/kontakt" })} className="pc-btn-primary">
+                  {resolvedCmsContent.hero.buttonText}
                   <ArrowRight size={16} />
                 </span>
               </Link>
