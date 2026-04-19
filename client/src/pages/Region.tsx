@@ -226,6 +226,7 @@ export default function Region() {
           regionLabel={region.label}
           serviceName={selectedService.label}
           description={pageIntro}
+          pagePath={location}
           nearbyAreas={region.nearbyAreas}
         />
       )}
