@@ -90,19 +90,6 @@ export default function CompanyStructuredData() {
       .map((service) => normalizeValue(service.label))
       .filter((value): value is string => Boolean(value));
 
-    // AggregateRating based on documented metrics
-    const aggregateRating =
-      companyConfig.metrics?.googleRating && companyConfig.metrics?.customers
-        ? {
-            "@type": "AggregateRating",
-            ratingValue: parseFloat(companyConfig.metrics.googleRating.replace("★", "")),
-            bestRating: 5,
-            worstRating: 1,
-            ratingCount: companyConfig.metrics.customers,
-            reviewCount: companyConfig.metrics.customers,
-          }
-        : undefined;
-
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": ["HouseCleaningService", "LocalBusiness"],
@@ -124,7 +111,6 @@ export default function CompanyStructuredData() {
       ...(openingHoursSpecification.length > 0 ? { openingHoursSpecification } : {}),
       ...(areaServed.length > 0 ? { areaServed } : {}),
       ...(serviceType.length > 0 ? { serviceType } : {}),
-      ...(aggregateRating ? { aggregateRating } : {}),
     };
 
     return Object.fromEntries(
