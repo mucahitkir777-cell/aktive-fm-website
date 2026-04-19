@@ -36,7 +36,6 @@ export default function RegionalServiceStructuredData({
         "@type": "City",
         name: area,
       })),
-      priceRange: "$$",
       service: {
         "@type": "Service",
         name: serviceName,
