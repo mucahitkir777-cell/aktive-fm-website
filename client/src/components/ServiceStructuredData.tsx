@@ -19,6 +19,9 @@ function normalizeValue(value: string | undefined | null) {
 
 export default function ServiceStructuredData({ services }: ServiceStructuredDataProps) {
   const structuredData = useMemo(() => {
+    const providerName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
+    const providerUrl = normalizeValue(companyConfig.brand.siteUrl);
+
     const areaServed = companyConfig.regions
       .map((region) => normalizeValue(region.label))
       .filter((name): name is string => Boolean(name))
@@ -40,11 +43,15 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
           "@type": "Service",
           name,
           description,
-          provider: {
-            "@type": "LocalBusiness",
-            name: companyConfig.brand.legalName,
-            url: companyConfig.brand.siteUrl,
-          },
+          ...(providerName && providerUrl
+            ? {
+                provider: {
+                  "@type": "LocalBusiness",
+                  name: providerName,
+                  url: providerUrl,
+                },
+              }
+            : {}),
           serviceType: name,
           ...(areaServed.length > 0 ? { areaServed } : {}),
         };
@@ -63,6 +70,10 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
       itemListElement,
     };
   }, [services]);
+
+  if (structuredData.itemListElement.length === 0) {
+    return null;
+  }
 
   return (
     <script
