@@ -22,6 +22,7 @@ export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPa
 
     const publisherName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const publisherUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const organizationId = publisherUrl ? `${publisherUrl}#organization` : undefined;
     const normalizedPagePath = normalizeValue(pagePath);
     const pageUrl =
       publisherUrl && normalizedPagePath
@@ -74,6 +75,7 @@ export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPa
         ? {
             publisher: {
               "@type": "Organization",
+              ...(organizationId ? { "@id": organizationId } : {}),
               name: publisherName,
               url: publisherUrl,
             },
