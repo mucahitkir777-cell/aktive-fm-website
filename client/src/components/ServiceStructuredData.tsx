@@ -12,33 +12,55 @@ interface ServiceStructuredDataProps {
   services: ServiceItem[];
 }
 
+function normalizeValue(value: string | undefined | null) {
+  const trimmed = (value ?? "").trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
 export default function ServiceStructuredData({ services }: ServiceStructuredDataProps) {
   const structuredData = useMemo(() => {
-    const serviceList = services.map((service) => ({
-      "@type": "Service",
-      name: service.title,
-      description: service.fullDesc || service.shortDesc,
-      provider: {
-        "@type": "LocalBusiness",
-        name: companyConfig.brand.legalName,
-        url: companyConfig.brand.siteUrl,
-      },
-      areaServed: companyConfig.regions
-        .map((region) => ({
-          "@type": "City",
-          name: region.label,
-        })),
-      serviceType: service.title,
-    }));
+    const areaServed = companyConfig.regions
+      .map((region) => normalizeValue(region.label))
+      .filter((name): name is string => Boolean(name))
+      .map((name) => ({
+        "@type": "City",
+        name,
+      }));
+
+    const itemListElement = services
+      .map((service, index) => {
+        const name = normalizeValue(service.title);
+        const description = normalizeValue(service.fullDesc) ?? normalizeValue(service.shortDesc);
+
+        if (!name || !description) {
+          return null;
+        }
+
+        const item: Record<string, unknown> = {
+          "@type": "Service",
+          name,
+          description,
+          provider: {
+            "@type": "LocalBusiness",
+            name: companyConfig.brand.legalName,
+            url: companyConfig.brand.siteUrl,
+          },
+          serviceType: name,
+          ...(areaServed.length > 0 ? { areaServed } : {}),
+        };
+
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          item,
+        };
+      })
+      .filter((entry): entry is { "@type": "ListItem"; position: number; item: Record<string, unknown> } => Boolean(entry));
 
     return {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      itemListElement: serviceList.map((service, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: service,
-      })),
+      itemListElement,
     };
   }, [services]);
 
