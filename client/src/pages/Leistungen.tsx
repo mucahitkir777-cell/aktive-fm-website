@@ -227,7 +227,7 @@ export default function Leistungen() {
 
   return (
     <div className="min-h-screen pc-bg-section">
-      <ServiceStructuredData services={services} />
+      <ServiceStructuredData services={services} pagePath="/leistungen" />
       <Navigation />
 
       {/* Page Hero */}
