@@ -56,6 +56,7 @@ export default function CompanyStructuredData() {
 
     const businessName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const businessUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const businessId = businessUrl ? `${businessUrl}#organization` : undefined;
     const businessDescription = normalizeValue(
       `Professionelle ${companyConfig.brand.descriptor} für Unternehmen in ${companyConfig.regionMessaging.primaryLabel}`,
     );
@@ -98,6 +99,7 @@ export default function CompanyStructuredData() {
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": ["HouseCleaningService", "LocalBusiness"],
+      ...(businessId ? { "@id": businessId } : {}),
       name: businessName,
       description: businessDescription,
       url: businessUrl,
