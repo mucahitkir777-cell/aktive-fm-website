@@ -5,6 +5,7 @@ interface RegionalServiceStructuredDataProps {
   regionLabel: string;
   serviceName: string;
   description: string;
+  pagePath: string;
   nearbyAreas?: string[];
 }
 
@@ -12,6 +13,7 @@ export default function RegionalServiceStructuredData({
   regionLabel,
   serviceName,
   description,
+  pagePath,
   nearbyAreas = [],
 }: RegionalServiceStructuredDataProps) {
   const structuredData = useMemo(() => {
@@ -20,7 +22,7 @@ export default function RegionalServiceStructuredData({
       "@type": "LocalBusiness",
       name: `${serviceName} ${regionLabel}`,
       description,
-      url: companyConfig.brand.siteUrl,
+      url: `${companyConfig.brand.siteUrl}${pagePath}`,
       telephone: companyConfig.contact.phoneInternational,
       email: companyConfig.contact.email,
       address: {
@@ -47,7 +49,7 @@ export default function RegionalServiceStructuredData({
     };
 
     return data;
-  }, [regionLabel, serviceName, description, nearbyAreas]);
+  }, [regionLabel, serviceName, description, pagePath, nearbyAreas]);
 
   return (
     <script
