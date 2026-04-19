@@ -22,11 +22,13 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
   const structuredData = useMemo(() => {
     const providerName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const providerUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const providerId = providerUrl ? `${providerUrl}#organization` : undefined;
     const normalizedPagePath = normalizeValue(pagePath);
     const pageUrl =
       providerUrl && normalizedPagePath
         ? `${providerUrl}${normalizedPagePath}`
         : undefined;
+    const itemListId = pageUrl ? `${pageUrl}#services` : undefined;
 
     const areaServed = companyConfig.regions
       .map((region) => normalizeValue(region.label))
@@ -63,24 +65,26 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
     const itemListElement = validServices.map((service, index) => {
       const item: Record<string, unknown> = {
         "@type": "Service",
+        ...(service.url ? { "@id": `${service.url}#service`, url: service.url } : {}),
         name: service.name,
         description: service.description,
         ...(providerName && providerUrl
           ? {
               provider: {
                 "@type": "LocalBusiness",
+                ...(providerId ? { "@id": providerId } : {}),
                 name: providerName,
                 url: providerUrl,
               },
             }
           : {}),
-        ...(service.url ? { url: service.url } : {}),
         serviceType: service.name,
         ...(areaServed.length > 0 ? { areaServed } : {}),
       };
 
       return {
         "@type": "ListItem",
+        ...(service.url ? { "@id": `${service.url}#listitem` } : {}),
         position: index + 1,
         item,
       };
@@ -89,6 +93,7 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
     return {
       "@context": "https://schema.org",
       "@type": "ItemList",
+      ...(itemListId ? { "@id": itemListId } : {}),
       ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
       itemListElement,
     };
