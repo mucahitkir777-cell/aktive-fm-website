@@ -30,8 +30,8 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
         name,
       }));
 
-    const itemListElement = services
-      .map((service, index) => {
+    const validServices = services
+      .map((service) => {
         const name = normalizeValue(service.title);
         const description = normalizeValue(service.fullDesc) ?? normalizeValue(service.shortDesc);
 
@@ -39,30 +39,37 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
           return null;
         }
 
-        const item: Record<string, unknown> = {
-          "@type": "Service",
+        return {
           name,
           description,
-          ...(providerName && providerUrl
-            ? {
-                provider: {
-                  "@type": "LocalBusiness",
-                  name: providerName,
-                  url: providerUrl,
-                },
-              }
-            : {}),
-          serviceType: name,
-          ...(areaServed.length > 0 ? { areaServed } : {}),
-        };
-
-        return {
-          "@type": "ListItem",
-          position: index + 1,
-          item,
         };
       })
-      .filter((entry): entry is { "@type": "ListItem"; position: number; item: Record<string, unknown> } => Boolean(entry));
+      .filter((entry): entry is { name: string; description: string } => Boolean(entry));
+
+    const itemListElement = validServices.map((service, index) => {
+      const item: Record<string, unknown> = {
+        "@type": "Service",
+        name: service.name,
+        description: service.description,
+        ...(providerName && providerUrl
+          ? {
+              provider: {
+                "@type": "LocalBusiness",
+                name: providerName,
+                url: providerUrl,
+              },
+            }
+          : {}),
+        serviceType: service.name,
+        ...(areaServed.length > 0 ? { areaServed } : {}),
+      };
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item,
+      };
+    });
 
     return {
       "@context": "https://schema.org",
