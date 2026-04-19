@@ -26,6 +26,10 @@ function parseAddressFromLines(lines: string[]) {
   };
 }
 
+function getUniqueValues(values: Array<string | null>) {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value))));
+}
+
 export default function CompanyStructuredData() {
   const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
@@ -88,13 +92,8 @@ export default function CompanyStructuredData() {
         return typeof entry.dayOfWeek === "string" && Boolean(normalizeValue(entry.dayOfWeek));
       });
 
-    const areaServed = companyConfig.regions
-      .map((region) => normalizeValue(region.label))
-      .filter((value): value is string => Boolean(value));
-
-    const serviceType = companyConfig.services
-      .map((service) => normalizeValue(service.label))
-      .filter((value): value is string => Boolean(value));
+    const areaServed = getUniqueValues(companyConfig.regions.map((region) => normalizeValue(region.label)));
+    const serviceType = getUniqueValues(companyConfig.services.map((service) => normalizeValue(service.label)));
 
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
