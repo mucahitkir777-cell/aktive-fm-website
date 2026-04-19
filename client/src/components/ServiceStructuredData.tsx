@@ -95,6 +95,8 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
       "@type": "ItemList",
       ...(itemListId ? { "@id": itemListId } : {}),
       ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
+      itemListOrder: "https://schema.org/ItemListOrderAscending",
+      numberOfItems: itemListElement.length,
       itemListElement,
     };
   }, [services, pagePath]);
