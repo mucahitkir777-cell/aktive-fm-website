@@ -22,6 +22,12 @@ export default function RegionalServiceStructuredData({
   nearbyAreas = [],
 }: RegionalServiceStructuredDataProps) {
   const structuredData = useMemo(() => {
+    const normalizedRegionLabel = normalizeValue(regionLabel);
+    const normalizedServiceName = normalizeValue(serviceName);
+    const normalizedDescription = normalizeValue(description);
+    const normalizedPagePath = normalizeValue(pagePath);
+    const normalizedSiteUrl = normalizeValue(companyConfig.brand.siteUrl);
+
     const openingHoursSpecification = companyConfig.openingHours.schema
       .map((entry) => ({
         "@type": "OpeningHoursSpecification",
@@ -52,9 +58,15 @@ export default function RegionalServiceStructuredData({
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      name: `${serviceName} ${regionLabel}`,
-      description,
-      url: `${companyConfig.brand.siteUrl}${pagePath}`,
+      name:
+        normalizedRegionLabel && normalizedServiceName
+          ? `${normalizedServiceName} ${normalizedRegionLabel}`
+          : undefined,
+      description: normalizedDescription,
+      url:
+        normalizedSiteUrl && normalizedPagePath
+          ? `${normalizedSiteUrl}${normalizedPagePath}`
+          : undefined,
       telephone: normalizeValue(companyConfig.contact.phoneInternational),
       email: normalizeValue(companyConfig.contact.email),
       address: {
@@ -65,11 +77,14 @@ export default function RegionalServiceStructuredData({
         addressCountry: companyConfig.address.countryCode,
       },
       ...(areaServed.length > 0 ? { areaServed } : {}),
-      service: {
-        "@type": "Service",
-        name: serviceName,
-        description,
-      },
+      service:
+        normalizedServiceName && normalizedDescription
+          ? {
+              "@type": "Service",
+              name: normalizedServiceName,
+              description: normalizedDescription,
+            }
+          : undefined,
       ...(openingHoursSpecification.length > 0 ? { openingHoursSpecification } : {}),
     };
 
@@ -77,6 +92,10 @@ export default function RegionalServiceStructuredData({
       Object.entries(data).filter(([, value]) => value !== undefined && value !== null && value !== ""),
     );
   }, [regionLabel, serviceName, description, pagePath, nearbyAreas]);
+
+  if (!structuredData.name || !structuredData.url || !structuredData.service) {
+    return null;
+  }
 
   return (
     <script
