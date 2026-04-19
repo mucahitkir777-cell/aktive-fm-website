@@ -33,18 +33,26 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
     const validServices = services
       .map((service) => {
         const name = normalizeValue(service.title);
+        const slug = normalizeValue(service.slug);
         const description = normalizeValue(service.fullDesc) ?? normalizeValue(service.shortDesc);
 
         if (!name || !description) {
           return null;
         }
 
+        const url = providerUrl
+          ? slug
+            ? `${providerUrl}/leistungen#${slug}`
+            : `${providerUrl}/leistungen`
+          : undefined;
+
         return {
           name,
           description,
+          url,
         };
       })
-      .filter((entry): entry is { name: string; description: string } => Boolean(entry));
+      .filter((entry): entry is { name: string; description: string; url?: string } => Boolean(entry));
 
     const itemListElement = validServices.map((service, index) => {
       const item: Record<string, unknown> = {
@@ -60,6 +68,7 @@ export default function ServiceStructuredData({ services }: ServiceStructuredDat
               },
             }
           : {}),
+        ...(service.url ? { url: service.url } : {}),
         serviceType: service.name,
         ...(areaServed.length > 0 ? { areaServed } : {}),
       };
