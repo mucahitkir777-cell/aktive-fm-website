@@ -102,6 +102,8 @@ export default function RegionalServiceStructuredData({
               name: normalizedServiceName,
               description: normalizedDescription,
               ...(pageUrl ? { url: pageUrl } : {}),
+              ...(businessId ? { provider: { "@id": businessId } } : {}),
+              ...(areaServed.length > 0 ? { areaServed } : {}),
             }
           : undefined,
       ...(openingHoursSpecification.length > 0 ? { openingHoursSpecification } : {}),
