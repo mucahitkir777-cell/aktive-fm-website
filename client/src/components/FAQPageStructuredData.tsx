@@ -39,7 +39,7 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
       )
       .filter((entry): entry is { "@type": "Question"; name: string; acceptedAnswer: { "@type": "Answer"; text: string } } => Boolean(entry));
 
-    const publisherName = normalizeValue(companyConfig.brand.legalName);
+    const publisherName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const publisherUrl = normalizeValue(companyConfig.brand.siteUrl);
 
     const data: Record<string, unknown> = {
@@ -59,6 +59,10 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
 
     return data;
   }, [faqCategories]);
+
+  if (structuredData.mainEntity.length === 0) {
+    return null;
+  }
 
   return (
     <script
