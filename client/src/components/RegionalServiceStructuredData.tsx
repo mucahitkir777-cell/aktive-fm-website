@@ -51,7 +51,10 @@ export default function RegionalServiceStructuredData({
         return typeof entry.dayOfWeek === "string" && Boolean(normalizeValue(entry.dayOfWeek));
       });
 
-    const areaServed = getUniqueValues(nearbyAreas.map((area) => normalizeValue(area))).map((area) => ({
+    const areaServed = getUniqueValues([
+      normalizedRegionLabel,
+      ...nearbyAreas.map((area) => normalizeValue(area)),
+    ]).map((area) => ({
       "@type": "City",
       name: area,
     }));
