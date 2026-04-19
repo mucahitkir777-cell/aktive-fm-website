@@ -182,7 +182,7 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen pc-bg-section">
-      <FAQPageStructuredData faqCategories={faqCategories} />
+      <FAQPageStructuredData faqCategories={faqCategories} pagePath="/faq" />
       <Navigation />
 
       <section className="pc-page-hero">
