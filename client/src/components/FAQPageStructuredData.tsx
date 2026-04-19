@@ -32,7 +32,6 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
         name: companyConfig.brand.legalName,
         url: companyConfig.brand.siteUrl,
       },
-      dateModified: new Date().toISOString().split("T")[0],
     };
 
     return data;
