@@ -36,6 +36,8 @@ export default function RegionalServiceStructuredData({
       normalizedSiteUrl && normalizedPagePath
         ? `${normalizedSiteUrl}${normalizedPagePath}`
         : undefined;
+    const businessId = pageUrl ? `${pageUrl}#localbusiness` : undefined;
+    const serviceId = pageUrl ? `${pageUrl}#service` : undefined;
 
     const openingHoursSpecification = companyConfig.openingHours.schema
       .map((entry) => ({
@@ -72,12 +74,13 @@ export default function RegionalServiceStructuredData({
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
+      ...(businessId ? { "@id": businessId } : {}),
       name:
         normalizedRegionLabel && normalizedServiceName
           ? `${normalizedServiceName} ${normalizedRegionLabel}`
           : undefined,
       description: normalizedDescription,
-      url: pageUrl,
+      ...(pageUrl ? { url: pageUrl, mainEntityOfPage: pageUrl } : {}),
       telephone: normalizeValue(companyConfig.contact.phoneInternational),
       email: normalizeValue(companyConfig.contact.email),
       address:
@@ -95,6 +98,7 @@ export default function RegionalServiceStructuredData({
         normalizedServiceName && normalizedDescription
           ? {
               "@type": "Service",
+              ...(serviceId ? { "@id": serviceId } : {}),
               name: normalizedServiceName,
               description: normalizedDescription,
               ...(pageUrl ? { url: pageUrl } : {}),
