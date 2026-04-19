@@ -116,7 +116,7 @@ export default function UeberUns() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppClick("about_hero")}
-                className="pc-btn-outline"
+                className="pc-btn-whatsapp"
               >
                 <MessageCircle size={16} />
                 WhatsApp
@@ -263,7 +263,7 @@ export default function UeberUns() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackWhatsAppClick("about_final_cta")}
-              className="pc-btn-accent"
+              className="pc-btn-whatsapp"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
               <MessageCircle size={16} />

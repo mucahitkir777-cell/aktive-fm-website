@@ -168,7 +168,6 @@ export default function Region() {
   };
 
   const renderContactCtas = (ctaLocation: string, tone: "dark" | "light" = "light") => {
-    const secondaryClass = tone === "dark" ? "pc-btn-white" : "pc-btn-outline";
     const primaryClass = "pc-btn-primary";
     const buttonClass = "w-full sm:w-auto justify-center min-h-12";
 
@@ -210,7 +209,7 @@ export default function Region() {
               page_path: location,
             })
           }
-          className={`${secondaryClass} ${buttonClass}`}
+          className={`pc-btn-whatsapp ${buttonClass}`}
         >
           <MessageCircle size={16} />
           WhatsApp

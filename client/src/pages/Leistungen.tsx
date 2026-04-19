@@ -266,7 +266,7 @@ export default function Leistungen() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackCtaClick({ cta_id: "services_hero_whatsapp", cta_text: "WhatsApp", cta_location: "services_hero", destination_url: companyConfig.contact.whatsappHref })}
-                className="pc-btn-outline"
+                className="pc-btn-whatsapp"
               >
                 <MessageCircle size={16} />
                 WhatsApp
@@ -394,7 +394,7 @@ export default function Leistungen() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackCtaClick({ cta_id: "services_final_whatsapp", cta_text: "WhatsApp", cta_location: "services_final_cta", destination_url: companyConfig.contact.whatsappHref })}
-              className="pc-btn-outline text-lg"
+              className="pc-btn-whatsapp text-lg"
             >
               <MessageCircle size={16} />
               WhatsApp

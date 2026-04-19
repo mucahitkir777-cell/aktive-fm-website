@@ -80,7 +80,8 @@ export default function StickyBar() {
               onClick={handleWhatsAppClick}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
+              className="inline-flex items-center gap-2 rounded-lg border px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#128C7E] active:bg-[#075E54] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]"
+              style={{ backgroundColor: "#25D366", borderColor: "#25D366" }}
               aria-label="Kontakt per WhatsApp"
             >
               <MessageCircle size={16} />
@@ -118,7 +119,8 @@ export default function StickyBar() {
             onClick={handleWhatsAppClick}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[60px] flex-col items-center justify-center gap-1 border-r pc-border px-2 py-1.5 pc-text-accent transition-colors hover:bg-[var(--pc-bg-soft)] active:bg-[var(--pc-bg-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-accent)]"
+            className="inline-flex min-h-[60px] flex-col items-center justify-center gap-1 border-r px-2 py-1.5 text-white transition-colors hover:bg-[#128C7E] active:bg-[#075E54] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]"
+            style={{ backgroundColor: "#25D366", borderColor: "#25D366" }}
             aria-label="Kontakt per WhatsApp"
           >
             <MessageCircle size={18} />

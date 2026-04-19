@@ -144,7 +144,7 @@ export default function Kontakt() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackWhatsAppClick("contact_hero")}
-                  className="pc-btn-accent"
+                  className="pc-btn-whatsapp"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <MessageCircle size={16} />
@@ -180,7 +180,7 @@ export default function Kontakt() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackWhatsAppClick("contact_page_quick_actions")}
-                    className="pc-btn-accent text-sm"
+                    className="pc-btn-whatsapp text-sm"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
                     <MessageCircle size={16} />

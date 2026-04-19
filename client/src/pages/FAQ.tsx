@@ -183,7 +183,7 @@ export default function FAQ() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppClick("faq_hero")}
-                className="pc-btn-outline"
+                className="pc-btn-whatsapp"
               >
                 <MessageCircle size={16} />
                 WhatsApp
@@ -244,7 +244,7 @@ export default function FAQ() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackWhatsAppClick("faq_final_cta")}
-                  className="pc-btn-accent"
+                  className="pc-btn-whatsapp"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <MessageCircle size={16} />

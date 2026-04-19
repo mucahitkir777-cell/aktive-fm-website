@@ -112,21 +112,33 @@ const processSteps = [
     num: "01",
     title: "Anfrage stellen",
     desc: "Kontaktieren Sie uns per Telefon, E-Mail oder über unser Formular. Wir melden uns innerhalb von 24 Stunden.",
+    imageUrl: IMAGES.aboutTeam,
+    imageAlt: "Persoenliche Erstberatung zur Reinigungsanfrage",
+    imagePosition: "center",
   },
   {
     num: "02",
     title: "Vor-Ort-Besichtigung",
     desc: "Wir besichtigen Ihr Objekt kostenlos und unverbindlich – um Ihren Bedarf genau zu verstehen.",
+    imageUrl: IMAGES.heroOffice,
+    imageAlt: "Vor-Ort-Termin zur Besichtigung des Objekts",
+    imagePosition: "center",
   },
   {
     num: "03",
     title: "Individuelles Angebot",
     desc: "Sie erhalten ein transparentes, maßgeschneidertes Angebot ohne versteckte Kosten.",
+    imageUrl: IMAGES.heroMain,
+    imageAlt: "Planung und Erstellung eines individuellen Reinigungsangebots",
+    imagePosition: "center",
   },
   {
     num: "04",
     title: "Reinigung starten",
     desc: "Nach Ihrer Freigabe beginnen wir termingerecht – zuverlässig, diskret und professionell.",
+    imageUrl: IMAGES.serviceGlass,
+    imageAlt: "Professionelle Reinigung im Einsatz",
+    imagePosition: "center",
   },
 ];
 
@@ -152,63 +164,72 @@ const testimonials = [
 ];
 
 const sectors = [
-  { label: "Büro & Verwaltung", icon: Building2 },
-  { label: "Arzt & Praxis", icon: Shield },
-  { label: "Hotel & Gastronomie", icon: Star },
-  { label: "Industrie & Logistik", icon: Layers },
-  { label: "Bildung & Kitas", icon: Users },
-  { label: "Handel & Retail", icon: Award },
+  {
+    label: "Büro & Verwaltung",
+    icon: Building2,
+    imageUrl: IMAGES.heroOffice,
+    imageAlt: "Bueroreinigung fuer Verwaltung und Office-Flaechen",
+    imagePosition: "center",
+  },
+  {
+    label: "Arzt & Praxis",
+    icon: Shield,
+    imageUrl: IMAGES.serviceOffice,
+    imageAlt: "Reinigung fuer Arztpraxis und medizinische Bereiche",
+    imagePosition: "center",
+  },
+  {
+    label: "Hotel & Gastronomie",
+    icon: Star,
+    imageUrl: IMAGES.heroMain,
+    imageAlt: "Reinigung fuer Hotel und Gastronomie",
+    imagePosition: "center",
+  },
+  {
+    label: "Industrie & Logistik",
+    icon: Layers,
+    imageUrl: IMAGES.serviceGlass,
+    imageAlt: "Reinigung fuer Industrie und Logistikflaechen",
+    imagePosition: "center",
+  },
+  {
+    label: "Bildung & Kitas",
+    icon: Users,
+    imageUrl: IMAGES.aboutTeam,
+    imageAlt: "Reinigung fuer Bildungseinrichtungen und Kitas",
+    imagePosition: "center",
+  },
+  {
+    label: "Handel & Retail",
+    icon: Award,
+    imageUrl: IMAGES.heroOffice,
+    imageAlt: "Reinigung fuer Handel und Retail-Flaechen",
+    imagePosition: "right center",
+  },
 ];
 
-// Counter animation hook
-function useCounter(target: number, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+const trustSectionQuotes = [
+  "Sehr zuverlässig und gründlich. Absolute Empfehlung.",
+  "Top Service, pünktlich vor Ort und sauber gearbeitet.",
+  "Freundliches Team, schnelle Abstimmung und starke Qualität.",
+];
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started) {
-          setStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [started]);
-
-  useEffect(() => {
-    if (!started) return;
-    let startTime: number;
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [started, target, duration]);
-
-  return { count, ref };
-}
-
-function StatCounter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
-  const { count, ref } = useCounter(value);
-  return (
-    <div ref={ref} className="text-center">
-      <div className="text-3xl lg:text-4xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
-        {count}{suffix}
-      </div>
-      <div className="text-sm pc-text-secondary mt-1" style={{ fontFamily: "Inter, sans-serif" }}>
-        {label}
-      </div>
-    </div>
-  );
-}
+const trustSectionCertifications = [
+  {
+    id: "hwk",
+    title: "Handwerkskammer Frankfurt Rhein-Main",
+    text: "Eingetragenes Unternehmen der Handwerkskammer Frankfurt Rhein-Main",
+    imageSrc: "/assets/handwerkskammer-frankfurt-rhein-main.jpg",
+    imageAlt: "Handwerkskammer Frankfurt Rhein-Main",
+  },
+  {
+    id: "bg-bau",
+    title: "BG Bau",
+    text: "Mitglied der Berufsgenossenschaft der Bauwirtschaft (BG BAU)",
+    imageSrc: "/assets/bg-bau.png",
+    imageAlt: "BG Bau",
+  },
+];
 
 function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
   if (!content || typeof content !== "object") {
@@ -252,21 +273,30 @@ export default function Home() {
   const homeReviewItems = [
     {
       id: "google",
+      name: "Google",
       logoUrl: resolvedCmsContent.reviews.googleImageUrl,
       score: resolvedCmsContent.reviews.googleScore,
       label: resolvedCmsContent.reviews.googleLabel,
+      href: "https://example.com/google",
+      quote: trustSectionQuotes[0],
     },
     {
       id: "trustpilot",
+      name: "Trustpilot",
       logoUrl: resolvedCmsContent.reviews.trustpilotImageUrl,
       score: resolvedCmsContent.reviews.trustpilotScore,
       label: resolvedCmsContent.reviews.trustpilotLabel,
+      href: "https://example.com/trustpilot",
+      quote: trustSectionQuotes[1],
     },
     {
       id: "provenexpert",
+      name: "ProvenExpert",
       logoUrl: resolvedCmsContent.reviews.provenexpertImageUrl,
       score: resolvedCmsContent.reviews.provenexpertScore,
       label: resolvedCmsContent.reviews.provenexpertLabel,
+      href: "https://example.com/provenexpert",
+      quote: trustSectionQuotes[2],
     },
   ];
 
@@ -345,21 +375,21 @@ export default function Home() {
       <Navigation />
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-[78vh] lg:min-h-[84vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[92vh] sm:min-h-[78vh] lg:min-h-[84vh] flex items-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-y-0 left-1/2 w-[calc(100%-1.5rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-slate-200/70 shadow-[0_28px_68px_-42px_rgba(15,33,55,0.72)] sm:w-[calc(100%-2.5rem)] lg:w-[min(1540px,calc(100%-6rem))] lg:rounded-[2rem] xl:w-[min(1540px,calc(100%-10rem))] 2xl:w-[min(1540px,calc(100%-14rem))]">
           <img
             src={heroImageUrl}
             alt="Professionelle Gebäudereinigung"
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover object-[70%_center] sm:object-center"
             loading="eager"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/82 to-white/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/96 via-white/86 to-white/70 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/82 sm:to-white/55" />
         </div>
 
         {/* Hero Content */}
-        <div className="container relative z-10 pt-20 pb-8 lg:pb-10">
-          <div className="max-w-2xl">
+        <div className="container relative z-10 pt-24 pb-24 sm:pt-20 sm:pb-10 lg:pb-10">
+          <div className="max-w-xl sm:max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-8 h-0.5 pc-bg-brand" />
               <span className="pc-text-brand text-sm font-medium uppercase tracking-widest" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -401,7 +431,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppClick("home_hero")}
-                className="pc-btn-outline text-base px-7 py-3.5"
+                className="pc-btn-whatsapp text-base px-7 py-3.5"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
                 <MessageCircle size={18} />
@@ -432,58 +462,140 @@ export default function Home() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pc-text-muted">
+        <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 pc-text-muted sm:flex">
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-[var(--color-text-muted)]" />
         </div>
       </section>
 
-      {/* ─── TRUST BAR ─── */}
-      <section className="bg-white border-b pc-border py-8">
+      {/* ─── TRUST SEKTION ─── */}
+      <section className="bg-white border-b pc-border py-12 lg:py-16">
         <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-[var(--color-border)]">
-            <StatCounter value={companyConfig.metrics.yearsExperience} suffix="+" label="Jahre Erfahrung" />
-            <StatCounter value={companyConfig.metrics.customers} suffix="+" label="Zufriedene Kunden" />
-            <StatCounter value={companyConfig.metrics.staff} suffix="+" label="Fachkräfte im Team" />
-            <StatCounter value={companyConfig.metrics.satisfactionPercent} suffix="%" label="Kundenzufriedenheit" />
-          </div>
-        </div>
-      </section>
-
-      {/* ─── BEWERTUNGEN ─── */}
-      <section className="bg-white border-b pc-border py-10">
-        <div className="container">
-          <div className="max-w-xl mb-8">
-            <span className="pc-accent-line" />
-            <h2 className="pc-section-title">{resolvedCmsContent.reviews.title}</h2>
-            <p className="pc-section-subtitle">{resolvedCmsContent.reviews.subtitle}</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {homeReviewItems.map((item) => (
-              <div key={item.id} className="rounded-xl border pc-border bg-white p-5 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
-                <div className="h-14 flex items-center justify-start">
-                  <img
-                    src={item.logoUrl}
-                    alt={`${item.id} Logo`}
-                    className="max-h-12 w-auto object-contain"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="mt-4 flex items-center gap-1.5">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={`${item.id}-${index}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
-                  ))}
-                </div>
-
-                <p className="mt-3 text-lg font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {item.score}
-                </p>
-                <p className="text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {item.label}
+          <div className="grid gap-10 lg:gap-12">
+            <div>
+              <div className="max-w-xl mb-8">
+                <span className="pc-accent-line" />
+                <h2 className="pc-section-title">Das sagen unsere Kunden</h2>
+                <p className="pc-section-subtitle">
+                  Bewertungen, Empfehlungen und verifizierte Profile auf einen Blick.
                 </p>
               </div>
-            ))}
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {homeReviewItems.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-full min-h-[252px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)] transition-shadow hover:shadow-[0_18px_32px_-24px_rgba(15,33,55,0.5)]"
+                  >
+                    <div className="flex h-12 items-center">
+                      <img
+                        src={item.logoUrl}
+                        alt={item.name}
+                        className="h-9 w-auto object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div className="mt-5 flex items-center gap-1.5">
+                      {Array.from({ length: 5 }).map((_, starIndex) => (
+                        <Star key={`${item.id}-${starIndex}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
+                      ))}
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="text-2xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {item.score}
+                      </p>
+                      <p className="mt-1 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {item.label}
+                      </p>
+                    </div>
+
+                    <p className="mt-auto border-t pc-border pt-4 text-sm leading-relaxed pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                      "{item.quote}"
+                    </p>
+                  </a>
+                ))}
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="flex min-h-[176px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
+                  <div className="flex h-14 items-center">
+                    <img
+                      src="/assets/review-logos/11880.png"
+                      alt="11880.com"
+                      className="h-10 w-auto object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                    Weiteres Bewertungsprofil. Der direkte Profil-Link wird hier hinterlegt.
+                  </p>
+                  <a
+                    href="https://example.com/11880"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    Profil ansehen <ChevronRight size={14} />
+                  </a>
+                </div>
+
+                <div className="flex min-h-[176px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
+                  <div className="flex h-14 items-center">
+                    <img
+                      src="/assets/review-logos/trustlocal.png"
+                      alt="Trustlocal"
+                      className="h-10 w-auto object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                    Weiteres Bewertungsprofil. Der direkte Profil-Link wird hier hinterlegt.
+                  </p>
+                  <a
+                    href="https://example.com/trustlocal"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    Profil ansehen <ChevronRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t pc-border pt-10">
+              <div className="max-w-xl mb-8">
+                <span className="pc-accent-line" />
+                <h2 className="pc-section-title">Geprüft & abgesichert</h2>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {trustSectionCertifications.map((certification) => (
+                  <div key={certification.id} className="rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
+                    <div className="mb-4 flex h-14 items-center">
+                      <img
+                        src={certification.imageSrc}
+                        alt={certification.imageAlt}
+                        className="h-10 w-auto object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                    <h3 className="mb-2 text-lg font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {certification.title}
+                    </h3>
+                    <p className="pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {certification.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -666,6 +778,17 @@ export default function Home() {
                   <div className="hidden lg:block absolute top-6 left-full w-full h-px bg-[var(--color-border)] z-0" />
                 )}
                 <div className="relative z-10">
+                  <div className="mb-5 overflow-hidden rounded-lg border pc-border bg-white shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
+                    <div className="aspect-[4/3]">
+                      <img
+                        src={step.imageUrl}
+                        alt={step.imageAlt}
+                        className="h-full w-full object-cover"
+                        style={{ objectPosition: step.imagePosition }}
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
                   <div className="text-5xl font-bold text-[var(--color-placeholder)] mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                     {step.num}
                   </div>
@@ -693,17 +816,28 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             {sectors.map((sector, i) => (
               <div
                 key={sector.label}
-                className="bg-white rounded-lg p-5 text-center border pc-border hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 pc-fade-up"
+                className="bg-white rounded-lg border pc-border hover:border-[var(--color-primary)] hover:shadow-md transition-all duration-300 pc-fade-up overflow-hidden"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
-                <sector.icon size={24} className="pc-text-brand mx-auto mb-3" />
-                <span className="pc-text-primary text-xs font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {sector.label}
-                </span>
+                <div className="aspect-[4/3]">
+                  <img
+                    src={sector.imageUrl}
+                    alt={sector.imageAlt}
+                    className="h-full w-full object-cover"
+                    style={{ objectPosition: sector.imagePosition }}
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5 text-center">
+                  <sector.icon size={24} className="pc-text-brand mx-auto mb-3" />
+                  <span className="pc-text-primary text-xs font-medium" style={{ fontFamily: "Inter, sans-serif" }}>
+                    {sector.label}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -822,7 +956,7 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackWhatsAppClick("home_final_cta")}
-                    className="pc-btn-outline"
+                    className="pc-btn-whatsapp"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
                     <MessageCircle size={16} />
