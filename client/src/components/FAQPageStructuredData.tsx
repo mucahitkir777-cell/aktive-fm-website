@@ -17,6 +17,8 @@ function normalizeValue(value: string | undefined | null) {
 
 export default function FAQPageStructuredData({ faqCategories }: FAQPageStructuredDataProps) {
   const structuredData = useMemo(() => {
+    const seenEntries = new Set<string>();
+
     const mainEntity = faqCategories
       .flatMap((category) =>
         category.items.map((item) => {
@@ -26,6 +28,12 @@ export default function FAQPageStructuredData({ faqCategories }: FAQPageStructur
           if (!question || !answer) {
             return null;
           }
+
+          const entryKey = `${question}::${answer}`;
+          if (seenEntries.has(entryKey)) {
+            return null;
+          }
+          seenEntries.add(entryKey);
 
           return {
             "@type": "Question",
