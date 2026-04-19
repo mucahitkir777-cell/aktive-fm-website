@@ -50,6 +50,12 @@ export default function CompanyStructuredData() {
     const addressLines = splitLines(resolvedCmsContent.footerContact.addressLines);
     const cmsAddress = parseAddressFromLines(addressLines);
 
+    const businessName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
+    const businessUrl = normalizeValue(companyConfig.brand.siteUrl);
+    const businessDescription = normalizeValue(
+      `Professionelle ${companyConfig.brand.descriptor} für Unternehmen in ${companyConfig.regionMessaging.primaryLabel}`,
+    );
+
     const phoneInternational = normalizeValue(companyConfig.contact.phoneInternational);
     const phoneFallback = normalizeValue(resolvedCmsContent.footerContact.phoneDisplay)?.replace(/\s+/g, "");
     const telephone = phoneInternational ?? phoneFallback;
@@ -93,9 +99,9 @@ export default function CompanyStructuredData() {
     const data: Record<string, unknown> = {
       "@context": "https://schema.org",
       "@type": ["HouseCleaningService", "LocalBusiness"],
-      name: normalizeValue(companyConfig.brand.legalName),
-      description: normalizeValue(`Professionelle ${companyConfig.brand.descriptor} für Unternehmen in ${companyConfig.regionMessaging.primaryLabel}`),
-      url: normalizeValue(companyConfig.brand.siteUrl),
+      name: businessName,
+      description: businessDescription,
+      url: businessUrl,
       telephone,
       email,
       address:
@@ -117,6 +123,10 @@ export default function CompanyStructuredData() {
       Object.entries(data).filter(([, value]) => value !== undefined && value !== null && value !== ""),
     );
   }, [resolvedCmsContent.footerContact.addressLines, resolvedCmsContent.footerContact.emailDisplay, resolvedCmsContent.footerContact.phoneDisplay]);
+
+  if (!structuredData.name || !structuredData.url) {
+    return null;
+  }
 
   return (
     <script
