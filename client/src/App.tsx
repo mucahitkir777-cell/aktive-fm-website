@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -13,15 +13,16 @@ import { initAnalytics, initScrollDepthTracking, trackPageView } from "./lib/ana
 import { sendInternalPageView } from "./lib/pageviews";
 import { companyConfig } from "./config/company";
 import Home from "./pages/Home";
-import Leistungen from "./pages/Leistungen";
-import UeberUns from "./pages/UeberUns";
-import Kontakt from "./pages/Kontakt";
-import Impressum from "./pages/Impressum";
-import Datenschutz from "./pages/Datenschutz";
-import FAQ from "./pages/FAQ";
 import Region from "./pages/Region";
-import Admin from "./pages/Admin";
 import Maintenance from "./pages/Maintenance";
+
+const Leistungen = lazy(() => import("./pages/Leistungen"));
+const UeberUns = lazy(() => import("./pages/UeberUns"));
+const Kontakt = lazy(() => import("./pages/Kontakt"));
+const Impressum = lazy(() => import("./pages/Impressum"));
+const Datenschutz = lazy(() => import("./pages/Datenschutz"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Admin = lazy(() => import("./pages/Admin"));
 
 function AppContent() {
   const [location] = useLocation();
@@ -80,20 +81,76 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/leistungen" component={Leistungen} />
-      <Route path="/ueber-uns" component={UeberUns} />
-      <Route path="/kontakt" component={Kontakt} />
-      <Route path="/impressum" component={Impressum} />
-      <Route path="/datenschutz" component={Datenschutz} />
-      <Route path="/faq" component={FAQ} />
-      <Route path="/admin/dashboard" component={Admin} />
-      <Route path="/admin/leads" component={Admin} />
-      <Route path="/admin/settings" component={Admin} />
-      <Route path="/admin/pages" component={Admin} />
-      <Route path="/admin/content" component={Admin} />
-      <Route path="/admin/preview" component={Admin} />
-      <Route path="/admin/:section" component={Admin} />
-      <Route path="/admin" component={Admin} />
+      <Route path="/leistungen">
+        <Suspense fallback={null}>
+          <Leistungen />
+        </Suspense>
+      </Route>
+      <Route path="/ueber-uns">
+        <Suspense fallback={null}>
+          <UeberUns />
+        </Suspense>
+      </Route>
+      <Route path="/kontakt">
+        <Suspense fallback={null}>
+          <Kontakt />
+        </Suspense>
+      </Route>
+      <Route path="/impressum">
+        <Suspense fallback={null}>
+          <Impressum />
+        </Suspense>
+      </Route>
+      <Route path="/datenschutz">
+        <Suspense fallback={null}>
+          <Datenschutz />
+        </Suspense>
+      </Route>
+      <Route path="/faq">
+        <Suspense fallback={null}>
+          <FAQ />
+        </Suspense>
+      </Route>
+      <Route path="/admin/dashboard">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/leads">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/settings">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/pages">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/content">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/preview">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin/:section">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
+      <Route path="/admin">
+        <Suspense fallback={null}>
+          <Admin />
+        </Suspense>
+      </Route>
       {regionalRegionRoutes.map((path) => (
         <Route key={path} path={path} component={Region} />
       ))}

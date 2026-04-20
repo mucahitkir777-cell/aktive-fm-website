@@ -27,28 +27,43 @@ async function postJson(provider: "webhook" | "crm" | "email", endpoint: string,
   }
 
   try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
-    if (!response.ok) {
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        return {
+          provider,
+          status: "error",
+          message: `${provider} responded with ${response.status}.`,
+        };
+      }
+
+      return {
+        provider,
+        status: "success",
+        message: `${provider} accepted the lead.`,
+      };
+    } finally {
+      clearTimeout(timeout);
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
       return {
         provider,
         status: "error",
-        message: `${provider} responded with ${response.status}.`,
+        message: `${provider} request timed out (10s).`,
       };
     }
-
-    return {
-      provider,
-      status: "success",
-      message: `${provider} accepted the lead.`,
-    };
-  } catch (error) {
     return {
       provider,
       status: "error",
@@ -92,14 +107,26 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
     payload,
   };
 
-  const savedLead = await createLead(storedLead);
+  let savedLead: any;
+  let databaseResult: LeadProviderResult;
 
-  const providerResults: LeadProviderResult[] = [
-    {
+  try {
+    savedLead = await createLead(storedLead);
+    databaseResult = {
       provider: "database",
       status: "success",
       message: `Lead stored in PostgreSQL with status ${savedLead.status}.`,
-    },
+    };
+  } catch (error) {
+    databaseResult = {
+      provider: "database",
+      status: "error",
+      message: error instanceof Error ? error.message : "Database storage failed.",
+    };
+  }
+
+  const providerResults: LeadProviderResult[] = [
+    databaseResult,
     await persistToLocalInbox(storedLead),
   ];
 
@@ -114,11 +141,7 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
   providerResults.push(await deliverLeadNotification(storedLead));
   providerResults.push(await deliverLeadConfirmation(storedLead));
 
-  const hasSuccessfulProcessing = providerResults.some((result) => result.status === "success");
-
-  if (!hasSuccessfulProcessing) {
-    throw new Error("No lead provider accepted the submission.");
-  }
+  // Note: We always return results now, success is determined by database status in the endpoint
 
   return {
     leadId: storedLead.leadId,

@@ -213,7 +213,6 @@ export default function Region() {
           description={pageIntro}
           pagePath={location}
           nearbyAreas={region.nearbyAreas}
-          pagePath={location}
         />
       )}
       <Navigation />

@@ -4,9 +4,9 @@
  */
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "wouter";
-import { AlertCircle, CheckCircle, Send } from "lucide-react";
+import { AlertCircle, CheckCircle, Send, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import type { LeadFieldErrors, LeadSubmissionPayload } from "@shared/lead";
+import type { LeadFieldErrors, LeadSubmissionPayload, LeadProviderResult } from "@shared/lead";
 import { submitLead } from "@/lib/leads/submit";
 import { getDeviceClass, getStoredUtmParameters } from "@/lib/tracking";
 import {
@@ -59,8 +59,27 @@ export default function QuickContactForm({
   });
   const [fieldErrors, setFieldErrors] = useState<LeadFieldErrors>({});
   const [leadId, setLeadId] = useState("");
+  const [providerResults, setProviderResults] = useState<LeadProviderResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
+
+  const resetForm = () => {
+    setLeadId("");
+    setProviderResults([]);
+    setFieldErrors({});
+    setFormData({
+      name: "",
+      company: "",
+      email: "",
+      phone: "",
+      regionId: defaultRegionId,
+      serviceId: defaultServiceId,
+      objectSize: "",
+      cleaningInterval: "",
+      message: "",
+      privacyConsent: false,
+    });
+  };
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -185,6 +204,7 @@ export default function QuickContactForm({
     if (!result.success) {
       const errors = result.fieldErrors ?? { general: result.message };
       setFieldErrors(errors);
+      setProviderResults(result.providerResults ?? []);
       trackFormError({
         ...trackingPayload,
         error_message: result.message,
@@ -194,6 +214,7 @@ export default function QuickContactForm({
       return;
     }
     setLeadId(result.leadId ?? "");
+    setProviderResults(result.providerResults ?? []);
     trackFormSuccess({
       ...trackingPayload,
       lead_id: result.leadId,
@@ -202,17 +223,52 @@ export default function QuickContactForm({
     toast.success(result.message);
   };
   if (leadId) {
+    const failedProviders = providerResults.filter((r) => r.status === "error");
+    const emailFailures = failedProviders.filter((r) => r.provider === "email" || r.provider.includes("notification") || r.provider.includes("confirmation"));
+    const integrationFailures = failedProviders.filter((r) => r.provider === "webhook" || r.provider === "crm");
+
     return (
-      <div className="pc-form-shell text-center">
-        <div className="w-16 h-16 pc-bg-soft rounded-full flex items-center justify-center mx-auto mb-5">
+      <div className="pc-form-shell text-center space-y-5">
+        <div className="w-16 h-16 pc-bg-soft rounded-full flex items-center justify-center mx-auto">
           <CheckCircle size={32} className="pc-text-brand" />
         </div>
-        <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
-          Vielen Dank!
-        </h3>
-        <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
-          Ihre Anfrage wurde verarbeitet. Ihre Referenz: {leadId}
-        </p>
+        <div>
+          <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
+            Vielen Dank!
+          </h3>
+          <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+            Ihre Anfrage wurde verarbeitet. Ihre Referenz: {leadId}
+          </p>
+        </div>
+
+        {emailFailures.length > 0 && (
+          <div className="flex gap-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg p-3 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+            <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Hinweis: Bestätigung könnte nicht versendet werden.</p>
+              <p className="text-xs mt-1">Bitte kontaktieren Sie uns unter der Telefonnummer, falls Sie keine E-Mail erhalten.</p>
+            </div>
+          </div>
+        )}
+
+        {integrationFailures.length > 0 && (
+          <div className="flex gap-2 bg-orange-50 text-orange-700 border border-orange-200 rounded-lg p-3 text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+            <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Warnung: Anfrage wurde gespeichert, aber Benachrichtigungen fehlgeschlagen.</p>
+              <p className="text-xs mt-1">Bitte rufen Sie uns an, um die Anfrage zu bestätigen.</p>
+            </div>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={resetForm}
+          className="w-full pc-btn-secondary"
+          style={{ fontFamily: "Inter, sans-serif" }}
+        >
+          Neue Anfrage
+        </button>
       </div>
     );
   }

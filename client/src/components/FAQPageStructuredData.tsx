@@ -11,6 +11,34 @@ interface FAQPageStructuredDataProps {
   pagePath: string;
 }
 
+interface FAQAnswerEntity {
+  "@type": "Answer";
+  text: string;
+  "@id"?: string;
+}
+
+interface FAQQuestionEntity {
+  "@type": "Question";
+  name: string;
+  acceptedAnswer: FAQAnswerEntity;
+  "@id"?: string;
+}
+
+interface FAQPageJsonLd {
+  "@context": "https://schema.org";
+  "@type": "FAQPage";
+  mainEntity: FAQQuestionEntity[];
+  "@id"?: string;
+  url?: string;
+  mainEntityOfPage?: string;
+  publisher?: {
+    "@type": "Organization";
+    name: string;
+    url: string;
+    "@id"?: string;
+  };
+}
+
 function normalizeValue(value: string | undefined | null) {
   const trimmed = (value ?? "").trim();
   return trimmed.length > 0 ? trimmed : null;
@@ -55,17 +83,17 @@ export default function FAQPageStructuredData({ faqCategories, pagePath }: FAQPa
       )
       .filter((entry): entry is { entryKey: string; question: string; answer: string } => Boolean(entry))
       .map((entry, index) => ({
-        "@type": "Question",
+        "@type": "Question" as const,
         ...(pageUrl ? { "@id": `${pageUrl}#faq-${index + 1}` } : {}),
         name: entry.question,
         acceptedAnswer: {
-          "@type": "Answer",
+          "@type": "Answer" as const,
           ...(pageUrl ? { "@id": `${pageUrl}#answer-${index + 1}` } : {}),
           text: entry.answer,
         },
       }));
 
-    const data: Record<string, unknown> = {
+    const data: FAQPageJsonLd = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       ...(pageId ? { "@id": pageId } : {}),

@@ -144,19 +144,15 @@ async function startServer() {
   app.get(["/portfolio", "/portfolio/"], (_req, res) => {
     res.redirect(301, "/leistungen");
   });
-  app.get(
-    [
-      "/gebaeudereinigung-mannheim",
-      "/gebaeudereinigung-mannheim/",
-      "/buero-reinigung-mannheim",
-      "/buero-reinigung-mannheim/",
-      "/unterhaltsreinigung-mannheim",
-      "/unterhaltsreinigung-mannheim/",
-    ],
-    (_req, res) => {
-      res.status(410).type("text/plain").send("Gone");
-    },
-  );
+  app.get(["/gebaeudereinigung-mannheim", "/gebaeudereinigung-mannheim/"], (_req, res) => {
+    res.redirect(301, "/leistungen");
+  });
+  app.get(["/buero-reinigung-mannheim", "/buero-reinigung-mannheim/"], (_req, res) => {
+    res.redirect(301, "/leistungen");
+  });
+  app.get(["/unterhaltsreinigung-mannheim", "/unterhaltsreinigung-mannheim/"], (_req, res) => {
+    res.redirect(301, "/leistungen");
+  });
 
   app.post("/api/admin/login", async (req, res) => {
     const parsedBody = adminLoginSchema.safeParse(req.body ?? {});
@@ -470,12 +466,23 @@ async function startServer() {
 
     try {
       const result = await processLeadSubmission(validation.data);
-      res.status(200).json({
-        success: true,
-        leadId: result.leadId,
-        message: "Ihre Anfrage wurde erfolgreich verarbeitet.",
-        providerResults: result.providerResults,
-      });
+      const databaseResult = result.providerResults.find(r => r.provider === "database");
+      const isDatabaseSuccess = databaseResult?.status === "success";
+
+      if (isDatabaseSuccess) {
+        res.status(200).json({
+          success: true,
+          leadId: result.leadId,
+          message: "Ihre Anfrage wurde erfolgreich verarbeitet.",
+          providerResults: result.providerResults,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "Die Anfrage konnte nicht gespeichert werden.",
+          providerResults: result.providerResults,
+        });
+      }
     } catch (error) {
       res.status(500).json({
         success: false,

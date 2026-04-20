@@ -23,6 +23,8 @@ function getTransporter() {
       user: LEAD_SERVER_CONFIG.email.smtp.user,
       pass: LEAD_SERVER_CONFIG.email.smtp.password,
     },
+    connectionTimeout: 30000,
+    socketTimeout: 30000,
   });
 
   return transporter;
@@ -150,28 +152,45 @@ async function postLeadNotificationEndpoint(input: StoredLeadEmailInput): Promis
   }
 
   try {
-    const response = await fetch(LEAD_SERVER_CONFIG.email.endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(input),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
-    if (!response.ok) {
+    try {
+      const response = await fetch(LEAD_SERVER_CONFIG.email.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        return {
+          provider: "email",
+          status: "error",
+          message: `email responded with ${response.status}.`,
+        };
+      }
+
+      return {
+        provider: "email",
+        status: "success",
+        message: "Email endpoint accepted the lead.",
+      };
+    } finally {
+      clearTimeout(timeout);
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      const message = "Email endpoint request timed out (10s).";
+      console.error("[lead-email]", message);
       return {
         provider: "email",
         status: "error",
-        message: `email responded with ${response.status}.`,
+        message,
       };
     }
-
-    return {
-      provider: "email",
-      status: "success",
-      message: "Email endpoint accepted the lead.",
-    };
-  } catch (error) {
     const message = error instanceof Error ? error.message : "Email endpoint request failed.";
     console.error("[lead-email]", message);
 

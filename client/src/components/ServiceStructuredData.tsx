@@ -13,6 +13,12 @@ interface ServiceStructuredDataProps {
   pagePath: string;
 }
 
+interface ServiceEntry {
+  name: string;
+  description: string;
+  url?: string;
+}
+
 function normalizeValue(value: string | undefined | null) {
   const trimmed = (value ?? "").trim();
   return trimmed.length > 0 ? trimmed : null;
@@ -38,14 +44,13 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
         name,
       }));
 
-    const validServices = services
-      .map((service) => {
+    const validServices = services.reduce<ServiceEntry[]>((result, service) => {
         const name = normalizeValue(service.title);
         const slug = normalizeValue(service.slug);
         const description = normalizeValue(service.fullDesc) ?? normalizeValue(service.shortDesc);
 
         if (!name || !description) {
-          return null;
+          return result;
         }
 
         const url = pageUrl
@@ -54,13 +59,14 @@ export default function ServiceStructuredData({ services, pagePath }: ServiceStr
             : pageUrl
           : undefined;
 
-        return {
+        result.push({
           name,
           description,
-          url,
-        };
-      })
-      .filter((entry): entry is { name: string; description: string; url?: string } => Boolean(entry));
+          ...(url ? { url } : {}),
+        });
+
+        return result;
+      }, []);
 
     const itemListElement = validServices.map((service, index) => {
       const item: Record<string, unknown> = {
