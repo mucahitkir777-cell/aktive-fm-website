@@ -231,6 +231,8 @@ const trustSectionCertifications = [
   },
 ];
 
+const HOME_CMS_CACHE_KEY = "proclean:cms:home:v1";
+
 function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
   if (!content || typeof content !== "object") {
     return defaults;
@@ -262,10 +264,43 @@ function mergeCmsHomeContent(content: unknown): CmsHomeContent {
   };
 }
 
+function getCachedHomeContent(): CmsHomeContent | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = window.sessionStorage.getItem(HOME_CMS_CACHE_KEY);
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return mergeCmsHomeContent(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
+
+function setCachedHomeContent(content: CmsHomeContent) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.sessionStorage.setItem(HOME_CMS_CACHE_KEY, JSON.stringify(content));
+}
+
 export default function Home() {
   const sectionsRef = useRef<HTMLDivElement>(null);
-  const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getDefaultCmsPageContent("home"));
+  const [cmsContent, setCmsContent] = useState<CmsHomeContent>(() => getCachedHomeContent() ?? getDefaultCmsPageContent("home"));
+  const [isHeroContentStable, setIsHeroContentStable] = useState<boolean>(() => getCachedHomeContent() !== null);
   const resolvedCmsContent = mergeCmsHomeContent(cmsContent);
+  const trustLogoClasses: Record<string, string> = {
+    google: "max-h-9 max-w-[148px]",
+    trustpilot: "max-h-8 max-w-[164px]",
+    provenexpert: "max-h-8 max-w-[156px]",
+    "11880": "max-h-9 max-w-[148px]",
+    trustlocal: "max-h-9 max-w-[208px]",
+  };
   const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroMain;
   const uspsImageUrl = resolvedCmsContent.usps.imageUrl || IMAGES.heroOffice;
   const servicesFeatureImageUrl = resolvedCmsContent.services.imageUrl || IMAGES.serviceGlass;
@@ -326,14 +361,26 @@ export default function Home() {
 
   useEffect(() => {
     let isActive = true;
+    let cachedDuringFetch = false;
 
     void fetchPublicCmsPage("home")
       .then((page) => {
         if (page && isActive) {
-          setCmsContent(mergeCmsHomeContent(page.content));
+          const normalizedContent = mergeCmsHomeContent(page.content);
+          setCmsContent(normalizedContent);
+          setCachedHomeContent(normalizedContent);
+          cachedDuringFetch = true;
         }
       })
-      .catch(() => undefined);
+      .catch(() => undefined)
+      .finally(() => {
+        if (isActive) {
+          if (!cachedDuringFetch) {
+            setCachedHomeContent(mergeCmsHomeContent(cmsContent));
+          }
+          setIsHeroContentStable(true);
+        }
+      });
 
     return () => {
       isActive = false;
@@ -392,7 +439,7 @@ export default function Home() {
 
         {/* Hero Content */}
         <div className="container relative z-10 pt-24 pb-24 sm:pt-20 sm:pb-10 lg:pb-10">
-          <div className="max-w-xl sm:max-w-2xl">
+          <div className={`max-w-xl sm:max-w-2xl transition-opacity duration-150 ${isHeroContentStable ? "opacity-100" : "opacity-0"}`} aria-hidden={!isHeroContentStable}>
             <div className="flex items-center gap-2 mb-6">
               <span className="w-8 h-0.5 pc-bg-brand" />
               <span className="pc-text-brand text-sm font-medium uppercase tracking-widest" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -492,14 +539,14 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="flex h-full min-h-[252px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)] transition-shadow hover:shadow-[0_18px_32px_-24px_rgba(15,33,55,0.5)]"
                   >
-                    <div className="flex h-12 items-center">
+                    <div className="flex h-14 items-center">
                       <img
                         src={item.logoUrl}
                         alt={item.name}
-                        className="h-9 w-auto object-contain"
+                        className={`h-auto w-auto object-contain ${trustLogoClasses[item.id] ?? "max-h-9 max-w-[152px]"}`}
                         loading="lazy"
                         width={160}
-                        height={36}
+                        height={48}
                       />
                     </div>
 
@@ -531,10 +578,10 @@ export default function Home() {
                     <img
                       src="/assets/review-logos/11880.png"
                       alt="11880.com"
-                      className="h-10 w-auto object-contain"
+                      className={`h-auto w-auto object-contain ${trustLogoClasses["11880"]}`}
                       loading="lazy"
                       width={140}
-                      height={40}
+                      height={48}
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -556,10 +603,10 @@ export default function Home() {
                     <img
                       src="/assets/review-logos/trustlocal.png"
                       alt="Trustlocal"
-                      className="h-10 w-auto object-contain"
+                      className={`h-auto w-auto object-contain ${trustLogoClasses.trustlocal}`}
                       loading="lazy"
                       width={140}
-                      height={40}
+                      height={48}
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
