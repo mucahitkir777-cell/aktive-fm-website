@@ -141,6 +141,22 @@ async function startServer() {
   const server = createServer(app);
 
   app.use(express.json({ limit: "12mb" }));
+  app.get(["/portfolio", "/portfolio/"], (_req, res) => {
+    res.redirect(301, "/leistungen");
+  });
+  app.get(
+    [
+      "/gebaeudereinigung-mannheim",
+      "/gebaeudereinigung-mannheim/",
+      "/buero-reinigung-mannheim",
+      "/buero-reinigung-mannheim/",
+      "/unterhaltsreinigung-mannheim",
+      "/unterhaltsreinigung-mannheim/",
+    ],
+    (_req, res) => {
+      res.status(410).type("text/plain").send("Gone");
+    },
+  );
 
   app.post("/api/admin/login", async (req, res) => {
     const parsedBody = adminLoginSchema.safeParse(req.body ?? {});

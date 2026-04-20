@@ -14,6 +14,10 @@ import { companyConfig } from "@/config/company";
 import { fetchPublicCmsPage } from "@/lib/cms";
 import { getDefaultCmsPageContent, normalizeCmsPageContent, type CmsGlobalContent, type CmsNavigationItem } from "@shared/cms";
 
+function isExternalHref(href: string) {
+  return /^(?:[a-z][a-z\d+\-.]*:|\/\/)/i.test(href);
+}
+
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -88,6 +92,8 @@ export default function Navigation() {
       destination_url: resolvedCmsContent.navigation.ctaHref,
     });
   };
+  const ctaHref = resolvedCmsContent.navigation.ctaHref;
+  const ctaIsExternal = isExternalHref(ctaHref);
 
   return (
     <header
@@ -113,12 +119,12 @@ export default function Navigation() {
 
           <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
-              link.target === "_blank" ? (
+              link.target === "_blank" || isExternalHref(link.href) ? (
                 <a
                   key={link.id}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={link.target}
+                  rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
                   className="pc-nav-link"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -128,7 +134,7 @@ export default function Navigation() {
                 <Link key={link.id} href={link.href}>
                   <span
                     className={`pc-nav-link ${
-                      location === link.href
+                      location === link.href.split("#")[0]
                         ? "pc-text-brand pc-bg-soft"
                         : ""
                     }`}
@@ -151,11 +157,17 @@ export default function Navigation() {
               <Phone size={14} />
               <span>{companyConfig.contact.phoneDisplay}</span>
             </a>
-            <Link href={resolvedCmsContent.navigation.ctaHref}>
-              <span onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
+            {ctaIsExternal ? (
+              <a href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
                 {resolvedCmsContent.navigation.ctaLabel}
-              </span>
-            </Link>
+              </a>
+            ) : (
+              <Link href={ctaHref}>
+                <span onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
+                  {resolvedCmsContent.navigation.ctaLabel}
+                </span>
+              </Link>
+            )}
           </div>
 
           <button
@@ -172,12 +184,12 @@ export default function Navigation() {
         <div className="lg:hidden bg-white border-t pc-border shadow-[0_18px_34px_-26px_rgba(15,33,55,0.6)]">
           <div className="container py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
-              link.target === "_blank" ? (
+              link.target === "_blank" || isExternalHref(link.href) ? (
                 <a
                   key={link.id}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target={link.target}
+                  rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
                   className="block py-3 px-2 text-sm font-medium rounded transition-colors pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
                   style={{ fontFamily: "Inter, sans-serif" }}
                 >
@@ -187,7 +199,7 @@ export default function Navigation() {
                 <Link key={link.id} href={link.href}>
                   <span
                     className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
-                      location === link.href
+                      location === link.href.split("#")[0]
                         ? "pc-text-brand pc-bg-soft"
                         : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
                     }`}
@@ -207,11 +219,17 @@ export default function Navigation() {
                 <Phone size={16} className="pc-text-brand" />
                 {companyConfig.contact.phoneDisplay}
               </a>
-              <Link href={resolvedCmsContent.navigation.ctaHref}>
-                <span onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
+              {ctaIsExternal ? (
+                <a href={ctaHref} onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
                   {resolvedCmsContent.navigation.ctaLabel}
-                </span>
-              </Link>
+                </a>
+              ) : (
+                <Link href={ctaHref}>
+                  <span onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
+                    {resolvedCmsContent.navigation.ctaLabel}
+                  </span>
+                </Link>
+              )}
             </div>
           </div>
         </div>

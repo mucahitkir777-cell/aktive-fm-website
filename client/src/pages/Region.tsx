@@ -12,6 +12,7 @@ import QuickContactForm from "@/components/QuickContactForm";
 import RegionalServiceStructuredData from "@/components/RegionalServiceStructuredData";
 import { getLeadRegionBySlug, getLeadServiceById, leadRegions, leadServices, type LeadRegion, type LeadService } from "@/data/leadTargets";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest, trackWhatsAppClick } from "@/lib/analytics";
+import { applyPageSeo } from "@/lib/seo";
 import { companyConfig } from "@/config/company";
 
 type RegionalServicePageRoute = (typeof companyConfig.regionalServiceRoutes)[number];
@@ -45,26 +46,6 @@ function resolveRegionalPage(location: string): RegionalPageContext | undefined 
   return region ? { region } : undefined;
 }
 
-function setMeta(selector: string, attribute: "content" | "href", value: string) {
-  const element = document.querySelector(selector);
-  if (element) {
-    element.setAttribute(attribute, value);
-  }
-}
-
-function applyRegionalSeo(title: string, description: string, path: string) {
-  const canonicalUrl = `${companyConfig.brand.siteUrl}${path}`;
-
-  document.title = title;
-  setMeta('meta[name="description"]', "content", description);
-  setMeta('link[rel="canonical"]', "href", canonicalUrl);
-  setMeta('meta[property="og:url"]', "content", canonicalUrl);
-  setMeta('meta[property="og:title"]', "content", title);
-  setMeta('meta[property="og:description"]', "content", description);
-  setMeta('meta[name="twitter:title"]', "content", title);
-  setMeta('meta[name="twitter:description"]', "content", description);
-}
-
 export default function Region() {
   const [location] = useLocation();
   const pageContext = resolveRegionalPage(location);
@@ -81,7 +62,11 @@ export default function Region() {
     const seoTitle = serviceRoute?.seoTitle ?? region.seoTitle;
     const seoDescription = serviceRoute?.seoDescription ?? region.seoDescription;
 
-    applyRegionalSeo(seoTitle, seoDescription, location);
+    applyPageSeo({
+      title: seoTitle,
+      description: seoDescription,
+      path: location,
+    });
     trackLocationInterest(region.label, {
       source: pageType,
       region_id: region.id,
@@ -228,6 +213,7 @@ export default function Region() {
           description={pageIntro}
           pagePath={location}
           nearbyAreas={region.nearbyAreas}
+          pagePath={location}
         />
       )}
       <Navigation />

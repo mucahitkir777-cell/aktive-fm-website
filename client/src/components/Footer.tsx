@@ -19,6 +19,10 @@ function splitLines(value: string) {
     .filter(Boolean);
 }
 
+function isExternalHref(href: string) {
+  return /^(?:[a-z][a-z\d+\-.]*:|\/\/)/i.test(href);
+}
+
 export default function Footer() {
   const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
@@ -45,6 +49,8 @@ export default function Footer() {
     { id: "impressum", label: resolvedCmsContent.legal.impressumLabel, href: resolvedCmsContent.legal.impressumHref, visible: true, sortOrder: 6, type: "custom", target: "_self" },
     { id: "datenschutz", label: resolvedCmsContent.legal.datenschutzLabel, href: resolvedCmsContent.legal.datenschutzHref, visible: true, sortOrder: 7, type: "custom", target: "_self" },
   ];
+  const impressumHref = resolvedCmsContent.legal.impressumHref;
+  const datenschutzHref = resolvedCmsContent.legal.datenschutzHref;
 
   useEffect(() => {
     let active = true;
@@ -116,11 +122,11 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {footerCompanyLinks.map((item) => (
                 <li key={`${item.href}-${item.label}`}>
-                  {item.target === "_blank" ? (
+                  {item.target === "_blank" || isExternalHref(item.href) ? (
                     <a
                       href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      target={item.target}
+                      rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
                       className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200"
                       style={{ fontFamily: "Inter, sans-serif" }}
                     >
@@ -204,16 +210,28 @@ export default function Footer() {
             {getCopyrightLine()}
           </p>
           <div className="flex items-center gap-5">
-            <Link href={resolvedCmsContent.legal.impressumHref}>
-              <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+            {isExternalHref(impressumHref) ? (
+              <a href={impressumHref} className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.legal.impressumLabel}
-              </span>
-            </Link>
-            <Link href={resolvedCmsContent.legal.datenschutzHref}>
-              <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+              </a>
+            ) : (
+              <Link href={impressumHref}>
+                <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {resolvedCmsContent.legal.impressumLabel}
+                </span>
+              </Link>
+            )}
+            {isExternalHref(datenschutzHref) ? (
+              <a href={datenschutzHref} className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
                 {resolvedCmsContent.legal.datenschutzLabel}
-              </span>
-            </Link>
+              </a>
+            ) : (
+              <Link href={datenschutzHref}>
+                <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                  {resolvedCmsContent.legal.datenschutzLabel}
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
