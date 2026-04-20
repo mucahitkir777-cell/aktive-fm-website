@@ -1,4 +1,5 @@
 ﻿import express from "express";
+import compression from "compression";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -55,6 +56,22 @@ const mediaUploadSchema = z.object({
   filename: z.string().trim().min(1).max(255),
   dataUrl: z.string().trim().min(1).max(16_000_000),
 });
+
+function buildContentSecurityPolicy() {
+  const directives = [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'self'",
+    "img-src 'self' data: https:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+    "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://forge.butterfly-effect.dev",
+  ];
+
+  return directives.join("; ");
+}
 
 function validateNavigationItems(items: CmsNavigationItem[]) {
   const duplicateIds = new Set<string>();
@@ -139,6 +156,28 @@ async function startServer() {
 
   const app = express();
   const server = createServer(app);
+
+  app.use((req, res, next) => {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    if (isProduction) {
+      res.setHeader("Content-Security-Policy", buildContentSecurityPolicy());
+      res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+      res.setHeader("X-Frame-Options", "SAMEORIGIN");
+
+      const forwardedProto = req.header("x-forwarded-proto");
+      const isHttpsRequest = req.secure || forwardedProto === "https";
+      if (isHttpsRequest) {
+        res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+      }
+    }
+
+    next();
+  });
+
+  app.use(compression({
+    threshold: 1024,
+  }));
 
   app.use(express.json({ limit: "12mb" }));
   app.get(["/portfolio", "/portfolio/"], (_req, res) => {

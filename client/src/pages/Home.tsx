@@ -593,6 +593,8 @@ export default function Home() {
                         alt={certification.imageAlt}
                         className="h-10 w-auto object-contain"
                         loading="lazy"
+                        width={140}
+                        height={40}
                       />
                     </div>
                     <h3 className="mb-2 text-lg font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -744,9 +746,9 @@ export default function Home() {
                       <usp.icon size={18} className="pc-text-brand" />
                     </div>
                     <div>
-                      <h4 className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Inter, sans-serif" }}>
+                      <h3 className="font-semibold pc-text-primary text-sm mb-1" style={{ fontFamily: "Inter, sans-serif" }}>
                         {usp.title}
-                      </h4>
+                      </h3>
                       <p className="pc-text-secondary text-xs leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                         {usp.desc}
                       </p>
@@ -909,6 +911,8 @@ export default function Home() {
           alt="Glasreinigung an modernem Bürogebäude"
           className="w-full h-full object-cover"
           loading="lazy"
+          width={1600}
+          height={900}
         />
         <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center">
           <div className="text-center pc-text-primary max-w-2xl px-4">

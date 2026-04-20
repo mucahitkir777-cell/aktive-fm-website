@@ -101,6 +101,16 @@ function loadMapScript() {
   return new Promise<boolean>((resolve) => {
     const existingScript = document.querySelector<HTMLScriptElement>(MAP_SCRIPT_SELECTOR);
     if (existingScript) {
+      const status = existingScript.dataset.procleanMapsStatus;
+      if (status === "loaded") {
+        resolve(Boolean(window.google?.maps));
+        return;
+      }
+      if (status === "error") {
+        resolve(false);
+        return;
+      }
+
       existingScript.addEventListener("load", () => resolve(Boolean(window.google?.maps)), { once: true });
       existingScript.addEventListener("error", () => resolve(false), { once: true });
       return;
@@ -112,9 +122,11 @@ function loadMapScript() {
     script.crossOrigin = "anonymous";
     script.dataset.procleanMaps = "true";
     script.onload = () => {
+      script.dataset.procleanMapsStatus = "loaded";
       resolve(Boolean(window.google?.maps));
     };
     script.onerror = () => {
+      script.dataset.procleanMapsStatus = "error";
       resolve(false);
     };
     document.head.appendChild(script);

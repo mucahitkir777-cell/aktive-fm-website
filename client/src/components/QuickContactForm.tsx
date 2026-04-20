@@ -491,9 +491,7 @@ export default function QuickContactForm({
         />
         <span>
           Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet werden. Hinweise finden Sie in der{" "}
-          <Link href="/datenschutz">
-            <span className="pc-text-brand hover:text-[var(--color-primary-hover)]">Datenschutzerklärung</span>
-          </Link>
+          <Link href="/datenschutz" className="pc-text-brand hover:text-[var(--color-primary-hover)]">Datenschutzerklärung</Link>
           . *
           {fieldErrors.privacyConsent && <span className="block text-red-600 mt-1">{fieldErrors.privacyConsent}</span>}
         </span>

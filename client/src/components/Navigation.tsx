@@ -133,17 +133,17 @@ export default function Navigation() {
                   {link.label}
                 </a>
               ) : (
-                <Link key={link.id} href={link.href}>
-                  <span
-                    className={`pc-nav-link ${
-                      location === link.href.split("#")[0]
-                        ? "pc-text-brand pc-bg-soft"
-                        : ""
-                    }`}
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    {link.label}
-                  </span>
+                <Link
+                  key={link.id}
+                  href={link.href}
+                  className={`pc-nav-link ${
+                    location === link.href.split("#")[0]
+                      ? "pc-text-brand pc-bg-soft"
+                      : ""
+                  }`}
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  {link.label}
                 </Link>
               )
             ))}
@@ -164,10 +164,8 @@ export default function Navigation() {
                 {resolvedCmsContent.navigation.ctaLabel}
               </a>
             ) : (
-              <Link href={ctaHref}>
-                <span onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
-                  {resolvedCmsContent.navigation.ctaLabel}
-                </span>
+              <Link href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
+                {resolvedCmsContent.navigation.ctaLabel}
               </Link>
             )}
           </div>
@@ -175,7 +173,9 @@ export default function Navigation() {
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--color-bg-soft)]"
-            aria-label="Menü öffnen"
+            aria-label={isMobileOpen ? "Menü schließen" : "Menü öffnen"}
+            aria-expanded={isMobileOpen}
+            aria-controls="mobile-navigation-menu"
           >
             {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -183,7 +183,7 @@ export default function Navigation() {
       </div>
 
       {isMobileOpen && (
-        <div className="lg:hidden bg-white border-t pc-border shadow-[0_18px_34px_-26px_rgba(15,33,55,0.6)]">
+        <div id="mobile-navigation-menu" className="lg:hidden bg-white border-t pc-border shadow-[0_18px_34px_-26px_rgba(15,33,55,0.6)]">
           <div className="container py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               link.target === "_blank" || isExternalHref(link.href) ? (
@@ -198,17 +198,17 @@ export default function Navigation() {
                   {link.label}
                 </a>
               ) : (
-                <Link key={link.id} href={link.href}>
-                  <span
-                    className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
-                      location === link.href.split("#")[0]
-                        ? "pc-text-brand pc-bg-soft"
-                        : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
-                    }`}
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    {link.label}
-                  </span>
+                <Link
+                  key={link.id}
+                  href={link.href}
+                  className={`block py-3 px-2 text-sm font-medium rounded transition-colors ${
+                    location === link.href.split("#")[0]
+                      ? "pc-text-brand pc-bg-soft"
+                      : "pc-text-primary hover:text-[var(--color-primary)] hover:bg-[var(--color-bg-soft)]"
+                  }`}
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  {link.label}
                 </Link>
               )
             ))}
@@ -226,10 +226,8 @@ export default function Navigation() {
                   {resolvedCmsContent.navigation.ctaLabel}
                 </a>
               ) : (
-                <Link href={ctaHref}>
-                  <span onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
-                    {resolvedCmsContent.navigation.ctaLabel}
-                  </span>
+                <Link href={ctaHref} onClick={() => handleRequestClick("navigation_mobile")} className="pc-btn-primary w-full justify-center text-sm">
+                  {resolvedCmsContent.navigation.ctaLabel}
                 </Link>
               )}
             </div>

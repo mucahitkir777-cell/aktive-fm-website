@@ -94,9 +94,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
+            <h3 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Leistungen
-            </h4>
+            </h3>
             <ul className="space-y-2.5">
               {[
                 "Büroreinigung",
@@ -107,10 +107,8 @@ export default function Footer() {
                 "Grundreinigung",
               ].map((item) => (
                 <li key={item}>
-                  <Link href="/leistungen">
-                    <span className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
-                      {item}
-                    </span>
+                  <Link href="/leistungen" className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
+                    {item}
                   </Link>
                 </li>
               ))}
@@ -118,9 +116,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
+            <h3 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Unternehmen
-            </h4>
+            </h3>
             <ul className="space-y-2.5">
               {footerCompanyLinks.map((item) => (
                 <li key={`${item.href}-${item.label}`}>
@@ -135,10 +133,8 @@ export default function Footer() {
                       {item.label}
                     </a>
                   ) : (
-                    <Link href={item.href}>
-                      <span className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
-                        {item.label}
-                      </span>
+                    <Link href={item.href} className="pc-text-secondary text-sm hover:text-[var(--pc-primary)] transition-colors duration-200" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {item.label}
                     </Link>
                   )}
                 </li>
@@ -147,9 +143,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
+            <h3 className="pc-text-primary font-semibold text-sm mb-5 uppercase tracking-wider" style={{ fontFamily: "Inter, sans-serif" }}>
               Kontakt
-            </h4>
+            </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <Phone size={15} className="pc-text-brand mt-0.5 shrink-0" />
@@ -217,10 +213,8 @@ export default function Footer() {
                 {resolvedCmsContent.legal.impressumLabel}
               </a>
             ) : (
-              <Link href={impressumHref}>
-                <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {resolvedCmsContent.legal.impressumLabel}
-                </span>
+              <Link href={impressumHref} className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                {resolvedCmsContent.legal.impressumLabel}
               </Link>
             )}
             {isExternalHref(datenschutzHref) ? (
@@ -228,10 +222,8 @@ export default function Footer() {
                 {resolvedCmsContent.legal.datenschutzLabel}
               </a>
             ) : (
-              <Link href={datenschutzHref}>
-                <span className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
-                  {resolvedCmsContent.legal.datenschutzLabel}
-                </span>
+              <Link href={datenschutzHref} className="pc-caption text-xs hover:text-[var(--pc-primary)] transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
+                {resolvedCmsContent.legal.datenschutzLabel}
               </Link>
             )}
           </div>
