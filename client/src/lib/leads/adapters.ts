@@ -19,7 +19,8 @@ export const internalApiLeadAdapter: LeadTransportAdapter = {
 
     const result = (await response.json().catch(() => null)) as LeadSubmissionResult | null;
 
-    if (!response.ok) {
+    // Wenn HTTP-Status nicht ok, oder Body sagt success: false → Error
+    if (!response.ok || (result && result.success === false)) {
       return {
         success: false,
         message: result?.message ?? "Die Anfrage konnte nicht verarbeitet werden.",
@@ -28,6 +29,7 @@ export const internalApiLeadAdapter: LeadTransportAdapter = {
       };
     }
 
+    // Nur bei HTTP 200+ und success !== false → Success annehmen
     return (
       result ?? {
         success: true,

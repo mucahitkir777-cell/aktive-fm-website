@@ -226,7 +226,7 @@ export default function Leistungen() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <ServiceStructuredData services={services} pagePath="/leistungen" />
       <Navigation />
 
@@ -238,6 +238,8 @@ export default function Leistungen() {
             alt="Reinigungsleistungen"
             className="h-full w-full object-cover"
             loading="eager"
+            width={1600}
+            height={600}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/88 to-white/72" />
         </div>
@@ -325,6 +327,8 @@ export default function Leistungen() {
                         alt={service.title}
                         className="w-full h-64 sm:h-72 lg:h-96 object-contain sm:object-cover bg-[var(--color-bg-soft)] sm:hover:scale-105 transition-transform duration-700"
                         loading="lazy"
+                        width={800}
+                        height={500}
                       />
                     </div>
                     <div className="absolute -bottom-3 -left-3 pc-bg-brand text-white rounded-lg p-4 shadow-lg">
@@ -410,7 +414,7 @@ export default function Leistungen() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

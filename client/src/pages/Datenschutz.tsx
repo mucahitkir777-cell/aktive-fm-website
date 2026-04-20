@@ -22,7 +22,7 @@ export default function Datenschutz() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <Navigation />
 
       <section className="pc-page-hero">
@@ -153,7 +153,7 @@ export default function Datenschutz() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

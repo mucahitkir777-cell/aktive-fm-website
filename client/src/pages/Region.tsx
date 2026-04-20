@@ -88,7 +88,7 @@ export default function Region() {
 
   if (!region) {
     return (
-      <div className="min-h-screen pc-bg-section">
+      <main className="min-h-screen pc-bg-section">
         <Navigation />
         <section className="pc-section text-center">
           <div className="container">
@@ -102,7 +102,7 @@ export default function Region() {
           </div>
         </section>
         <Footer />
-      </div>
+      </main>
     );
   }
 
@@ -205,7 +205,7 @@ export default function Region() {
   };
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       {selectedService && (
         <RegionalServiceStructuredData
           regionLabel={region.label}
@@ -395,7 +395,7 @@ export default function Region() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

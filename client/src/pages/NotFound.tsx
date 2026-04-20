@@ -10,7 +10,7 @@ import { ArrowLeft, Home } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <Navigation />
 
       <section className="pc-page-hero min-h-[60vh] flex items-center">
@@ -45,7 +45,7 @@ export default function NotFound() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

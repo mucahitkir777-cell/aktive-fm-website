@@ -22,7 +22,7 @@ export default function Impressum() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <Navigation />
 
       <section className="pc-page-hero">
@@ -173,7 +173,7 @@ export default function Impressum() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

@@ -181,7 +181,7 @@ export default function FAQ() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <FAQPageStructuredData faqCategories={faqCategories} pagePath="/faq" />
       <Navigation />
 
@@ -285,6 +285,6 @@ export default function FAQ() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

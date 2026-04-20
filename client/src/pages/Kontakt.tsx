@@ -104,7 +104,7 @@ export default function Kontakt() {
 
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <Navigation />
 
       {/* Page Hero */}
@@ -348,7 +348,7 @@ export default function Kontakt() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

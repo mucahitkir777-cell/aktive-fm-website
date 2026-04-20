@@ -80,6 +80,8 @@ export default function Footer() {
                 className="h-16 w-auto sm:h-20"
                 loading="lazy"
                 decoding="async"
+                width={200}
+                height={80}
               />
             </div>
             <p className="pc-text-secondary text-sm leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>

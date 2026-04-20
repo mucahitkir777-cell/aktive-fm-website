@@ -87,7 +87,7 @@ export default function UeberUns() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section">
+    <main className="min-h-screen pc-bg-section">
       <Navigation />
 
       <section className="pc-page-hero">
@@ -161,7 +161,7 @@ export default function UeberUns() {
 
             <div className="relative pc-fade-up">
               <div className="overflow-hidden rounded-lg shadow-xl">
-                <img src={storyImageUrl} alt={storyImageAlt} className="w-full h-96 lg:h-[500px] object-cover" loading="lazy" />
+                <img src={storyImageUrl} alt={storyImageAlt} className="w-full h-96 lg:h-[500px] object-cover" loading="lazy" width={900} height={500} />
               </div>
               <div className="absolute -top-4 -right-4 pc-bg-accent pc-text-primary rounded-xl p-5 shadow-xl">
                 <div className="text-2xl font-bold" style={{ fontFamily: "Inter, sans-serif" }}>{companyConfig.metrics.customers}+</div>
@@ -207,7 +207,7 @@ export default function UeberUns() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="pc-fade-up">
-              <img src={teamImageUrl} alt={teamImageAlt} className="w-full h-80 object-cover rounded-lg shadow-lg" loading="lazy" />
+              <img src={teamImageUrl} alt={teamImageAlt} className="w-full h-80 object-cover rounded-lg shadow-lg" loading="lazy" width={900} height={400} />
             </div>
             <div className="pc-fade-up">
               <span className="pc-accent-line" />
@@ -274,6 +274,6 @@ export default function UeberUns() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }

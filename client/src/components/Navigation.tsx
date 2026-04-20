@@ -113,6 +113,8 @@ export default function Navigation() {
                 className="h-10 w-auto sm:h-12 lg:h-14"
                 loading="eager"
                 decoding="async"
+                width={200}
+                height={56}
               />
             </div>
           </Link>

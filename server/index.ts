@@ -490,6 +490,7 @@ async function startServer() {
           error instanceof Error
             ? error.message
             : "Die Anfrage konnte nicht verarbeitet werden.",
+        providerResults: [],
       });
     }
   });

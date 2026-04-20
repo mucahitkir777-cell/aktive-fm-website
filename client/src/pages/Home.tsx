@@ -371,7 +371,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen pc-bg-section" ref={sectionsRef}>
+    <main className="min-h-screen pc-bg-section" ref={sectionsRef}>
       <Navigation />
 
       {/* ─── HERO ─── */}
@@ -383,6 +383,9 @@ export default function Home() {
             alt="Professionelle Gebäudereinigung"
             className="h-full w-full object-cover object-[70%_center] sm:object-center"
             loading="eager"
+            fetchPriority="high"
+            width={1540}
+            height={860}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-white/96 via-white/86 to-white/70 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/82 sm:to-white/55" />
         </div>
@@ -495,6 +498,8 @@ export default function Home() {
                         alt={item.name}
                         className="h-9 w-auto object-contain"
                         loading="lazy"
+                        width={160}
+                        height={36}
                       />
                     </div>
 
@@ -528,6 +533,8 @@ export default function Home() {
                       alt="11880.com"
                       className="h-10 w-auto object-contain"
                       loading="lazy"
+                      width={140}
+                      height={40}
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -551,6 +558,8 @@ export default function Home() {
                       alt="Trustlocal"
                       className="h-10 w-auto object-contain"
                       loading="lazy"
+                      width={140}
+                      height={40}
                     />
                   </div>
                   <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -707,6 +716,8 @@ export default function Home() {
                   alt="Professionelle Büroreinigung"
                   className="w-full h-80 lg:h-[500px] object-cover"
                   loading="lazy"
+                  width={900}
+                  height={500}
                 />
               </div>
               {/* Floating Badge */}
@@ -786,6 +797,8 @@ export default function Home() {
                         className="h-full w-full object-cover"
                         style={{ objectPosition: step.imagePosition }}
                         loading="lazy"
+                        width={600}
+                        height={450}
                       />
                     </div>
                   </div>
@@ -830,6 +843,8 @@ export default function Home() {
                     className="h-full w-full object-cover"
                     style={{ objectPosition: sector.imagePosition }}
                     loading="lazy"
+                    width={600}
+                    height={450}
                   />
                 </div>
                 <div className="p-5 text-center">
@@ -990,6 +1005,8 @@ export default function Home() {
                   alt={`${companyConfig.brand.name} Team`}
                   className="w-full h-full object-cover"
                   loading="lazy"
+                  width={600}
+                  height={500}
                 />
                 <div className="absolute inset-0 bg-gradient-to-l from-transparent to-white/20" />
               </div>
@@ -999,7 +1016,7 @@ export default function Home() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 
