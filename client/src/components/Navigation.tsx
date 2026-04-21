@@ -216,7 +216,7 @@ export default function Navigation() {
           <Link href="/">
             <div
               ref={logoFrameRef}
-              className={`relative flex items-center group ${isPreviewResizeMode ? "h-full w-[240px] sm:w-[280px] lg:w-[320px] overflow-hidden" : "overflow-visible"}`}
+              className={`relative flex items-center group ${isPreviewResizeMode ? "h-[56px] sm:h-[64px] lg:h-[72px] w-[240px] sm:w-[280px] lg:w-[320px] overflow-hidden" : "overflow-visible"}`}
             >
               <img
                 ref={logoRef}
