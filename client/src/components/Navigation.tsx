@@ -24,16 +24,12 @@ interface NavLayoutConfig {
   logoHeightPx: number;
   logoOffsetX: number;
   logoOffsetY: number;
-  titlesOffsetX: number;
-  titlesOffsetY: number;
 }
 
 const defaultNavLayout: NavLayoutConfig = {
   logoHeightPx: 72,
   logoOffsetX: 0,
   logoOffsetY: 0,
-  titlesOffsetX: 0,
-  titlesOffsetY: 0,
 };
 
 export default function Navigation() {
@@ -43,15 +39,12 @@ export default function Navigation() {
   const [isPreviewResizeMode, setIsPreviewResizeMode] = useState(false);
   const [logoHeightPx, setLogoHeightPx] = useState<number>(defaultNavLayout.logoHeightPx);
   const [logoOffset, setLogoOffset] = useState({ x: defaultNavLayout.logoOffsetX, y: defaultNavLayout.logoOffsetY });
-  const [titlesOffset, setTitlesOffset] = useState({ x: defaultNavLayout.titlesOffsetX, y: defaultNavLayout.titlesOffsetY });
   const [saveNotice, setSaveNotice] = useState("");
   const [location] = useLocation();
   const logoRef = useRef<HTMLImageElement | null>(null);
-  const titlesRef = useRef<HTMLDivElement | null>(null);
   const editBoundsRef = useRef<HTMLDivElement | null>(null);
   const dragStateRef = useRef<{ startY: number; startHeight: number } | null>(null);
   const moveDragStateRef = useRef<{ startX: number; startY: number; startOffsetX: number; startOffsetY: number } | null>(null);
-  const titlesDragStateRef = useRef<{ startX: number; startY: number; startOffsetX: number; startOffsetY: number } | null>(null);
   const isHome = location === "/";
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
   const navLinks = useMemo(() => {
@@ -112,10 +105,6 @@ export default function Navigation() {
       setLogoOffset({
         x: typeof parsed.logoOffsetX === "number" ? parsed.logoOffsetX : defaultNavLayout.logoOffsetX,
         y: typeof parsed.logoOffsetY === "number" ? parsed.logoOffsetY : defaultNavLayout.logoOffsetY,
-      });
-      setTitlesOffset({
-        x: typeof parsed.titlesOffsetX === "number" ? parsed.titlesOffsetX : defaultNavLayout.titlesOffsetX,
-        y: typeof parsed.titlesOffsetY === "number" ? parsed.titlesOffsetY : defaultNavLayout.titlesOffsetY,
       });
     } catch {
       // ignore broken local layout payload
@@ -245,44 +234,6 @@ export default function Navigation() {
     window.addEventListener("pointerup", stopMoveDrag);
   };
 
-  const stopTitlesDrag = () => {
-    titlesDragStateRef.current = null;
-    window.removeEventListener("pointermove", handleTitlesDrag);
-    window.removeEventListener("pointerup", stopTitlesDrag);
-  };
-
-  function handleTitlesDrag(event: PointerEvent) {
-    if (!titlesDragStateRef.current) {
-      return;
-    }
-
-    const deltaX = event.clientX - titlesDragStateRef.current.startX;
-    const deltaY = event.clientY - titlesDragStateRef.current.startY;
-    const next = clampOffset(
-      titlesDragStateRef.current.startOffsetX + deltaX,
-      titlesDragStateRef.current.startOffsetY + deltaY,
-      titlesRef.current,
-    );
-    setTitlesOffset(next);
-  }
-
-  const handleTitlesDragStart = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!isPreviewResizeMode) {
-      return;
-    }
-
-    event.preventDefault();
-    titlesDragStateRef.current = {
-      startX: event.clientX,
-      startY: event.clientY,
-      startOffsetX: titlesOffset.x,
-      startOffsetY: titlesOffset.y,
-    };
-
-    window.addEventListener("pointermove", handleTitlesDrag);
-    window.addEventListener("pointerup", stopTitlesDrag);
-  };
-
   const handleSaveLayout = () => {
     if (typeof window === "undefined") {
       return;
@@ -292,8 +243,6 @@ export default function Navigation() {
       logoHeightPx,
       logoOffsetX: logoOffset.x,
       logoOffsetY: logoOffset.y,
-      titlesOffsetX: titlesOffset.x,
-      titlesOffsetY: titlesOffset.y,
     };
 
     window.localStorage.setItem(NAV_LAYOUT_STORAGE_KEY, JSON.stringify(payload));
@@ -307,12 +256,8 @@ export default function Navigation() {
       window.removeEventListener("pointerup", stopResizeDrag);
       window.removeEventListener("pointermove", handleMoveDrag);
       window.removeEventListener("pointerup", stopMoveDrag);
-      window.removeEventListener("pointermove", handleTitlesDrag);
-      window.removeEventListener("pointerup", stopTitlesDrag);
     };
   }, []);
-
-  const titlesPreviewText = navLinks.map((item) => item.label).join("  •  ");
   const resolvedLogoWidth = logoRef.current?.getBoundingClientRect().width ?? Math.max(120, Math.round(logoHeightPx * 2));
 
   return (
@@ -355,15 +300,6 @@ export default function Navigation() {
                 title="Logo-Größe ziehen"
                 aria-label="Logo-Größe ziehen"
               />
-              <div
-                ref={titlesRef}
-                onPointerDown={handleTitlesDragStart}
-                className="absolute left-0 top-0 cursor-move select-none whitespace-nowrap rounded-md border border-slate-300 bg-white/95 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm"
-                style={{ transform: `translate(${titlesOffset.x}px, ${titlesOffset.y}px)` }}
-                title="Titelblock verschieben"
-              >
-                {titlesPreviewText}
-              </div>
               <button
                 type="button"
                 onClick={handleSaveLayout}
@@ -396,10 +332,7 @@ export default function Navigation() {
             </Link>
           )}
 
-          <nav
-            className={`hidden lg:flex items-center gap-6 whitespace-nowrap ${isPreviewResizeMode ? "pointer-events-none opacity-0" : ""}`}
-            style={isPreviewResizeMode ? undefined : { transform: `translate(${titlesOffset.x}px, ${titlesOffset.y}px)` }}
-          >
+          <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
             {navLinks.map((link) => (
               link.target === "_blank" || isExternalHref(link.href) ? (
                 <a
@@ -429,7 +362,7 @@ export default function Navigation() {
             ))}
           </nav>
 
-          <div className={`hidden lg:flex items-center gap-3 ${isPreviewResizeMode ? "pointer-events-none opacity-0" : ""}`}>
+          <div className="hidden lg:flex items-center gap-3">
             <a
               href={companyConfig.contact.phoneHref}
               onClick={() => handlePhoneClick("navigation_desktop")}
@@ -452,7 +385,7 @@ export default function Navigation() {
 
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className={`lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--color-bg-soft)] ${isPreviewResizeMode ? "pointer-events-none opacity-0" : ""}`}
+            className="lg:hidden p-2 rounded-lg transition-colors pc-text-primary hover:bg-[var(--color-bg-soft)]"
             aria-label={isMobileOpen ? "Menü schließen" : "Menü öffnen"}
             aria-expanded={isMobileOpen}
             aria-controls="mobile-navigation-menu"
