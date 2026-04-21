@@ -24,9 +24,12 @@ export default function Navigation() {
   const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
   const [isPreviewResizeMode, setIsPreviewResizeMode] = useState(false);
   const [logoHeightPx, setLogoHeightPx] = useState<number | null>(null);
+  const [logoOffset, setLogoOffset] = useState({ x: 0, y: 0 });
   const [location] = useLocation();
   const logoRef = useRef<HTMLImageElement | null>(null);
+  const logoFrameRef = useRef<HTMLDivElement | null>(null);
   const dragStateRef = useRef<{ startY: number; startHeight: number } | null>(null);
+  const moveDragStateRef = useRef<{ startX: number; startY: number; startOffsetX: number; startOffsetY: number } | null>(null);
   const isHome = location === "/";
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
   const navLinks = useMemo(() => {
@@ -110,6 +113,24 @@ export default function Navigation() {
     window.removeEventListener("pointerup", stopResizeDrag);
   };
 
+  const clampLogoOffset = (nextX: number, nextY: number) => {
+    const frame = logoFrameRef.current?.getBoundingClientRect();
+    const logo = logoRef.current?.getBoundingClientRect();
+    if (!frame || !logo) {
+      return { x: nextX, y: nextY };
+    }
+
+    const minX = Math.min(0, frame.width - logo.width);
+    const maxX = 0;
+    const minY = Math.min(0, frame.height - logo.height);
+    const maxY = 0;
+
+    return {
+      x: Math.max(minX, Math.min(maxX, nextX)),
+      y: Math.max(minY, Math.min(maxY, nextY)),
+    };
+  };
+
   function handleResizeDrag(event: PointerEvent) {
     if (!dragStateRef.current) {
       return;
@@ -136,10 +157,49 @@ export default function Navigation() {
     window.addEventListener("pointerup", stopResizeDrag);
   };
 
+  const stopMoveDrag = () => {
+    moveDragStateRef.current = null;
+    window.removeEventListener("pointermove", handleMoveDrag);
+    window.removeEventListener("pointerup", stopMoveDrag);
+  };
+
+  function handleMoveDrag(event: PointerEvent) {
+    if (!moveDragStateRef.current) {
+      return;
+    }
+
+    const deltaX = event.clientX - moveDragStateRef.current.startX;
+    const deltaY = event.clientY - moveDragStateRef.current.startY;
+    const next = clampLogoOffset(
+      moveDragStateRef.current.startOffsetX + deltaX,
+      moveDragStateRef.current.startOffsetY + deltaY,
+    );
+    setLogoOffset(next);
+  }
+
+  const handleMoveDragStart = (event: React.PointerEvent<HTMLImageElement>) => {
+    if (!isPreviewResizeMode) {
+      return;
+    }
+
+    event.preventDefault();
+    moveDragStateRef.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      startOffsetX: logoOffset.x,
+      startOffsetY: logoOffset.y,
+    };
+
+    window.addEventListener("pointermove", handleMoveDrag);
+    window.addEventListener("pointerup", stopMoveDrag);
+  };
+
   useEffect(() => {
     return () => {
       window.removeEventListener("pointermove", handleResizeDrag);
       window.removeEventListener("pointerup", stopResizeDrag);
+      window.removeEventListener("pointermove", handleMoveDrag);
+      window.removeEventListener("pointerup", stopMoveDrag);
     };
   }, []);
 
@@ -154,23 +214,34 @@ export default function Navigation() {
       <div className="container">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/">
-            <div className="relative flex items-center group overflow-visible">
+            <div
+              ref={logoFrameRef}
+              className={`relative flex items-center group ${isPreviewResizeMode ? "h-full w-[240px] sm:w-[280px] lg:w-[320px] overflow-hidden" : "overflow-visible"}`}
+            >
               <img
                 ref={logoRef}
                 src={companyConfig.brand.logoUrl}
                 alt={`${companyConfig.brand.name} Logo`}
-                className="h-[56px] w-auto sm:h-[64px] lg:h-[72px]"
+                className={`h-[56px] w-auto sm:h-[64px] lg:h-[72px] ${isPreviewResizeMode ? "absolute left-0 top-1/2 -translate-y-1/2 cursor-move select-none" : ""}`}
                 loading="eager"
                 decoding="async"
                 width={700}
                 height={350}
-                style={logoHeightPx ? { height: `${logoHeightPx}px` } : undefined}
+                onPointerDown={handleMoveDragStart}
+                style={
+                  isPreviewResizeMode
+                    ? {
+                        height: logoHeightPx ? `${logoHeightPx}px` : undefined,
+                        transform: `translate(${logoOffset.x}px, calc(-50% + ${logoOffset.y}px))`,
+                      }
+                    : (logoHeightPx ? { height: `${logoHeightPx}px` } : undefined)
+                }
               />
               {isPreviewResizeMode ? (
                 <button
                   type="button"
                   onPointerDown={handleResizeDragStart}
-                  className="absolute -right-2 -bottom-2 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
+                  className="absolute right-1 bottom-1 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
                   title="Logo-Größe ziehen"
                   aria-label="Logo-Größe ziehen"
                 />

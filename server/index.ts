@@ -640,7 +640,10 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use("/uploads", express.static(getUploadsDirectory(projectRoot), { fallthrough: false }));
+  app.use("/uploads", express.static(getUploadsDirectory(projectRoot)));
+  app.use("/uploads", (_req, res) => {
+    res.status(404).type("text/plain").send("Upload file not found");
+  });
   app.use(express.static(staticPath));
 
   app.get("*", (_req, res) => {
