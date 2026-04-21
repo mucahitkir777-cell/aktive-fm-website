@@ -10,7 +10,8 @@
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
-    "leads:reminder-job": "tsx server/leads/reminder-job.ts"
+    "leads:reminder-job": "tsx server/leads/reminder-job.ts",
+    "cms:sync": "node scripts/sync-cms-content.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
