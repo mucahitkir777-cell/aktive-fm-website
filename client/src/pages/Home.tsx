@@ -461,7 +461,7 @@ export default function Home() {
             width={1540}
             height={860}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/96 via-white/86 to-white/70 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/82 sm:to-white/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/78 via-white/56 to-white/28 sm:bg-gradient-to-r sm:from-white/84 sm:via-white/58 sm:to-white/24" />
         </div>
 
         {/* Hero Content */}
