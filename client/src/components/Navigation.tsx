@@ -269,9 +269,10 @@ export default function Navigation() {
       }`}
     >
       <div className="container">
-        <div ref={editBoundsRef} className="relative flex items-center justify-between h-16 lg:h-20">
-          {isPreviewResizeMode ? (
-            <>
+        <div className="relative flex items-center justify-between h-16 lg:h-20 gap-3 lg:gap-6">
+          <div ref={editBoundsRef} className="relative h-[52px] w-[190px] shrink-0 overflow-hidden sm:h-[58px] sm:w-[220px] lg:h-[66px] lg:w-[320px]">
+            {isPreviewResizeMode ? (
+              <>
               <img
                 ref={logoRef}
                 src={companyConfig.brand.logoUrl}
@@ -303,17 +304,17 @@ export default function Navigation() {
               <button
                 type="button"
                 onClick={handleSaveLayout}
-                className="absolute right-2 top-2 inline-flex h-8 items-center gap-1 rounded-md border border-slate-300 bg-white px-2 text-xs font-semibold text-slate-700 shadow-sm"
+                className="absolute right-1 top-1 inline-flex h-7 items-center gap-1 rounded-md border border-slate-300 bg-white px-2 text-[11px] font-semibold text-slate-700 shadow-sm"
                 aria-label="Layout speichern"
                 title="Layout speichern"
               >
-                <Save size={14} />
+                <Save size={12} />
                 {saveNotice || "Speichern"}
               </button>
-            </>
-          ) : (
-            <Link href="/">
-              <div className="relative flex items-center group overflow-visible">
+              </>
+            ) : (
+              <Link href="/">
+                <div className="relative flex h-full items-center overflow-visible">
                 <img
                   ref={logoRef}
                   src={companyConfig.brand.logoUrl}
@@ -328,59 +329,62 @@ export default function Navigation() {
                     transform: `translate(${logoOffset.x}px, ${logoOffset.y}px)`,
                   }}
                 />
-              </div>
-            </Link>
-          )}
-
-          <nav className="hidden lg:flex items-center gap-6 whitespace-nowrap">
-            {navLinks.map((link) => (
-              link.target === "_blank" || isExternalHref(link.href) ? (
-                <a
-                  key={link.id}
-                  href={link.href}
-                  target={link.target}
-                  rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-                  className="pc-nav-link"
-                  style={{ fontFamily: "Inter, sans-serif" }}
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.id}
-                  href={link.href}
-                  className={`pc-nav-link ${
-                    location === link.href.split("#")[0]
-                      ? "pc-text-brand pc-bg-soft"
-                      : ""
-                  }`}
-                  style={{ fontFamily: "Inter, sans-serif" }}
-                >
-                  {link.label}
-                </Link>
-              )
-            ))}
-          </nav>
-
-          <div className="hidden lg:flex items-center gap-3">
-            <a
-              href={companyConfig.contact.phoneHref}
-              onClick={() => handlePhoneClick("navigation_desktop")}
-              className="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 pc-text-primary hover:text-[var(--color-primary)] rounded-lg px-3 py-2 hover:bg-[var(--color-bg-soft)]"
-              style={{ fontFamily: "Inter, sans-serif" }}
-            >
-              <Phone size={14} />
-              <span>{companyConfig.contact.phoneDisplay}</span>
-            </a>
-            {ctaIsExternal ? (
-              <a href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
-                {resolvedCmsContent.navigation.ctaLabel}
-              </a>
-            ) : (
-              <Link href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
-                {resolvedCmsContent.navigation.ctaLabel}
+                </div>
               </Link>
             )}
+          </div>
+
+          <div className="hidden lg:flex flex-1 min-w-0 items-center justify-end gap-8">
+            <nav className="flex min-w-0 items-center justify-end gap-6 whitespace-nowrap">
+              {navLinks.map((link) => (
+                link.target === "_blank" || isExternalHref(link.href) ? (
+                  <a
+                    key={link.id}
+                    href={link.href}
+                    target={link.target}
+                    rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+                    className="pc-nav-link"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.id}
+                    href={link.href}
+                    className={`pc-nav-link ${
+                      location === link.href.split("#")[0]
+                        ? "pc-text-brand pc-bg-soft"
+                        : ""
+                    }`}
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              ))}
+            </nav>
+
+            <div className="flex shrink-0 items-center gap-3">
+              <a
+                href={companyConfig.contact.phoneHref}
+                onClick={() => handlePhoneClick("navigation_desktop")}
+                className="flex items-center gap-1.5 text-sm font-medium transition-colors duration-200 pc-text-primary hover:text-[var(--color-primary)] rounded-lg px-3 py-2 hover:bg-[var(--color-bg-soft)]"
+                style={{ fontFamily: "Inter, sans-serif" }}
+              >
+                <Phone size={14} />
+                <span>{companyConfig.contact.phoneDisplay}</span>
+              </a>
+              {ctaIsExternal ? (
+                <a href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
+                  {resolvedCmsContent.navigation.ctaLabel}
+                </a>
+              ) : (
+                <Link href={ctaHref} onClick={() => handleRequestClick("navigation_desktop")} className="pc-btn-primary text-sm px-5 py-2.5">
+                  {resolvedCmsContent.navigation.ctaLabel}
+                </Link>
+              )}
+            </div>
           </div>
 
           <button
