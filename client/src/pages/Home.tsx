@@ -212,6 +212,8 @@ const trustSectionQuotes = [
   "Saubere Ausführung, verlässliche Termine und schnelle Abstimmung.",
   "Professioneller Ablauf und konstante Qualität im laufenden Einsatz.",
   "Freundliche Kommunikation, klare Angebote und überzeugende Ergebnisse.",
+  "Branchenprofil mit aktuellen Unternehmensdaten und öffentlicher Bewertung.",
+  "Plattformprofil mit zusammengefassten Bewertungen und Unternehmensangaben.",
 ];
 
 const trustSectionCertifications = [
@@ -298,8 +300,8 @@ export default function Home() {
     google: "max-h-9 max-w-[148px]",
     trustpilot: "max-h-8 max-w-[164px]",
     provenexpert: "max-h-8 max-w-[156px]",
-    "11880": "max-h-9 max-w-[148px]",
-    trustlocal: "max-h-9 max-w-[208px]",
+    "11880": "max-h-10 max-w-[176px]",
+    trustlocal: "max-h-8 max-w-[164px]",
   };
   const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroMain;
   const uspsImageUrl = resolvedCmsContent.usps.imageUrl || IMAGES.heroOffice;
@@ -332,6 +334,24 @@ export default function Home() {
       label: resolvedCmsContent.reviews.provenexpertLabel,
       href: "https://www.provenexpert.com/aktive-facility-management-gmbh/",
       quote: trustSectionQuotes[2],
+    },
+    {
+      id: "11880",
+      name: "11880.com",
+      logoUrl: resolvedCmsContent.reviews.oneOneEightEightZeroImageUrl,
+      score: resolvedCmsContent.reviews.oneOneEightEightZeroScore,
+      label: resolvedCmsContent.reviews.oneOneEightEightZeroLabel,
+      href: "https://www.11880.com/branchenbuch/dreieich/061331911B107212052/aktive-facility-management-gmbh.html",
+      quote: trustSectionQuotes[3],
+    },
+    {
+      id: "trustlocal",
+      name: "Trustlocal",
+      logoUrl: resolvedCmsContent.reviews.trustlocalImageUrl,
+      score: resolvedCmsContent.reviews.trustlocalScore,
+      label: resolvedCmsContent.reviews.trustlocalLabel,
+      href: "https://trustlocal.de/hessen/neu-isenburg/reinigungsfirma/aktive-facility-management-gmbh/",
+      quote: trustSectionQuotes[4],
     },
   ];
 
@@ -572,57 +592,6 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <div className="flex min-h-[176px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
-                  <div className="flex h-14 items-center">
-                    <img
-                      src="/assets/review-logos/11880.png"
-                      alt="11880.com"
-                      className={`h-auto w-auto object-contain ${trustLogoClasses["11880"]}`}
-                      loading="lazy"
-                      width={140}
-                      height={48}
-                    />
-                  </div>
-                  <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Branchenprofil mit aktuellen Unternehmensdaten und öffentlicher Bewertung.
-                  </p>
-                  <a
-                    href="https://www.11880.com/branchenbuch/dreieich/061331911B107212052/aktive-facility-management-gmbh.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    11880-Profil öffnen <ChevronRight size={14} />
-                  </a>
-                </div>
-
-                <div className="flex min-h-[176px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)]">
-                  <div className="flex h-14 items-center">
-                    <img
-                      src="/assets/review-logos/trustlocal.png"
-                      alt="Trustlocal"
-                      className={`h-auto w-auto object-contain ${trustLogoClasses.trustlocal}`}
-                      loading="lazy"
-                      width={140}
-                      height={48}
-                    />
-                  </div>
-                  <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Trustlocal-Profil mit zusammengefassten Bewertungen und Unternehmensangaben.
-                  </p>
-                  <a
-                    href="https://trustlocal.de/hessen/neu-isenburg/reinigungsfirma/aktive-facility-management-gmbh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-medium pc-text-brand"
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    Trustlocal-Profil öffnen <ChevronRight size={14} />
-                  </a>
-                </div>
-              </div>
             </div>
 
             <div className="border-t pc-border pt-10">

@@ -101,6 +101,12 @@ export const cmsPageDefinitions = {
           { key: "provenexpertImageUrl", label: "ProvenExpert Logo URL", input: "text" },
           { key: "provenexpertScore", label: "ProvenExpert Score", input: "text" },
           { key: "provenexpertLabel", label: "ProvenExpert Label", input: "text" },
+          { key: "oneOneEightEightZeroImageUrl", label: "11880 Logo URL", input: "text" },
+          { key: "oneOneEightEightZeroScore", label: "11880 Score", input: "text" },
+          { key: "oneOneEightEightZeroLabel", label: "11880 Label", input: "text" },
+          { key: "trustlocalImageUrl", label: "Trustlocal Logo URL", input: "text" },
+          { key: "trustlocalScore", label: "Trustlocal Score", input: "text" },
+          { key: "trustlocalLabel", label: "Trustlocal Label", input: "text" },
         ],
       },
       {

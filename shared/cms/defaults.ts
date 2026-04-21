@@ -74,6 +74,12 @@ export const defaultCmsPageContent: CmsPageContentMap = {
       provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
       provenexpertScore: "SEHR GUT",
       provenexpertLabel: "Verifizierte Bewertungen",
+      oneOneEightEightZeroImageUrl: "/assets/review-logos/11880.png",
+      oneOneEightEightZeroScore: "4,9",
+      oneOneEightEightZeroLabel: "Branchenprofil",
+      trustlocalImageUrl: "/assets/review-logos/trustlocal.png",
+      trustlocalScore: "4,9",
+      trustlocalLabel: "Plattformprofil",
     },
     finalCta: {
       title: "Sauberkeit planbar organisieren",

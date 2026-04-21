@@ -81,6 +81,12 @@ export const cmsHomeContentSchema = z.object({
       provenexpertImageUrl: imageUrlSchema.default("/assets/review-logos/provenexpert.png"),
       provenexpertScore: pageTitleSchema.default("SEHR GUT"),
       provenexpertLabel: pageSubtitleSchema.default("Verifizierte Bewertungen"),
+      oneOneEightEightZeroImageUrl: imageUrlSchema.default("/assets/review-logos/11880.png"),
+      oneOneEightEightZeroScore: pageTitleSchema.default("4,9"),
+      oneOneEightEightZeroLabel: pageSubtitleSchema.default("Branchenprofil"),
+      trustlocalImageUrl: imageUrlSchema.default("/assets/review-logos/trustlocal.png"),
+      trustlocalScore: pageTitleSchema.default("4,9"),
+      trustlocalLabel: pageSubtitleSchema.default("Plattformprofil"),
     })
     .default({
       title: "Bewertungen & Referenzen",
@@ -94,6 +100,12 @@ export const cmsHomeContentSchema = z.object({
       provenexpertImageUrl: "/assets/review-logos/provenexpert.png",
       provenexpertScore: "SEHR GUT",
       provenexpertLabel: "Verifizierte Bewertungen",
+      oneOneEightEightZeroImageUrl: "/assets/review-logos/11880.png",
+      oneOneEightEightZeroScore: "4,9",
+      oneOneEightEightZeroLabel: "Branchenprofil",
+      trustlocalImageUrl: "/assets/review-logos/trustlocal.png",
+      trustlocalScore: "4,9",
+      trustlocalLabel: "Plattformprofil",
     }),
   finalCta: finalCtaSchema.extend({
     imageUrl: imageUrlSchema,
