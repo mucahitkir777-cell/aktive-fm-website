@@ -303,6 +303,13 @@ export default function Home() {
     "11880": "max-h-10 max-w-[176px]",
     trustlocal: "max-h-8 max-w-[164px]",
   };
+  const trustLogoIntrinsicSizes: Record<string, { width: number; height: number }> = {
+    google: { width: 160, height: 48 },
+    trustpilot: { width: 160, height: 48 },
+    provenexpert: { width: 2000, height: 550 },
+    "11880": { width: 328, height: 162 },
+    trustlocal: { width: 160, height: 48 },
+  };
   const heroImageUrl = resolvedCmsContent.hero.imageUrl || IMAGES.heroMain;
   const uspsImageUrl = resolvedCmsContent.usps.imageUrl || IMAGES.heroOffice;
   const servicesFeatureImageUrl = resolvedCmsContent.services.imageUrl || IMAGES.serviceGlass;
@@ -482,17 +489,17 @@ export default function Home() {
               Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 mb-10">
+            <div className="mb-10 flex min-h-[192px] flex-col gap-3 sm:min-h-[56px] sm:flex-row">
               <Link href="/kontakt">
                 <span
                   onClick={() => handleHomeCtaClick("home_hero_offer", resolvedCmsContent.hero.primaryButtonText, "home_hero", "/kontakt")}
-                  className="pc-btn-primary text-base px-7 py-3.5"
+                  className="pc-btn-primary inline-flex h-14 w-full items-center justify-center px-7 py-3.5 text-base sm:w-auto"
                 >
                   {resolvedCmsContent.hero.primaryButtonText}
                   <ArrowRight size={18} />
                 </span>
               </Link>
-              <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("home_hero")} className="pc-btn-white text-base px-7 py-3.5">
+              <a href={companyConfig.contact.phoneHref} onClick={() => trackPhoneClick("home_hero")} className="pc-btn-white inline-flex h-14 w-full items-center justify-center px-7 py-3.5 text-base sm:w-auto">
                 <Phone size={18} />
                 Jetzt anrufen
               </a>
@@ -501,7 +508,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackWhatsAppClick("home_hero")}
-                className="pc-btn-whatsapp text-base px-7 py-3.5"
+                className="pc-btn-whatsapp inline-flex h-14 w-full items-center justify-center px-7 py-3.5 text-base sm:w-auto"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
                 <MessageCircle size={18} />
@@ -551,45 +558,49 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {homeReviewItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-full min-h-[252px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)] transition-shadow hover:shadow-[0_18px_32px_-24px_rgba(15,33,55,0.5)]"
-                  >
-                    <div className="flex h-14 items-center">
-                      <img
-                        src={item.logoUrl}
-                        alt={item.name}
-                        className={`h-auto w-auto object-contain ${trustLogoClasses[item.id] ?? "max-h-9 max-w-[152px]"}`}
-                        loading="lazy"
-                        width={160}
-                        height={48}
-                      />
-                    </div>
+                {homeReviewItems.map((item) => {
+                  const logoSize = trustLogoIntrinsicSizes[item.id] ?? { width: 160, height: 48 };
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-full min-h-[252px] flex-col rounded-xl border pc-border bg-white p-6 shadow-[0_16px_30px_-26px_rgba(15,33,55,0.4)] transition-shadow hover:shadow-[0_18px_32px_-24px_rgba(15,33,55,0.5)]"
+                    >
+                      <div className="flex h-14 items-center">
+                        <img
+                          src={item.logoUrl}
+                          alt={item.name}
+                          className={`h-auto w-auto object-contain ${trustLogoClasses[item.id] ?? "max-h-9 max-w-[152px]"}`}
+                          loading="lazy"
+                          decoding="async"
+                          width={logoSize.width}
+                          height={logoSize.height}
+                        />
+                      </div>
 
-                    <div className="mt-5 flex items-center gap-1.5">
-                      {Array.from({ length: 5 }).map((_, starIndex) => (
-                        <Star key={`${item.id}-${starIndex}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
-                      ))}
-                    </div>
+                      <div className="mt-5 flex items-center gap-1.5">
+                        {Array.from({ length: 5 }).map((_, starIndex) => (
+                          <Star key={`${item.id}-${starIndex}`} size={16} className="fill-[#FFB800] text-[#FFB800]" />
+                        ))}
+                      </div>
 
-                    <div className="mt-4">
-                      <p className="text-2xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
-                        {item.score}
+                      <div className="mt-4">
+                        <p className="text-2xl font-bold pc-text-primary" style={{ fontFamily: "Inter, sans-serif" }}>
+                          {item.score}
+                        </p>
+                        <p className="mt-1 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                          {item.label}
+                        </p>
+                      </div>
+
+                      <p className="mt-auto border-t pc-border pt-4 text-sm leading-relaxed pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
+                        "{item.quote}"
                       </p>
-                      <p className="mt-1 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                        {item.label}
-                      </p>
-                    </div>
-
-                    <p className="mt-auto border-t pc-border pt-4 text-sm leading-relaxed pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-                      "{item.quote}"
-                    </p>
-                  </a>
-                ))}
+                    </a>
+                  );
+                })}
               </div>
 
             </div>

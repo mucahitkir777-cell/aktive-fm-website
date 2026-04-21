@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -10,6 +10,7 @@ import CookieConsent from "./components/CookieConsent";
 import CompanyMeta from "./components/CompanyMeta";
 import CompanyStructuredData from "./components/CompanyStructuredData";
 import { initAnalytics, initScrollDepthTracking, trackPageView } from "./lib/analytics";
+import { fetchPublicCmsPage } from "./lib/cms";
 import { sendInternalPageView } from "./lib/pageviews";
 import { companyConfig } from "./config/company";
 import Home from "./pages/Home";
@@ -27,6 +28,7 @@ const Admin = lazy(() => import("./pages/Admin"));
 function AppContent() {
   const [location] = useLocation();
   const [siteStatus, setSiteStatus] = useState<"live" | "maintenance">("live");
+  const hasSentInitialInternalPageView = useRef(false);
 
   useEffect(() => {
     initAnalytics();
@@ -36,17 +38,17 @@ function AppContent() {
 
   useEffect(() => {
     trackPageView({ route: location });
-    sendInternalPageView(location);
+    sendInternalPageView(location, { defer: !hasSentInitialInternalPageView.current });
+    hasSentInitialInternalPageView.current = true;
   }, [location]);
 
   useEffect(() => {
     let isMounted = true;
 
-    fetch("/api/content/pages/global")
-      .then((response) => response.json())
-      .then((result) => {
+    void fetchPublicCmsPage("global")
+      .then((page) => {
         if (!isMounted) return;
-        if (result?.success && result.page?.content?.siteStatus === "maintenance") {
+        if (page?.content?.siteStatus === "maintenance") {
           setSiteStatus("maintenance");
         }
       })
