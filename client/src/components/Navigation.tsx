@@ -312,7 +312,8 @@ export default function Navigation() {
     };
   }, []);
 
-  const titlesPreviewText = navLinks.map((item) => item.label).join("   ");
+  const titlesPreviewText = navLinks.map((item) => item.label).join("  •  ");
+  const resolvedLogoWidth = logoRef.current?.getBoundingClientRect().width ?? Math.max(120, Math.round(logoHeightPx * 2));
 
   return (
     <header
@@ -346,10 +347,10 @@ export default function Navigation() {
               <button
                 type="button"
                 onPointerDown={handleResizeDragStart}
-                className="absolute z-20 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
+                className="absolute z-20 h-4 w-4 rounded border border-slate-400 bg-white shadow"
                 style={{
-                  left: `${Math.max(4, logoOffset.x + 130)}px`,
-                  top: `${Math.max(4, logoOffset.y + Math.max(logoHeightPx - 10, 10))}px`,
+                  left: `${Math.max(4, logoOffset.x + resolvedLogoWidth - 8)}px`,
+                  top: `${Math.max(4, logoOffset.y + Math.max(logoHeightPx - 8, 8))}px`,
                 }}
                 title="Logo-Größe ziehen"
                 aria-label="Logo-Größe ziehen"
@@ -357,7 +358,7 @@ export default function Navigation() {
               <div
                 ref={titlesRef}
                 onPointerDown={handleTitlesDragStart}
-                className="absolute left-0 top-0 cursor-move select-none whitespace-nowrap rounded-md border border-slate-300 bg-white/90 px-2 py-1 text-sm font-medium text-slate-800"
+                className="absolute left-0 top-0 cursor-move select-none whitespace-nowrap rounded-md border border-slate-300 bg-white/95 px-3 py-1.5 text-sm font-medium text-slate-800 shadow-sm"
                 style={{ transform: `translate(${titlesOffset.x}px, ${titlesOffset.y}px)` }}
                 title="Titelblock verschieben"
               >
