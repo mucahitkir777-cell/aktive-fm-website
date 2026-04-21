@@ -120,10 +120,12 @@ export default function Navigation() {
       return { x: nextX, y: nextY };
     }
 
-    const minX = Math.min(0, frame.width - logo.width);
-    const maxX = 0;
-    const minY = Math.min(0, frame.height - logo.height);
-    const maxY = 0;
+    const xDelta = frame.width - logo.width;
+    const yDelta = frame.height - logo.height;
+    const minX = Math.min(0, xDelta);
+    const maxX = Math.max(0, xDelta);
+    const minY = Math.min(0, yDelta);
+    const maxY = Math.max(0, yDelta);
 
     return {
       x: Math.max(minX, Math.min(maxX, nextX)),
@@ -213,41 +215,53 @@ export default function Navigation() {
     >
       <div className="container">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/">
+          {isPreviewResizeMode ? (
             <div
               ref={logoFrameRef}
-              className={`relative flex items-center group ${isPreviewResizeMode ? "h-[56px] sm:h-[64px] lg:h-[72px] w-[240px] sm:w-[280px] lg:w-[320px] overflow-hidden" : "overflow-visible"}`}
+              className="relative flex items-center group h-[56px] sm:h-[64px] lg:h-[72px] w-[240px] sm:w-[280px] lg:w-[320px] overflow-hidden"
             >
               <img
                 ref={logoRef}
                 src={companyConfig.brand.logoUrl}
                 alt={`${companyConfig.brand.name} Logo`}
-                className={`h-[56px] w-auto sm:h-[64px] lg:h-[72px] ${isPreviewResizeMode ? "absolute left-0 top-1/2 -translate-y-1/2 cursor-move select-none" : ""}`}
+                className="absolute left-0 top-0 h-[56px] w-auto cursor-move select-none sm:h-[64px] lg:h-[72px]"
                 loading="eager"
                 decoding="async"
                 width={700}
                 height={350}
+                draggable={false}
+                onDragStart={(event) => event.preventDefault()}
                 onPointerDown={handleMoveDragStart}
-                style={
-                  isPreviewResizeMode
-                    ? {
-                        height: logoHeightPx ? `${logoHeightPx}px` : undefined,
-                        transform: `translate(${logoOffset.x}px, calc(-50% + ${logoOffset.y}px))`,
-                      }
-                    : (logoHeightPx ? { height: `${logoHeightPx}px` } : undefined)
-                }
+                style={{
+                  height: logoHeightPx ? `${logoHeightPx}px` : undefined,
+                  transform: `translate(${logoOffset.x}px, ${logoOffset.y}px)`,
+                }}
               />
-              {isPreviewResizeMode ? (
-                <button
-                  type="button"
-                  onPointerDown={handleResizeDragStart}
-                  className="absolute right-1 bottom-1 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
-                  title="Logo-Größe ziehen"
-                  aria-label="Logo-Größe ziehen"
-                />
-              ) : null}
+              <button
+                type="button"
+                onPointerDown={handleResizeDragStart}
+                className="absolute right-1 bottom-1 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
+                title="Logo-Größe ziehen"
+                aria-label="Logo-Größe ziehen"
+              />
             </div>
-          </Link>
+          ) : (
+            <Link href="/">
+              <div ref={logoFrameRef} className="relative flex items-center group overflow-visible">
+                <img
+                  ref={logoRef}
+                  src={companyConfig.brand.logoUrl}
+                  alt={`${companyConfig.brand.name} Logo`}
+                  className="h-[56px] w-auto sm:h-[64px] lg:h-[72px]"
+                  loading="eager"
+                  decoding="async"
+                  width={700}
+                  height={350}
+                  style={logoHeightPx ? { height: `${logoHeightPx}px` } : undefined}
+                />
+              </div>
+            </Link>
+          )}
 
           <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
