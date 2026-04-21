@@ -1,4 +1,5 @@
 ﻿import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { Eye, ImagePlus, Monitor, Search, Smartphone, Tablet } from "lucide-react";
 import type {
   CmsNavigationItem,
   CmsPage,
@@ -13,6 +14,7 @@ import type {
   CmsDraftSection,
   CmsDraftValue,
   CmsImagePlacementOption,
+  CmsPreviewViewport,
   CmsSectionKey,
 } from "./types";
 import CmsNavigationEditor from "./CmsNavigationEditor";
@@ -61,6 +63,14 @@ interface CmsEditorSectionProps {
   onAddNavigationItem: () => void;
   formatDate: (value: string) => string;
   formatFileSize: (bytes: number) => string;
+  previewViewport: CmsPreviewViewport;
+  previewRefreshKey: number;
+  previewWidthClass: string;
+  pagePath: string;
+  pageTitle: string;
+  onSelectViewport: (viewport: CmsPreviewViewport) => void;
+  onRefreshPreview: () => void;
+  onOpenFullPreview: () => void;
 }
 
 export default function CmsEditorSection({
@@ -99,10 +109,20 @@ export default function CmsEditorSection({
   onAddNavigationItem,
   formatDate,
   formatFileSize,
+  previewViewport,
+  previewRefreshKey,
+  previewWidthClass,
+  pagePath,
+  pageTitle,
+  onSelectViewport,
+  onRefreshPreview,
+  onOpenFullPreview,
 }: CmsEditorSectionProps) {
   const navigationSection = (cmsDraft.navigation ?? {}) as CmsDraftSection;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [visibleMediaCount, setVisibleMediaCount] = useState(24);
+  const [expandedImageFieldKey, setExpandedImageFieldKey] = useState<string>("");
+  const [mediaSearchQuery, setMediaSearchQuery] = useState("");
+  const [visibleFieldMediaCount, setVisibleFieldMediaCount] = useState(24);
   const hasImagePlacementOptions = imagePlacementOptions.length > 0;
 
   const selectedImagePlacement = useMemo(
@@ -110,15 +130,63 @@ export default function CmsEditorSection({
     [imagePlacementOptions, selectedImagePlacementKey],
   );
 
-  const visibleMediaItems = useMemo(
-    () => mediaItems.slice(0, visibleMediaCount),
-    [mediaItems, visibleMediaCount],
-  );
-  const remainingMediaCount = Math.max(0, mediaItems.length - visibleMediaItems.length);
-
   useEffect(() => {
-    setVisibleMediaCount(24);
-  }, [selectedCmsSlug]);
+    setExpandedImageFieldKey("");
+    setMediaSearchQuery("");
+    setVisibleFieldMediaCount(24);
+  }, [selectedCmsSectionKey, selectedCmsSlug]);
+
+  const currentSectionDraft = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
+
+  const imageFieldsInCurrentSection = useMemo(
+    () =>
+      cmsSelectedSection.fields.filter(
+        (field) => field.input === "text" && String(field.key).toLowerCase().includes("imageurl"),
+      ),
+    [cmsSelectedSection.fields],
+  );
+
+  const activePlacementForSection = useMemo(
+    () => imagePlacementOptions.find((option) => option.key === selectedImagePlacementKey) ?? null,
+    [imagePlacementOptions, selectedImagePlacementKey],
+  );
+
+  const activeInlineImageField = useMemo(() => {
+    if (!expandedImageFieldKey) {
+      return null;
+    }
+
+    return imageFieldsInCurrentSection.find((field) => String(field.key) === expandedImageFieldKey) ?? null;
+  }, [expandedImageFieldKey, imageFieldsInCurrentSection]);
+
+  const filteredMediaItems = useMemo(() => {
+    const query = mediaSearchQuery.trim().toLowerCase();
+    if (!query) {
+      return mediaItems;
+    }
+
+    return mediaItems.filter((media) => {
+      const filename = media.filename.toLowerCase();
+      const url = media.url.toLowerCase();
+      return filename.includes(query) || url.includes(query);
+    });
+  }, [mediaItems, mediaSearchQuery]);
+
+  const visibleFieldMediaItems = useMemo(
+    () => filteredMediaItems.slice(0, visibleFieldMediaCount),
+    [filteredMediaItems, visibleFieldMediaCount],
+  );
+  const remainingFieldMediaCount = Math.max(0, filteredMediaItems.length - visibleFieldMediaItems.length);
+
+  const activePlacementUrl = useMemo(() => {
+    if (!activePlacementForSection) {
+      return "";
+    }
+
+    const sectionValue = (cmsDraft[activePlacementForSection.sectionKey] ?? {}) as CmsDraftSection;
+    const fieldValue = sectionValue[activePlacementForSection.fieldKey];
+    return typeof fieldValue === "string" ? fieldValue : "";
+  }, [activePlacementForSection, cmsDraft]);
 
   const placementKeyForNextUpload = autoApplyUploadedMedia ? selectedImagePlacementKey : undefined;
 
@@ -219,138 +287,80 @@ export default function CmsEditorSection({
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className={surfacePanelClass}>
-          <div className="flex flex-col gap-4 border-b border-slate-200 pb-5">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_430px]">
+        <aside className={`${surfacePanelClass} order-1 h-fit lg:sticky lg:top-24 lg:order-2`}>
+          <div className="flex items-start justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
-              <h3 className="text-base font-semibold text-slate-900">Medienverwaltung</h3>
-              <p className="mt-1 text-sm text-slate-500">Bilder hochladen und URLs direkt in CMS-Felder übernehmen.</p>
+              <h3 className="text-base font-semibold text-slate-900">Vorschau im Bearbeitungsfluss</h3>
+              <p className="mt-1 text-sm text-slate-500">Sichtbar während der Bearbeitung, ohne Wechsel in einen anderen Bereich.</p>
             </div>
-
-            <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <label className={fieldLabelClass}>
-                  Ziel-Platzierung
-                  <select
-                    value={selectedImagePlacementKey}
-                    onChange={(event) => onSelectImagePlacementKey(event.target.value)}
-                    disabled={!hasImagePlacementOptions}
-                    className={fieldControlClass}
-                  >
-                    {hasImagePlacementOptions ? (
-                      imagePlacementOptions.map((option) => (
-                        <option key={option.key} value={option.key}>
-                          {option.label}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="">Keine Bildfelder verfügbar</option>
-                    )}
-                  </select>
-                </label>
-
-                <label className="mt-6 flex items-center gap-2 text-sm text-slate-700 sm:mt-7">
-                  <input
-                    type="checkbox"
-                    checked={autoApplyUploadedMedia}
-                    onChange={(event) => onSetAutoApplyUploadedMedia(event.target.checked)}
-                    disabled={!selectedImagePlacement}
-                  />
-                  Nach Upload direkt zuweisen
-                </label>
-              </div>
-
-              <div className="flex flex-wrap items-start justify-start gap-2 lg:justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    void openMediaPicker();
-                  }}
-                  disabled={uploadingMedia}
-                  className={secondaryButtonClass}
-                >
-                  {uploadingMedia ? "Upload läuft..." : "Bild hochladen"}
-                </button>
-              </div>
-            </div>
-
-            <div className={subtleSurfaceClass}>
-              <p className="text-xs text-slate-500">
-                {selectedImagePlacement
-                  ? `Aktives Ziel: ${selectedImagePlacement.label}`
-                  : "Wählen Sie ein Bildfeld als Ziel aus."}
-              </p>
-            </div>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              onChange={handleMediaInputChange}
-              disabled={uploadingMedia}
-              className="hidden"
-            />
+            <button type="button" onClick={onOpenFullPreview} className={secondaryButtonClass}>
+              <Eye size={16} /> Vollansicht
+            </button>
           </div>
 
-          {loadingMedia ? (
-            <div className="py-6 text-sm text-slate-500">Medien werden geladen...</div>
-          ) : mediaItems.length === 0 ? (
-            <div className="py-6 text-sm text-slate-500">Noch keine Bilder hochgeladen.</div>
-          ) : (
-            <>
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {visibleMediaItems.map((media) => (
-                  <div key={media.filename} className={subtleSurfaceClass}>
-                    <div className="aspect-[16/10] overflow-hidden rounded-xl border border-slate-200 bg-white">
-                      <img src={media.url} alt={media.filename} className="h-full w-full object-cover" loading="lazy" />
-                    </div>
-                    <p className="mt-3 truncate text-xs font-semibold text-slate-900">{media.filename}</p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {formatFileSize(media.size)} · {formatDate(media.uploadedAt)}
-                    </p>
-                    <input
-                      value={media.url}
-                      readOnly
-                      className={`${fieldControlClass} mt-2 px-2.5 py-2 text-xs`}
-                    />
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={() => onCopyMediaUrl(media.url)}
-                        className={secondaryButtonClass}
-                      >
-                        URL kopieren
-                      </button>
-                      {selectedImagePlacement && (
-                        <button
-                          type="button"
-                          onClick={() => onApplyMediaToPlacement(media.url)}
-                          className={secondaryButtonClass}
-                        >
-                          In Ziel übernehmen
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => onSelectViewport("desktop")}
+              className={previewViewport === "desktop" ? secondaryButtonClass : "rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"}
+            >
+              <Monitor size={14} /> Desktop
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectViewport("tablet")}
+              className={previewViewport === "tablet" ? secondaryButtonClass : "rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"}
+            >
+              <Tablet size={14} /> Tablet
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectViewport("mobile")}
+              className={previewViewport === "mobile" ? secondaryButtonClass : "rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700"}
+            >
+              <Smartphone size={14} /> Mobil
+            </button>
+          </div>
 
-              {remainingMediaCount > 0 && (
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={() => setVisibleMediaCount((current) => current + 24)}
-                    className={secondaryButtonClass}
-                  >
-                    Weitere Medien laden ({remainingMediaCount})
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {cmsSections.map((section) => (
+              <button
+                key={`preview-section-${section.key}`}
+                type="button"
+                onClick={() => onSelectSection(section.key)}
+                className={
+                  section.key === selectedCmsSectionKey
+                    ? "rounded-lg border border-slate-900 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white"
+                    : "rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700"
+                }
+              >
+                {section.label}
+              </button>
+            ))}
+          </div>
 
-        <form onSubmit={onSubmit} className={surfacePanelClass}>
+          <div className="mt-4 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+            <span>Aktive Sektion: {cmsSelectedSection.label}</span>
+            <button type="button" onClick={onRefreshPreview} className="font-semibold text-slate-700 hover:text-slate-900">
+              Neu laden
+            </button>
+          </div>
+
+          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <div className={`${previewWidthClass} max-w-full`}>
+              <iframe
+                key={`inline-preview-${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}
+                src={pagePath}
+                title={`Inline Vorschau ${pageTitle}`}
+                className="h-[52vh] min-h-[420px] w-full bg-white lg:h-[calc(100vh-260px)]"
+              />
+            </div>
+          </div>
+        </aside>
+
+        <div className="order-2 space-y-4 lg:order-1">
+          <form onSubmit={onSubmit} className={surfacePanelClass}>
           <div className="flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="text-base font-semibold text-slate-900">{cmsDefinitionTitle}</h3>
@@ -391,11 +401,12 @@ export default function CmsEditorSection({
               ) : (
                 <>
                   {cmsSelectedSection.fields.map((field) => {
-                    const sectionValue = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
+                    const sectionValue = currentSectionDraft;
                     const fieldKey = String(field.key);
                     const inputType = field.input;
                     const rawValue = sectionValue[fieldKey];
                     const textValue = typeof rawValue === "string" ? rawValue : rawValue == null ? "" : String(rawValue);
+                    const isImageField = inputType === "text" && fieldKey.toLowerCase().includes("imageurl");
                     const checkedValue =
                       typeof rawValue === "boolean"
                         ? rawValue
@@ -446,6 +457,48 @@ export default function CmsEditorSection({
                             className={fieldControlClass}
                           />
                         )}
+
+                        {isImageField ? (
+                          <div className="mt-2 space-y-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+                            {textValue ? (
+                              <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+                                <img src={textValue} alt={field.label} className="h-28 w-full object-cover" loading="lazy" />
+                              </div>
+                            ) : (
+                              <div className="rounded-lg border border-dashed border-slate-300 bg-white p-4 text-xs text-slate-500">
+                                Kein Bild zugewiesen.
+                              </div>
+                            )}
+
+                            <div className="flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                className={secondaryButtonClass}
+                                onClick={() => {
+                                  onSelectImagePlacementKey(`${cmsSelectedSection.key}.${fieldKey}`);
+                                  setMediaSearchQuery("");
+                                  setVisibleFieldMediaCount(24);
+                                  setExpandedImageFieldKey((current) =>
+                                    current === fieldKey ? "" : fieldKey,
+                                  );
+                                }}
+                              >
+                                <ImagePlus size={16} /> Bild aus Bibliothek
+                              </button>
+                              <button
+                                type="button"
+                                className={secondaryButtonClass}
+                                onClick={() => {
+                                  onSelectImagePlacementKey(`${cmsSelectedSection.key}.${fieldKey}`);
+                                  setExpandedImageFieldKey(fieldKey);
+                                  void openMediaPicker();
+                                }}
+                              >
+                                Direkt hochladen
+                              </button>
+                            </div>
+                          </div>
+                        ) : null}
                       </label>
                     );
                   })}
@@ -462,7 +515,105 @@ export default function CmsEditorSection({
               {savingCms ? "Speichert..." : "Speichern"}
             </button>
           </div>
-        </form>
+          </form>
+
+          <div className={surfacePanelClass}>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900">Feldnahe Medienzuweisung</h3>
+                <p className="text-xs text-slate-500">
+                  {activeInlineImageField
+                    ? `${activeInlineImageField.label} aktiv`
+                    : "Wähle bei einem Bildfeld \"Bild aus Bibliothek\"."}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={!activeInlineImageField || uploadingMedia}
+                  onClick={() => {
+                    if (!activeInlineImageField) {
+                      return;
+                    }
+                    onSelectImagePlacementKey(`${cmsSelectedSection.key}.${String(activeInlineImageField.key)}`);
+                    void openMediaPicker();
+                  }}
+                  className={secondaryButtonClass}
+                >
+                  {uploadingMedia ? "Upload läuft..." : "Bild hochladen"}
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-lg border border-slate-200 bg-white px-3 py-2">
+              <label className="flex items-center gap-2 text-xs text-slate-500">
+                <Search size={14} />
+                <input
+                  value={mediaSearchQuery}
+                  onChange={(event) => {
+                    setMediaSearchQuery(event.target.value);
+                    setVisibleFieldMediaCount(24);
+                  }}
+                  placeholder="Medien suchen (Dateiname oder URL)"
+                  className="w-full border-0 bg-transparent p-0 text-sm text-slate-900 outline-none"
+                />
+              </label>
+            </div>
+
+            {!activeInlineImageField ? (
+              <p className="mt-4 text-sm text-slate-500">Noch kein Bildfeld ausgewählt.</p>
+            ) : loadingMedia ? (
+              <p className="mt-4 text-sm text-slate-500">Medien werden geladen...</p>
+            ) : filteredMediaItems.length === 0 ? (
+              <p className="mt-4 text-sm text-slate-500">Keine Medien gefunden.</p>
+            ) : (
+              <>
+                <div className="mt-4 grid max-h-[420px] gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+                  {visibleFieldMediaItems.map((media) => (
+                    <button
+                      key={`field-media-${media.filename}`}
+                      type="button"
+                      onClick={() => {
+                        const targetFieldKey = String(activeInlineImageField.key);
+                        onUpdateCmsField(cmsSelectedSection.key, targetFieldKey, media.url);
+                        onSelectImagePlacementKey(`${cmsSelectedSection.key}.${targetFieldKey}`);
+                        onCopyMediaUrl(media.url);
+                      }}
+                      className="overflow-hidden rounded-lg border border-slate-200 bg-white text-left transition hover:border-slate-400"
+                    >
+                      <img src={media.url} alt={media.filename} className="h-24 w-full object-cover" loading="lazy" />
+                      <div className="px-2 py-1.5">
+                        <p className="truncate text-xs font-medium text-slate-700">{media.filename}</p>
+                        <p className="text-[11px] text-slate-500">{formatFileSize(media.size)}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {remainingFieldMediaCount > 0 && (
+                  <div className="mt-3 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setVisibleFieldMediaCount((current) => current + 24)}
+                      className={secondaryButtonClass}
+                    >
+                      Weitere Medien laden ({remainingFieldMediaCount})
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleMediaInputChange}
+              disabled={uploadingMedia}
+              className="hidden"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1621,6 +1621,14 @@ export default function Admin() {
             onAddNavigationItem={addNavigationItem}
             formatDate={formatDate}
             formatFileSize={formatFileSize}
+            previewViewport={previewViewport}
+            previewRefreshKey={previewRefreshKey}
+            previewWidthClass={previewWidthClass}
+            pagePath={cmsDefinition.path}
+            pageTitle={cmsDefinition.title}
+            onSelectViewport={setPreviewViewport}
+            onRefreshPreview={() => setPreviewRefreshKey((current) => current + 1)}
+            onOpenFullPreview={() => setLocation("/admin/preview")}
           />
         )}
 
