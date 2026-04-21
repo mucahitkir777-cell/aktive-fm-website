@@ -120,9 +120,10 @@ export default function CmsEditorSection({
 }: CmsEditorSectionProps) {
   const navigationSection = (cmsDraft.navigation ?? {}) as CmsDraftSection;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const mediaPanelRef = useRef<HTMLDivElement | null>(null);
   const [expandedImageFieldKey, setExpandedImageFieldKey] = useState<string>("");
   const [mediaSearchQuery, setMediaSearchQuery] = useState("");
-  const [visibleFieldMediaCount, setVisibleFieldMediaCount] = useState(24);
+  const [visibleFieldMediaCount, setVisibleFieldMediaCount] = useState(8);
   const hasImagePlacementOptions = imagePlacementOptions.length > 0;
 
   const selectedImagePlacement = useMemo(
@@ -133,8 +134,20 @@ export default function CmsEditorSection({
   useEffect(() => {
     setExpandedImageFieldKey("");
     setMediaSearchQuery("");
-    setVisibleFieldMediaCount(24);
+    setVisibleFieldMediaCount(8);
   }, [selectedCmsSectionKey, selectedCmsSlug]);
+
+  const openInlineMediaLibrary = (fieldKey: string) => {
+    onSelectImagePlacementKey(`${cmsSelectedSection.key}.${fieldKey}`);
+    setMediaSearchQuery("");
+    setVisibleFieldMediaCount(8);
+    setExpandedImageFieldKey((current) => (current === fieldKey ? "" : fieldKey));
+
+    // Ensure the media panel is brought into view immediately after clicking a field action.
+    window.requestAnimationFrame(() => {
+      mediaPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  };
 
   const currentSectionDraft = (cmsDraft[cmsSelectedSection.key] ?? {}) as CmsDraftSection;
 
@@ -474,14 +487,7 @@ export default function CmsEditorSection({
                               <button
                                 type="button"
                                 className={secondaryButtonClass}
-                                onClick={() => {
-                                  onSelectImagePlacementKey(`${cmsSelectedSection.key}.${fieldKey}`);
-                                  setMediaSearchQuery("");
-                                  setVisibleFieldMediaCount(24);
-                                  setExpandedImageFieldKey((current) =>
-                                    current === fieldKey ? "" : fieldKey,
-                                  );
-                                }}
+                                onClick={() => openInlineMediaLibrary(fieldKey)}
                               >
                                 <ImagePlus size={16} /> Bild aus Bibliothek
                               </button>
@@ -517,7 +523,7 @@ export default function CmsEditorSection({
           </div>
           </form>
 
-          <div className={surfacePanelClass}>
+          <div ref={mediaPanelRef} className={surfacePanelClass}>
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
               <div>
                 <h3 className="text-sm font-semibold text-slate-900">Feldnahe Medienzuweisung</h3>
@@ -552,7 +558,7 @@ export default function CmsEditorSection({
                   value={mediaSearchQuery}
                   onChange={(event) => {
                     setMediaSearchQuery(event.target.value);
-                    setVisibleFieldMediaCount(24);
+                    setVisibleFieldMediaCount(8);
                   }}
                   placeholder="Medien suchen (Dateiname oder URL)"
                   className="w-full border-0 bg-transparent p-0 text-sm text-slate-900 outline-none"
@@ -577,7 +583,6 @@ export default function CmsEditorSection({
                         const targetFieldKey = String(activeInlineImageField.key);
                         onUpdateCmsField(cmsSelectedSection.key, targetFieldKey, media.url);
                         onSelectImagePlacementKey(`${cmsSelectedSection.key}.${targetFieldKey}`);
-                        onCopyMediaUrl(media.url);
                       }}
                       className="overflow-hidden rounded-lg border border-slate-200 bg-white text-left transition hover:border-slate-400"
                     >
@@ -594,7 +599,7 @@ export default function CmsEditorSection({
                   <div className="mt-3 flex justify-center">
                     <button
                       type="button"
-                      onClick={() => setVisibleFieldMediaCount((current) => current + 24)}
+                      onClick={() => setVisibleFieldMediaCount((current) => current + 16)}
                       className={secondaryButtonClass}
                     >
                       Weitere Medien laden ({remainingFieldMediaCount})

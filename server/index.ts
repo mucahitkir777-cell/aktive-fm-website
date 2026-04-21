@@ -33,7 +33,7 @@ import { initializeDatabase } from "./db";
 import { processLeadSubmission } from "./leads/adapters";
 import { runLeadReminderJob } from "./leads/reminders";
 import { getLeadById, listLeads, updateLead } from "./leads/repository";
-import { ensureUploadsDirectory, listUploadedImages, saveUploadedImage } from "./media/storage";
+import { ensureUploadsDirectory, getUploadsDirectory, listUploadedImages, saveUploadedImage } from "./media/storage";
 import { hashPassword, verifyPassword } from "./users/password";
 import {
   createUser,
@@ -640,7 +640,7 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
-  app.use("/uploads", express.static(path.resolve(projectRoot, "uploads")));
+  app.use("/uploads", express.static(getUploadsDirectory(projectRoot), { fallthrough: false }));
   app.use(express.static(staticPath));
 
   app.get("*", (_req, res) => {
