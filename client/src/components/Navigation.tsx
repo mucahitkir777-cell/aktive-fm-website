@@ -6,7 +6,7 @@
  * - Mobile hamburger menu
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, Phone, X } from "lucide-react";
 import { trackCtaClick, trackPhoneClick } from "@/lib/analytics";
@@ -22,7 +22,11 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [cmsContent, setCmsContent] = useState<CmsGlobalContent>(() => getDefaultCmsPageContent("global"));
+  const [isPreviewResizeMode, setIsPreviewResizeMode] = useState(false);
+  const [logoHeightPx, setLogoHeightPx] = useState<number | null>(null);
   const [location] = useLocation();
+  const logoRef = useRef<HTMLImageElement | null>(null);
+  const dragStateRef = useRef<{ startY: number; startHeight: number } | null>(null);
   const isHome = location === "/";
   const resolvedCmsContent = normalizeCmsPageContent("global", cmsContent);
   const navLinks = useMemo(() => {
@@ -63,6 +67,11 @@ export default function Navigation() {
   }, [location]);
 
   useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    setIsPreviewResizeMode(query.get("previewLogoResize") === "1");
+  }, [location]);
+
+  useEffect(() => {
     let active = true;
 
     void fetchPublicCmsPage("global")
@@ -95,27 +104,77 @@ export default function Navigation() {
   const ctaHref = resolvedCmsContent.navigation.ctaHref;
   const ctaIsExternal = isExternalHref(ctaHref);
 
+  const stopResizeDrag = () => {
+    dragStateRef.current = null;
+    window.removeEventListener("pointermove", handleResizeDrag);
+    window.removeEventListener("pointerup", stopResizeDrag);
+  };
+
+  function handleResizeDrag(event: PointerEvent) {
+    if (!dragStateRef.current) {
+      return;
+    }
+
+    const deltaY = event.clientY - dragStateRef.current.startY;
+    const nextHeight = Math.max(44, Math.min(140, Math.round(dragStateRef.current.startHeight + deltaY)));
+    setLogoHeightPx(nextHeight);
+  }
+
+  const handleResizeDragStart = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!isPreviewResizeMode) {
+      return;
+    }
+
+    event.preventDefault();
+    const currentHeight = logoRef.current?.getBoundingClientRect().height ?? 72;
+    dragStateRef.current = {
+      startY: event.clientY,
+      startHeight: currentHeight,
+    };
+
+    window.addEventListener("pointermove", handleResizeDrag);
+    window.addEventListener("pointerup", stopResizeDrag);
+  };
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener("pointermove", handleResizeDrag);
+      window.removeEventListener("pointerup", stopResizeDrag);
+    };
+  }, []);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isTopState
-          ? "bg-white/95 backdrop-blur-sm border-b pc-border"
-          : "bg-white/98 backdrop-blur-sm shadow-[0_10px_35px_-24px_rgba(15,33,55,0.65)] border-b pc-border"
+          ? "bg-white border-b border-slate-200 shadow-[0_8px_24px_-24px_rgba(15,33,55,0.45)]"
+          : "bg-white shadow-[0_12px_28px_-22px_rgba(15,33,55,0.65)] border-b border-slate-200"
       }`}
     >
       <div className="container">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/">
-            <div className="flex items-center group">
+            <div className="relative flex items-center group overflow-visible">
               <img
+                ref={logoRef}
                 src={companyConfig.brand.logoUrl}
                 alt={`${companyConfig.brand.name} Logo`}
-                className="h-10 w-auto sm:h-12 lg:h-14"
+                className="h-[56px] w-auto sm:h-[64px] lg:h-[72px]"
                 loading="eager"
                 decoding="async"
-                width={200}
-                height={56}
+                width={700}
+                height={350}
+                style={logoHeightPx ? { height: `${logoHeightPx}px` } : undefined}
               />
+              {isPreviewResizeMode ? (
+                <button
+                  type="button"
+                  onPointerDown={handleResizeDragStart}
+                  className="absolute -right-2 -bottom-2 h-4 w-4 rounded-full border border-slate-400 bg-white shadow"
+                  title="Logo-Größe ziehen"
+                  aria-label="Logo-Größe ziehen"
+                />
+              ) : null}
             </div>
           </Link>
 

@@ -7,7 +7,7 @@
 /*
  * Aktive Facility Management Design System
  * Philosophy: Helle Business-Optik
- * Primary: #1F4E6B | Secondary: #245A86 | Accent: #3FA7A3
+ * Primary: #40A8F5 | Secondary: #62CFF7 | Accent: #7CDFA7
  * Background: Soft Gray #F5F7FA | Text: Ink #0F2137
  * Fonts: Inter (Headlines + Body)
  */
@@ -52,10 +52,10 @@
 }
 
 :root {
-  --primary-dark: #1F4E6B;
-  --primary-mid:  #245A86;
-  --accent:       #3FA7A3;
-  --accent-light: #52C5BF;
+  --primary-dark: #40A8F5;
+  --primary-mid:  #62CFF7;
+  --accent:       #7CDFA7;
+  --accent-light: #6FEDAC;
   --border-soft:  #D7E3EA;
   --white:        #FFFFFF;
   --bg-soft:      #F5F7F9;
@@ -75,9 +75,10 @@
   --color-text-muted: var(--text-muted);
   --color-border: var(--border-soft);
   --color-accent: var(--accent);
-  --color-highlight: #5FE3D0;
+  --color-highlight: #6FEDAC;
   --color-success: var(--primary-mid);
   --color-placeholder: #9CA3AF;
+  --brand-gradient: linear-gradient(90deg, #40A8F5 0%, #62CFF7 30%, #7CDFA7 60%, #6FEDAC 100%);
 
   /* Typography Tokens */
   --font-family-heading: "Inter", sans-serif;
@@ -126,7 +127,7 @@
   --ring: var(--color-primary);
   --chart-1: var(--primary-dark);
   --chart-2: var(--primary-mid);
-  --chart-3: #4E88A2;
+  --chart-3: #62CFF7;
   --chart-4: var(--color-accent);
   --chart-5: var(--color-success);
   --sidebar: var(--color-bg);
@@ -228,13 +229,13 @@
 
   .pc-btn-primary {
     @apply inline-flex items-center justify-center gap-2 text-white font-semibold px-6 py-3.5 transition-colors duration-200;
-    background-color: var(--color-primary);
+    background: var(--brand-gradient);
     border-radius: var(--pc-radius-md);
     box-shadow: var(--pc-shadow-soft);
     font-family: var(--font-family-body);
   }
   .pc-btn-primary:hover {
-    background-color: var(--color-primary-hover);
+    filter: brightness(0.98);
     box-shadow: var(--pc-shadow-soft-hover);
   }
 
@@ -373,7 +374,7 @@
   .pc-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(31, 78, 107, 0.14);
+    box-shadow: 0 0 0 3px rgba(64, 168, 245, 0.18);
   }
 
   .pc-checkbox {
@@ -393,6 +394,7 @@
   .pc-bg-section { background-color: var(--color-bg-section); }
   .pc-bg-soft { background-color: var(--color-bg-soft); }
   .pc-bg-brand { background-color: var(--color-primary); }
+  .pc-bg-brand-gradient { background: var(--brand-gradient); }
   .pc-bg-accent { background-color: var(--color-accent); }
   .pc-bg-success { background-color: var(--color-success); }
   .pc-border { border-color: var(--color-border); }
@@ -400,6 +402,12 @@
   .pc-text-secondary { color: var(--color-text-secondary); }
   .pc-text-muted { color: var(--color-text-muted); }
   .pc-text-brand { color: var(--color-primary); }
+  .pc-text-brand-gradient {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
   .pc-text-accent { color: var(--color-accent); }
 
   /* Scroll animation utility */

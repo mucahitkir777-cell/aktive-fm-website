@@ -97,6 +97,10 @@ export default function PreviewSection({
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [activeField, setActiveField] = useState<PreviewEditableField | null>(null);
   const [activeValue, setActiveValue] = useState("");
+  const previewPagePath = useMemo(() => {
+    const separator = pagePath.includes("?") ? "&" : "?";
+    return `${pagePath}${separator}previewLogoResize=1`;
+  }, [pagePath]);
 
   const previewEditableFields = useMemo<PreviewEditableField[]>(() => {
     return cmsSections.flatMap((section) => {
@@ -384,7 +388,7 @@ export default function PreviewSection({
           <iframe
             ref={iframeRef}
             key={`${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}
-            src={pagePath}
+            src={previewPagePath}
             title={`Vorschau ${pageTitle}`}
             className="h-[780px] w-full bg-white"
             onLoad={handlePreviewFrameLoaded}

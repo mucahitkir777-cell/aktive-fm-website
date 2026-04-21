@@ -1,4 +1,6 @@
-﻿export interface CompanyRegion {
+﻿import { AFM_BRAND } from "@/styles/brand";
+
+export interface CompanyRegion {
   id: string;
   slug: string;
   label: string;
@@ -35,7 +37,7 @@ export const companyConfig = {
     legalName: "Aktive Facility Management GmbH",
     initials: "AFM",
     descriptor: "Gebäudereinigung",
-    logoUrl: "/aktive-ak-logo.svg",
+    logoUrl: AFM_BRAND.logoPath,
     siteUrl: "https://aktive-fm.de",
     footerText:
       "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",

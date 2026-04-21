@@ -364,7 +364,7 @@ export default function CmsEditorSection({
             <div className={`${previewWidthClass} max-w-full`}>
               <iframe
                 key={`inline-preview-${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}
-                src={pagePath}
+                src={`${pagePath}${pagePath.includes("?") ? "&" : "?"}previewLogoResize=1`}
                 title={`Inline Vorschau ${pageTitle}`}
                 className="h-[52vh] min-h-[420px] w-full bg-white lg:h-[calc(100vh-260px)]"
               />

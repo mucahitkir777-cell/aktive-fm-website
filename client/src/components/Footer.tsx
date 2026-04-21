@@ -77,11 +77,11 @@ export default function Footer() {
               <img
                 src={companyConfig.brand.logoUrl}
                 alt={`${companyConfig.brand.name} Logo`}
-                className="h-16 w-auto sm:h-20"
+                className="h-28 w-auto sm:h-32"
                 loading="lazy"
                 decoding="async"
-                width={200}
-                height={80}
+                width={560}
+                height={280}
               />
             </div>
             <p className="pc-text-secondary text-sm leading-relaxed mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
