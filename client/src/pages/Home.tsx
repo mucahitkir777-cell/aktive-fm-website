@@ -50,7 +50,7 @@ const services = [
     icon: Building2,
     title: "Büroreinigung",
     desc: "Saubere Arbeitsplätze, Besprechungsräume und Sanitärbereiche im festen Intervall.",
-    href: "/leistungen",
+    href: "/buero-reinigung-frankfurt",
   },
   {
     icon: Sparkles,
@@ -62,7 +62,7 @@ const services = [
     icon: Wind,
     title: "Glasreinigung",
     desc: "Fenster, Glasflächen und Eingangsbereiche streifenfrei und sauber gepflegt.",
-    href: "/leistungen",
+    href: "/glasreinigung-frankfurt",
   },
   {
     icon: Layers,
@@ -82,6 +82,18 @@ const services = [
     desc: "Spezielle Leistungen für besondere Anforderungen, Materialien oder Situationen.",
     href: "/leistungen",
   },
+];
+
+const primaryRegionIds = ["neu_isenburg", "frankfurt_am_main", "hanau", "kreis_offenbach"] as const;
+
+const prioritizedRegionalLinks = [
+  { label: "Gebäudereinigung Frankfurt", href: "/gebaeudereinigung-frankfurt" },
+  { label: "Büroreinigung Frankfurt", href: "/buero-reinigung-frankfurt" },
+  { label: "Glasreinigung Frankfurt", href: "/glasreinigung-frankfurt" },
+  { label: "Praxisreinigung Frankfurt", href: "/praxisreinigung-frankfurt" },
+  { label: "Bauendreinigung Frankfurt", href: "/bauendreinigung-frankfurt" },
+  { label: "Gebäudereinigung Neu-Isenburg", href: "/gebaeudereinigung-neu-isenburg" },
+  { label: "Gebäudereinigung Kreis Offenbach", href: "/gebaeudereinigung-kreis-offenbach" },
 ];
 
 const usps = [
@@ -361,6 +373,9 @@ export default function Home() {
       quote: trustSectionQuotes[4],
     },
   ];
+  const primaryRegions = leadRegions.filter((region) => primaryRegionIds.includes(region.id as (typeof primaryRegionIds)[number]));
+  const secondaryRegions = leadRegions.filter((region) => !primaryRegionIds.includes(region.id as (typeof primaryRegionIds)[number]));
+  const secondaryRegionLabels = secondaryRegions.map((region) => region.label).join(", ");
 
   const handleHomeCtaClick = (ctaId: string, ctaText: string, ctaLocation: string, destinationUrl: string, serviceType?: string) => {
     trackCtaClick({
@@ -486,7 +501,7 @@ export default function Home() {
               {resolvedCmsContent.hero.subtitle}
             </p>
             <p className="text-sm pc-text-secondary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-              Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+              Kostenlos & unverbindlich. Rückmeldung innerhalb von {companyConfig.metrics.responseTime}.
             </p>
 
             <div className="mb-10 flex min-h-[192px] flex-col gap-3 sm:min-h-[56px] sm:flex-row">
@@ -647,10 +662,35 @@ export default function Home() {
             <p className="pc-section-subtitle">
               {companyConfig.regionMessaging.coverageDescription} Mit planbaren Teams und kurzen Abstimmungswegen.
             </p>
+            <p className="pc-text-secondary text-sm mt-3" style={{ fontFamily: "Inter, sans-serif" }}>
+              Schwerpunkt auf Gebäudereinigung Frankfurt sowie Einsätzen in Neu-Isenburg und im Kreis Offenbach.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {leadRegions.map((region, i) => (
+          <div className="mb-8 rounded-2xl border pc-border pc-bg-soft p-5 lg:p-6 pc-fade-up">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h3 className="text-lg font-bold pc-text-primary mb-1" style={{ fontFamily: "Inter, sans-serif" }}>
+                  Region wählen, Leistung wählen, Anfrage senden
+                </h3>
+                <p className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                  Starten Sie direkt mit Ihrer Anfrage. Wir stimmen Einsatzort und Leistung passend auf Ihr Objekt ab.
+                </p>
+              </div>
+              <Link href="/kontakt">
+                <span
+                  onClick={() => handleHomeCtaClick("home_regions_request", "Anfrage starten", "home_regions", "/kontakt")}
+                  className="pc-btn-primary"
+                >
+                  Anfrage starten
+                  <ArrowRight size={16} />
+                </span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+            {primaryRegions.map((region, i) => (
               <Link key={region.id} href={region.route}>
                 <span
                   onClick={() => handleRegionClick(region.label, region.route, "home_regions")}
@@ -673,6 +713,30 @@ export default function Home() {
               </Link>
             ))}
           </div>
+
+          <details className="mt-6 rounded-xl border pc-border bg-white p-4 pc-fade-up">
+            <summary className="cursor-pointer list-none flex items-center justify-between gap-3 pc-text-primary font-semibold" style={{ fontFamily: "Inter, sans-serif" }}>
+              Weitere Regionen anzeigen
+              <ChevronRight size={14} className="shrink-0" />
+            </summary>
+            <p className="mt-3 pc-text-secondary text-sm leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+              Weitere Einsatzorte: {secondaryRegionLabels}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {secondaryRegions.map((region) => (
+                <Link key={region.id} href={region.route}>
+                  <span
+                    onClick={() => handleRegionClick(region.label, region.route, "home_regions_more")}
+                    className="inline-flex items-center gap-1 rounded-md border pc-border px-3 py-1.5 text-xs pc-text-secondary hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    {region.label}
+                    <ChevronRight size={12} />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </details>
         </div>
       </section>
 
@@ -684,6 +748,9 @@ export default function Home() {
             <h2 className="pc-section-title">{resolvedCmsContent.services.title}</h2>
             <p className="pc-section-subtitle">
               {resolvedCmsContent.services.subtitle}
+            </p>
+            <p className="pc-text-secondary text-sm mt-3" style={{ fontFamily: "Inter, sans-serif" }}>
+              Besonders gefragt: Büroreinigung Frankfurt, Glasreinigung Frankfurt, Praxisreinigung Frankfurt und Bauendreinigung Frankfurt.
             </p>
           </div>
 
@@ -729,6 +796,31 @@ export default function Home() {
                 <ArrowRight size={16} />
               </span>
             </Link>
+          </div>
+
+          <div className="mt-10 pc-fade-up">
+            <div className="rounded-2xl border pc-border bg-white p-6 lg:p-7 shadow-sm">
+              <h3 className="text-xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
+                Beliebte Anfragen im Rhein-Main-Gebiet
+              </h3>
+              <p className="pc-text-secondary text-sm mb-5" style={{ fontFamily: "Inter, sans-serif" }}>
+                Direkte Einstiege zu den wichtigsten regionalen Zielseiten rund um Frankfurt, Neu-Isenburg und Kreis Offenbach.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {prioritizedRegionalLinks.map((item) => (
+                  <Link key={item.href} href={item.href}>
+                    <span
+                      onClick={() => handleHomeCtaClick("home_priority_regional", item.label, "home_priority_regional_links", item.href, item.label)}
+                      className="flex items-center justify-between gap-3 rounded-lg border pc-border px-4 py-3 pc-text-primary hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors duration-200"
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    >
+                      <span className="text-sm font-medium">{item.label}</span>
+                      <ChevronRight size={14} className="shrink-0" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

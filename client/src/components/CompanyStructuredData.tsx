@@ -56,9 +56,15 @@ export default function CompanyStructuredData() {
 
     const businessName = normalizeValue(companyConfig.brand.legalName) ?? normalizeValue(companyConfig.brand.name);
     const businessUrl = normalizeValue(companyConfig.brand.siteUrl);
-    const businessId = businessUrl ? `${businessUrl}#organization` : undefined;
+    const businessId = businessUrl ? `${businessUrl}#localbusiness` : undefined;
+    const regionalFocus = getUniqueValues([
+      normalizeValue(companyConfig.regionMessaging.primaryLabel),
+      normalizeValue(companyConfig.regionMessaging.coverageLabel),
+    ]).join(", ");
     const businessDescription = normalizeValue(
-      `Professionelle ${companyConfig.brand.descriptor} für Unternehmen in ${companyConfig.regionMessaging.primaryLabel}`,
+      `${companyConfig.brand.name} bietet professionelle ${companyConfig.brand.descriptor} für Unternehmen im Rhein-Main-Gebiet${
+        regionalFocus ? ` mit Schwerpunkt ${regionalFocus}` : ""
+      }.`,
     );
 
     const phoneInternational = normalizeValue(companyConfig.contact.phoneInternational);

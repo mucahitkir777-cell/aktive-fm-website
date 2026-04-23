@@ -13,7 +13,7 @@ import RegionalServiceStructuredData from "@/components/RegionalServiceStructure
 import { getLeadRegionBySlug, getLeadServiceById, leadRegions, leadServices, type LeadRegion, type LeadService } from "@/data/leadTargets";
 import { trackCtaClick, trackLocationInterest, trackPhoneClick, trackServiceInterest, trackWhatsAppClick } from "@/lib/analytics";
 import { applyPageSeo } from "@/lib/seo";
-import { companyConfig } from "@/config/company";
+import { companyConfig, regionalServiceContentByServiceId } from "@/config/company";
 
 type RegionalServicePageRoute = (typeof companyConfig.regionalServiceRoutes)[number];
 
@@ -113,6 +113,23 @@ export default function Region() {
     `${region.description} Wir planen Reinigung verlässlich nach Objekt, Intervall und gewünschter Leistung.`;
   const serviceHeadline = selectedService ? `${selectedService.label} und passende Zusatzleistungen` : `Leistungen für ${region.shortLabel}`;
   const otherRegions = leadRegions.filter((item) => item.id !== region.id);
+  const selectedServiceContent = selectedService ? regionalServiceContentByServiceId[selectedService.id] : undefined;
+  const nearbyRegionIds = leadRegions
+    .filter(
+      (item) =>
+        item.id !== region.id &&
+        (region.nearbyAreas.includes(item.label) || region.nearbyAreas.includes(item.shortLabel)),
+    )
+    .map((item) => item.id);
+  const currentRegionServiceRoutes = companyConfig.regionalServiceRoutes.filter((route) => route.regionId === region.id);
+  const relatedRegionalServiceRoutes = currentRegionServiceRoutes
+    .filter((route) => route.id !== serviceRoute?.id && route.route !== location)
+    .slice(0, serviceRoute ? 4 : 6);
+  const hasRelatedRegionalServiceRoutes = relatedRegionalServiceRoutes.length > 0;
+  const prioritizedRegions = [
+    ...leadRegions.filter((item) => nearbyRegionIds.includes(item.id)),
+    ...otherRegions.filter((item) => !nearbyRegionIds.includes(item.id)),
+  ].slice(0, 8);
 
   const getRegionalServiceRoute = (serviceId: string) =>
     companyConfig.regionalServiceRoutes.find((route) => route.regionId === region.id && route.serviceId === serviceId);
@@ -257,6 +274,53 @@ export default function Region() {
                 </div>
               )}
 
+              {selectedService && selectedServiceContent && (
+                <div className="grid grid-cols-1 gap-5">
+                  <div className="bg-white rounded-lg p-6 border pc-border">
+                    <h2 className="text-2xl font-bold pc-text-primary mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {selectedService.label} in {region.label}: klar strukturiert geplant
+                    </h2>
+                    <p className="pc-text-secondary leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
+                      {selectedServiceContent.summary} Für {region.shortLabel} stimmen wir Leistung, Intervall und Einsatzfenster passend auf Objekt, Nutzung und gewünschte Abläufe ab.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="bg-white rounded-lg p-6 border pc-border">
+                      <h3 className="text-xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {selectedServiceContent.focusTitle}
+                      </h3>
+                      <div className="space-y-3">
+                        {selectedServiceContent.focusPoints.map((item) => (
+                          <div key={item} className="flex items-start gap-3">
+                            <CheckCircle size={18} className="pc-text-brand shrink-0 mt-0.5" />
+                            <span className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-lg p-6 border pc-border">
+                      <h3 className="text-xl font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
+                        {selectedServiceContent.suitableTitle}
+                      </h3>
+                      <div className="space-y-3">
+                        {selectedServiceContent.suitableFor.map((item) => (
+                          <div key={item} className="flex items-start gap-3">
+                            <CheckCircle size={18} className="pc-text-brand shrink-0 mt-0.5" />
+                            <span className="pc-text-secondary text-sm" style={{ fontFamily: "Inter, sans-serif" }}>
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {leadServices.map((service) => {
                   const regionalServiceRoute = getRegionalServiceRoute(service.id);
@@ -310,7 +374,7 @@ export default function Region() {
                     Weitere Regionen
                   </h3>
                   <div className="space-y-3">
-                    {otherRegions.map((targetRegion) => (
+                    {prioritizedRegions.map((targetRegion) => (
                       <Link key={targetRegion.id} href={targetRegion.route}>
                         <span
                           onClick={() => handleRegionLinkClick(targetRegion)}
@@ -327,31 +391,34 @@ export default function Region() {
 
                 <div className="bg-white rounded-lg p-6 border pc-border">
                   <h3 className="font-bold pc-text-primary mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Leistungen verbinden
+                    {selectedService ? "Ähnliche regionale Einstiege" : "Leistungen verbinden"}
                   </h3>
                   <div className="space-y-3">
-                    <Link href="/leistungen">
-                      <span
-                        onClick={() => handleCtaClick("region_link_services", "Leistungen", "region_internal_links", "/leistungen")}
-                        className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
-                        style={{ fontFamily: "Inter, sans-serif" }}
-                      >
-                        Alle Leistungen
-                        <ArrowRight size={14} />
-                      </span>
-                    </Link>
-                    {companyConfig.regionalServiceRoutes.map((route) => (
-                      <Link key={route.id} href={route.route}>
+                    {hasRelatedRegionalServiceRoutes ? (
+                      relatedRegionalServiceRoutes.map((route) => (
+                        <Link key={route.id} href={route.route}>
+                          <span
+                            onClick={() => handleCtaClick(`region_link_${route.id}`, route.h1, "region_internal_links", route.route)}
+                            className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
+                            style={{ fontFamily: "Inter, sans-serif" }}
+                          >
+                            {route.h1}
+                            <ArrowRight size={14} />
+                          </span>
+                        </Link>
+                      ))
+                    ) : (
+                      <Link href="/leistungen">
                         <span
-                          onClick={() => handleCtaClick(`region_link_${route.id}`, route.h1, "region_internal_links", route.route)}
+                          onClick={() => handleCtaClick("region_link_services", "Leistungen", "region_internal_links", "/leistungen")}
                           className="flex items-center justify-between gap-3 pc-text-brand hover:text-[var(--color-primary-hover)] text-sm font-semibold"
                           style={{ fontFamily: "Inter, sans-serif" }}
                         >
-                          {route.h1}
+                          Alle Leistungen
                           <ArrowRight size={14} />
                         </span>
                       </Link>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
