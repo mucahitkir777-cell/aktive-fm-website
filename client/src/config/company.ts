@@ -38,7 +38,7 @@ export const companyConfig = {
     initials: "AFM",
     descriptor: "Gebäudereinigung",
     logoUrl: AFM_BRAND.logoPath,
-    siteUrl: "https://aktive-fm.de",
+    siteUrl: "https://www.aktive-fm.de",
     footerText:
       "Ihr zuverlässiger Partner für professionelle Gebäudereinigung in Neu-Isenburg und Umgebung. Qualität, die man sieht.",
     membershipLabel: "BIV Bundesinnungsverband",
@@ -601,6 +601,42 @@ export const companyConfig = {
         "Hygienische Praxisreinigung in Hanau für Behandlungsräume, Empfang und Sanitärbereiche in medizinischen Einrichtungen.",
     },
     {
+      id: "sonderreinigung_hanau",
+      route: "/sonderreinigung-hanau",
+      regionId: "hanau",
+      serviceId: "sonderreinigung",
+      h1: "Sonderreinigung in Hanau",
+      seoTitle: "Sonderreinigung Hanau | Aktive Facility Management",
+      seoDescription:
+        "Sonderreinigung in Hanau für besondere Anforderungen, sensible Bereiche und gewerbliche Objekte. Individuell geplant und gründlich umgesetzt.",
+      intro:
+        "Sonderreinigung in Hanau für spezielle Reinigungsaufgaben in Gewerbe, Praxis und Verwaltung mit klarer Leistungsabstimmung.",
+    },
+    {
+      id: "kanzleireinigung_hanau",
+      route: "/kanzleireinigung-hanau",
+      regionId: "hanau",
+      serviceId: "kanzleireinigung",
+      h1: "Kanzleireinigung in Hanau",
+      seoTitle: "Kanzleireinigung Hanau | Aktive Facility Management",
+      seoDescription:
+        "Kanzleireinigung in Hanau für Arbeitsplätze, Besprechungsräume und Empfangsbereiche. Diskret, zuverlässig und planbar umgesetzt.",
+      intro:
+        "Kanzleireinigung in Hanau für gepflegte Arbeitsumgebungen mit diskreter Durchführung und klarer Terminplanung.",
+    },
+    {
+      id: "bauendreinigung_hanau",
+      route: "/bauendreinigung-hanau",
+      regionId: "hanau",
+      serviceId: "bauendreinigung",
+      h1: "Bauendreinigung in Hanau",
+      seoTitle: "Bauendreinigung Hanau | Aktive Facility Management",
+      seoDescription:
+        "Bauendreinigung in Hanau nach Bau-, Umbau- oder Renovierungsarbeiten. Gründliche Reinigung für bezugsfertige Büro- und Gewerbeflächen.",
+      intro:
+        "Bauendreinigung in Hanau für saubere und bezugsfertige Flächen nach Bau- und Renovierungsarbeiten.",
+    },
+    {
       id: "fensterreinigung_kreis_offenbach",
       route: "/fensterreinigung-kreis-offenbach",
       regionId: "kreis_offenbach",
@@ -623,6 +659,42 @@ export const companyConfig = {
         "Praxisreinigung im Kreis Offenbach für Arztpraxen und Behandlungsräume. Hygienische Reinigung mit verlässlichen Abläufen und regionaler Planung.",
       intro:
         "Praxisreinigung im Kreis Offenbach für hygienisch saubere Behandlungsräume, Empfangsbereiche und Sanitärflächen.",
+    },
+    {
+      id: "sonderreinigung_kreis_offenbach",
+      route: "/sonderreinigung-kreis-offenbach",
+      regionId: "kreis_offenbach",
+      serviceId: "sonderreinigung",
+      h1: "Sonderreinigung im Kreis Offenbach",
+      seoTitle: "Sonderreinigung Kreis Offenbach | Aktive Facility Management",
+      seoDescription:
+        "Sonderreinigung im Kreis Offenbach für besondere Anforderungen, sensible Bereiche und gewerbliche Objekte. Individuell geplant und gründlich ausgeführt.",
+      intro:
+        "Sonderreinigung im Kreis Offenbach für spezielle Reinigungsaufgaben mit regionaler Planung und klaren Leistungsumfängen.",
+    },
+    {
+      id: "kanzleireinigung_kreis_offenbach",
+      route: "/kanzleireinigung-kreis-offenbach",
+      regionId: "kreis_offenbach",
+      serviceId: "kanzleireinigung",
+      h1: "Kanzleireinigung im Kreis Offenbach",
+      seoTitle: "Kanzleireinigung Kreis Offenbach | Aktive Facility Management",
+      seoDescription:
+        "Kanzleireinigung im Kreis Offenbach für Besprechungsräume, Arbeitsplätze und Empfangsbereiche. Diskret und zuverlässig betreut.",
+      intro:
+        "Kanzleireinigung im Kreis Offenbach für gepflegte Arbeitsumgebungen mit verlässlicher Durchführung und regionaler Abstimmung.",
+    },
+    {
+      id: "bauendreinigung_kreis_offenbach",
+      route: "/bauendreinigung-kreis-offenbach",
+      regionId: "kreis_offenbach",
+      serviceId: "bauendreinigung",
+      h1: "Bauendreinigung im Kreis Offenbach",
+      seoTitle: "Bauendreinigung Kreis Offenbach | Aktive Facility Management",
+      seoDescription:
+        "Bauendreinigung im Kreis Offenbach nach Bau-, Umbau- oder Renovierungsarbeiten. Gründliche Reinigung für bezugsfertige Gewerbe- und Praxisflächen.",
+      intro:
+        "Bauendreinigung im Kreis Offenbach für saubere und bezugsfertige Flächen nach Abschluss von Bau- und Renovierungsarbeiten.",
     },
     {
       id: "fensterreinigung_neu_isenburg",
@@ -673,6 +745,18 @@ export const companyConfig = {
         "Glasreinigung in Neu-Isenburg für saubere Fensterflächen und einen gepflegten Eingangsbereich in Büro- und Gewerbeimmobilien.",
     },
     {
+      id: "treppenhausreinigung_neu_isenburg",
+      route: "/treppenhausreinigung-neu-isenburg",
+      regionId: "neu_isenburg",
+      serviceId: "treppenhausreinigung",
+      h1: "Treppenhausreinigung in Neu-Isenburg",
+      seoTitle: "Treppenhausreinigung Neu-Isenburg | Aktive Facility Management",
+      seoDescription:
+        "Treppenhausreinigung in Neu-Isenburg für Wohn- und Gewerbeobjekte. Saubere Eingangsbereiche und Allgemeinflächen mit festen Intervallen.",
+      intro:
+        "Treppenhausreinigung in Neu-Isenburg für gepflegte Eingangsbereiche und dauerhaft saubere Allgemeinflächen.",
+    },
+    {
       id: "fensterreinigung_langen",
       route: "/fensterreinigung-langen",
       regionId: "langen",
@@ -695,6 +779,42 @@ export const companyConfig = {
         "Büroreinigung in Langen für Arbeitsplätze, Besprechungsräume und Gemeinschaftsflächen. Zuverlässig geplant und gründlich ausgeführt.",
       intro:
         "Büroreinigung in Langen für saubere Arbeitsumgebungen mit festen Reinigungsintervallen und klarer regionaler Abstimmung.",
+    },
+    {
+      id: "glasreinigung_langen",
+      route: "/glasreinigung-langen",
+      regionId: "langen",
+      serviceId: "glasreinigung",
+      h1: "Glasreinigung in Langen",
+      seoTitle: "Glasreinigung Langen | Aktive Facility Management",
+      seoDescription:
+        "Glasreinigung in Langen für Fenster, Glasfronten und Eingangsbereiche. Streifenfreie Reinigung für Büros, Praxen und Gewerbeobjekte.",
+      intro:
+        "Glasreinigung in Langen für saubere Fensterflächen und gepflegte Eingangsbereiche in gewerblichen Objekten.",
+    },
+    {
+      id: "treppenhausreinigung_langen",
+      route: "/treppenhausreinigung-langen",
+      regionId: "langen",
+      serviceId: "treppenhausreinigung",
+      h1: "Treppenhausreinigung in Langen",
+      seoTitle: "Treppenhausreinigung Langen | Aktive Facility Management",
+      seoDescription:
+        "Treppenhausreinigung in Langen für Wohn- und Gewerbeobjekte. Saubere Allgemeinflächen und Eingangsbereiche mit festen Reinigungsintervallen.",
+      intro:
+        "Treppenhausreinigung in Langen für gepflegte Eingänge, Laufwege und Allgemeinflächen mit planbaren Intervallen.",
+    },
+    {
+      id: "praxisreinigung_langen",
+      route: "/praxisreinigung-langen",
+      regionId: "langen",
+      serviceId: "praxisreinigung",
+      h1: "Praxisreinigung in Langen",
+      seoTitle: "Praxisreinigung Langen | Aktive Facility Management",
+      seoDescription:
+        "Praxisreinigung in Langen für Arztpraxen, Behandlungsräume und Empfangsbereiche. Hygienische Reinigung mit klaren Abläufen.",
+      intro:
+        "Praxisreinigung in Langen für hygienisch saubere Behandlungsräume, Empfangsflächen und Sanitärbereiche.",
     },
   ] satisfies RegionalServiceRoute[],
 } as const;
