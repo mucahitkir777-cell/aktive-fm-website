@@ -541,18 +541,6 @@ export const companyConfig = {
         "Büroreinigung in Hanau für saubere Arbeitsplätze, Konferenzräume und Sanitärbereiche im laufenden Betrieb.",
     },
     {
-      id: "gebaeudereinigung_hanau",
-      route: "/gebaeudereinigung-hanau",
-      regionId: "hanau",
-      serviceId: "gebaeudereinigung",
-      h1: "Gebäudereinigung in Hanau",
-      seoTitle: "Gebäudereinigung Hanau | Aktive Facility Management",
-      seoDescription:
-        "Gebäudereinigung in Hanau für Büros, Praxen und Gewerbeobjekte. Regional abgestimmt und professionell durchgeführt.",
-      intro:
-        "Gebäudereinigung in Hanau für Unternehmen mit verlässlicher Einsatzplanung und klar definierten Leistungen.",
-    },
-    {
       id: "glasreinigung_kreis_offenbach",
       route: "/glasreinigung-kreis-offenbach",
       regionId: "kreis_offenbach",
@@ -587,18 +575,6 @@ export const companyConfig = {
         "Büroreinigung im Kreis Offenbach für Arbeitsplätze, Besprechungsräume und Gemeinschaftsflächen. Regelmäßig und zuverlässig.",
       intro:
         "Büroreinigung im Kreis Offenbach für saubere Arbeitsumgebungen mit klarer Abstimmung und festen Reinigungsplänen.",
-    },
-    {
-      id: "gebaeudereinigung_kreis_offenbach",
-      route: "/gebaeudereinigung-kreis-offenbach",
-      regionId: "kreis_offenbach",
-      serviceId: "gebaeudereinigung",
-      h1: "Gebäudereinigung im Kreis Offenbach",
-      seoTitle: "Gebäudereinigung Kreis Offenbach | Aktive Facility Management",
-      seoDescription:
-        "Gebäudereinigung im Kreis Offenbach für Büros, Praxen und Gewerbeobjekte. Regional organisiert und professionell umgesetzt.",
-      intro:
-        "Gebäudereinigung im Kreis Offenbach mit zuverlässigen Teams für Büro-, Praxis- und Gewerbeflächen.",
     },
   ] satisfies RegionalServiceRoute[],
 } as const;
