@@ -125,6 +125,16 @@ const services = [
   },
 ];
 
+const prioritizedRegionalLinks = [
+  { label: "Gebäudereinigung Frankfurt", href: "/gebaeudereinigung-frankfurt" },
+  { label: "Büroreinigung Frankfurt", href: "/buero-reinigung-frankfurt" },
+  { label: "Glasreinigung Frankfurt", href: "/glasreinigung-frankfurt" },
+  { label: "Praxisreinigung Frankfurt", href: "/praxisreinigung-frankfurt" },
+  { label: "Bauendreinigung Frankfurt", href: "/bauendreinigung-frankfurt" },
+  { label: "Gebäudereinigung Neu-Isenburg", href: "/gebaeudereinigung-neu-isenburg" },
+  { label: "Gebäudereinigung Kreis Offenbach", href: "/gebaeudereinigung-kreis-offenbach" },
+];
+
 function mergeCmsSection<T extends Record<string, string>>(defaults: T, content: unknown): T {
   if (!content || typeof content !== "object") {
     return defaults;
@@ -277,7 +287,7 @@ export default function Leistungen() {
               </a>
             </div>
           <p className="mt-4 text-sm pc-text-secondary" style={{ fontFamily: "Inter, sans-serif" }}>
-            Kostenlos & unverbindlich. Rückmeldung in der Regel innerhalb von {companyConfig.metrics.responseTime}.
+            Kostenlos & unverbindlich. Rückmeldung innerhalb von {companyConfig.metrics.responseTime}.
           </p>
           </div>
         </div>
@@ -305,6 +315,33 @@ export default function Leistungen() {
         </div>
       </section>
 
+      <section className="pc-section pt-0">
+        <div className="container">
+          <div className="rounded-2xl border pc-border bg-white p-6 lg:p-7 shadow-sm pc-fade-up">
+            <h2 className="text-2xl font-bold pc-text-primary mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
+              Häufig angefragt im Rhein-Main-Gebiet
+            </h2>
+            <p className="pc-text-secondary text-sm mb-5" style={{ fontFamily: "Inter, sans-serif" }}>
+              Direkte Einstiege zu priorisierten Zielseiten für Frankfurt, Neu-Isenburg und den Kreis Offenbach.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {prioritizedRegionalLinks.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <span
+                    onClick={() => handleServiceCtaClick("services_popular_regional", item.label, "services_popular_regional_links", item.href, item.label)}
+                    className="flex items-center justify-between gap-3 rounded-lg border pc-border px-4 py-3 pc-text-primary hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors duration-200"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    <span className="text-sm font-medium">{item.label}</span>
+                    <ArrowRight size={14} className="shrink-0" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Detail */}
       <section className="pc-section">
         <div className="container">
@@ -312,6 +349,12 @@ export default function Leistungen() {
             {services.map((service, i) => {
               const cmsServiceImageUrl =
                 (i % 2 === 0 ? detailImagePrimary : detailImageSecondary) || detailImagePrimary || detailImageSecondary || service.image;
+              const servicePrimaryRoute =
+                service.slug === "buero"
+                  ? "/buero-reinigung-frankfurt"
+                  : service.slug === "glas"
+                    ? "/glasreinigung-frankfurt"
+                    : "/kontakt";
 
               return (
                 <div
@@ -357,8 +400,8 @@ export default function Leistungen() {
                     </ul>
 
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Link href="/kontakt">
-                        <span onClick={() => handleServiceCtaClick(`service_${service.slug}_offer`, "Angebot anfragen", "services_detail", "/kontakt", service.title, service.slug)} className="pc-btn-primary">
+                      <Link href={servicePrimaryRoute}>
+                        <span onClick={() => handleServiceCtaClick(`service_${service.slug}_offer`, "Angebot anfragen", "services_detail", servicePrimaryRoute, service.title, service.slug)} className="pc-btn-primary">
                           Angebot anfragen
                           <ArrowRight size={16} />
                         </span>
