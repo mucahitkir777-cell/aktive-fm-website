@@ -576,6 +576,126 @@ export const companyConfig = {
       intro:
         "Büroreinigung im Kreis Offenbach für saubere Arbeitsumgebungen mit klarer Abstimmung und festen Reinigungsplänen.",
     },
+    {
+      id: "fensterreinigung_hanau",
+      route: "/fensterreinigung-hanau",
+      regionId: "hanau",
+      serviceId: "fensterreinigung",
+      h1: "Fensterreinigung in Hanau",
+      seoTitle: "Fensterreinigung Hanau | Aktive Facility Management",
+      seoDescription:
+        "Fensterreinigung in Hanau für Büros, Praxen und Gewerbeobjekte. Gründliche Reinigung von Fenstern, Rahmen und Glasflächen im Innen- und Außenbereich.",
+      intro:
+        "Professionelle Fensterreinigung in Hanau für streifenfreie Glasflächen und gepflegte Fassaden in Gewerbe- und Praxisobjekten.",
+    },
+    {
+      id: "praxisreinigung_hanau",
+      route: "/praxisreinigung-hanau",
+      regionId: "hanau",
+      serviceId: "praxisreinigung",
+      h1: "Praxisreinigung in Hanau",
+      seoTitle: "Praxisreinigung Hanau | Aktive Facility Management",
+      seoDescription:
+        "Praxisreinigung in Hanau für Arztpraxen, Behandlungsräume und Empfangsbereiche. Hygienische Reinigung mit klaren Abläufen und planbaren Intervallen.",
+      intro:
+        "Hygienische Praxisreinigung in Hanau für Behandlungsräume, Empfang und Sanitärbereiche in medizinischen Einrichtungen.",
+    },
+    {
+      id: "fensterreinigung_kreis_offenbach",
+      route: "/fensterreinigung-kreis-offenbach",
+      regionId: "kreis_offenbach",
+      serviceId: "fensterreinigung",
+      h1: "Fensterreinigung im Kreis Offenbach",
+      seoTitle: "Fensterreinigung Kreis Offenbach | Aktive Facility Management",
+      seoDescription:
+        "Fensterreinigung im Kreis Offenbach für Büros, Praxen und Gewerbeobjekte. Saubere Glasflächen im Innen- und Außenbereich mit klarer Terminplanung.",
+      intro:
+        "Fensterreinigung im Kreis Offenbach für gepflegte Fensterflächen und einen sauberen ersten Eindruck in Gewerbe- und Praxisobjekten.",
+    },
+    {
+      id: "praxisreinigung_kreis_offenbach",
+      route: "/praxisreinigung-kreis-offenbach",
+      regionId: "kreis_offenbach",
+      serviceId: "praxisreinigung",
+      h1: "Praxisreinigung im Kreis Offenbach",
+      seoTitle: "Praxisreinigung Kreis Offenbach | Aktive Facility Management",
+      seoDescription:
+        "Praxisreinigung im Kreis Offenbach für Arztpraxen und Behandlungsräume. Hygienische Reinigung mit verlässlichen Abläufen und regionaler Planung.",
+      intro:
+        "Praxisreinigung im Kreis Offenbach für hygienisch saubere Behandlungsräume, Empfangsbereiche und Sanitärflächen.",
+    },
+    {
+      id: "fensterreinigung_neu_isenburg",
+      route: "/fensterreinigung-neu-isenburg",
+      regionId: "neu_isenburg",
+      serviceId: "fensterreinigung",
+      h1: "Fensterreinigung in Neu-Isenburg",
+      seoTitle: "Fensterreinigung Neu-Isenburg | Aktive Facility Management",
+      seoDescription:
+        "Fensterreinigung in Neu-Isenburg für Büros, Praxen und Gewerbeobjekte. Gründliche Reinigung von Fenstern und Glasflächen im Innen- und Außenbereich.",
+      intro:
+        "Fensterreinigung in Neu-Isenburg für klare Sicht und gepflegte Glasflächen in Büro- und Gewerbeobjekten.",
+    },
+    {
+      id: "praxisreinigung_neu_isenburg",
+      route: "/praxisreinigung-neu-isenburg",
+      regionId: "neu_isenburg",
+      serviceId: "praxisreinigung",
+      h1: "Praxisreinigung in Neu-Isenburg",
+      seoTitle: "Praxisreinigung Neu-Isenburg | Aktive Facility Management",
+      seoDescription:
+        "Praxisreinigung in Neu-Isenburg für Arztpraxen, Behandlungsräume und Empfangsbereiche. Hygienisch, zuverlässig und planbar.",
+      intro:
+        "Hygienische Praxisreinigung in Neu-Isenburg für Behandlungsräume, Empfangsflächen und Sanitärbereiche in medizinischen Einrichtungen.",
+    },
+    {
+      id: "buero_reinigung_neu_isenburg",
+      route: "/buero-reinigung-neu-isenburg",
+      regionId: "neu_isenburg",
+      serviceId: "buero_reinigung",
+      h1: "Büroreinigung in Neu-Isenburg",
+      seoTitle: "Büroreinigung Neu-Isenburg | Aktive Facility Management",
+      seoDescription:
+        "Büroreinigung in Neu-Isenburg für Arbeitsplätze, Besprechungsräume und Gemeinschaftsflächen. Regelmäßige Reinigung mit klarer Abstimmung.",
+      intro:
+        "Regelmäßige Büroreinigung in Neu-Isenburg für saubere Arbeitsplätze, Konferenzräume und Sanitärbereiche im laufenden Betrieb.",
+    },
+    {
+      id: "glasreinigung_neu_isenburg",
+      route: "/glasreinigung-neu-isenburg",
+      regionId: "neu_isenburg",
+      serviceId: "glasreinigung",
+      h1: "Glasreinigung in Neu-Isenburg",
+      seoTitle: "Glasreinigung Neu-Isenburg | Aktive Facility Management",
+      seoDescription:
+        "Glasreinigung in Neu-Isenburg für Fenster, Glasfronten und Eingangsbereiche. Streifenfreie Reinigung für gewerbliche Objekte.",
+      intro:
+        "Glasreinigung in Neu-Isenburg für saubere Fensterflächen und einen gepflegten Eingangsbereich in Büro- und Gewerbeimmobilien.",
+    },
+    {
+      id: "fensterreinigung_langen",
+      route: "/fensterreinigung-langen",
+      regionId: "langen",
+      serviceId: "fensterreinigung",
+      h1: "Fensterreinigung in Langen",
+      seoTitle: "Fensterreinigung Langen | Aktive Facility Management",
+      seoDescription:
+        "Fensterreinigung in Langen für Büros, Praxen und Gewerbeobjekte. Gründliche Reinigung von Fenstern und Glasflächen mit klarer Terminplanung.",
+      intro:
+        "Fensterreinigung in Langen für klare Glasflächen und gepflegte Fassaden in gewerblichen und medizinischen Objekten.",
+    },
+    {
+      id: "buero_reinigung_langen",
+      route: "/buero-reinigung-langen",
+      regionId: "langen",
+      serviceId: "buero_reinigung",
+      h1: "Büroreinigung in Langen",
+      seoTitle: "Büroreinigung Langen | Aktive Facility Management",
+      seoDescription:
+        "Büroreinigung in Langen für Arbeitsplätze, Besprechungsräume und Gemeinschaftsflächen. Zuverlässig geplant und gründlich ausgeführt.",
+      intro:
+        "Büroreinigung in Langen für saubere Arbeitsumgebungen mit festen Reinigungsintervallen und klarer regionaler Abstimmung.",
+    },
   ] satisfies RegionalServiceRoute[],
 } as const;
 
