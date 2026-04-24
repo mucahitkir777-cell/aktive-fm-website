@@ -43,6 +43,6 @@
   - eingebunden in `pages/FAQ.tsx`.
 
 ## Konsistenzregeln
-- `@id`-Anker für Company: `https://aktive-fm.de#organization`.
+- `@id`-Anker für Company: `https://www.aktive-fm.de#localbusiness` (wird dynamisch aus `companyConfig.brand.siteUrl` generiert).
 - `provider`/`publisher` in JSON-LD referenzieren diese globale Company-Entity.
 - Canonical und `og:url` folgen immer der aktuellen Route (bzw. `/404` bei unbekannten Routen).

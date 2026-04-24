@@ -2,7 +2,7 @@
 
 ## Zu prüfende Routen
 - `/`
-  - Erwartet: `ProfessionalService` + `LocalBusiness` (globale Company-Entity, `@id: https://aktive-fm.de#organization`)
+  - Erwartet: `ProfessionalService` + `LocalBusiness` (globale Company-Entity, `@id: https://www.aktive-fm.de#localbusiness`)
 - `/faq`
   - Erwartet: `FAQPage` mit `Question`/`Answer`
   - plus globale Company-Entity aus `App.tsx`
@@ -25,5 +25,5 @@
 - Keine leeren Felder (`""`, `null`, leere Arrays bei Kernfeldern).
 - `url`-Felder korrekt und zur Route passend.
 - `@id`-Verknüpfungen konsistent:
-  - `provider` / `publisher` -> `https://aktive-fm.de#organization`
+  - `provider` / `publisher` -> `https://www.aktive-fm.de#localbusiness`
 - Keine doppelten FAQ-Einträge auf `/faq`.
