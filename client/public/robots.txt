@@ -3,6 +3,6 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
-Sitemap: https://aktive-fm.de/sitemap.xml
+Sitemap: https://www.aktive-fm.de/sitemap.xml
 
 
