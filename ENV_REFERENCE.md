@@ -134,6 +134,7 @@ These are **completely optional**. Website runs fine without them. Activating th
 - **If false:** Email sending is skipped (status: "skipped"), but leads are still stored in database
 - **If true:** Requires valid SMTP configuration (see section B above)
 - **Example:** `LEAD_EMAIL_ENABLED=true`
+- **Server Impact:** Non-blocking — leads still store successfully even if email fails
 
 #### LEAD_EMAIL_NOTIFICATION_ENABLED
 - **File & Function:** `server/leads/email.ts:deliverLeadNotification()`
@@ -141,6 +142,8 @@ These are **completely optional**. Website runs fine without them. Activating th
 - **What it controls:** Team notification emails to LEAD_NOTIFICATION_TO
 - **Requirements:** LEAD_EMAIL_ENABLED=true + valid SMTP configuration
 - **Example:** `LEAD_EMAIL_NOTIFICATION_ENABLED=true`
+- **Server Impact:** Non-blocking — lead storage not affected by email failure
+- **Email Content:** Includes name, email, phone, region, service, message, lead ID, admin link
 
 #### LEAD_EMAIL_CONFIRMATION_ENABLED
 - **File & Function:** `server/leads/email.ts:deliverLeadConfirmation()`
@@ -148,6 +151,76 @@ These are **completely optional**. Website runs fine without them. Activating th
 - **What it controls:** Customer confirmation emails to the lead's email address
 - **Requirements:** LEAD_EMAIL_ENABLED=true + valid SMTP configuration
 - **Example:** `LEAD_EMAIL_CONFIRMATION_ENABLED=true`
+- **Server Impact:** Non-blocking — lead storage not affected by email failure
+- **Email Content:** Welcome message, request summary, contact details, signature
+
+#### LEAD_SMTP_HOST
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.host`, `server/leads/email.ts:getTransporter()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true`
+- **Default:** `smtp.example.com` (placeholder)
+- **Format:** Hostname of SMTP server (no protocol, no port)
+- **Examples:** 
+  - `smtp.gmail.com` (Gmail)
+  - `smtp.office365.com` (Microsoft 365)
+  - `mail.company.com` (self-hosted)
+- **Notes:** Domain only, port specified separately in LEAD_SMTP_PORT
+
+#### LEAD_SMTP_PORT
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.port`
+- **Required if:** `LEAD_EMAIL_ENABLED=true`
+- **Default:** `587` (TLS standard)
+- **Valid values:** 
+  - `587` — TLS (recommended, requires LEAD_SMTP_SECURE=false)
+  - `465` — SSL/implicit TLS (requires LEAD_SMTP_SECURE=true, auto-set)
+  - `25` — plain (not recommended)
+- **Example:** `LEAD_SMTP_PORT=587`
+- **Notes:** Auto-sets LEAD_SMTP_SECURE=true if port is 465
+
+#### LEAD_SMTP_SECURE
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.secure`, `server/leads/email.ts:getTransporter()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true` with port 25 or non-standard
+- **Default:** `false` (automatically set to `true` if port is 465)
+- **Meaning:**
+  - `true` — Use SSL/TLS from connection start (port 465)
+  - `false` — Start plain, upgrade with STARTTLS (port 587)
+- **Example:** `LEAD_SMTP_SECURE=false`
+- **Auto-calculation:** If `LEAD_SMTP_PORT=465`, this is automatically set to `true`
+
+#### LEAD_SMTP_USER
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.user`, `server/leads/email.ts:getTransporter()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true` and SMTP is used
+- **Format:** Email address or username for SMTP authentication
+- **Example:** `LEAD_SMTP_USER=notifications@gmail.com`
+- **No default:** Empty string, validation requires this to be non-empty
+- **Security:** ⚠️ NEVER commit to repository, use `.env.production` only
+
+#### LEAD_SMTP_PASSWORD
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.password`, `server/leads/email.ts:getTransporter()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true` and SMTP is used
+- **Format:** Password or app-specific token (NOT your account password for Gmail/Office365)
+- **Examples:**
+  - Gmail: Use "App Password" from Account Security (16-character token)
+  - Office365: Use account password or app password
+  - Self-hosted: Use SMTP password
+- **No default:** Empty string, validation requires this to be non-empty
+- **Security:** ⚠️ NEVER commit to repository, use `.env.production` only, ⚠️ DO NOT log this value
+
+#### LEAD_EMAIL_FROM
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.from`, `server/leads/email.ts:sendLeadNotificationEmail()`, `sendLeadConfirmationEmailToLead()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true`
+- **Default:** `notifications@example.com` (placeholder)
+- **Format:** Valid email address (typically same as or verified by SMTP_USER)
+- **Example:** `LEAD_EMAIL_FROM=notifications@aktive-fm.de`
+- **Notes:** This is the "From" address visible in sent emails. Many SMTP providers require this to match the authenticated user.
+
+#### LEAD_NOTIFICATION_TO
+- **File & Function:** `server/leads/config.ts:LEAD_SERVER_CONFIG.email.smtp.to`, `server/leads/email.ts:sendLeadNotificationEmail()`
+- **Required if:** `LEAD_EMAIL_ENABLED=true` and `LEAD_EMAIL_NOTIFICATION_ENABLED=true`
+- **Default:** `team@example.com` (placeholder)
+- **Format:** Valid email address (team/operator email)
+- **Example:** `LEAD_NOTIFICATION_TO=team@aktive-fm.de`
+- **Recipient:** This is who receives internal lead notifications (not the customer)
+- **Notes:** Can be different from LEAD_SMTP_USER
 
 #### LEAD_EMAIL_ENDPOINT (fallback webhook)
 - **File & Function:** `server/leads/email.ts:postLeadNotificationEndpoint()`
