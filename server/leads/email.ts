@@ -1,7 +1,6 @@
-﻿import nodemailer from "nodemailer";
 import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
-import dns from "node:dns/promises";
-import { LEAD_SERVER_CONFIG, hasConfiguredLeadSmtp, hasConfiguredLeadValue } from "./config";
+import SibApiV3Sdk from "sib-api-v3-sdk";
+import { LEAD_SERVER_CONFIG, hasConfiguredLeadBrevo, hasConfiguredLeadValue } from "./config";
 
 interface StoredLeadEmailInput {
   leadId: string;
@@ -9,8 +8,7 @@ interface StoredLeadEmailInput {
   payload: LeadSubmissionPayload;
 }
 
-let transporter: nodemailer.Transporter | null = null;
-let transporterPromise: Promise<nodemailer.Transporter> | null = null;
+let transactionalEmailApi: InstanceType<typeof SibApiV3Sdk.TransactionalEmailsApi> | null = null;
 
 /**
  * Strukturiertes Logging für E-Mail-Events
@@ -29,42 +27,36 @@ function logEmailEvent(level: "info" | "warn" | "error", leadId: string, mailTyp
   }
 }
 
-async function resolveSmtpHostForRailway() {
-  const smtpHost = LEAD_SERVER_CONFIG.email.smtp.host;
-
-  try {
-    const [ipv4Address] = await dns.resolve4(smtpHost);
-    return ipv4Address ?? smtpHost;
-  } catch {
-    return smtpHost;
+function getTransactionalEmailApi() {
+  if (transactionalEmailApi) {
+    return transactionalEmailApi;
   }
+
+  const apiClient = SibApiV3Sdk.ApiClient.instance;
+  apiClient.authentications["api-key"].apiKey = LEAD_SERVER_CONFIG.email.brevo.apiKey;
+
+  transactionalEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+  return transactionalEmailApi;
 }
 
-async function getTransporter() {
-  if (transporter) {
-    return transporter;
-  }
+async function sendBrevoTransactionalEmail(input: {
+  to: string;
+  subject: string;
+  textContent: string;
+  htmlContent: string;
+}) {
+  const apiInstance = getTransactionalEmailApi();
 
-  if (!transporterPromise) {
-    transporterPromise = resolveSmtpHostForRailway().then((smtpHost) => nodemailer.createTransport({
-      host: smtpHost,
-      port: LEAD_SERVER_CONFIG.email.smtp.port,
-      secure: LEAD_SERVER_CONFIG.email.smtp.secure,
-      auth: {
-        user: LEAD_SERVER_CONFIG.email.smtp.user,
-        pass: LEAD_SERVER_CONFIG.email.smtp.password,
-      },
-      tls: {
-        servername: LEAD_SERVER_CONFIG.email.smtp.host,
-      },
-      connectionTimeout: 30000,
-      socketTimeout: 30000,
-    }));
-  }
-
-  transporter = await transporterPromise;
-
-  return transporter;
+  await apiInstance.sendTransacEmail({
+    sender: {
+      email: LEAD_SERVER_CONFIG.email.smtp.from,
+      name: "Aktive FM",
+    },
+    to: [{ email: input.to }],
+    subject: input.subject,
+    textContent: input.textContent,
+    htmlContent: input.htmlContent,
+  });
 }
 
 function buildNotificationText(input: StoredLeadEmailInput) {
@@ -268,23 +260,21 @@ function buildConfirmationHtml(input: StoredLeadEmailInput) {
 }
 
 async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
-  if (!hasConfiguredLeadSmtp()) {
-    logEmailEvent("info", input.leadId, "notification", "SKIPPED", "SMTP not configured");
+  if (!hasConfiguredLeadBrevo()) {
+    logEmailEvent("info", input.leadId, "notification", "SKIPPED", "Brevo API not configured");
     return {
       provider: "email",
       status: "skipped",
-      message: "SMTP notification is not configured.",
+      message: "Brevo notification is not configured.",
     };
   }
 
   try {
-    const mailTransporter = await getTransporter();
-    await mailTransporter.sendMail({
-      from: LEAD_SERVER_CONFIG.email.smtp.from,
+    await sendBrevoTransactionalEmail({
       to: LEAD_SERVER_CONFIG.email.smtp.to,
       subject: `Neuer Lead: ${input.payload.name}`,
-      text: buildNotificationText(input),
-      html: buildNotificationHtml(input),
+      textContent: buildNotificationText(input),
+      htmlContent: buildNotificationHtml(input),
     });
 
     logEmailEvent("info", input.leadId, "notification", "SENT");
@@ -294,7 +284,7 @@ async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<L
       message: "Lead notification email sent.",
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "SMTP email send failed.";
+    const message = error instanceof Error ? error.message : "Brevo email send failed.";
     logEmailEvent("error", input.leadId, "notification", "FAILED", message);
 
     return {
@@ -306,23 +296,21 @@ async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<L
 }
 
 async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
-  if (!hasConfiguredLeadSmtp()) {
-    logEmailEvent("info", input.leadId, "confirmation", "SKIPPED", "SMTP not configured");
+  if (!hasConfiguredLeadBrevo()) {
+    logEmailEvent("info", input.leadId, "confirmation", "SKIPPED", "Brevo API not configured");
     return {
       provider: "email_confirmation",
       status: "skipped",
-      message: "SMTP confirmation is not configured.",
+      message: "Brevo confirmation is not configured.",
     };
   }
 
   try {
-    const mailTransporter = await getTransporter();
-    await mailTransporter.sendMail({
-      from: LEAD_SERVER_CONFIG.email.smtp.from,
+    await sendBrevoTransactionalEmail({
       to: input.payload.email,
       subject: "Bestätigung Ihrer Anfrage – aktive-FM",
-      text: buildConfirmationText(input),
-      html: buildConfirmationHtml(input),
+      textContent: buildConfirmationText(input),
+      htmlContent: buildConfirmationHtml(input),
     });
 
     logEmailEvent("info", input.leadId, "confirmation", "SENT");
@@ -332,7 +320,7 @@ async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Pro
       message: "Confirmation email sent to lead.",
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "SMTP confirmation email send failed.";
+    const message = error instanceof Error ? error.message : "Brevo confirmation email send failed.";
     logEmailEvent("error", input.leadId, "confirmation", "FAILED", message);
 
     return {
@@ -426,7 +414,7 @@ export async function deliverLeadNotification(input: StoredLeadEmailInput): Prom
     };
   }
 
-  if (hasConfiguredLeadSmtp()) {
+  if (hasConfiguredLeadBrevo()) {
     return sendLeadNotificationEmail(input);
   }
 
