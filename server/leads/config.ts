@@ -8,6 +8,7 @@ const PLACEHOLDER_VALUES = new Set([
   "smtp.example.com",
   "notifications@example.com",
   "team@example.com",
+  "your-brevo-api-key",
 ]);
 
 function readEnv(name: string, fallback = "") {
@@ -52,6 +53,9 @@ export const LEAD_SERVER_CONFIG = {
     },
     endpoint: readEnv("LEAD_EMAIL_ENDPOINT", "https://email.example.com/send-lead"),
     provider: readEnv("LEAD_EMAIL_PROVIDER", "placeholder"),
+    brevo: {
+      apiKey: readEnv("BREVO_API_KEY"),
+    },
     smtp: {
       host: readEnv("LEAD_SMTP_HOST", "smtp.example.com"),
       port: smtpPort,
@@ -75,5 +79,13 @@ export function hasConfiguredLeadSmtp() {
     && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.to)
     && Boolean(LEAD_SERVER_CONFIG.email.smtp.user.trim())
     && Boolean(LEAD_SERVER_CONFIG.email.smtp.password.trim())
+  );
+}
+
+export function hasConfiguredLeadBrevo() {
+  return (
+    hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.brevo.apiKey)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.from)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.to)
   );
 }
