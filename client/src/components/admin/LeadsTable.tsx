@@ -50,7 +50,7 @@ export default function LeadsTable({
 
   return (
     <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-      <thead className={tableHeadClass}>
+      <thead className={`${tableHeadClass} sticky top-0 z-10`}>
         <tr>
           <th className={`${tableHeaderCellClass} w-12`}>
             <input
@@ -103,7 +103,7 @@ export default function LeadsTable({
             const dueState = getLeadDueState(lead);
 
             return (
-              <tr key={lead.id} className={tableRowClass}>
+              <tr key={lead.id} className={`${tableRowClass} odd:bg-white even:bg-slate-50/50`}>
                 <td className={tableCellClass}>
                   <input
                     type="checkbox"
@@ -150,17 +150,22 @@ export default function LeadsTable({
                   )}
                 </td>
                 <td className={tableCellClass}>
-                  <select
-                    value={lead.status}
-                    onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)}
-                    className={`${fieldControlClass} mt-0 min-w-[170px] px-3 py-2`}
-                  >
-                    {leadStatuses.map((status) => (
-                      <option key={status} value={status}>
-                        {getLeadStatusLabel(status)}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="space-y-2">
+                    <span className="inline-flex rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600">
+                      {getLeadStatusLabel(lead.status)}
+                    </span>
+                    <select
+                      value={lead.status}
+                      onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)}
+                      className={`${fieldControlClass} mt-0 min-w-[170px] px-3 py-2`}
+                    >
+                      {leadStatuses.map((status) => (
+                        <option key={status} value={status}>
+                          {getLeadStatusLabel(status)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </td>
                 <td className={tableCellClass}>
                   <div className="flex flex-col gap-2">
