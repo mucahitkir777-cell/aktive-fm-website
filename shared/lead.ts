@@ -112,7 +112,7 @@ export interface LeadSubmissionResult {
 
 export interface LeadProviderResult {
   provider: "database" | "local_inbox" | "webhook" | "crm" | "email" | "email_confirmation";
-  status: "success" | "skipped" | "error";
+  status: "success" | "skipped" | "queued" | "error";
   message: string;
 }
 

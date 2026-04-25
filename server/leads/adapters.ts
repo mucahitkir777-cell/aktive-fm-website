@@ -100,6 +100,52 @@ async function persistToLocalInbox(storedLead: StoredLead): Promise<LeadProvider
   }
 }
 
+function queueLeadEmailDelivery(storedLead: StoredLead): LeadProviderResult[] {
+  const queuedResults: LeadProviderResult[] = [];
+
+  if (LEAD_SERVER_CONFIG.email.enabled && LEAD_SERVER_CONFIG.email.notification.enabled) {
+    queuedResults.push({
+      provider: "email",
+      status: "queued",
+      message: "Lead notification email queued.",
+    });
+
+    void deliverLeadNotification(storedLead).catch((error) => {
+      console.error(
+        `[lead-email] [${new Date().toISOString()}] [notification] [${storedLead.leadId}] FAILED - ${
+          error instanceof Error ? error.message : "Unexpected email notification error."
+        }`,
+      );
+    });
+  }
+
+  if (LEAD_SERVER_CONFIG.email.enabled && LEAD_SERVER_CONFIG.email.confirmation.enabled) {
+    queuedResults.push({
+      provider: "email_confirmation",
+      status: "queued",
+      message: "Lead confirmation email queued.",
+    });
+
+    void deliverLeadConfirmation(storedLead).catch((error) => {
+      console.error(
+        `[lead-email] [${new Date().toISOString()}] [confirmation] [${storedLead.leadId}] FAILED - ${
+          error instanceof Error ? error.message : "Unexpected email confirmation error."
+        }`,
+      );
+    });
+  }
+
+  if (!queuedResults.length) {
+    queuedResults.push({
+      provider: "email",
+      status: "skipped",
+      message: "Lead email delivery is disabled.",
+    });
+  }
+
+  return queuedResults;
+}
+
 export async function processLeadSubmission(payload: LeadSubmissionPayload): Promise<ProcessLeadResult> {
   const storedLead: StoredLead = {
     leadId: `lead_${randomUUID()}`,
@@ -138,8 +184,7 @@ export async function processLeadSubmission(payload: LeadSubmissionPayload): Pro
     providerResults.push(await postJson("crm", LEAD_SERVER_CONFIG.crm.endpoint, storedLead));
   }
 
-  providerResults.push(await deliverLeadNotification(storedLead));
-  providerResults.push(await deliverLeadConfirmation(storedLead));
+  providerResults.push(...queueLeadEmailDelivery(storedLead));
 
   // Note: We always return results now, success is determined by database status in the endpoint
 
