@@ -26,7 +26,7 @@ function readNumberEnv(name: string, fallback: number) {
 }
 
 const smtpPort = readNumberEnv("LEAD_SMTP_PORT", 587);
-const smtpSecure = smtpPort === 465 || readBooleanEnv("LEAD_SMTP_SECURE", false);
+const smtpSecure = smtpPort === 465 || (smtpPort !== 587 && readBooleanEnv("LEAD_SMTP_SECURE", false));
 
 export const LEAD_SERVER_CONFIG = {
   inbox: {
