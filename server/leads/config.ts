@@ -21,14 +21,6 @@ function readBooleanEnv(name: string, fallback = false) {
   return String(value).toLowerCase() === "true";
 }
 
-function readNumberEnv(name: string, fallback: number) {
-  const value = Number(process.env[name]);
-  return Number.isFinite(value) && value > 0 ? value : fallback;
-}
-
-const smtpPort = readNumberEnv("LEAD_SMTP_PORT", 587);
-const smtpSecure = smtpPort === 465 || (smtpPort !== 587 && readBooleanEnv("LEAD_SMTP_SECURE", false));
-
 export const LEAD_SERVER_CONFIG = {
   inbox: {
     enabled: readBooleanEnv("LEAD_INBOX_ENABLED", false),
@@ -53,17 +45,10 @@ export const LEAD_SERVER_CONFIG = {
     },
     endpoint: readEnv("LEAD_EMAIL_ENDPOINT", "https://email.example.com/send-lead"),
     provider: readEnv("LEAD_EMAIL_PROVIDER", "placeholder"),
+    from: readEnv("LEAD_EMAIL_FROM", "notifications@example.com"),
+    to: readEnv("LEAD_NOTIFICATION_TO", "team@example.com"),
     brevo: {
       apiKey: readEnv("BREVO_API_KEY"),
-    },
-    smtp: {
-      host: readEnv("LEAD_SMTP_HOST", "smtp.example.com"),
-      port: smtpPort,
-      secure: smtpSecure,
-      user: readEnv("LEAD_SMTP_USER"),
-      password: readEnv("LEAD_SMTP_PASSWORD"),
-      from: readEnv("LEAD_EMAIL_FROM", "notifications@example.com"),
-      to: readEnv("LEAD_NOTIFICATION_TO", "team@example.com"),
     },
   },
 } as const;
@@ -72,20 +57,10 @@ export function hasConfiguredLeadValue(value: string) {
   return !PLACEHOLDER_VALUES.has(value.trim());
 }
 
-export function hasConfiguredLeadSmtp() {
-  return (
-    hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.host)
-    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.from)
-    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.to)
-    && Boolean(LEAD_SERVER_CONFIG.email.smtp.user.trim())
-    && Boolean(LEAD_SERVER_CONFIG.email.smtp.password.trim())
-  );
-}
-
 export function hasConfiguredLeadBrevo() {
   return (
     hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.brevo.apiKey)
-    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.from)
-    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.smtp.to)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.from)
+    && hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.to)
   );
 }

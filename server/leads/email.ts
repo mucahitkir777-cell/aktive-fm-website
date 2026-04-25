@@ -1,6 +1,5 @@
 import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
-import SibApiV3Sdk from "sib-api-v3-sdk";
-import { LEAD_SERVER_CONFIG, hasConfiguredLeadBrevo, hasConfiguredLeadValue } from "./config";
+import { LEAD_SERVER_CONFIG, hasConfiguredLeadBrevo } from "./config";
 
 interface StoredLeadEmailInput {
   leadId: string;
@@ -8,7 +7,20 @@ interface StoredLeadEmailInput {
   payload: LeadSubmissionPayload;
 }
 
-let transactionalEmailApi: InstanceType<typeof SibApiV3Sdk.TransactionalEmailsApi> | null = null;
+const BREVO_TRANSACTIONAL_EMAIL_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
+
+interface BrevoEmailAddress {
+  email: string;
+  name?: string;
+}
+
+interface BrevoTransactionalEmailPayload {
+  sender: BrevoEmailAddress;
+  to: BrevoEmailAddress[];
+  subject: string;
+  htmlContent: string;
+  textContent: string;
+}
 
 /**
  * Strukturiertes Logging für E-Mail-Events
@@ -27,36 +39,37 @@ function logEmailEvent(level: "info" | "warn" | "error", leadId: string, mailTyp
   }
 }
 
-function getTransactionalEmailApi() {
-  if (transactionalEmailApi) {
-    return transactionalEmailApi;
-  }
-
-  const apiClient = SibApiV3Sdk.ApiClient.instance;
-  apiClient.authentications["api-key"].apiKey = LEAD_SERVER_CONFIG.email.brevo.apiKey;
-
-  transactionalEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
-  return transactionalEmailApi;
-}
-
 async function sendBrevoTransactionalEmail(input: {
   to: string;
   subject: string;
   textContent: string;
   htmlContent: string;
 }) {
-  const apiInstance = getTransactionalEmailApi();
-
-  await apiInstance.sendTransacEmail({
+  const payload: BrevoTransactionalEmailPayload = {
     sender: {
-      email: LEAD_SERVER_CONFIG.email.smtp.from,
-      name: "Aktive FM",
+      email: LEAD_SERVER_CONFIG.email.from,
+      name: "Aktive Facility Management",
     },
     to: [{ email: input.to }],
     subject: input.subject,
     textContent: input.textContent,
     htmlContent: input.htmlContent,
+  };
+
+  const response = await fetch(BREVO_TRANSACTIONAL_EMAIL_ENDPOINT, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "api-key": LEAD_SERVER_CONFIG.email.brevo.apiKey,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(payload),
   });
+
+  if (!response.ok) {
+    const responseBody = await response.text().catch(() => "");
+    throw new Error(`Brevo API responded with ${response.status}: ${responseBody || "(empty response)"}`);
+  }
 }
 
 function buildNotificationText(input: StoredLeadEmailInput) {
@@ -265,13 +278,13 @@ async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<L
     return {
       provider: "email",
       status: "skipped",
-      message: "Brevo notification is not configured.",
+      message: "Brevo notification is not configured. Set BREVO_API_KEY, LEAD_EMAIL_FROM and LEAD_NOTIFICATION_TO.",
     };
   }
 
   try {
     await sendBrevoTransactionalEmail({
-      to: LEAD_SERVER_CONFIG.email.smtp.to,
+      to: LEAD_SERVER_CONFIG.email.to,
       subject: `Neuer Lead: ${input.payload.name}`,
       textContent: buildNotificationText(input),
       htmlContent: buildNotificationHtml(input),
@@ -301,7 +314,7 @@ async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Pro
     return {
       provider: "email_confirmation",
       status: "skipped",
-      message: "Brevo confirmation is not configured.",
+      message: "Brevo confirmation is not configured. Set BREVO_API_KEY, LEAD_EMAIL_FROM and LEAD_NOTIFICATION_TO.",
     };
   }
 
@@ -331,70 +344,6 @@ async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Pro
   }
 }
 
-async function postLeadNotificationEndpoint(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
-  if (!hasConfiguredLeadValue(LEAD_SERVER_CONFIG.email.endpoint)) {
-    logEmailEvent("info", input.leadId, "notification", "SKIPPED", "Email endpoint not configured");
-    return {
-      provider: "email",
-      status: "skipped",
-      message: "Email endpoint is not configured.",
-    };
-  }
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-
-    try {
-      const response = await fetch(LEAD_SERVER_CONFIG.email.endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        const message = `email responded with ${response.status}.`;
-        logEmailEvent("warn", input.leadId, "notification", "FAILED", message);
-        return {
-          provider: "email",
-          status: "error",
-          message,
-        };
-      }
-
-      logEmailEvent("info", input.leadId, "notification", "SENT via endpoint");
-      return {
-        provider: "email",
-        status: "success",
-        message: "Email endpoint accepted the lead.",
-      };
-    } finally {
-      clearTimeout(timeout);
-    }
-  } catch (error) {
-    if (error instanceof Error && error.name === "AbortError") {
-      const message = "Email endpoint request timed out (10s).";
-      logEmailEvent("error", input.leadId, "notification", "FAILED", message);
-      return {
-        provider: "email",
-        status: "error",
-        message,
-      };
-    }
-    const message = error instanceof Error ? error.message : "Email endpoint request failed.";
-    logEmailEvent("error", input.leadId, "notification", "FAILED", message);
-
-    return {
-      provider: "email",
-      status: "error",
-      message,
-    };
-  }
-}
-
 export async function deliverLeadNotification(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
   if (!LEAD_SERVER_CONFIG.email.enabled) {
     logEmailEvent("info", input.leadId, "notification", "DISABLED", "Email feature disabled globally");
@@ -414,11 +363,7 @@ export async function deliverLeadNotification(input: StoredLeadEmailInput): Prom
     };
   }
 
-  if (hasConfiguredLeadBrevo()) {
-    return sendLeadNotificationEmail(input);
-  }
-
-  return postLeadNotificationEndpoint(input);
+  return sendLeadNotificationEmail(input);
 }
 
 export async function deliverLeadConfirmation(input: StoredLeadEmailInput): Promise<LeadProviderResult> {
