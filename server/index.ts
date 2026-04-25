@@ -32,7 +32,7 @@ import {
 import { initializeDatabase } from "./db";
 import { processLeadSubmission } from "./leads/adapters";
 import { runLeadReminderJob } from "./leads/reminders";
-import { getLeadById, listLeads, updateLead } from "./leads/repository";
+import { deleteLead, deleteLeads, getLeadById, listLeads, updateLead } from "./leads/repository";
 import { ensureUploadsDirectory, getUploadsDirectory, listUploadedImages, saveUploadedImage } from "./media/storage";
 import { hashPassword, verifyPassword } from "./users/password";
 import {
@@ -55,6 +55,14 @@ const pageViewSchema = z.object({
 const mediaUploadSchema = z.object({
   filename: z.string().trim().min(1).max(255),
   dataUrl: z.string().trim().min(1).max(16_000_000),
+});
+
+const leadIdSchema = z
+  .string()
+  .trim()
+  .regex(/^lead_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+const leadBulkDeleteSchema = z.object({
+  ids: z.array(leadIdSchema).min(1).max(200).transform((ids) => Array.from(new Set(ids))),
 });
 
 function buildContentSecurityPolicy() {
@@ -547,8 +555,14 @@ async function startServer() {
   });
 
   app.get("/api/leads/:id", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
+    const parsedId = leadIdSchema.safeParse(req.params.id);
+    if (!parsedId.success) {
+      res.status(400).json({ success: false, message: "Ungültige Lead-ID." });
+      return;
+    }
+
     try {
-      const lead = await getLeadById(req.params.id);
+      const lead = await getLeadById(parsedId.data);
       if (!lead) {
         res.status(404).json({ success: false, message: "Lead nicht gefunden." });
         return;
@@ -563,7 +577,37 @@ async function startServer() {
     }
   });
 
+  app.post("/api/leads/bulk-delete", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
+    const parsedBody = leadBulkDeleteSchema.safeParse(req.body ?? {});
+
+    if (!parsedBody.success) {
+      res.status(400).json({ success: false, message: "Ungültige Lead-Auswahl." });
+      return;
+    }
+
+    try {
+      const deletedIds = await deleteLeads(parsedBody.data.ids);
+      res.status(200).json({
+        success: true,
+        deletedIds,
+        deletedCount: deletedIds.length,
+        message: `${deletedIds.length} Lead${deletedIds.length === 1 ? "" : "s"} gelöscht.`,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Leads konnten nicht gelöscht werden.",
+      });
+    }
+  });
+
   app.patch("/api/leads/:id", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
+    const parsedId = leadIdSchema.safeParse(req.params.id);
+    if (!parsedId.success) {
+      res.status(400).json({ success: false, message: "Ungültige Lead-ID." });
+      return;
+    }
+
     const parsedUpdate = adminLeadUpdateSchema.safeParse(req.body ?? {});
 
     if (!parsedUpdate.success) {
@@ -572,7 +616,7 @@ async function startServer() {
     }
 
     try {
-      const lead = await updateLead(req.params.id, parsedUpdate.data);
+      const lead = await updateLead(parsedId.data, parsedUpdate.data);
 
       if (!lead) {
         res.status(404).json({ success: false, message: "Lead nicht gefunden." });
@@ -584,6 +628,33 @@ async function startServer() {
       res.status(500).json({
         success: false,
         message: error instanceof Error ? error.message : "Lead konnte nicht aktualisiert werden.",
+      });
+    }
+  });
+
+  app.delete("/api/leads/:id", requireAdminAuth, requireAdminRole("admin"), async (req, res) => {
+    const parsedId = leadIdSchema.safeParse(req.params.id);
+    if (!parsedId.success) {
+      res.status(400).json({ success: false, message: "Ungültige Lead-ID." });
+      return;
+    }
+
+    try {
+      const deletedId = await deleteLead(parsedId.data);
+      if (!deletedId) {
+        res.status(404).json({ success: false, message: "Lead nicht gefunden." });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        deletedId,
+        message: "Lead wurde gelöscht.",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Lead konnte nicht gelöscht werden.",
       });
     }
   });

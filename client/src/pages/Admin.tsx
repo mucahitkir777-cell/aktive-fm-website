@@ -78,6 +78,15 @@ interface LeadResponse {
   code?: string;
 }
 
+interface LeadDeleteResponse {
+  success: boolean;
+  deletedId?: string;
+  deletedIds?: string[];
+  deletedCount?: number;
+  message?: string;
+  code?: string;
+}
+
 interface LoginResponse {
   success: boolean;
   token?: string;
@@ -339,6 +348,8 @@ export default function Admin() {
   const [leadFilter, setLeadFilter] = useState<LeadFilterValue>("all");
   const [leadSearch, setLeadSearch] = useState("");
   const [leadSort, setLeadSort] = useState<LeadSortValue>("newest");
+  const [selectedLeadIds, setSelectedLeadIds] = useState<Set<string>>(() => new Set());
+  const [deletingLeads, setDeletingLeads] = useState(false);
   const [selectedLead, setSelectedLead] = useState<LeadDraft | null>(null);
   const [changePasswordForm, setChangePasswordForm] = useState({
     currentPassword: "",
@@ -406,6 +417,7 @@ export default function Admin() {
 
     return nextLeads;
   }, [leadFilter, leadSearch, leadSort, leads]);
+  const selectedLeadCount = selectedLeadIds.size;
 
   const cmsDefinition = cmsPageDefinitions[selectedCmsSlug] ?? cmsPageDefinitions.home;
   const cmsPageOptions = cmsPages.length > 0
@@ -483,6 +495,7 @@ export default function Admin() {
     setSelectedCmsSlug("home");
     setSelectedCmsSection("hero");
     setPreviewRefreshKey(0);
+    setSelectedLeadIds(new Set());
     setSelectedLead(null);
     setActivePanel(null);
     setSettingsOpen(false);
@@ -866,6 +879,14 @@ export default function Admin() {
   }, [session]);
 
   useEffect(() => {
+    const currentLeadIds = new Set(leads.map((lead) => lead.id));
+    setSelectedLeadIds((current) => {
+      const nextSelection = new Set(Array.from(current).filter((id) => currentLeadIds.has(id)));
+      return nextSelection.size === current.size ? current : nextSelection;
+    });
+  }, [leads]);
+
+  useEffect(() => {
     if (!session || !hasSectionAccess(session.user.role, currentSection)) {
       return;
     }
@@ -1065,6 +1086,130 @@ export default function Admin() {
 
     setLeads((current) => current.map((lead) => (lead.id === id ? result.lead! : lead)));
     void loadStats(session);
+  }
+
+  function toggleLeadSelection(id: string) {
+    setSelectedLeadIds((current) => {
+      const nextSelection = new Set(current);
+      if (nextSelection.has(id)) {
+        nextSelection.delete(id);
+      } else {
+        nextSelection.add(id);
+      }
+      return nextSelection;
+    });
+  }
+
+  function toggleAllVisibleLeads() {
+    setSelectedLeadIds((current) => {
+      const visibleIds = filteredLeads.map((lead) => lead.id);
+      const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => current.has(id));
+      const nextSelection = new Set(current);
+
+      visibleIds.forEach((id) => {
+        if (allVisibleSelected) {
+          nextSelection.delete(id);
+        } else {
+          nextSelection.add(id);
+        }
+      });
+
+      return nextSelection;
+    });
+  }
+
+  function clearLeadSelection() {
+    setSelectedLeadIds(new Set());
+  }
+
+  async function refreshLeadAdminData(activeSession: SessionState) {
+    await loadLeads(activeSession);
+    await loadStats(activeSession);
+  }
+
+  async function handleDeleteLead(id: string) {
+    if (!session) {
+      return;
+    }
+
+    const confirmed = window.confirm("Diesen Lead wirklich löschen?");
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingLeads(true);
+    setError("");
+    setSuccessMessage("");
+
+    const { response, result } = await requestJson<LeadDeleteResponse>(`/api/leads/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
+    });
+
+    setDeletingLeads(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success) {
+      setError(result.message ?? "Lead konnte nicht gelöscht werden.");
+      return;
+    }
+
+    clearLeadSelection();
+    if (selectedLead?.id === id) {
+      setSelectedLead(null);
+      setActivePanel(null);
+    }
+    await refreshLeadAdminData(session);
+    setSuccessMessage(result.message ?? "Lead wurde gelöscht.");
+  }
+
+  async function handleDeleteSelectedLeads() {
+    if (!session || selectedLeadIds.size === 0) {
+      return;
+    }
+
+    const selectedIds = Array.from(selectedLeadIds);
+    const confirmed = window.confirm(`${selectedIds.length} ausgewählte Leads wirklich löschen?`);
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingLeads(true);
+    setError("");
+    setSuccessMessage("");
+
+    const { response, result } = await requestJson<LeadDeleteResponse>("/api/leads/bulk-delete", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds }),
+    });
+
+    setDeletingLeads(false);
+
+    if (!result) {
+      return;
+    }
+
+    if (!response.ok || !result.success) {
+      setError(result.message ?? "Auswahl konnte nicht gelöscht werden.");
+      return;
+    }
+
+    clearLeadSelection();
+    if (selectedLead && selectedIds.includes(selectedLead.id)) {
+      setSelectedLead(null);
+      setActivePanel(null);
+    }
+    await refreshLeadAdminData(session);
+    setSuccessMessage(result.message ?? `${result.deletedCount ?? selectedIds.length} Leads gelöscht.`);
   }
 
   function openLeadEditor(lead: AdminLead) {
@@ -1553,6 +1698,9 @@ export default function Admin() {
             leads={leads}
             loadingLeads={loadingLeads}
             leadStatuses={leadStatuses}
+            selectedLeadIds={selectedLeadIds}
+            selectedLeadCount={selectedLeadCount}
+            deletingLeads={deletingLeads}
             onFilterChange={setLeadFilter}
             onSearchChange={setLeadSearch}
             onSortChange={setLeadSort}
@@ -1560,6 +1708,15 @@ export default function Admin() {
               void handleStatusChange(id, status);
             }}
             onOpenLeadEditor={openLeadEditor}
+            onToggleLeadSelection={toggleLeadSelection}
+            onToggleAllVisibleLeads={toggleAllVisibleLeads}
+            onClearLeadSelection={clearLeadSelection}
+            onDeleteLead={(id) => {
+              void handleDeleteLead(id);
+            }}
+            onDeleteSelectedLeads={() => {
+              void handleDeleteSelectedLeads();
+            }}
           />
         )}
 

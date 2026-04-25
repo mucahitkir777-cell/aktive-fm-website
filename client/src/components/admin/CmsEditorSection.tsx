@@ -288,7 +288,7 @@ export default function CmsEditorSection({
                   onClick={() => onSelectSection(section.key)}
                   className={
                     selectedCmsSectionKey === section.key
-                      ? "rounded-lg border border-slate-900 bg-slate-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,33,55,0.95)]"
+                      ? "rounded-xl border border-[#1D6FA4]/20 bg-[#1D6FA4]/10 px-3.5 py-2.5 text-sm font-semibold text-[#144f74] shadow-[0_12px_24px_-20px_rgba(29,111,164,0.7)]"
                       : "rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 transition-colors hover:border-slate-300 hover:bg-slate-50"
                   }
                 >
@@ -551,7 +551,7 @@ export default function CmsEditorSection({
               </div>
             </div>
 
-            <div className="mt-3 rounded-lg border border-slate-200 bg-white px-3 py-2">
+            <div className="mt-3 rounded-xl border border-slate-200 bg-white px-3 py-2">
               <label className="flex items-center gap-2 text-xs text-slate-500">
                 <Search size={14} />
                 <input
@@ -584,7 +584,7 @@ export default function CmsEditorSection({
                         onUpdateCmsField(cmsSelectedSection.key, targetFieldKey, media.url);
                         onSelectImagePlacementKey(`${cmsSelectedSection.key}.${targetFieldKey}`);
                       }}
-                      className="overflow-hidden rounded-lg border border-slate-200 bg-white text-left transition hover:border-slate-400"
+                      className="overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition hover:border-slate-400"
                     >
                       <img src={media.url} alt={media.filename} className="h-24 w-full object-cover" loading="lazy" />
                       <div className="px-2 py-1.5">

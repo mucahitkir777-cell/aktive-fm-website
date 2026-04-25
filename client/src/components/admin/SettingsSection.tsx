@@ -64,7 +64,7 @@ export default function SettingsSection({
         </p>
         <form onSubmit={onSaveSiteStatus} className="mt-4 space-y-4">
           <div className="space-y-3 text-sm text-slate-900">
-            <label className={`${infoPanelClass} flex items-center`}>
+            <label className={`${infoPanelClass} flex items-center gap-3`}>
               <input
                 type="radio"
                 name="siteStatus"
@@ -73,9 +73,9 @@ export default function SettingsSection({
                 onChange={() => onSetSiteStatus("live")}
                 disabled={!canAccessCmsSection}
               />
-              <span className="ml-3 font-medium">Live</span>
+              <span className="font-medium">Live</span>
             </label>
-            <label className={`${infoPanelClass} flex items-center`}>
+            <label className={`${infoPanelClass} flex items-center gap-3`}>
               <input
                 type="radio"
                 name="siteStatus"
@@ -84,7 +84,7 @@ export default function SettingsSection({
                 onChange={() => onSetSiteStatus("maintenance")}
                 disabled={!canAccessCmsSection}
               />
-              <span className="ml-3 font-medium">Wartung</span>
+              <span className="font-medium">Wartung</span>
             </label>
           </div>
           <div className="flex flex-wrap gap-2">

@@ -384,7 +384,7 @@ export default function PreviewSection({
       </div>
 
       <div className={surfacePanelClass}>
-        <div className={`overflow-hidden rounded-xl border border-slate-200 bg-slate-50 ${previewWidthClass}`}>
+        <div className={`overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-inner ${previewWidthClass}`}>
           <iframe
             ref={iframeRef}
             key={`${selectedCmsSlug}-${previewViewport}-${previewRefreshKey}`}

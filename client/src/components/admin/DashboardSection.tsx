@@ -1,5 +1,6 @@
 ﻿import type { AdminDashboardStats } from "@shared/admin";
 import type { LeadStatus } from "@shared/lead";
+import { AlarmClock, BarChart3, CalendarDays, Clock3, Inbox, ListChecks, UserPlus } from "lucide-react";
 import AdminEmptyState from "./AdminEmptyState";
 import AdminStatusBadge from "./AdminStatusBadge";
 import { formatDate, formatDateOnly, getLeadStatusLabel } from "./helpers";
@@ -14,13 +15,13 @@ interface DashboardSectionProps {
 }
 
 const statCards = [
-  { key: "total", label: "Gesamtleads", getValue: (stats: AdminDashboardStats) => stats.leads.total },
-  { key: "today", label: "Neue Leads heute", getValue: (stats: AdminDashboardStats) => stats.leads.today },
-  { key: "week", label: "Leads diese Woche", getValue: (stats: AdminDashboardStats) => stats.leads.thisWeek },
-  { key: "viewsToday", label: "Seitenaufrufe heute", getValue: (stats: AdminDashboardStats) => stats.pageViews.today },
-  { key: "views7", label: "Seitenaufrufe 7 Tage", getValue: (stats: AdminDashboardStats) => stats.pageViews.last7Days },
-  { key: "dueToday", label: "Heute fällig", getValue: (stats: AdminDashboardStats) => stats.leads.dueToday },
-  { key: "overdue", label: "Überfällig", getValue: (stats: AdminDashboardStats) => stats.leads.overdue },
+  { key: "total", label: "Gesamtleads", icon: Inbox, tone: "text-slate-700 bg-slate-100", getValue: (stats: AdminDashboardStats) => stats.leads.total },
+  { key: "today", label: "Neue Leads heute", icon: UserPlus, tone: "text-[#1D6FA4] bg-[#1D6FA4]/10", getValue: (stats: AdminDashboardStats) => stats.leads.today },
+  { key: "week", label: "Leads diese Woche", icon: CalendarDays, tone: "text-[#1D6FA4] bg-[#1D6FA4]/10", getValue: (stats: AdminDashboardStats) => stats.leads.thisWeek },
+  { key: "viewsToday", label: "Seitenaufrufe heute", icon: BarChart3, tone: "text-slate-700 bg-slate-100", getValue: (stats: AdminDashboardStats) => stats.pageViews.today },
+  { key: "views7", label: "Seitenaufrufe 7 Tage", icon: ListChecks, tone: "text-slate-700 bg-slate-100", getValue: (stats: AdminDashboardStats) => stats.pageViews.last7Days },
+  { key: "dueToday", label: "Heute fällig", icon: Clock3, tone: "text-amber-700 bg-amber-100", getValue: (stats: AdminDashboardStats) => stats.leads.dueToday },
+  { key: "overdue", label: "Überfällig", icon: AlarmClock, tone: "text-red-700 bg-red-100", getValue: (stats: AdminDashboardStats) => stats.leads.overdue },
 ] as const;
 
 export default function DashboardSection({
@@ -34,7 +35,10 @@ export default function DashboardSection({
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-7">
         {statCards.map((card) => (
-          <div key={card.key} className={surfacePanelClass}>
+          <div key={card.key} className={`${surfacePanelClass} relative overflow-hidden`}>
+            <div className={`absolute right-4 top-4 rounded-lg p-2 ${card.tone}`}>
+              <card.icon size={16} />
+            </div>
             <p className="text-sm font-medium text-slate-500">{card.label}</p>
             <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
               {loadingStats && !stats ? "..." : stats ? card.getValue(stats) : 0}
@@ -67,7 +71,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-white`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -104,7 +108,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-amber-300 hover:bg-white`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -141,7 +145,7 @@ export default function DashboardSection({
                 key={lead.id}
                 type="button"
                 onClick={() => onOpenLeadEditorById(lead.id)}
-                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-slate-300 hover:bg-slate-50`}
+                className={`${subtleSurfaceClass} block w-full text-left transition-colors hover:border-red-300 hover:bg-white`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

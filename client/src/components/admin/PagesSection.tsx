@@ -16,7 +16,7 @@ export default function PagesSection({ pages, formatDate, onEditContent, onOpenP
           <div className="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
             <div>
               <h3 className="text-base font-semibold text-slate-900">{page.title}</h3>
-              <p className="mt-1 text-sm text-slate-500">{page.path}</p>
+              <p className="mt-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">{page.path}</p>
               <p className="mt-3 text-sm text-slate-500">
                 {page.updatedAt ? `Zuletzt aktualisiert: ${formatDate(page.updatedAt)}` : "Noch nicht gespeichert."}
               </p>

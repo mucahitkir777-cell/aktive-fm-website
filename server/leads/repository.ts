@@ -192,3 +192,35 @@ export async function updateLead(id: string, input: AdminLeadUpdateInput) {
   return result.rows[0] ? mapLeadRow(result.rows[0]) : null;
 }
 
+export async function deleteLead(id: string) {
+  const db = getDbPool();
+  const result = await db.query<Pick<LeadRow, "id">>(
+    `
+      DELETE FROM leads
+      WHERE id = $1
+      RETURNING id
+    `,
+    [id],
+  );
+
+  return result.rows[0]?.id ?? null;
+}
+
+export async function deleteLeads(ids: string[]) {
+  if (!ids.length) {
+    return [];
+  }
+
+  const db = getDbPool();
+  const result = await db.query<Pick<LeadRow, "id">>(
+    `
+      DELETE FROM leads
+      WHERE id = ANY($1::text[])
+      RETURNING id
+    `,
+    [ids],
+  );
+
+  return result.rows.map((row) => row.id);
+}
+

@@ -38,12 +38,12 @@ export default function AdminHeader({
     <div className={`${surfaceClass} p-5 md:p-6`}>
       <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Adminbereich</p>
+          <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+            Adminbereich
+          </div>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">{sectionMeta.title}</h1>
           <p className={`mt-2 max-w-2xl ${helperTextClass}`}>{sectionMeta.description}</p>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Eingeloggt als {username}
-          </p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Eingeloggt als {username}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
