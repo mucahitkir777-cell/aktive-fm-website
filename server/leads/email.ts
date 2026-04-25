@@ -1,5 +1,6 @@
 ﻿import nodemailer from "nodemailer";
 import type { LeadProviderResult, LeadSubmissionPayload } from "@shared/lead";
+import dns from "node:dns/promises";
 import { LEAD_SERVER_CONFIG, hasConfiguredLeadSmtp, hasConfiguredLeadValue } from "./config";
 
 interface StoredLeadEmailInput {
@@ -9,6 +10,7 @@ interface StoredLeadEmailInput {
 }
 
 let transporter: nodemailer.Transporter | null = null;
+let transporterPromise: Promise<nodemailer.Transporter> | null = null;
 
 /**
  * Strukturiertes Logging für E-Mail-Events
@@ -27,22 +29,40 @@ function logEmailEvent(level: "info" | "warn" | "error", leadId: string, mailTyp
   }
 }
 
-function getTransporter() {
+async function resolveSmtpHostForRailway() {
+  const smtpHost = LEAD_SERVER_CONFIG.email.smtp.host;
+
+  try {
+    const [ipv4Address] = await dns.resolve4(smtpHost);
+    return ipv4Address ?? smtpHost;
+  } catch {
+    return smtpHost;
+  }
+}
+
+async function getTransporter() {
   if (transporter) {
     return transporter;
   }
 
-  transporter = nodemailer.createTransport({
-    host: LEAD_SERVER_CONFIG.email.smtp.host,
-    port: LEAD_SERVER_CONFIG.email.smtp.port,
-    secure: LEAD_SERVER_CONFIG.email.smtp.secure,
-    auth: {
-      user: LEAD_SERVER_CONFIG.email.smtp.user,
-      pass: LEAD_SERVER_CONFIG.email.smtp.password,
-    },
-    connectionTimeout: 30000,
-    socketTimeout: 30000,
-  });
+  if (!transporterPromise) {
+    transporterPromise = resolveSmtpHostForRailway().then((smtpHost) => nodemailer.createTransport({
+      host: smtpHost,
+      port: LEAD_SERVER_CONFIG.email.smtp.port,
+      secure: LEAD_SERVER_CONFIG.email.smtp.secure,
+      auth: {
+        user: LEAD_SERVER_CONFIG.email.smtp.user,
+        pass: LEAD_SERVER_CONFIG.email.smtp.password,
+      },
+      tls: {
+        servername: LEAD_SERVER_CONFIG.email.smtp.host,
+      },
+      connectionTimeout: 30000,
+      socketTimeout: 30000,
+    }));
+  }
+
+  transporter = await transporterPromise;
 
   return transporter;
 }
@@ -258,7 +278,7 @@ async function sendLeadNotificationEmail(input: StoredLeadEmailInput): Promise<L
   }
 
   try {
-    const mailTransporter = getTransporter();
+    const mailTransporter = await getTransporter();
     await mailTransporter.sendMail({
       from: LEAD_SERVER_CONFIG.email.smtp.from,
       to: LEAD_SERVER_CONFIG.email.smtp.to,
@@ -296,7 +316,7 @@ async function sendLeadConfirmationEmailToLead(input: StoredLeadEmailInput): Pro
   }
 
   try {
-    const mailTransporter = getTransporter();
+    const mailTransporter = await getTransporter();
     await mailTransporter.sendMail({
       from: LEAD_SERVER_CONFIG.email.smtp.from,
       to: input.payload.email,
@@ -434,4 +454,3 @@ export async function deliverLeadConfirmation(input: StoredLeadEmailInput): Prom
 
   return sendLeadConfirmationEmailToLead(input);
 }
-
