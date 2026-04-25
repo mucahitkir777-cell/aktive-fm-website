@@ -2,9 +2,11 @@
 import type { LeadFilterValue, LeadSortValue } from "./types";
 import LeadsTable from "./LeadsTable";
 import {
+  dangerButtonClass,
   fieldControlClass,
   fieldLabelClass,
   infoPanelClass,
+  secondaryButtonClass,
   surfacePanelClass,
   tableWrapperClass,
 } from "./styles";
@@ -17,11 +19,19 @@ interface LeadsSectionProps {
   leads: AdminLead[];
   loadingLeads: boolean;
   leadStatuses: LeadStatus[];
+  selectedLeadIds: Set<string>;
+  selectedLeadCount: number;
+  deletingLeads: boolean;
   onFilterChange: (value: LeadFilterValue) => void;
   onSearchChange: (value: string) => void;
   onSortChange: (value: LeadSortValue) => void;
   onStatusChange: (id: string, status: LeadStatus) => void;
   onOpenLeadEditor: (lead: AdminLead) => void;
+  onToggleLeadSelection: (id: string) => void;
+  onToggleAllVisibleLeads: () => void;
+  onClearLeadSelection: () => void;
+  onDeleteLead: (id: string) => void;
+  onDeleteSelectedLeads: () => void;
 }
 
 export default function LeadsSection({
@@ -32,11 +42,19 @@ export default function LeadsSection({
   leads,
   loadingLeads,
   leadStatuses,
+  selectedLeadIds,
+  selectedLeadCount,
+  deletingLeads,
   onFilterChange,
   onSearchChange,
   onSortChange,
   onStatusChange,
   onOpenLeadEditor,
+  onToggleLeadSelection,
+  onToggleAllVisibleLeads,
+  onClearLeadSelection,
+  onDeleteLead,
+  onDeleteSelectedLeads,
 }: LeadsSectionProps) {
   return (
     <div className="space-y-4">
@@ -93,14 +111,45 @@ export default function LeadsSection({
         </div>
       </div>
 
+      {selectedLeadCount > 0 && (
+        <div className="flex flex-col gap-3 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 md:flex-row md:items-center md:justify-between">
+          <div className="text-sm font-semibold text-red-800">
+            {selectedLeadCount} Lead{selectedLeadCount === 1 ? "" : "s"} ausgewählt
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={onDeleteSelectedLeads}
+              disabled={deletingLeads}
+              className={dangerButtonClass}
+            >
+              Auswahl löschen
+            </button>
+            <button
+              type="button"
+              onClick={onClearLeadSelection}
+              disabled={deletingLeads}
+              className={secondaryButtonClass}
+            >
+              Auswahl aufheben
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className={tableWrapperClass}>
         <LeadsTable
           leads={leads}
           filteredLeads={filteredLeads}
           loadingLeads={loadingLeads}
           leadStatuses={leadStatuses}
+          selectedLeadIds={selectedLeadIds}
+          deletingLeads={deletingLeads}
           onStatusChange={onStatusChange}
           onOpenLeadEditor={onOpenLeadEditor}
+          onToggleLeadSelection={onToggleLeadSelection}
+          onToggleAllVisibleLeads={onToggleAllVisibleLeads}
+          onDeleteLead={onDeleteLead}
         />
       </div>
     </div>
