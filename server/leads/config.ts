@@ -26,6 +26,7 @@ function readNumberEnv(name: string, fallback: number) {
 }
 
 const smtpPort = readNumberEnv("LEAD_SMTP_PORT", 587);
+const smtpSecure = smtpPort === 465 || readBooleanEnv("LEAD_SMTP_SECURE", false);
 
 export const LEAD_SERVER_CONFIG = {
   inbox: {
@@ -54,7 +55,7 @@ export const LEAD_SERVER_CONFIG = {
     smtp: {
       host: readEnv("LEAD_SMTP_HOST", "smtp.example.com"),
       port: smtpPort,
-      secure: readBooleanEnv("LEAD_SMTP_SECURE", smtpPort === 465),
+      secure: smtpSecure,
       user: readEnv("LEAD_SMTP_USER"),
       password: readEnv("LEAD_SMTP_PASSWORD"),
       from: readEnv("LEAD_EMAIL_FROM", "notifications@example.com"),
